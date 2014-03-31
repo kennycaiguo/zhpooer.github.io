@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Hello World]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://yoursite.com/"/>
-  <updated>2014-03-30T10:49:57.866Z</updated>
+  <updated>2014-03-31T02:30:32.514Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,11 +15,40 @@
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
   
   <entry>
+    <title><![CDATA[传智播客Day02]]></title>
+    <link href="http://yoursite.com/2014/03/31/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day02/"/>
+    <id>http://yoursite.com/2014/03/31/传智播客day02/</id>
+    <published>2014-03-31T00:48:34.000Z</published>
+    <updated>2014-03-31T02:29:29.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="html-">html剩余</h1>
+<h2 id="div-span-p">div span p</h2>
+<p>div: 块标签，主要用来封装数据，配合css使用</p>
+<p>span: 行级标签，只占据一行中被封装数据的大小，主要用来封装数据</p>
+<p>p:段落</p>
+<h1 id="css">css</h1>
+<p><code>CSS: 层叠样式表，用来美化和修饰页面，不区分大小写</code></p>
+<p>通过sytle标签属性，给其指定样式。<code>属性名:属性;属性名:属性;</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">div</span> <span class="attribute">style</span>=<span class="value">"color:red;font-size:24px"</span>&gt;</span><span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+]]></content>
+    
+    
+      <category term="课堂笔记" scheme="http://yoursite.com/tags/%E8%AF%BE%E5%A0%82%E7%AC%94%E8%AE%B0/"/>
+    
+      <category term="html" scheme="http://yoursite.com/tags/html/"/>
+    
+      <category term="css" scheme="http://yoursite.com/tags/css/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[传智播客Day01]]></title>
     <link href="http://yoursite.com/2014/03/30/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day01/"/>
     <id>http://yoursite.com/2014/03/30/传智播客day01/</id>
     <published>2014-03-30T06:58:05.000Z</published>
-    <updated>2014-03-30T10:49:37.000Z</updated>
+    <updated>2014-03-31T01:04:56.000Z</updated>
     <content type="html"><![CDATA[<h1 id="html">html</h1>
 <p>网页 = html + css + javascript</p>
 <p>html:封装数据</p>
@@ -111,7 +140,7 @@
 <span class="tag">&lt;/<span class="title">ul</span>&gt;</span>
 </pre></td></tr></table></figure>
 
-<p><code>ol type=&quot;a/i/1&quot;</code></p>
+<p><code>ol type=&quot;a/i/1/I/A&quot;</code></p>
 <p>ol: ordered list</p>
 <p>ul: unorded list</p>
 <p>li: list item</p>
@@ -192,7 +221,7 @@
 </pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">html</span>&gt;</span>
     <span class="tag">&lt;<span class="title">head</span>&gt;</span> <span class="tag">&lt;/<span class="title">head</span>&gt;</span>
     <span class="tag">&lt;<span class="title">frameset</span> <span class="attribute">cols</span>=<span class="value">"200px,"</span> <span class="attribute">noresize</span>=<span class="value">"noresize"</span>&gt;</span>
-    <span class="tag">&lt;<span class="title">frame</span> <span class="attribute">src</span>=<span class="value">"relative-path"</span> &gt;</span>
+        <span class="tag">&lt;<span class="title">frame</span> <span class="attribute">src</span>=<span class="value">"relative-path"</span> &gt;</span>
             <span class="tag">&lt;<span class="title">a</span> <span class="attribute">href</span>=<span class="value">""</span> <span class="attribute">target</span>=<span class="value">"right_frame"</span>/&gt;</span>
         <span class="tag">&lt;/<span class="title">frameset</span>&gt;</span>
         <span class="tag">&lt;<span class="title">frame</span> <span class="attribute">name</span>=<span class="value">"righ_frame"</span> <span class="attribute">src</span>=<span class="value">"relative-path"</span>/&gt;</span>
