@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Hello World]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://yoursite.com/"/>
-  <updated>2014-03-31T02:30:32.514Z</updated>
+  <updated>2014-04-01T10:38:07.803Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,11 +15,343 @@
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
   
   <entry>
+    <title><![CDATA[传智播客day03]]></title>
+    <link href="http://yoursite.com/2014/04/01/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day03/"/>
+    <id>http://yoursite.com/2014/04/01/传智播客day03/</id>
+    <published>2014-04-01T01:03:33.000Z</published>
+    <updated>2014-04-01T09:02:29.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="todo">TODO</h1>
+<p><em>什么是 强类型，弱类型，动态类型，静态类型</em></p>
+<h1 id="javascript">javascript</h1>
+<h2 id="undefined-null">undefined 和 null</h2>
+<p>undefined: 本身是数据类型，唯一的值是undefined，表示未定义和指定的</p>
+<ol>
+<li>var 声明变量，当时没赋值，是 undefined</li>
+<li>js 所有函数都有返回值，如果没有明确返回什么，返回值是 undefined</li>
+<li>访问的对象不存在属性时，值是 undefined</li>
+</ol>
+<p>null 本身是数据类型，唯一的值是 null, 表示一个无效的对象</p>
+<blockquote>
+<p><code>var o = null; o = new Date()</code></p>
+</blockquote>
+<h2 id="-">运算符种类</h2>
+<h3 id="-">算数运算符</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre><span class="comment">/*
+ * +: 有两个意义，
+ * 1. 表示运算负求和
+ * 2. 字符串链接符
+ *    如果左右两边出现一个字符串的时候，就是字符串连接符
+**/</span>
+<span class="keyword">var</span> result = <span class="number">3</span> + <span class="string">"2"</span> <span class="comment">// 32</span>
+<span class="keyword">var</span> result = <span class="literal">true</span> + <span class="number">2</span> <span class="comment">// 3</span>
+<span class="keyword">var</span> result = <span class="literal">null</span> + <span class="number">2</span> <span class="comment">// 2</span>
+<span class="keyword">var</span> result = <span class="literal">undefined</span> + <span class="number">2</span> <span class="comment">// NaN</span>
+</pre></td></tr></table></figure>
+
+<h3 id="-">逻辑算术符</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code"><pre><span class="comment">/*
+ * && : 寻找表示假的值，若没有找到，返回最后一个元素值，找到则返回那个值
+ * || : 寻找表示真的的值，若没有找到，返回最后一个元素值, 返回最后一个元素值，找到则返回那个值
+ *
+**/</span>
+<span class="keyword">var</span> result = <span class="string">"a"</span> && <span class="string">"b"</span> <span class="comment">// b</span>
+<span class="keyword">var</span> result = <span class="string">"a"</span> || <span class="string">"b"</span> <span class="comment">// a</span>
+<span class="keyword">var</span> result = !!<span class="string">"false"</span> <span class="comment">// true</span>
+<span class="comment">// ||使用</span>
+<span class="function"><span class="keyword">function</span> <span class="title">myFun</span><span class="params">(defaultValue)</span> {</span>
+    <span class="keyword">var</span> result = result || <span class="number">1</span>;
+}
+</pre></td></tr></table></figure>
+
+<h3 id="typeof-instanceof">typeof 和 instanceof</h3>
+<p>typeof 用来判断一个值是哪种数据类型</p>
+<p>instanceof 判断一个值是否是某个类的实例</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="keyword">typeof</span> <span class="string">"hello"</span>; <span class="comment">// String</span>
+<span class="keyword">typeof</span> <span class="number">1</span>; <span class="comment">// number</span>
+<span class="keyword">typeof</span> <span class="literal">undefined</span>; <span class="comment">// undefined</span>
+<span class="keyword">typeof</span> <span class="literal">true</span>; boolean
+<span class="keyword">typeof</span> <span class="literal">null</span>; <span class="comment">// object</span>
+</pre></td></tr></table></figure>
+
+<blockquote>
+<p>typeof (new Date); // object</p>
+<p>(new Date) instanceof Date // true</p>
+</blockquote>
+<h2 id="-">语句</h2>
+<h3 id="if">if</h3>
+<blockquote>
+<p>if(num=9) // equals if(9)</p>
+<p>if(9==num) 规避风险</p>
+</blockquote>
+<h3 id="for">for</h3>
+<h3 id="while">while</h3>
+<h3 id="demo-">DEMO 九九乘法表</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+</pre></td><td class="code"><pre><span class="comment">// TODO 用table输出到页面，使格式对齐</span>
+<span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">1</span>; i&lt;<span class="number">10</span>; i++) {
+  <span class="keyword">var</span> line = <span class="string">""</span>;
+  <span class="keyword">for</span>(j = i; j &lt; <span class="number">10</span>; j ++){
+    <span class="keyword">var</span> result = i*j;
+    line += (i + <span class="string">"x"</span> + j + <span class="string">"="</span> + result + <span class="string">"  "</span>);
+  }
+  console.log(line);
+}
+<span class="comment">//表格</span>
+<span class="function"><span class="keyword">function</span> <span class="title">render</span><span class="params">(content, tag)</span>{</span>
+    <span class="keyword">var</span> result = <span class="string">""</span>;
+    result += (<span class="string">"&lt;"</span> + tag + <span class="string">"&gt;"</span>);
+    result += content;
+    result += (<span class="string">"&lt;/"</span> + tag + <span class="string">"&gt;"</span>);
+    <span class="keyword">return</span> result;
+}
+<span class="keyword">var</span> tableContent = <span class="string">""</span>;
+<span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">1</span>; i&lt;=<span class="number">9</span>; i++) {
+    <span class="keyword">var</span> row = <span class="string">""</span>;
+    <span class="keyword">for</span>(<span class="keyword">var</span> j = i; j &lt;= <span class="number">9</span>; j ++){
+        <span class="keyword">var</span> result = i*j;
+        row += render( i + <span class="string">"x"</span> + j + <span class="string">"="</span> + result, <span class="string">"td"</span> );
+    }
+    tableContent += render( row, <span class="string">"tr"</span> );
+}
+document.write( render(tableContent, <span class="string">"table"</span>) );
+</pre></td></tr></table></figure>
+
+<h2 id="-">函数</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">script</span>&gt;</span><span class="javascript">
+    <span class="function"><span class="keyword">function</span> <span class="title">myfn</span><span class="params">()</span>{</span>}
+
+    <span class="function"><span class="keyword">function</span> <span class="title">myfn2</span><span class="params">(args)</span>{</span>}
+
+    myfun2() <span class="comment">// args passed undefined</span>
+</span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
+<span class="tag">&lt;<span class="title">input</span> <span class="attribute">onclick</span>=<span class="value">"myfn();"</span>/&gt;</span>pp
+</pre></td></tr></table></figure>
+
+<p>同名函数会被覆盖</p>
+<h3 id="-arguments-">函数arguments参数</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre><span class="function"><span class="keyword">function</span> <span class="title">myfn</span>(){}</span>
+myfun(“<span class="operator">a</span><span class="string">","</span>b<span class="string">") // arguments =&gt; ["</span><span class="operator">a</span><span class="string">", "</span>b<span class="string">"]</span>
+</pre></td></tr></table></figure>
+
+<h3 id="-">函数是变量</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="function"><span class="keyword">function</span> <span class="title">myfn</span><span class="params">()</span></span>{}
+// var myfn = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{} 匿名函数
+// var myfn = new Function(<span class="string">"arg_name"</span>, ”alert(<span class="string">'hello world'</span>);“);
+<span class="function"><span class="keyword">function</span> <span class="title">handler</span><span class="params">( fun )</span></span>{ fun() }
+handler(myfn)
+</pre></td></tr></table></figure>
+
+<h2 id="-">全局变量和局部变量</h2>
+<p>在script标签内，在函数外定义变量都是全局变量</p>
+<blockquote>
+<p><code>for(var i=0;i&lt;1;i++){} log(i);</code> // i is 1</p>
+<p><code>function myfn(){ a = &quot;1&quot;; var b = &quot;2&quot; }</code> // a是局部变量，b是全局变量</p>
+</blockquote>
+<h2 id="-">数组</h2>
+<blockquote>
+<p>var arr = new Array() | var arr = []</p>
+</blockquote>
+<p>可以跨越下标赋值，被跨越部分值是undefined,同一个数组可以装载不同类型值</p>
+<blockquote>
+<p>arr.length = 0 //清空数组</p>
+</blockquote>
+<h3 id="demo">demo</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre><span class="comment">//求最大值</span>
+<span class="function"><span class="keyword">function</span> <span class="title">max</span><span class="params">()</span>{</span>
+  <span class="keyword">if</span> (<span class="built_in">arguments</span>.length == <span class="number">0</span> ) <span class="keyword">return</span> <span class="literal">undefined</span>;
+  <span class="keyword">var</span> maxNum = <span class="built_in">arguments</span>[<span class="number">0</span>];
+  <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>; i&lt;<span class="built_in">arguments</span>.length; i++) {
+    maxNum = maxNum &gt; <span class="built_in">arguments</span>[i] ? maxNum : <span class="built_in">arguments</span>[i];
+  }
+  <span class="keyword">return</span> maxNum;
+}
+
+max(<span class="number">23</span>, <span class="number">1</span>, <span class="number">990</span>, <span class="number">29</span>, <span class="number">100</span>, <span class="number">65</span>);
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="code"><pre>
+<span class="keyword">var</span> info = {
+  <span class="string">"张三"</span>: [<span class="number">18</span>, <span class="string">"男"</span>, <span class="string">"本科"</span>],
+  <span class="string">"李四"</span>: [<span class="number">17</span>, <span class="string">"男"</span>, <span class="string">"大专"</span>],
+  <span class="string">"王五"</span>: [<span class="number">16</span>, <span class="string">"男"</span>, <span class="string">"高中"</span>]
+};
+
+<span class="function"><span class="keyword">function</span> <span class="title">getinfoFromName</span><span class="params">(name)</span> {</span>
+  console.log(info[name]);
+}
+
+getinfoFromName(<span class="string">"张三"</span>);
+getinfoFromName(<span class="string">"李四"</span>);
+getinfoFromName(<span class="string">"王五"</span>);
+getinfoFromName(<span class="string">"aa"</span>);
+</pre></td></tr></table></figure>
+
+<blockquote>
+<p>new Array(23) // length == 23</p>
+<p>new Array(2.3) // 无效</p>
+</blockquote>
+<h3 id="-">数组方法</h3>
+<ol>
+<li>push，向末尾添加</li>
+<li>concat，连接两个或更多数组</li>
+<li>join，拼接成字符串，指定连接符号，默认是逗号</li>
+</ol>
+<h2 id="-">面向对象</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="function"><span class="keyword">function</span> <span class="title">Persion</span><span class="params">()</span>{</span>};
+<span class="keyword">var</span> p = <span class="keyword">new</span> Persion(); <span class="comment">// 创建对象</span>
+p.name = <span class="string">""</span>; p[<span class="string">"age"</span>] = <span class="number">12</span>; <span class="comment">// 添加属性</span>
+p.eat = <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>}   <span class="comment">//添加方法</span>
+</pre></td></tr></table></figure>
+
+<h3 id="-">构造函数</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="function"><span class="keyword">function</span> <span class="title">Person</span><span class="params">(name,age)</span>{</span>
+    <span class="keyword">this</span>.name = <span class="string">""</span>
+    <span class="keyword">this</span>.age = <span class="number">12</span>;
+    <span class="keyword">this</span>.eat = <span class="function"><span class="keyword">function</span> <span class="params">()</span>{</span>}
+};
+</pre></td></tr></table></figure>
+
+<p>js中的每一个函数内部都有一个this,this表示当前对象(谁调用就是谁)</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre><span class="keyword">var</span> name = <span class="string">"out"</span>
+<span class="function"><span class="keyword">function</span> <span class="title">sleep</span><span class="params">()</span> {</span>
+    <span class="keyword">return</span> <span class="keyword">this</span>.name;
+}
+<span class="keyword">var</span> p = <span class="keyword">new</span> <span class="built_in">Object</span>();  <span class="comment">//new 一个新的运行上下文</span>
+p.name = <span class="string">"in"</span>;
+p.sleep = sleep;
+
+sleep();  <span class="comment">// out, this 表示 最外部这运行上下文(环境)</span>
+p.sleep(); <span class="comment">// in, this 表示 p 这个对象的运行上下文(环境)</span>
+</pre></td></tr></table></figure>
+
+]]></content>
+    
+    
+      <category term="课堂笔记" scheme="http://yoursite.com/tags/%E8%AF%BE%E5%A0%82%E7%AC%94%E8%AE%B0/"/>
+    
+      <category term="javascript" scheme="http://yoursite.com/tags/javascript/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[传智播客Day02]]></title>
     <link href="http://yoursite.com/2014/03/31/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day02/"/>
     <id>http://yoursite.com/2014/03/31/传智播客day02/</id>
     <published>2014-03-31T00:48:34.000Z</published>
-    <updated>2014-03-31T02:29:29.000Z</updated>
+    <updated>2014-04-01T01:44:38.000Z</updated>
     <content type="html"><![CDATA[<h1 id="html-">html剩余</h1>
 <h2 id="div-span-p">div span p</h2>
 <p>div: 块标签，主要用来封装数据，配合css使用</p>
@@ -27,11 +359,304 @@
 <p>p:段落</p>
 <h1 id="css">css</h1>
 <p><code>CSS: 层叠样式表，用来美化和修饰页面，不区分大小写</code></p>
-<p>通过sytle标签属性，给其指定样式。<code>属性名:属性;属性名:属性;</code></p>
+<h2 id="css-">css封装</h2>
+<p>1.通过sytle标签属性，给其指定样式。<code>属性名:属性;属性名:属性;</code></p>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
-</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">div</span> <span class="attribute">style</span>=<span class="value">"color:red;font-size:24px"</span>&gt;</span><span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">div</span> <span class="attribute">style</span>=<span class="value">"color:red;font-size:24px;background-color: #9966cc;"</span>&gt;</span><span class="tag">&lt;/<span class="title">div</span>&gt;</span>
 </pre></td></tr></table></figure>
 
+<p>2.把样式代码封装到style标签当中</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">head</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">style</span> <span class="attribute">text</span>=<span class="value">"text/css"</span>&gt;</span><span class="css">
+        <span class="tag">div</span><span class="rules">{<span class="rule"><span class="attribute">color</span>:<span class="value">red</span></span>;<span class="rule"><span class="attribute">font-size</span>:<span class="value"><span class="number">24</span>px</span></span>;<span class="rule"><span class="attribute">background-color</span>:<span class="value"> <span class="hexcolor">#9966cc</span></span></span>;<span class="rule">}</span></span>
+        <span class="tag">span</span><span class="rules">{<span class="rule"><span class="attribute">color</span>:<span class="value">red</span></span>;<span class="rule"><span class="attribute">font-size</span>:<span class="value"><span class="number">24</span>px</span></span>;<span class="rule"><span class="attribute">background-color</span>:<span class="value"> <span class="hexcolor">#9966cc</span></span></span>;<span class="rule">}</span></span>
+    </span><span class="tag">&lt;/<span class="title">style</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">head</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<p>3.把样式代码提取到一个单独的文件</p>
+<figure class="highlight css:"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="comment">/* url.css */</span>
+<span class="tag">div</span><span class="rules">{<span class="rule"><span class="attribute">color</span>:<span class="value">red</span></span>;<span class="rule"><span class="attribute">font-size</span>:<span class="value"><span class="number">24</span>px</span></span>;<span class="rule"><span class="attribute">background-color</span>:<span class="value"> <span class="hexcolor">#9966cc</span></span></span>;<span class="rule">}</span></span>
+<span class="tag">span</span><span class="rules">{<span class="rule"><span class="attribute">color</span>:<span class="value">red</span></span>;<span class="rule"><span class="attribute">font-size</span>:<span class="value"><span class="number">24</span>px</span></span>;<span class="rule"><span class="attribute">background-color</span>:<span class="value"> <span class="hexcolor">#9966cc</span></span></span>;<span class="rule">}</span></span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight css:"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">style</span> <span class="attribute">type</span>=<span class="value">"text/css"</span>&gt;</span><span class="css">
+<span class="at_rule">@<span class="keyword">import</span> <span class="function">url(url.css)</span>
+</span></span><span class="tag">&lt;/<span class="title">style</span>&gt;</span>
+<span class="comment">&lt;!-- rel：引入的外部文件和当前页面的关系 --&gt;</span>
+<span class="tag">&lt;<span class="title">link</span> <span class="attribute">rel</span>=<span class="value">"stylesheet"</span> <span class="attribute">type</span>=<span class="value">"text/css"</span> <span class="attribute">href</span>=<span class="value">"url.css"</span>/&gt;</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight css:"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="comment">/* total.css */</span>
+<span class="at_rule">@<span class="keyword">import</span> <span class="function">url(<span class="number">1</span>.css)</span>
+@import <span class="function">url(<span class="number">2</span>.css)</span></span>
+</pre></td></tr></table></figure>
+
+<h2 id="-">选择器</h2>
+<p>选择器： 用来确定被（操作）的标签的一种语法</p>
+<ol>
+<li>标签名称选择器,
+<code>div{color:red}</code> or <code>span</code></li>
+<li>类选择器,
+<code>.class-name{color:red}</code>
+<code>&lt;div class=&quot;class-name&quot;/&gt;</code></li>
+<li>id选择器，
+<code>#div-id{color:red}</code>
+<code>&lt;div id=&quot;div-id&quot;/&gt;</code></li>
+</ol>
+<h3 id="-">选择器优先级</h3>
+<p><code>style &gt; id &gt; class &gt; name</code></p>
+<h3 id="-">组合选择器</h3>
+<p>共用多个样式代码
+<code>selector1, selector2 ... {color:red}</code></p>
+<h3 id="-">关联选择器</h3>
+<p>逐渐缩小范围，确定被操作元素
+<code>parent child {color:red}</code></p>
+<h3 id="-">伪类选择器</h3>
+<p>要有顺序： lvha</p>
+<figure class="highlight css:"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre><span class="comment">/* :link, visited,:hover, :active */</span>
+<span class="tag">selector</span><span class="pseudo">:active</span> <span class="rules">{ <span class="rule"><span class="attribute">color</span>:<span class="value"> red </span></span></span>}
+</pre></td></tr></table></figure>
+
+<h2 id="css-">css定位模型</h2>
+<ol>
+<li>基本流模型</li>
+<li>浮动流模型定位：脱离基本流，按照指定方向浮动，
+遮挡时文字环绕在周围<figure class="highlight css:"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre><span class="comment">/* 浮动流 */</span>
+<span class="tag">div</span> <span class="rules">{ <span class="rule"><span class="attribute">float</span>:<span class="value"> left</span></span>; <span class="rule"><span class="attribute">margin</span>:<span class="value"> <span class="number">8</span>px</span></span>;<span class="rule">}</span></span>
+</pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h2 id="css-">css盒模型</h2>
+<ul>
+<li><p>margin: 外边距</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre><span class="comment">/* 上右下左*/</span>
+<span class="label">margin:</span> <span class="number">10</span>px <span class="number">0</span>px <span class="number">10</span>px <span class="number">0</span>px
+</pre></td></tr></table></figure>
+</li>
+<li><p>padding: 内边距</p>
+</li>
+<li>border: 边框<blockquote>
+<p>border-width, border-color, border-style</p>
+<p>total_width or height = padding + magin + border + width</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="-">位置模型</h2>
+<p>按照我们指定的位置显示相关的标签</p>
+<blockquote>
+<p>position: static | absolute | fixed | relative</p>
+</blockquote>
+<p>relative: 没有脱离基本流，相对于自身原来位置,<em>相对于第一个包含的相对定位或绝对定位</em></p>
+<p>static: 默认值，按基本流排列</p>
+<p>absolute: 脱离基本流，<em>相对于第一个包含的相对定位或绝对定位</em></p>
+<p>fixed:　相对于窗口？</p>
+<p>z-index: 决定谁在最顶端</p>
+<blockquote>
+<p>display: none | block <code>/* 显示隐藏标签 */</code></p>
+</blockquote>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre><span class="attribute">position</span><span class="value">: absolute;</span> <span class="attribute">top</span><span class="value">:<span class="number">20</span>px;</span> <span class="attribute">left</span><span class="value">:<span class="number">20</span>px;</span> <span class="attribute">z-index</span><span class="value">:<span class="number">100</span>;</span>
+</pre></td></tr></table></figure>
+
+<h2 id="demo">DEMO</h2>
+<figure class="highlight html:"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+</pre></td><td class="code"><pre>&lt;body&gt;
+  &lt;<span class="keyword">div</span>&gt;
+    &lt;img src=<span class="string">"xiaobao.png"</span>/&gt;
+    Here’s an example <span class="keyword">that</span> shows an <span class="type">application</span> area <span class="keyword">for</span> which Scala <span class="keyword">is</span> particularly well
+suited. Consider <span class="keyword">the</span> task <span class="keyword">of</span> implementing an electronic auction service. We use
+an Erlang-style actor process model <span class="keyword">to</span> implement <span class="keyword">the</span> participants <span class="keyword">of</span> <span class="keyword">the</span> auction.
+Actors are objects <span class="keyword">to</span> which messages are sent. Every actor has a “mailbox” <span class="keyword">of</span> <span class="keyword">its</span> <span class="keyword">in</span>-
+coming messages which <span class="keyword">is</span> represented <span class="keyword">as</span> a queue. It can work sequentially <span class="keyword">through</span>
+<span class="keyword">the</span> messages <span class="keyword">in</span> <span class="keyword">its</span> mailbox, <span class="keyword">or</span> search <span class="keyword">for</span> messages matching <span class="keyword">some</span> pattern.
+For <span class="keyword">every</span> traded <span class="property">item</span> there <span class="keyword">is</span> an auctioneer actor <span class="keyword">that</span> publishes information <span class="keyword">about</span>
+<span class="keyword">the</span> traded <span class="property">item</span>, <span class="keyword">that</span> accepts offers <span class="keyword">from</span> clients <span class="keyword">and</span> <span class="keyword">that</span> communicates <span class="keyword">with</span> <span class="keyword">the</span>
+seller <span class="keyword">and</span> winning bidder <span class="keyword">to</span> close <span class="keyword">the</span> <span class="keyword">transaction</span>. We present an overview <span class="keyword">of</span> a
+simple implementation here.
+  &lt;/<span class="keyword">div</span>&gt;
+  &lt;<span class="keyword">div</span> <span class="property">id</span>=<span class="string">"div1"</span>&gt;&lt;/<span class="keyword">div</span>&gt;
+  &lt;<span class="keyword">div</span> <span class="property">id</span>=<span class="string">"div4"</span>&gt;
+      &lt;<span class="keyword">div</span> <span class="property">id</span>=<span class="string">"div2"</span>&gt;&lt;/<span class="keyword">div</span>&gt;
+  &lt;/<span class="keyword">div</span>&gt;
+
+  &lt;<span class="keyword">div</span> <span class="property">id</span>=<span class="string">"div3"</span>&gt;&lt;/<span class="keyword">div</span>&gt;
+&lt;/body&gt;
+</pre></td></tr></table></figure>
+
+<figure class="highlight css:"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+</pre></td><td class="code"><pre><span class="tag">div</span><span class="rules">{
+    <span class="rule"><span class="attribute">width</span>:<span class="value"><span class="number">600</span>px</span></span>;
+    <span class="rule"><span class="attribute">border</span>:<span class="value"> solid <span class="number">9</span>px red</span></span>;
+    <span class="rule"><span class="attribute">margin</span>:<span class="value"> <span class="number">11</span>px</span></span>;
+    <span class="rule"><span class="attribute">padding</span>:<span class="value"> <span class="number">15</span>px</span></span>;
+<span class="rule">}</span></span>
+<span class="tag">img</span> <span class="rules">{
+    <span class="rule"><span class="attribute">float</span>:<span class="value"> left</span></span>;
+    <span class="rule"><span class="attribute">margin</span>:<span class="value"> <span class="number">8</span>px</span></span>;
+<span class="rule">}</span></span>
+<span class="id">#div1</span> <span class="rules">{
+    <span class="rule"><span class="attribute">width</span>:<span class="value"> <span class="number">40</span>px</span></span>;
+    <span class="rule"><span class="attribute">height</span>:<span class="value"> <span class="number">40</span>px</span></span>;
+    <span class="rule"><span class="attribute">position</span>:<span class="value"> static</span></span>;
+    <span class="rule"><span class="attribute">top</span>:<span class="value"> <span class="number">50</span>px</span></span>;
+    <span class="rule"><span class="attribute">right</span>:<span class="value"> <span class="number">20</span>px</span></span>;
+    <span class="rule"><span class="attribute">background-color</span>:<span class="value"> yellow</span></span>;
+<span class="rule">}</span></span>
+<span class="id">#div2</span> <span class="rules">{
+    <span class="rule"><span class="attribute">width</span>:<span class="value"> <span class="number">40</span>px</span></span>;
+    <span class="rule"><span class="attribute">height</span>:<span class="value"> <span class="number">40</span>px</span></span>;
+    <span class="rule"><span class="attribute">top</span>:<span class="value"> <span class="number">0</span>px</span></span>;
+    <span class="rule"><span class="attribute">right</span>:<span class="value"> <span class="number">5</span>px</span></span>;
+    <span class="rule"><span class="attribute">position</span>:<span class="value"> relative</span></span>;
+    <span class="rule"><span class="attribute">background-color</span>:<span class="value"> green</span></span>;
+<span class="rule">}</span></span>
+<span class="id">#div3</span> <span class="rules">{
+    <span class="rule"><span class="attribute">width</span>:<span class="value"> <span class="number">40</span>px</span></span>;
+    <span class="rule"><span class="attribute">height</span>:<span class="value"> <span class="number">40</span>px</span></span>;
+    <span class="rule"><span class="attribute">top</span>:<span class="value"> <span class="number">50</span>px</span></span>;
+    <span class="rule"><span class="attribute">right</span>:<span class="value"> <span class="number">20</span>px</span></span>;
+    <span class="rule"><span class="attribute">position</span>:<span class="value"> static</span></span>;
+    <span class="rule"><span class="attribute">background-color</span>:<span class="value"> blue</span></span>;
+<span class="rule">}</span></span>
+<span class="id">#div4</span> <span class="rules">{
+    <span class="rule"><span class="attribute">top</span>:<span class="value"> <span class="number">50</span>px</span></span>;
+    <span class="rule"><span class="attribute">left</span>:<span class="value"> <span class="number">20</span>px</span></span>;
+    <span class="rule"><span class="attribute">position</span>:<span class="value"> absolute</span></span>;
+    <span class="rule"><span class="attribute">background-color</span>:<span class="value"> purple</span></span>;
+<span class="rule">}</span></span>
+</pre></td></tr></table></figure>
+
+<h1 id="javascript">javascript</h1>
+<p><strong>javascript是运行在浏览器中的一门语言, 可以动态操作页面上的元素</strong></p>
+<h2 id="-">嵌入浏览器</h2>
+<ol>
+<li><p>把代码放到script当中</p>
+<figure class="highlight html:"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">“text</span>/<span class="attribute">javascript</span>"&gt;</span><span class="javascript">
+<span class="comment">/* code */</span>
+</span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
+</pre></td></tr></table></figure>
+</li>
+<li><p>从外部引入</p>
+<figure class="highlight javascript:"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">“text</span>/<span class="attribute">javascript</span>" <span class="attribute">src</span>=<span class="value">"*.js"</span>/&gt;</span><span class="javascript"> <span class="comment">// 外部文件的编码格式，和html的编码格式要一致</span></span>
+</pre></td></tr></table></figure>
+</li>
+<li><p>写在标签里</p>
+<figure class="highlight html:"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">a</span> <span class="attribute">href</span>=<span class="value">"javascript: alert('hello world')"</span>/&gt;</span>
+</pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h2 id="javascript-">javascript核心语法</h2>
+<h3 id="-">定义变量</h3>
+<p>变量的类型由给定的值来确定  <code>var name = &quot;string&quot;</code></p>
+<p>没赋值，为 undefined. <code>var name; // name为undefined</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre>demo = <span class="string">"else"</span> <span class="comment">//不声明亦可, 有什么副作用?</span>
+alert(demo)
+
+result=<span class="number">3</span>*<span class="string">"a"</span> <span class="comment">// NaN</span>
+result=<span class="number">3</span>*<span class="string">"2"</span> <span class="comment">//  6 , 自动类型转换</span>
+<span class="number">0</span> <span class="literal">null</span> <span class="literal">NaN</span>　<span class="literal">undefined</span>　 <span class="comment">// 都表示假，其他表示真</span>
+</pre></td></tr></table></figure>
+
+<blockquote>
+<p>基本数据类型：string, boolean(true|false), number, null, undefined</p>
+<p>应用数据类型: object, function</p>
+</blockquote>
 ]]></content>
     
     
@@ -40,6 +665,8 @@
       <category term="html" scheme="http://yoursite.com/tags/html/"/>
     
       <category term="css" scheme="http://yoursite.com/tags/css/"/>
+    
+      <category term="javascript" scheme="http://yoursite.com/tags/javascript/"/>
     
   </entry>
   
