@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Hello World]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://yoursite.com/"/>
-  <updated>2014-04-01T10:38:07.803Z</updated>
+  <updated>2014-04-04T11:15:21.589Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,11 +15,435 @@
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
   
   <entry>
+    <title><![CDATA[传智播客day05]]></title>
+    <link href="http://yoursite.com/2014/04/04/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day05/"/>
+    <id>http://yoursite.com/2014/04/04/传智播客day05/</id>
+    <published>2014-04-04T01:20:29.000Z</published>
+    <updated>2014-04-04T08:50:27.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="xml-">xml语言</h1>
+<ul>
+<li>作用：传输数据 存储数据</li>
+</ul>
+<h2 id="xml-">xml结构</h2>
+<ul>
+<li>xml1.1 发一次请求，多次响应</li>
+<li>xml1.0 发一次请求，一次响应<figure class="highlight xml:"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span> <span class="comment">&lt;!--声明--&gt;</span>
+
+<span class="tag">&lt;<span class="title">books</span>&gt;</span>  <span class="comment">&lt;!--必须要有根元素--&gt;</span>
+    <span class="tag">&lt;<span class="title">book</span> <span class="attribute">id</span>=<span class="value">"first"</span>&gt;</span> content <span class="tag">&lt;/<span class="title">book</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">books</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p><strong> 注意： 大小写敏感 </strong></p>
+<h2 id="dtd-xml-">dtd xml约束</h2>
+<ul>
+<li>DOCTYPE: 内部声明</li>
+<li>ELEMENT: 元素声明</li>
+</ul>
+<figure class="highlight dtd:"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre><span class="pi">&lt;?xml version="1.0" encoding="gbk"?&gt;</span>
+<span class="tag">&lt;<span class="title">!ELEMENT</span> <span class="attribute">books</span> (<span class="attribute">book</span>?)&gt;</span>  <span class="comment">&lt;!-- + * ?: 出现一次或多次--&gt;</span>
+<span class="tag">&lt;<span class="title">!ELEMENT</span> <span class="attribute">book</span> (<span class="attribute">name</span>, <span class="attribute">price</span>)&gt;</span>
+<span class="tag">&lt;<span class="title">!ELEMENT</span> <span class="attribute">name</span> (#<span class="attribute">PCDATA</span>)&gt;</span>
+<span class="tag">&lt;<span class="title">!ELEMENT</span> <span class="attribute">price</span> (#<span class="attribute">PCDATA</span>)&gt;</span>
+<span class="tag">&lt;<span class="title">!ATTLIST</span> <span class="attribute">book</span> <span class="attribute">bid</span> <span class="attribute">CDATA</span> #<span class="attribute">REQUIRED</span> &gt;</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight xml:"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre><span class="pi">&lt;?xml version="1.0" encoding="gbk"?&gt;</span>
+<span class="doctype">&lt;!DOCTYPE books [
+   &lt;!ELEMENT books(book)&gt;
+   &lt;!ELEMENT book(name, price, author|publish)&gt; &lt;!-- 必须按顺序写 --&gt;
+   &lt;!ELEMENT name(#PCDATA)&gt;
+   &lt;!ELEMENT price(#PCDATA)&gt;
+]&gt;</span> <span class="comment">&lt;!-- 声明在头部 or --&gt;</span>
+
+<span class="doctype">&lt;!DOCTYPE books SYSTEM "**path.dtd**"&gt;</span> <span class="comment">&lt;!-- 从本地引入dtd文件 --&gt;</span>
+
+<span class="doctype">&lt;!DOCTYPE books PUBLIC "//UNKNOWN/" "unknown.dtd"&gt;</span> <span class="comment">&lt;!-- 从互联网引入 --&gt;</span>
+</pre></td></tr></table></figure>
+
+<h3 id="-">类型</h3>
+<ul>
+<li>CDATA: 字符数据</li>
+<li>ID: id</li>
+</ul>
+<h3 id="-">约束</h3>
+<ul>
+<li>#REQUIRED</li>
+<li>#FIXED value: 固定</li>
+<li>#IMPLIED: 不是必须</li>
+</ul>
+<h3 id="cdata">CDATA</h3>
+<blockquote>
+<p><code>&lt;![CDATA[will be not parsed content]]&gt;</code></p>
+</blockquote>
+<h3 id="xml-css">xml css</h3>
+<blockquote>
+<p><code>&lt;?xml-stylesheet type=&quot;text/css&quot; href=&quot;book.css&quot;?&gt;</code></p>
+</blockquote>
+<h3 id="-entity">实体 entity</h3>
+<blockquote>
+<p><code>&lt;!ENTITY site &quot;www.itcast.cn&quot;&gt;</code></p>
+<p><code>&lt;publish&gt;&amp;my;&lt;/publish&gt; &lt;!-- 引用 --&gt;</code></p>
+</blockquote>
+<h3 id="-">混合型</h3>
+<blockquote>
+<p><code>&lt;!ELEMENT note (#PCDATA|to|from|header|message)*&gt;</code></p>
+</blockquote>
+<h2 id="schema">schema</h2>
+<p>Schema是一个xml文件扩展为xsd，替代dtd</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">schema</span> <span class="attribute">xmlns</span>=<span class="value">""</span>
+        <span class="attribute">targetNamespace</span>=<span class="value">"*any*"</span><span class="value">i</span>
+        <span class="attribute">xml</span> <span class="attribute">ns:tns</span>=<span class="value">"*any*"</span>
+        <span class="attribute">elementForDefault</span>=<span class="value">"qualified"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">element</span> <span class="attribute">name</span>=<span class="value">"books"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">complexType</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">sequence</span>&gt;</span>
+                <span class="tag">&lt;<span class="title">element</span> <span class="attribute">name</span>=<span class="value">"book"</span> <span class="attribute">minOcdcurs</span>=<span class="value">"2"</span> <span class="attribute">maxOccurs</span>=<span class="value">"3"</span>&gt;</span>
+                    <span class="tag">&lt;<span class="title">complexType</span>&gt;</span>
+                        <span class="tag">&lt;<span class="title">sequence</span>&gt;</span>
+                            <span class="tag">&lt;<span class="title">element</span> <span class="attribute">name</span>=<span class="value">"name"</span> <span class="attribute">type</span>=<span class="value">"string"</span>&gt;</span> <span class="tag">&lt;/<span class="title">element</span>&gt;</span>
+                            <span class="tag">&lt;<span class="title">element</span> <span class="attribute">name</span>=<span class="value">"price"</span> <span class="attribute">type</span>=<span class="value">"tns:myprice"</span>&gt;</span> <span class="tag">&lt;/<span class="title">element</span>&gt;</span> <span class="comment">&lt;!--注意：自定义类型使用 --&gt;</span>
+                            <span class="tag">&lt;<span class="title">element</span> <span class="attribute">name</span>=<span class="value">"publishtime"</span> <span class="attribute">type</span>=<span class="value">"date"</span>&gt;</span> <span class="tag">&lt;/<span class="title">element</span>&gt;</span>
+                            <span class="tag">&lt;<span class="title">element</span> <span class="attribute">name</span>=<span class="value">"tel"</span> <span class="attribute">type</span>=<span class="value">"tns:mytel"</span>&gt;</span> <span class="tag">&lt;/<span class="title">element</span>&gt;</span>
+                        <span class="tag">&lt;/<span class="title">sequence</span>&gt;</span>
+                    <span class="tag">&lt;/<span class="title">complexType</span>&gt;</span>
+                <span class="tag">&lt;/<span class="title">element</span>&gt;</span>
+            <span class="tag">&lt;/<span class="title">sequence</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">attribute</span> <span class="attribute">name</span>=<span class="value">"bid"</span> <span class="attribute">type</span>=<span class="value">"int"</span> <span class="attribute">use</span>=<span class="value">"option"</span>&gt;</span>
+            <span class="tag">&lt;/<span class="title">attribute</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">complexType</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">element</span>&gt;</span>
+    <span class="comment">&lt;!-- 自定义元素 --&gt;</span>
+    <span class="tag">&lt;<span class="title">simpleType</span> <span class="attribute">name</span>=<span class="value">"mytel"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">restriction</span> <span class="attribute">base</span>=<span class="value">"striing"</span>&gt;</span> <span class="comment">&lt;!-- 指定元素类型 进行加强 --&gt;</span>
+            <span class="tag">&lt;<span class="title">parttern</span> <span class="attribute">value</span>=<span class="value">"\d{3}-\d{4}-\d{4}"</span>&gt;</span>
+            <span class="tag">&lt;/<span class="title">parttern</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">restriction</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">simpleType</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">simpleType</span> <span class="attribute">name</span>=<span class="value">"myprice"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">restriction</span> <span class="attribute">base</span>=<span class="value">"double"</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">maxInclusive</span> <span class="attribute">value</span>=<span class="value">"200"</span>&gt;</span> <span class="tag">&lt;/<span class="title">maxInclusive</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">minInclusive</span> <span class="attribute">value</span>=<span class="value">"100"</span>&gt;</span> <span class="tag">&lt;/<span class="title">minInclusive</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">restriction</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">simpleType</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">schema</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">books</span> <span class="attribute">xmlns</span>=<span class="value">""</span> <span class="attribute">xmlns:xsi</span>=<span class="value">""</span> <span class="attribute">xsi:schemaLocation</span>=<span class="value">""</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">books</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+]]></content>
+    
+    
+      <category term="课堂笔记" scheme="http://yoursite.com/tags/%E8%AF%BE%E5%A0%82%E7%AC%94%E8%AE%B0/"/>
+    
+      <category term="xml" scheme="http://yoursite.com/tags/xml/"/>
+    
+      <category term="dtd" scheme="http://yoursite.com/tags/dtd/"/>
+    
+      <category term="schema" scheme="http://yoursite.com/tags/schema/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[传智播客day04]]></title>
+    <link href="http://yoursite.com/2014/04/03/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day04/"/>
+    <id>http://yoursite.com/2014/04/03/传智播客day04/</id>
+    <published>2014-04-03T00:55:12.000Z</published>
+    <updated>2014-04-04T01:11:36.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="javascript">javascript</h1>
+<h2 id="prototype">prototype</h2>
+<p>prototype 是一个类的属性，是类的一个属性,
+是类的一个实例，也就是说当一个类被声明后，js自动创建，
+并且作为类的prototype属性而存在,称作类的<em>原型</em></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code"><pre>function Person(){
+}
+<span class="keyword">log</span>(Person<span class="built_in">.</span>prototype) <span class="comment">// Person(){}</span>
+<span class="built_in">var</span> p <span class="subst">=</span> <span class="literal">new</span> Person();
+<span class="keyword">log</span>(p<span class="built_in">.</span>prototype); <span class="comment">// undefined</span>
+<span class="keyword">log</span>(console<span class="built_in">.</span><span class="keyword">log</span>(p<span class="built_in">.</span>__proto__<span class="subst">==</span>Person<span class="built_in">.</span>prototype); <span class="comment">// true</span>
+
+Person<span class="built_in">.</span>prototype<span class="built_in">.</span>name <span class="subst">=</span> <span class="string">"123"</span>; <span class="comment">// readonly</span>
+<span class="keyword">log</span>(p<span class="built_in">.</span>name); <span class="comment">// 123</span>
+
+p<span class="built_in">.</span>name <span class="subst">=</span> <span class="number">124</span>;
+<span class="keyword">log</span>(p<span class="built_in">.</span>name); <span class="comment">// 124</span>
+</pre></td></tr></table></figure>
+
+<p>在扩展共用属性，用prototype；在应用个性化的属性时，用构造函数</p>
+<h2 id="dom">DOM</h2>
+<p>dom: 文档对象模型，是一套规范</p>
+<p>dom 定义了哪些对象，这些对象有哪些方法和属性</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre>window.onload = <span class="function"><span class="keyword">function</span> <span class="params">()</span>{</span>
+    document.getElementsByTagName(<span class="string">"div"</span>) <span class="comment">// 获得所有的div</span>
+    document.getElementsByName(<span class="string">"div"</span>)[<span class="number">0</span>]  <span class="comment">//获得集合，name值不唯一如'&lt;input type="radio/&gt;"'</span>
+    <span class="keyword">var</span> div1 = document.getElementById() <span class="comment">// 获得的引用，代表对象</span>
+    log(div1.innerHTML)
+}
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>&lt;<span class="operator">div</span>&gt;&lt;/<span class="operator">div</span>&gt;<span class="comment"> // 代表标签</span>
+</pre></td></tr></table></figure>
+
+<p><em>标签和标签之间也都是文本</em>
+/<em> 拷贝老师 </em>/！！！！！</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- 如何获得div3 --&gt;</span>
+<span class="tag">&lt;<span class="title">table</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">tr</span>&gt;</span> <span class="tag">&lt;<span class="title">td</span> <span class="attribute">id</span>=<span class="value">"td1"</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">div</span>&gt;</span>div3<span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">td</span>&gt;</span> <span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">table</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre><span class="keyword">var</span> td1 = document.getElementById(<span class="string">"td1"</span>)
+td1.getElementsByTagName(<span class="string">"div"</span>)[<span class="number">0</span>] <span class="comment">// 所有容器对象，都有get*方法</span>
+</pre></td></tr></table></figure>
+
+<blockquote>
+<p><code>document.forms</code> // 获得页面上所有的form</p>
+</blockquote>
+<h3 id="-">对象的属性和方法</h3>
+<p>nodeName: 节点名称</p>
+<blockquote>
+<p>   元素节点，标签名</p>
+<p>   属性节点，属性名</p>
+<p>   文本节点，#text</p>
+</blockquote>
+<p>nodeValue: 节点值</p>
+<blockquote>
+<p>   元素节点，null</p>
+<p>   属性节点，属性值</p>
+<p>   文本节点，文本内容</p>
+</blockquote>
+<p>nodeType: 节点类型</p>
+<blockquote>
+<p>   元素节点，1</p>
+<p>   属性节点，2</p>
+<p>   文本节点，3</p>
+</blockquote>
+<h3 id="demo">DEMO</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">ul</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">li</span> <span class="attribute">id</span>=<span class="value">"bj"</span>&gt;</span>
+      北京
+      <span class="tag">&lt;<span class="title">p</span>&gt;</span>海淀<span class="tag">&lt;/<span class="title">p</span>&gt;</span>
+      奥运
+    <span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">ul</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="code"><pre><span class="reserved">var</span> li = <span class="built_in">document</span>.getElementById(<span class="string">"bj"</span>);
+<span class="built_in">console</span>.debug(li.childNodes);
+<span class="keyword">for</span> (<span class="reserved">var</span> i=<span class="number">0</span>;i&lt;li.childNodes.length;i++){
+  <span class="reserved">var</span> child = li.childNodes[i];
+  <span class="keyword">if</span> (child.nodeType == <span class="number">3</span>)
+    <span class="built_in">console</span>.log(child.nodeValue);
+  <span class="keyword">else</span>
+    <span class="built_in">console</span>.log(child.innerHTML);
+}
+</pre></td></tr></table></figure>
+
+<h3 id="demo2">DEMO2</h3>
+<p>打印明天你好</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">h1</span> <span class="attribute">id</span>=<span class="value">"h1"</span>&gt;</span>明天休息<span class="tag">&lt;/<span class="title">h1</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre>var h1 = document<span class="preprocessor">.getElementById</span>(<span class="string">"h1"</span>)<span class="comment">;</span>
+console<span class="preprocessor">.log</span>(h1<span class="preprocessor">.innerHTML</span>)<span class="comment">;</span>
+console<span class="preprocessor">.log</span>(h1<span class="preprocessor">.firstChild</span><span class="preprocessor">.nodeValue</span>)<span class="comment">;</span>
+console<span class="preprocessor">.log</span>(h1<span class="preprocessor">.lastChild</span><span class="preprocessor">.nodeValue</span>)<span class="comment">;</span>
+console<span class="preprocessor">.log</span>(h1<span class="preprocessor">.childNodes</span>[<span class="number">0</span>]<span class="preprocessor">.nodeValue</span>)<span class="comment">;</span>
+</pre></td></tr></table></figure>
+
+<h3 id="demo3">DEMO3</h3>
+<p>打印option中的内容</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">select</span> <span class="attribute">id</span>=<span class="value">"select"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">option</span>&gt;</span> aaa <span class="tag">&lt;/<span class="title">option</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">option</span>&gt;</span>bbb <span class="tag">&lt;/<span class="title">option</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">option</span>&gt;</span>ccc <span class="tag">&lt;/<span class="title">option</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">option</span>&gt;</span>dddd <span class="tag">&lt;/<span class="title">option</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">select</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre><span class="reserved">var</span> options = <span class="built_in">document</span>.getElementById(<span class="string">"select"</span>).childNodes;
+
+<span class="keyword">for</span>(<span class="reserved">var</span> i=<span class="number">0</span>;i&lt;options.length;i++){
+  <span class="keyword">if</span>(options[i].nodeType == <span class="number">1</span>)
+    <span class="built_in">console</span>.log(options[i].innerHTML);
+}
+</pre></td></tr></table></figure>
+
+<h3 id="-">创建节点</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre>var <span class="keyword">tr</span> = document.createElement(<span class="string">"tr"</span>);
+<span class="keyword">tr</span>.innerHTML = <span class="string">"&lt;td&gt;content&lt;/td&gt;"</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre><span class="xml"><span class="tag"><span class="value">&lt;a href='</span><span class="value">javascript:void(0)'</span> <span class="attribute">onclick</span>=<span class="value">'onClick(this)'</span>/&gt;</span></span>
+</pre></td></tr></table></figure>
+
+<p><code>所有的input元素都通过value来获得其值</code></p>
+<h3 id="string-">string 转换</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre><span class="built_in">String</span>.prototype.trim = <span class="function"><span class="keyword">function</span> <span class="params">()</span>{</span> <span class="keyword">return</span> <span class="string">""</span>}
+<span class="string">"aa  "</span>.trim(); <span class="comment">// 字符串虽然是基本数据类型，但是会自动转换String对象</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>&lt;form onsubmit=“<span class="keyword">return</span> <span class="literal">false</span>;”&gt;&lt;<span class="regexp">/form&gt; /</span>/ <span class="keyword">not</span> work
+</pre></td></tr></table></figure>
+
+<h2 id="bom">BOM</h2>
+<p>bom 浏览器对象模型</p>
+<p>1 window, 顶级元素，每一个窗口都有一个window对象</p>
+<p>javascript所有定义的全局变量和函数都是window对象的</p>
+<p>2 frame</p>
+<p>3 location</p>
+<blockquote>
+<p>window.location.href = &quot;<a href="http://url" target="_blank">http://url</a>&quot;</p>
+</blockquote>
+<p>4 history</p>
+]]></content>
+    
+    
+      <category term="课堂笔记" scheme="http://yoursite.com/tags/%E8%AF%BE%E5%A0%82%E7%AC%94%E8%AE%B0/"/>
+    
+      <category term="javascript" scheme="http://yoursite.com/tags/javascript/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[传智播客day03]]></title>
     <link href="http://yoursite.com/2014/04/01/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day03/"/>
     <id>http://yoursite.com/2014/04/01/传智播客day03/</id>
     <published>2014-04-01T01:03:33.000Z</published>
-    <updated>2014-04-01T09:02:29.000Z</updated>
+    <updated>2014-04-03T01:37:12.000Z</updated>
     <content type="html"><![CDATA[<h1 id="todo">TODO</h1>
 <p><em>什么是 强类型，弱类型，动态类型，静态类型</em></p>
 <h1 id="javascript">javascript</h1>
@@ -185,15 +609,15 @@ document.write( render(tableContent, <span class="string">"table"</span>) );
 
     myfun2() <span class="comment">// args passed undefined</span>
 </span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
-<span class="tag">&lt;<span class="title">input</span> <span class="attribute">onclick</span>=<span class="value">"myfn();"</span>/&gt;</span>pp
+<span class="tag">&lt;<span class="title">input</span> <span class="attribute">onclick</span>=<span class="value">"myfn();"</span>/&gt;</span>
 </pre></td></tr></table></figure>
 
 <p>同名函数会被覆盖</p>
 <h3 id="-arguments-">函数arguments参数</h3>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
-</pre></td><td class="code"><pre><span class="function"><span class="keyword">function</span> <span class="title">myfn</span>(){}</span>
-myfun(“<span class="operator">a</span><span class="string">","</span>b<span class="string">") // arguments =&gt; ["</span><span class="operator">a</span><span class="string">", "</span>b<span class="string">"]</span>
+</pre></td><td class="code"><pre><span class="function"><span class="keyword">function</span> <span class="title">myfn</span><span class="params">()</span></span>{}
+myfun(<span class="string">"a"</span>,<span class="string">"b"</span>) // arguments =&gt; [<span class="string">"a"</span>, <span class="string">"b"</span>]
 </pre></td></tr></table></figure>
 
 <h3 id="-">函数是变量</h3>
@@ -204,7 +628,7 @@ myfun(“<span class="operator">a</span><span class="string">","</span>b<span cl
 5
 </pre></td><td class="code"><pre><span class="function"><span class="keyword">function</span> <span class="title">myfn</span><span class="params">()</span></span>{}
 // var myfn = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{} 匿名函数
-// var myfn = new Function(<span class="string">"arg_name"</span>, ”alert(<span class="string">'hello world'</span>);“);
+// var myfn = new Function(<span class="string">"arg_name, arg_name2"</span>, ”alert(<span class="string">'hello world'</span>);“);
 <span class="function"><span class="keyword">function</span> <span class="title">handler</span><span class="params">( fun )</span></span>{ fun() }
 handler(myfn)
 </pre></td></tr></table></figure>
@@ -314,7 +738,8 @@ p.eat = <span class="function"><span class="keyword">function</span><span class=
 };
 </pre></td></tr></table></figure>
 
-<p>js中的每一个函数内部都有一个this,this表示当前对象(谁调用就是谁)</p>
+<p>js每一个类都有一个属性constructor,表示构造函数
+js中的每一个函数内部都有一个this,this表示当前对象(谁调用就是谁)</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
 3
@@ -351,7 +776,7 @@ p.sleep(); <span class="comment">// in, this 表示 p 这个对象的运行上�
     <link href="http://yoursite.com/2014/03/31/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day02/"/>
     <id>http://yoursite.com/2014/03/31/传智播客day02/</id>
     <published>2014-03-31T00:48:34.000Z</published>
-    <updated>2014-04-01T01:44:38.000Z</updated>
+    <updated>2014-04-04T02:53:25.000Z</updated>
     <content type="html"><![CDATA[<h1 id="html-">html剩余</h1>
 <h2 id="div-span-p">div span p</h2>
 <p>div: 块标签，主要用来封装数据，配合css使用</p>
@@ -404,7 +829,9 @@ p.sleep(); <span class="comment">// in, this 表示 p 这个对象的运行上�
 <figure class="highlight css:"><table><tr><td class="gutter"><pre>1
 2
 3
+4
 </pre></td><td class="code"><pre><span class="comment">/* total.css */</span>
+<span class="at_rule">@<span class="keyword">CHARSET</span> <span class="string">"UTF-8"</span></span>;
 <span class="at_rule">@<span class="keyword">import</span> <span class="function">url(<span class="number">1</span>.css)</span>
 @import <span class="function">url(<span class="number">2</span>.css)</span></span>
 </pre></td></tr></table></figure>

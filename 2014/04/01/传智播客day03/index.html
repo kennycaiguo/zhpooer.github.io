@@ -83,7 +83,7 @@ js 所有函数都有返回值，如果没有明确返回什么">
     </p>
   <p class="article-time">
     <time datetime="2014-04-01T01:03:33.000Z" itemprop="datePublished">4月 1 2014</time>
-    更新日期:<time datetime="2014-04-01T09:02:29.000Z" itemprop="dateModified">4月 1 2014</time>
+    更新日期:<time datetime="2014-04-03T01:37:12.000Z" itemprop="dateModified">4月 3 2014</time>
     
   </p>
 </header>
@@ -260,15 +260,15 @@ document.write( render(tableContent, <span class="string">"table"</span>) );
 
     myfun2() <span class="comment">// args passed undefined</span>
 </span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
-<span class="tag">&lt;<span class="title">input</span> <span class="attribute">onclick</span>=<span class="value">"myfn();"</span>/&gt;</span>pp
+<span class="tag">&lt;<span class="title">input</span> <span class="attribute">onclick</span>=<span class="value">"myfn();"</span>/&gt;</span>
 </pre></td></tr></table></figure>
 
 <p>同名函数会被覆盖</p>
 <h3 id="-arguments-">函数arguments参数</h3>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
-</pre></td><td class="code"><pre><span class="function"><span class="keyword">function</span> <span class="title">myfn</span>(){}</span>
-myfun(“<span class="operator">a</span><span class="string">","</span>b<span class="string">") // arguments =&gt; ["</span><span class="operator">a</span><span class="string">", "</span>b<span class="string">"]</span>
+</pre></td><td class="code"><pre><span class="function"><span class="keyword">function</span> <span class="title">myfn</span><span class="params">()</span></span>{}
+myfun(<span class="string">"a"</span>,<span class="string">"b"</span>) // arguments =&gt; [<span class="string">"a"</span>, <span class="string">"b"</span>]
 </pre></td></tr></table></figure>
 
 <h3 id="-">函数是变量</h3>
@@ -279,7 +279,7 @@ myfun(“<span class="operator">a</span><span class="string">","</span>b<span cl
 5
 </pre></td><td class="code"><pre><span class="function"><span class="keyword">function</span> <span class="title">myfn</span><span class="params">()</span></span>{}
 // var myfn = <span class="function"><span class="keyword">function</span><span class="params">()</span></span>{} 匿名函数
-// var myfn = new Function(<span class="string">"arg_name"</span>, ”alert(<span class="string">'hello world'</span>);“);
+// var myfn = new Function(<span class="string">"arg_name, arg_name2"</span>, ”alert(<span class="string">'hello world'</span>);“);
 <span class="function"><span class="keyword">function</span> <span class="title">handler</span><span class="params">( fun )</span></span>{ fun() }
 handler(myfn)
 </pre></td></tr></table></figure>
@@ -389,7 +389,8 @@ p.eat = <span class="function"><span class="keyword">function</span><span class=
 };
 </pre></td></tr></table></figure>
 
-<p>js中的每一个函数内部都有一个this,this表示当前对象(谁调用就是谁)</p>
+<p>js每一个类都有一个属性constructor,表示构造函数
+js中的每一个函数内部都有一个this,this表示当前对象(谁调用就是谁)</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
 3
@@ -435,6 +436,14 @@ p.sleep(); <span class="comment">// in, this 表示 p 这个对象的运行上�
 	
 <nav class="article-nav clearfix">
  
+ <div class="prev" >
+ <a href="/2014/04/03/传智播客day04/" title="传智播客day04">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  传智播客day04</span>
+</a>
+</div>
+
 
 <div class="next">
 <a href="/2014/03/31/传智播客day02/"  title="传智播客Day02">
@@ -472,11 +481,17 @@ p.sleep(); <span class="comment">// in, this 表示 p 这个对象的运行上�
 		
 			<li><a href="/tags/css/" title="css">css<sup>1</sup></a></li>
 		
+			<li><a href="/tags/dtd/" title="dtd">dtd<sup>1</sup></a></li>
+		
 			<li><a href="/tags/html/" title="html">html<sup>2</sup></a></li>
 		
-			<li><a href="/tags/javascript/" title="javascript">javascript<sup>2</sup></a></li>
+			<li><a href="/tags/javascript/" title="javascript">javascript<sup>3</sup></a></li>
 		
-			<li><a href="/tags/课堂笔记/" title="课堂笔记">课堂笔记<sup>3</sup></a></li>
+			<li><a href="/tags/schema/" title="schema">schema<sup>1</sup></a></li>
+		
+			<li><a href="/tags/xml/" title="xml">xml<sup>1</sup></a></li>
+		
+			<li><a href="/tags/课堂笔记/" title="课堂笔记">课堂笔记<sup>5</sup></a></li>
 		
 			<li><a href="/tags/随想/" title="随想">随想<sup>1</sup></a></li>
 		
