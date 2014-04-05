@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Hello World]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://yoursite.com/"/>
-  <updated>2014-04-04T11:15:21.589Z</updated>
+  <updated>2014-04-05T13:13:38.569Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,11 +15,64 @@
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
   
   <entry>
+    <title><![CDATA[eclipse上的emacs]]></title>
+    <link href="http://yoursite.com/2014/04/05/eclipse%E4%B8%8A%E7%9A%84emacs/"/>
+    <id>http://yoursite.com/2014/04/05/eclipse上的emacs/</id>
+    <published>2014-04-05T12:19:30.000Z</published>
+    <updated>2014-04-05T12:58:01.000Z</updated>
+    <content type="html"><![CDATA[<p>清明闲来无事，又要开始折腾 emacs 和我的编程环境。<br>作为一个 emacser ，小指头总会忍受各种折磨，下面贴出我在Linux下解决办法 ^_^</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="code"><pre>;; 修改 ~/.XmodMap 
+;; 交换右ctrl键和Caps键
+keysym Menu = Super_L
+remove <span class="operator"><span class="keyword">Lock</span> = Caps_Lock
+remove Control = Control_R
+keysym Control_R = Caps_Lock
+keysym Caps_Lock = Control_R
+<span class="keyword">add</span> <span class="keyword">Lock</span> = Caps_Lock
+<span class="keyword">add</span> Control = Control_R</span>
+</pre></td></tr></table></figure>
+
+<p>这个还是很有效果的，比以前使用左下角Ctrl轻松不少，不过用久了肩膀还是疼啊！！!
+泪奔,投奔vim党。</p>
+<p>以上是开胃菜，言归正传，身为一个Java程序猿，在IDE上编程总会有各种不适，从前研究过在
+emacs上使用emacs-jde编写java；在emacs上通过eclime使用eclipse的功能；或者在eclipse上用vim插件；
+均因为种种原因以失败告终，我可悲可叹的emacser人生，最后决定用 IdeaJ，他的按键绑定可以设置的很有emacs风格，
+不过还是和eclipse的使用习惯有一定的不习惯，特别是项目管理。直到今天，我发现了 <a href="&quot;http://blog.csdn.net/lzw_java/article/details/17016279&quot;">把Eclipse打造成Emacs</a></p>
+<p>具体的我就不多说了，秀一下我的按键绑定吧：</p>
+<ol>
+<li>Ctrl+C Ctrl+C : run</li>
+<li>Shift+Ctrl+/ : redo</li>
+<li>Ctrl+Q : quick fix</li>
+<li>Shift+Alt+&#39; :  Previous View</li>
+<li>Alt+&#39;: next View</li>
+<li>Alt+P : Previous Tab</li>
+<li>Alt+N: Next Tab</li>
+<li>Alt+O: Next Editor</li>
+</ol>
+]]></content>
+    
+    
+      <category term="eclipse" scheme="http://yoursite.com/tags/eclipse/"/>
+    
+      <category term="emacs" scheme="http://yoursite.com/tags/emacs/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[传智播客day05]]></title>
     <link href="http://yoursite.com/2014/04/04/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day05/"/>
     <id>http://yoursite.com/2014/04/04/传智播客day05/</id>
     <published>2014-04-04T01:20:29.000Z</published>
-    <updated>2014-04-04T08:50:27.000Z</updated>
+    <updated>2014-04-05T05:42:30.000Z</updated>
     <content type="html"><![CDATA[<h1 id="xml-">xml语言</h1>
 <ul>
 <li>作用：传输数据 存储数据</li>
@@ -35,7 +88,7 @@
 </pre></td><td class="code"><pre><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span> <span class="comment">&lt;!--声明--&gt;</span>
 
 <span class="tag">&lt;<span class="title">books</span>&gt;</span>  <span class="comment">&lt;!--必须要有根元素--&gt;</span>
-    <span class="tag">&lt;<span class="title">book</span> <span class="attribute">id</span>=<span class="value">"first"</span>&gt;</span> content <span class="tag">&lt;/<span class="title">book</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">book</span> <span class="attribute">id</span>=<span class="value">"first"</span>&gt;</span> cnontent <span class="tag">&lt;/<span class="title">book</span>&gt;</span>
 <span class="tag">&lt;/<span class="title">books</span>&gt;</span>
 </pre></td></tr></table></figure>
 
@@ -213,7 +266,7 @@
     <link href="http://yoursite.com/2014/04/03/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day04/"/>
     <id>http://yoursite.com/2014/04/03/传智播客day04/</id>
     <published>2014-04-03T00:55:12.000Z</published>
-    <updated>2014-04-04T01:11:36.000Z</updated>
+    <updated>2014-04-05T05:34:53.000Z</updated>
     <content type="html"><![CDATA[<h1 id="javascript">javascript</h1>
 <h2 id="prototype">prototype</h2>
 <p>prototype 是一个类的属性，是类的一个属性,
