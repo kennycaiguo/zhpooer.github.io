@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Hello World]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://yoursite.com/"/>
-  <updated>2014-04-05T13:13:38.569Z</updated>
+  <updated>2014-04-07T11:36:08.341Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,11 +15,260 @@
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
   
   <entry>
+    <title><![CDATA[传智播客day07]]></title>
+    <link href="http://yoursite.com/2014/04/07/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day07/"/>
+    <id>http://yoursite.com/2014/04/07/传智播客day07/</id>
+    <published>2014-04-07T01:01:39.000Z</published>
+    <updated>2014-04-07T11:35:36.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="tips">Tips</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="comment">// propoties 的快捷方法</span>
+ResourceBundle res = ResourceBundle.getBundle(<span class="string">"db"</span>); <span class="comment">//文件名为 db.prop</span>
+res.getString(<span class="string">"user"</span>)
+</pre></td></tr></table></figure>
+
+<p>.properties 不支持中文。使用jdk工具字符串转码工具</p>
+<blockquote>
+<p>native2ascii</p>
+</blockquote>
+<h1 id="junit-">junit 使用</h1>
+<ol>
+<li>线程独立</li>
+<li>测试方法<br>1.public<br>2.没有返回<br>3.方法不能有参数  </li>
+<li>独立测试体，调用指定对象</li>
+</ol>
+<blockquote>
+<p>类一般为Test结尾，如果类名没有以Test结尾，类继承TestCase类</p>
+</blockquote>
+<h1 id="-">泛型</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre>val entrys = maps<span class="preprocessor">.entrySet</span>()<span class="comment">;</span>
+entrys<span class="preprocessor">.iterator</span>()<span class="comment">;</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="comment">// T 不能是基本数据类型</span>
+<span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; T <span class="title">print</span>(T [] arr){
+    
+}
+</pre></td></tr></table></figure>
+
+<h1 id="-">可变参数</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">getSum</span>(<span class="keyword">int</span>... <span class="keyword">params</span>) {
+
+}
+</pre></td></tr></table></figure>
+
+<h1 id="for-">for循环</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre><span class="built_in">List</span><span class="subst">&lt;</span><span class="built_in">String</span><span class="subst">&gt;</span> <span class="built_in">list</span> <span class="subst">=</span> Arrays<span class="built_in">.</span>asList(arr);
+for (<span class="built_in">String</span> str : <span class="built_in">list</span>) println(str); <span class="comment">// 实现的对象要实现 iterable 接口</span>
+</pre></td></tr></table></figure>
+
+<h1 id="-">枚举</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="keyword">enum</span> <span class="title">Role</span> {
+    boss, manager, emp; <span class="comment">//私有构造类</span>
+}
+Role.values() <span class="comment">//返回对象数组</span>
+</pre></td></tr></table></figure>
+
+<h2 id="-">枚举的扩展</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="code"><pre><span class="keyword">enum</span> Week {
+   Mon(<span class="string">"星期一"</span>){<span class="annotation">@Override</span> <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getName</span>(){}}, Tue(<span class="string">"星期二"</span>);
+   <span class="keyword">private</span> String week;
+
+   <span class="keyword">private</span> <span class="title">Week</span>(String week) {
+       <span class="keyword">this</span>.week = week;
+   }
+   <span class="comment">// getWeek(); setWeek();</span>
+   
+   <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">getName</span>();
+}
+
+Week.Mon.name();
+Week.Mon.ordinal(); <span class="comment">//脚标，0</span>
+</pre></td></tr></table></figure>
+
+<h1 id="-">反射</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+</pre></td><td class="code"><pre>Class clazz = Class<span class="preprocessor">.forName</span>(<span class="string">""</span>)<span class="comment">;</span>
+Class clazz = ref<span class="preprocessor">.getClass</span>()<span class="comment">;</span>
+
+// 字段
+Object instance = clazz<span class="preprocessor">.newInstance</span>()<span class="comment">;</span>
+Field field = clazz<span class="preprocessor">.getDeclaredField</span>(<span class="string">"field"</span>)<span class="comment">; // or getField() 获取public的字段</span>
+field<span class="preprocessor">.setAccessible</span>(true)<span class="comment">; // private 变为 public</span>
+field<span class="preprocessor">.set</span>(instance, <span class="string">"list"</span>)<span class="comment">;</span>
+
+// 获取方法
+Method m = clazz<span class="preprocessor">.getDeclaredMethod</span>(<span class="string">"print"</span>, String<span class="preprocessor">.class</span>)<span class="comment">; //方法的名字和方法的参数</span>
+// <span class="keyword">or</span>  clazz<span class="preprocessor">.getDeclaredMethod</span>(<span class="string">"print"</span>, null)<span class="comment">;</span>
+m<span class="preprocessor">.setAccessible</span>(true)<span class="comment">; // private to public</span>
+m<span class="preprocessor">.invoke</span>(instance, <span class="string">"parameters"</span>)<span class="comment">;</span>
+
+Constructor con = clazz<span class="preprocessor">.getConstructor</span>(String<span class="preprocessor">.class</span>, String<span class="preprocessor">.class</span>)<span class="comment">;</span>
+con<span class="preprocessor">.newInstance</span>(<span class="string">""</span>)<span class="comment">;</span>
+</pre></td></tr></table></figure>
+
+]]></content>
+    
+    
+      <category term="课堂笔记" scheme="http://yoursite.com/tags/%E8%AF%BE%E5%A0%82%E7%AC%94%E8%AE%B0/"/>
+    
+      <category term="java" scheme="http://yoursite.com/tags/java/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[传智播客day06]]></title>
+    <link href="http://yoursite.com/2014/04/06/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day06/"/>
+    <id>http://yoursite.com/2014/04/06/传智播客day06/</id>
+    <published>2014-04-06T00:47:01.000Z</published>
+    <updated>2014-04-06T07:37:35.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="xml-">xml解析</h1>
+<ol>
+<li>dom<br>文档放入都内存中，方便CRUD</li>
+<li>sax<br>逐行解析，方便查询，速度快，但不能CRUD</li>
+</ol>
+<h2 id="dom-jaxp">DOM, jaxp</h2>
+<p>解析包：javax.xml.parsers</p>
+<ol>
+<li>获取解析器的工厂对象<br><code>DocumentBuilderFactory fac = DocumentBuilderFactory.newInstance();</code></li>
+<li>获取文档解析对象<br><code>DocumentBuilder docBuilder = factory.newDocumentBuilder;</code></li>
+<li>加载xml文件<br><code>docBuilder.parse(&quot;xml&quot;)</code></li>
+<li><p>获取Document对象</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre>import org<span class="preprocessor">.w</span>3c<span class="preprocessor">.dom</span><span class="preprocessor">.Document</span><span class="comment">;</span>
+Document document = documentBuilder<span class="preprocessor">.newDocument</span>()<span class="comment">;</span>
+</pre></td></tr></table></figure>
+</li>
+<li><p>操作<br>节点Node： 文本是一个节点，属性也是一个节点</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre>NodeList nodeList = document<span class="preprocessor">.getElementByTagName</span>(<span class="string">"book"</span>)<span class="comment">;</span>
+Node node = nodelist<span class="preprocessor">.item</span>()<span class="comment">;</span>
+</pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h3 id="node-">Node继承结构</h3>
+<p>Node是中心<br><code>nodelist.getNodeType()</code><br>继承Node： Text，Attr，Comment，Document, Element...<br>Text: 空白行也算<br><code>fac.setIgnoringElementContentWhitespace(true)// 忽略回车换行</code>,只对有约束的文档起作用</p>
+<h3 id="-">操作元素</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code"><pre><span class="comment">//1.创建元素</span>
+<span class="keyword">val</span> elm  = doc.createElement(<span class="string">"div"</span>)
+<span class="comment">//2.创建文本</span>
+<span class="keyword">val</span> txtElm = doc.createTextNode(<span class="string">"hello dom"</span>)
+<span class="comment">//3. 添加</span>
+elm.appendChild(txtElm)
+<span class="comment">//4. 删除</span>
+txtElm.getParentNode().removeChild(txtElm);
+<span class="comment">//5. 回写</span>
+<span class="keyword">val</span> transFac = TransformerFactory.newInstance()
+<span class="keyword">val</span> trans = transFac.newTransformer()
+trans.transform(<span class="keyword">new</span> DOMSource(doc), <span class="keyword">new</span> StreamResult(<span class="string">"filepath"</span>))
+</pre></td></tr></table></figure>
+
+<h2 id="sax">SAX</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre><span class="keyword">val</span> saxFac = SAXParserFactory.newInstance()
+<span class="keyword">val</span> saxPaser = saxFac.newSAXParser()
+<span class="keyword">val</span> handler = <span class="keyword">new</span> DefaultHandler {
+    <span class="keyword">override</span> <span class="keyword">def</span> characters(ch:Array[Char], start:Int, length:Int):Unit = println(ch)
+    <span class="keyword">override</span> <span class="keyword">def</span> startDocument() = println(<span class="string">"start doc"</span>)
+    <span class="keyword">override</span> <span class="keyword">def</span> endDocument() = println(<span class="string">"end doc"</span>)
+
+    <span class="keyword">override</span> <span class="keyword">def</span> startElement(uri:String, localName:String, qname:String, attr:Attributes) = println(	<span class="string">"start attr"</span>)
+    <span class="keyword">override</span> <span class="keyword">def</span> endElement(uri:String, localName:String, qname:String) = println(<span class="string">"end elm"</span>)
+}
+saxPaser.parse(<span class="string">"filepath.xml"</span>, handler)
+</pre></td></tr></table></figure>
+
+<h2 id="dom4j">DOM4j</h2>
+<p>结合了SAX和japx<br>核心是Element，japx核心是Node</p>
+]]></content>
+    
+    
+      <category term="xml" scheme="http://yoursite.com/tags/xml/"/>
+    
+      <category term="DOM" scheme="http://yoursite.com/tags/DOM/"/>
+    
+      <category term="SAX" scheme="http://yoursite.com/tags/SAX/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[eclipse上的emacs]]></title>
     <link href="http://yoursite.com/2014/04/05/eclipse%E4%B8%8A%E7%9A%84emacs/"/>
     <id>http://yoursite.com/2014/04/05/eclipse上的emacs/</id>
     <published>2014-04-05T12:19:30.000Z</published>
-    <updated>2014-04-05T12:58:01.000Z</updated>
+    <updated>2014-04-05T13:14:02.000Z</updated>
     <content type="html"><![CDATA[<p>清明闲来无事，又要开始折腾 emacs 和我的编程环境。<br>作为一个 emacser ，小指头总会忍受各种折磨，下面贴出我在Linux下解决办法 ^_^</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
@@ -47,7 +296,7 @@ keysym Caps_Lock = Control_R
 emacs上使用emacs-jde编写java；在emacs上通过eclime使用eclipse的功能；或者在eclipse上用vim插件；
 均因为种种原因以失败告终，我可悲可叹的emacser人生，最后决定用 IdeaJ，他的按键绑定可以设置的很有emacs风格，
 不过还是和eclipse的使用习惯有一定的不习惯，特别是项目管理。直到今天，我发现了 <a href="&quot;http://blog.csdn.net/lzw_java/article/details/17016279&quot;">把Eclipse打造成Emacs</a></p>
-<p>具体的我就不多说了，秀一下我的按键绑定吧：</p>
+<p>先按装好插件Emacs+，具体的我就不多说了，秀一下我的按键绑定吧：</p>
 <ol>
 <li>Ctrl+C Ctrl+C : run</li>
 <li>Shift+Ctrl+/ : redo</li>
@@ -266,7 +515,7 @@ emacs上使用emacs-jde编写java；在emacs上通过eclime使用eclipse的功�
     <link href="http://yoursite.com/2014/04/03/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day04/"/>
     <id>http://yoursite.com/2014/04/03/传智播客day04/</id>
     <published>2014-04-03T00:55:12.000Z</published>
-    <updated>2014-04-05T05:34:53.000Z</updated>
+    <updated>2014-04-06T06:36:22.000Z</updated>
     <content type="html"><![CDATA[<h1 id="javascript">javascript</h1>
 <h2 id="prototype">prototype</h2>
 <p>prototype 是一个类的属性，是类的一个属性,
@@ -488,6 +737,8 @@ console<span class="preprocessor">.log</span>(h1<span class="preprocessor">.chil
       <category term="课堂笔记" scheme="http://yoursite.com/tags/%E8%AF%BE%E5%A0%82%E7%AC%94%E8%AE%B0/"/>
     
       <category term="javascript" scheme="http://yoursite.com/tags/javascript/"/>
+    
+      <category term="DOM" scheme="http://yoursite.com/tags/DOM/"/>
     
   </entry>
   
@@ -829,7 +1080,7 @@ p.sleep(); <span class="comment">// in, this 表示 p 这个对象的运行上�
     <link href="http://yoursite.com/2014/03/31/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day02/"/>
     <id>http://yoursite.com/2014/03/31/传智播客day02/</id>
     <published>2014-03-31T00:48:34.000Z</published>
-    <updated>2014-04-04T02:53:25.000Z</updated>
+    <updated>2014-04-06T00:55:21.000Z</updated>
     <content type="html"><![CDATA[<h1 id="html-">html剩余</h1>
 <h2 id="div-span-p">div span p</h2>
 <p>div: 块标签，主要用来封装数据，配合css使用</p>
@@ -1134,8 +1385,7 @@ result=<span class="number">3</span>*<span class="string">"2"</span> <span class
 </pre></td></tr></table></figure>
 
 <blockquote>
-<p>基本数据类型：string, boolean(true|false), number, null, undefined</p>
-<p>应用数据类型: object, function</p>
+<p>基本数据类型：string, boolean(true|false), number, null, undefined<br>应用数据类型: object, function</p>
 </blockquote>
 ]]></content>
     
@@ -1155,7 +1405,7 @@ result=<span class="number">3</span>*<span class="string">"2"</span> <span class
     <link href="http://yoursite.com/2014/03/30/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day01/"/>
     <id>http://yoursite.com/2014/03/30/传智播客day01/</id>
     <published>2014-03-30T06:58:05.000Z</published>
-    <updated>2014-03-31T01:04:56.000Z</updated>
+    <updated>2014-04-06T00:52:08.000Z</updated>
     <content type="html"><![CDATA[<h1 id="html">html</h1>
 <p>网页 = html + css + javascript</p>
 <p>html:封装数据</p>

@@ -4,24 +4,20 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>eclipse上的emacs | Poe&#39;s World</title>
+    <title>传智播客day06 | Poe&#39;s World</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="zhpooer">
     
-    <meta name="description" content="清明闲来无事，又要开始折腾 emacs 和我的编程环境。作为一个 emacser ，小指头总会忍受各种折磨，下面贴出我在Linux下解决办法 ^_^
-1
-2
-3
-4
-5
-6
-7
-8
-9
-;; 修改 ~/.XmodMap 
-;; 交换右ctrl键和Caps键
-keysym Menu = Super_L">
+    <meta name="description" content="xml解析
+
+dom文档放入都内存中，方便CRUD
+sax逐行解析，方便查询，速度快，但不能CRUD
+
+DOM, jaxp
+解析包：javax.xml.parsers
+
+获取解析器的工厂对象DocumentBuilderFactory fac = DocumentBuilderFactory.new">
     
     
     
@@ -80,15 +76,15 @@ keysym Menu = Super_L">
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2014/04/05/eclipse上的emacs/" title="eclipse上的emacs" itemprop="url">eclipse上的emacs</a>
+      <a href="/2014/04/06/传智播客day06/" title="传智播客day06" itemprop="url">传智播客day06</a>
   </h1>
   <p class="article-author">By
     
       <a href="http://yoursite.com" title="zhpooer">zhpooer</a>
     </p>
   <p class="article-time">
-    <time datetime="2014-04-05T12:19:30.000Z" itemprop="datePublished">4月 5 2014</time>
-    更新日期:<time datetime="2014-04-05T13:14:02.000Z" itemprop="dateModified">4月 5 2014</time>
+    <time datetime="2014-04-06T00:47:01.000Z" itemprop="datePublished">4月 6 2014</time>
+    更新日期:<time datetime="2014-04-06T07:37:35.000Z" itemprop="dateModified">4月 6 2014</time>
     
   </p>
 </header>
@@ -97,10 +93,39 @@ keysym Menu = Super_L">
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#xml-"><span class="toc-number">1.</span> <span class="toc-text">xml解析</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#dom-jaxp"><span class="toc-number">1.1.</span> <span class="toc-text">DOM, jaxp</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#node-"><span class="toc-number">1.1.1.</span> <span class="toc-text">Node继承结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">1.1.2.</span> <span class="toc-text">操作元素</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#sax"><span class="toc-number">1.2.</span> <span class="toc-text">SAX</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#dom4j"><span class="toc-number">1.3.</span> <span class="toc-text">DOM4j</span></a></li></ol>
 		</div>
 		
-		<p>清明闲来无事，又要开始折腾 emacs 和我的编程环境。<br>作为一个 emacser ，小指头总会忍受各种折磨，下面贴出我在Linux下解决办法 ^_^</p>
+		<h1 id="xml-">xml解析</h1>
+<ol>
+<li>dom<br>文档放入都内存中，方便CRUD</li>
+<li>sax<br>逐行解析，方便查询，速度快，但不能CRUD</li>
+</ol>
+<h2 id="dom-jaxp">DOM, jaxp</h2>
+<p>解析包：javax.xml.parsers</p>
+<ol>
+<li>获取解析器的工厂对象<br><code>DocumentBuilderFactory fac = DocumentBuilderFactory.newInstance();</code></li>
+<li>获取文档解析对象<br><code>DocumentBuilder docBuilder = factory.newDocumentBuilder;</code></li>
+<li>加载xml文件<br><code>docBuilder.parse(&quot;xml&quot;)</code></li>
+<li><p>获取Document对象</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre>import org<span class="preprocessor">.w</span>3c<span class="preprocessor">.dom</span><span class="preprocessor">.Document</span><span class="comment">;</span>
+Document document = documentBuilder<span class="preprocessor">.newDocument</span>()<span class="comment">;</span>
+</pre></td></tr></table></figure>
+</li>
+<li><p>操作<br>节点Node： 文本是一个节点，属性也是一个节点</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre>NodeList nodeList = document<span class="preprocessor">.getElementByTagName</span>(<span class="string">"book"</span>)<span class="comment">;</span>
+Node node = nodelist<span class="preprocessor">.item</span>()<span class="comment">;</span>
+</pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h3 id="node-">Node继承结构</h3>
+<p>Node是中心<br><code>nodelist.getNodeType()</code><br>继承Node： Text，Attr，Comment，Document, Element...<br>Text: 空白行也算<br><code>fac.setIgnoringElementContentWhitespace(true)// 忽略回车换行</code>,只对有约束的文档起作用</p>
+<h3 id="-">操作元素</h3>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
 3
@@ -110,41 +135,57 @@ keysym Menu = Super_L">
 7
 8
 9
-</pre></td><td class="code"><pre>;; 修改 ~/.XmodMap 
-;; 交换右ctrl键和Caps键
-keysym Menu = Super_L
-remove <span class="operator"><span class="keyword">Lock</span> = Caps_Lock
-remove Control = Control_R
-keysym Control_R = Caps_Lock
-keysym Caps_Lock = Control_R
-<span class="keyword">add</span> <span class="keyword">Lock</span> = Caps_Lock
-<span class="keyword">add</span> Control = Control_R</span>
+10
+11
+12
+</pre></td><td class="code"><pre><span class="comment">//1.创建元素</span>
+<span class="keyword">val</span> elm  = doc.createElement(<span class="string">"div"</span>)
+<span class="comment">//2.创建文本</span>
+<span class="keyword">val</span> txtElm = doc.createTextNode(<span class="string">"hello dom"</span>)
+<span class="comment">//3. 添加</span>
+elm.appendChild(txtElm)
+<span class="comment">//4. 删除</span>
+txtElm.getParentNode().removeChild(txtElm);
+<span class="comment">//5. 回写</span>
+<span class="keyword">val</span> transFac = TransformerFactory.newInstance()
+<span class="keyword">val</span> trans = transFac.newTransformer()
+trans.transform(<span class="keyword">new</span> DOMSource(doc), <span class="keyword">new</span> StreamResult(<span class="string">"filepath"</span>))
 </pre></td></tr></table></figure>
 
-<p>这个还是很有效果的，比以前使用左下角Ctrl轻松不少，不过用久了肩膀还是疼啊！！!
-泪奔,投奔vim党。</p>
-<p>以上是开胃菜，言归正传，身为一个Java程序猿，在IDE上编程总会有各种不适，从前研究过在
-emacs上使用emacs-jde编写java；在emacs上通过eclime使用eclipse的功能；或者在eclipse上用vim插件；
-均因为种种原因以失败告终，我可悲可叹的emacser人生，最后决定用 IdeaJ，他的按键绑定可以设置的很有emacs风格，
-不过还是和eclipse的使用习惯有一定的不习惯，特别是项目管理。直到今天，我发现了 <a href="&quot;http://blog.csdn.net/lzw_java/article/details/17016279&quot;">把Eclipse打造成Emacs</a></p>
-<p>先按装好插件Emacs+，具体的我就不多说了，秀一下我的按键绑定吧：</p>
-<ol>
-<li>Ctrl+C Ctrl+C : run</li>
-<li>Shift+Ctrl+/ : redo</li>
-<li>Ctrl+Q : quick fix</li>
-<li>Shift+Alt+&#39; :  Previous View</li>
-<li>Alt+&#39;: next View</li>
-<li>Alt+P : Previous Tab</li>
-<li>Alt+N: Next Tab</li>
-<li>Alt+O: Next Editor</li>
-</ol>
+<h2 id="sax">SAX</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre><span class="keyword">val</span> saxFac = SAXParserFactory.newInstance()
+<span class="keyword">val</span> saxPaser = saxFac.newSAXParser()
+<span class="keyword">val</span> handler = <span class="keyword">new</span> DefaultHandler {
+    <span class="keyword">override</span> <span class="keyword">def</span> characters(ch:Array[Char], start:Int, length:Int):Unit = println(ch)
+    <span class="keyword">override</span> <span class="keyword">def</span> startDocument() = println(<span class="string">"start doc"</span>)
+    <span class="keyword">override</span> <span class="keyword">def</span> endDocument() = println(<span class="string">"end doc"</span>)
+
+    <span class="keyword">override</span> <span class="keyword">def</span> startElement(uri:String, localName:String, qname:String, attr:Attributes) = println(	<span class="string">"start attr"</span>)
+    <span class="keyword">override</span> <span class="keyword">def</span> endElement(uri:String, localName:String, qname:String) = println(<span class="string">"end elm"</span>)
+}
+saxPaser.parse(<span class="string">"filepath.xml"</span>, handler)
+</pre></td></tr></table></figure>
+
+<h2 id="dom4j">DOM4j</h2>
+<p>结合了SAX和japx<br>核心是Element，japx核心是Node</p>
   
 	</div>
 		<footer class="article-footer clearfix">
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/eclipse/">eclipse</a><a href="/tags/emacs/">emacs</a>
+  <span></span> <a href="/tags/xml/">xml</a><a href="/tags/DOM/">DOM</a><a href="/tags/SAX/">SAX</a>
   </div>
 
 
@@ -152,7 +193,7 @@ emacs上使用emacs-jde编写java；在emacs上通过eclime使用eclipse的功�
 
 <div class="article-share" id="share">
 
-  <div data-url="http://yoursite.com/2014/04/05/eclipse上的emacs/" data-title="eclipse上的emacs | Poe&#39;s World" data-tsina="null" class="share clearfix">
+  <div data-url="http://yoursite.com/2014/04/06/传智播客day06/" data-title="传智播客day06 | Poe&#39;s World" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -162,18 +203,18 @@ emacs上使用emacs-jde编写java；在emacs上通过eclime使用eclipse的功�
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2014/04/06/传智播客day06/" title="传智播客day06">
+ <a href="/2014/04/07/传智播客day07/" title="传智播客day07">
   <strong>PREVIOUS:</strong><br/>
   <span>
-  传智播客day06</span>
+  传智播客day07</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2014/04/04/传智播客day05/"  title="传智播客day05">
+<a href="/2014/04/05/eclipse上的emacs/"  title="eclipse上的emacs">
  <strong>NEXT:</strong><br/> 
- <span>传智播客day05
+ <span>eclipse上的emacs
 </span>
 </a>
 </div>
@@ -190,7 +231,7 @@ emacs上使用emacs-jde编写java；在emacs上通过eclime使用eclipse的功�
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#xml-"><span class="toc-number">1.</span> <span class="toc-text">xml解析</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#dom-jaxp"><span class="toc-number">1.1.</span> <span class="toc-text">DOM, jaxp</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#node-"><span class="toc-number">1.1.1.</span> <span class="toc-text">Node继承结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">1.1.2.</span> <span class="toc-text">操作元素</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#sax"><span class="toc-number">1.2.</span> <span class="toc-text">SAX</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#dom4j"><span class="toc-number">1.3.</span> <span class="toc-text">DOM4j</span></a></li></ol>
   </div>
 
 <div id="asidepart">
