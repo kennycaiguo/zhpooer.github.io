@@ -85,7 +85,7 @@ res.getString(&quot;user&quot;)
     </p>
   <p class="article-time">
     <time datetime="2014-04-07T01:01:39.000Z" itemprop="datePublished">4月 7 2014</time>
-    更新日期:<time datetime="2014-04-07T11:35:36.000Z" itemprop="dateModified">4月 7 2014</time>
+    更新日期:<time datetime="2014-04-09T12:52:30.000Z" itemprop="dateModified">4月 9 2014</time>
     
   </p>
 </header>
@@ -231,6 +231,119 @@ Constructor con = clazz<span class="preprocessor">.getConstructor</span>(String<
 con<span class="preprocessor">.newInstance</span>(<span class="string">""</span>)<span class="comment">;</span>
 </pre></td></tr></table></figure>
 
+<p>用scala实现的调用的java反射</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+</pre></td><td class="code"><pre><span class="keyword">package</span> io.zhpooer.test
+
+<span class="keyword">import</span> org.scalatest.FlatSpec
+<span class="keyword">import</span> org.scalatest.matchers.ShouldMatchers
+<span class="keyword">import</span> scala.beans.BeanProperty
+
+<span class="class"><span class="keyword">class</span> <span class="title">Person</span> {</span>
+  <span class="annotation">@BeanProperty</span> <span class="keyword">var</span> name: String = _
+  <span class="annotation">@BeanProperty</span> <span class="keyword">var</span> age: Int = _
+  <span class="keyword">override</span> <span class="keyword">def</span> toString = name + <span class="string">", "</span> + age 
+}
+
+<span class="class"><span class="keyword">class</span> <span class="title">ReflectSpec</span> <span class="keyword">extends</span> <span class="title">FlatSpec</span> <span class="keyword">with</span> <span class="title">ShouldMatchers</span> {</span>
+  it should <span class="string">"通过Java反射机制得到类的包名和类名"</span> in {
+    <span class="keyword">val</span> p = <span class="keyword">new</span> Person;
+    println(<span class="string">"包名字: "</span> + p.getClass().getPackage().getName())
+    println(<span class="string">"类名: "</span> + p.getClass().getSimpleName())
+    println(<span class="string">"完整类名: "</span> + p.getClass().getName())
+  }
+
+  it should <span class="string">"通过Java反射机制，用 Class 创建类对"</span> in {
+    <span class="keyword">val</span> clazz = Class.forName(<span class="string">"io.zhpooer.test.Person"</span>)
+
+    clazz.newInstance() <span class="keyword">match</span> {
+      <span class="keyword">case</span> p: Person =&gt;
+        p.setAge(<span class="number">12</span>)
+        p.setName(<span class="string">"lest"</span>)
+        println(p)
+    }
+  }
+  
+  it should <span class="string">"通过Java反射机制，用 Field 设置属性"</span> in {
+    <span class="keyword">val</span> clazz = Class.forName(<span class="string">"io.zhpooer.test.Person"</span>)
+    <span class="keyword">val</span> p = <span class="keyword">new</span> Person;
+    p.setAge(<span class="number">12</span>);
+    p.setName(<span class="string">"test"</span>)
+    
+    <span class="keyword">val</span> field = clazz.getDeclaredField(<span class="string">"name"</span>) 
+    field.setAccessible(<span class="keyword">true</span>)
+    field.set(p, <span class="string">"change"</span>)
+    println(field.get(p) +  <span class="string">" "</span> + p)
+  }
+  
+  it should <span class="string">"通过Java反射机制得到类的一些成员信息 方法等"</span> in {
+    <span class="keyword">val</span> clazz = Class.forName(<span class="string">"io.zhpooer.test.Person"</span>)
+
+    <span class="keyword">for</span> ( field &lt;- clazz.getDeclaredFields()) {
+      println(field.getModifiers() + <span class="string">" "</span> + field.getName())
+    }
+    
+    <span class="keyword">for</span> ( method &lt;- clazz.getDeclaredMethods()) {
+      println(method.getModifiers() + <span class="string">" "</span> + method.getReturnType() + <span class="string">" "</span> + method.getName())
+    }
+  }
+}
+</pre></td></tr></table></figure>
+
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -254,6 +367,14 @@ con<span class="preprocessor">.newInstance</span>(<span class="string">""</span>
 	
 <nav class="article-nav clearfix">
  
+ <div class="prev" >
+ <a href="/2014/04/07/php语法/" title="php基本语法">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  php基本语法</span>
+</a>
+</div>
+
 
 <div class="next">
 <a href="/2014/04/06/传智播客day06/"  title="传智播客day06">
@@ -303,13 +424,27 @@ con<span class="preprocessor">.newInstance</span>(<span class="string">""</span>
 		
 			<li><a href="/tags/html/" title="html">html<sup>2</sup></a></li>
 		
-			<li><a href="/tags/java/" title="java">java<sup>1</sup></a></li>
+			<li><a href="/tags/http协议/" title="http协议">http协议<sup>1</sup></a></li>
+		
+			<li><a href="/tags/java/" title="java">java<sup>2</sup></a></li>
 		
 			<li><a href="/tags/javascript/" title="javascript">javascript<sup>3</sup></a></li>
 		
+			<li><a href="/tags/php/" title="php">php<sup>1</sup></a></li>
+		
 			<li><a href="/tags/schema/" title="schema">schema<sup>1</sup></a></li>
 		
+			<li><a href="/tags/servlet/" title="servlet">servlet<sup>1</sup></a></li>
+		
+			<li><a href="/tags/testdisk/" title="testdisk">testdisk<sup>1</sup></a></li>
+		
+			<li><a href="/tags/tomcat/" title="tomcat">tomcat<sup>1</sup></a></li>
+		
+			<li><a href="/tags/web开发/" title="web开发">web开发<sup>1</sup></a></li>
+		
 			<li><a href="/tags/xml/" title="xml">xml<sup>2</sup></a></li>
+		
+			<li><a href="/tags/磁盘恢复/" title="磁盘恢复">磁盘恢复<sup>1</sup></a></li>
 		
 			<li><a href="/tags/课堂笔记/" title="课堂笔记">课堂笔记<sup>6</sup></a></li>
 		

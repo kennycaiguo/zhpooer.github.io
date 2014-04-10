@@ -4,14 +4,15 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>The first blog | Poe&#39;s World</title>
+    <title>testdisk 磁盘恢复总结 | Poe&#39;s World</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="zhpooer">
     
-    <meta name="description" content="子曰：独学而无友，则孤陋而寡闻。我想开一个技术博客的想法由来已久，却一直兴致缺缺，可能跟我自己沉闷的性格有一点关系。
-从第一个工作到现在辞职，我看了很多书，专研了很多的技术，从java语言到函数式编程、从eclipse到emacs和vim、从windows到linux...
-到头来发现自己所有到知识">
+    <meta name="description" content="上次手贱把移动硬盘里的磁盘全部格式化, 分区没了, 我X, 我所有的资料啊... 这该如何是好?不过根据经验磁盘里面的数据没有
+被重写, So, 上天有好生之德, 赐予了我 TestDisk 来拯救于我水火之中. 膜拜写这个软件的前辈, 以及再次感叹Linux的工具集
+的丰富.
+下面是这个软件的介绍">
     
     
     
@@ -70,15 +71,15 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2014/03/29/the-first-blog/" title="The first blog" itemprop="url">The first blog</a>
+      <a href="/2014/04/10/testdisk-磁盘恢复总结/" title="testdisk 磁盘恢复总结" itemprop="url">testdisk 磁盘恢复总结</a>
   </h1>
   <p class="article-author">By
     
       <a href="http://yoursite.com" title="zhpooer">zhpooer</a>
     </p>
   <p class="article-time">
-    <time datetime="2014-03-29T06:51:46.000Z" itemprop="datePublished">3月 29 2014</time>
-    更新日期:<time datetime="2014-03-29T09:08:09.000Z" itemprop="dateModified">3月 29 2014</time>
+    <time datetime="2014-04-10T10:17:11.000Z" itemprop="datePublished">4月 10 2014</time>
+    更新日期:<time datetime="2014-04-10T10:38:15.000Z" itemprop="dateModified">4月 10 2014</time>
     
   </p>
 </header>
@@ -90,22 +91,35 @@
 		
 		</div>
 		
-		<p>子曰：独学而无友，则孤陋而寡闻。我想开一个技术博客的想法由来已久，却一直兴致缺缺，可能跟我自己沉闷的性格有一点关系。
-从第一个工作到现在辞职，我看了很多书，专研了很多的技术，从java语言到函数式编程、从eclipse到emacs和vim、从windows到linux...
-到头来发现自己所有到知识都只有浅尝辄止，也没有形成一个系统，跟别说再去找一个好工作。希望以后这里可以作为我的一个交流阵地。</p>
-<p>子曰：天何言哉？四时行焉，百物生焉，天何言哉？老子又说：大音稀声。庄子还说：天地有大美而不言，四时有明法而不议，万物有成理而不说。
-一直以来，我都把少说当成自己的生活态度，以致我缺少必要的说话锻炼，以及语言思维锻炼，看来只有先成魔才能成佛。
-这种“不言”到艺术，也只能是辩者的专利了。有言道“知行合一”，我并不懂“知行合一”的真实意义，
-但是根据我浅显的理解，可以作为这个博客的指导思想。</p>
-<p>作为一个技术人员，写博客是一个锻炼，希望我把平常学到、用过到技术一一记录，也希望这也是对我从前从网络获取知识的一个反馈，
-也希望这个博客能鞭策我以后勤勤勉勉地学习。</p>
+		<p>上次手贱把移动硬盘里的磁盘全部格式化, 分区没了, 我X, 我所有的资料啊... 这该如何是好?不过根据经验磁盘里面的数据没有
+被重写, So, 上天有好生之德, 赐予了我 TestDisk 来拯救于我水火之中. 膜拜写这个软件的前辈, 以及再次感叹Linux的工具集
+的丰富.</p>
+<p>下面是这个软件的介绍</p>
+<blockquote>
+<p>TestDisk可以解决一些因为分区的原因而造成数据无法访问的问题。该工具可以帮助你恢复丢失的分区，
+让磁盘重新变得可以启动，整理分区表，恢复主引导记录，恢复引导扇区以及文件系统表，
+可以从NTFS、FAT、exFAT和ext2类型的文件系统中恢复被删除的文件，
+还能从已经删除了的NTFS、FAT、exFAT和ext2/3/4文件系统中拷贝文件。</p>
+</blockquote>
+<p>testdisk是一个Linux命令行工具, 我主要是用这个来恢复我丢失的分区, 但是因为分区表被重写,
+所以需要花比较长的时间来扫描硬盘, 来找到原来的分区信息, 所以大家需要耐心ho.ho.
+总之,他是一个比较很实用 简单的Linux工具.</p>
+<p>至于要恢复被删除掉的文件, 就需要Testdist的孪生兄弟 PhotoRec 来帮忙了.</p>
+<blockquote>
+<p>如果你主要是想恢复视频、文档和归档类文件，你应该试试PhotoRec。
+PhotoRec的优点在于它完全忽略了文件系统，只去搜寻底层的数据。
+这表示如果设备损坏或者被重新格式化了PhotoRec仍然能工作。</p>
+</blockquote>
+<p>这个工具我没有用过, 不过他和testdisk都出自于同一个人之手,
+估计也是灰常实用和简单的工具. 再次膜拜他!</p>
+<p>最后, 打个广告, ~.~, 有哪个妹子需要我恢复数据的, <strong>朝我开枪吧.</strong></p>
   
 	</div>
 		<footer class="article-footer clearfix">
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/随想/">随想</a>
+  <span></span> <a href="/tags/testdisk/">testdisk</a><a href="/tags/磁盘恢复/">磁盘恢复</a>
   </div>
 
 
@@ -113,7 +127,7 @@
 
 <div class="article-share" id="share">
 
-  <div data-url="http://yoursite.com/2014/03/29/the-first-blog/" data-title="The first blog | Poe&#39;s World" data-tsina="null" class="share clearfix">
+  <div data-url="http://yoursite.com/2014/04/10/testdisk-磁盘恢复总结/" data-title="testdisk 磁盘恢复总结 | Poe&#39;s World" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -122,14 +136,14 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2014/03/30/传智播客day01/" title="传智播客Day01">
-  <strong>PREVIOUS:</strong><br/>
-  <span>
-  传智播客Day01</span>
+
+<div class="next">
+<a href="/2014/04/10/传智播客day09/"  title="传智播客day09">
+ <strong>NEXT:</strong><br/> 
+ <span>传智播客day09
+</span>
 </a>
 </div>
-
 
 </nav>
 
