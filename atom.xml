@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Hello World]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://yoursite.com/"/>
-  <updated>2014-04-10T10:39:41.613Z</updated>
+  <updated>2014-04-10T10:59:39.725Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -56,7 +56,7 @@ PhotoRec的优点在于它完全忽略了文件系统，只去搜寻底层的数
     <link href="http://yoursite.com/2014/04/10/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day09/"/>
     <id>http://yoursite.com/2014/04/10/传智播客day09/</id>
     <published>2014-04-10T00:33:53.000Z</published>
-    <updated>2014-04-10T08:48:36.000Z</updated>
+    <updated>2014-04-10T10:58:55.000Z</updated>
     <content type="html"><![CDATA[<h1 id="servlet">Servlet</h1>
 <p>servlet是运行在服务器中的动态资源, 能接收用户的请求,发出响应.</p>
 <h2 id="-servlet-">创建 Servlet 步骤</h2>
@@ -240,7 +240,7 @@ javac <span class="operator">-d</span> . HelloServlet.java
 </pre></td></tr></table></figure>
 
 <h2 id="servlet-">servlet 核心继承图</h2>
-<p><strong> 插入图片 </strong></p>
+<p><img src="/img/servlet_api.png" alt="sevlet核心继承图"></p>
 <h2 id="servletconfig-">ServletConfig 详解</h2>
 <p>ServletConfig 是由服务器产生的</p>
 <h3 id="-servletconfig">获取 ServletConfig</h3>
