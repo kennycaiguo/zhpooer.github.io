@@ -1,0 +1,539 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>java集合框架 | Poe&#39;s World</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="zhpooer">
+    
+    <meta name="description" content="集合初识
+集合类的由来:
+
+对象用于封装特有的数据, 对象多了需要存储, 如果对象不确定.
+存储就使用集合容器进行
+
+集合特点:
+
+用于存储对象的容器
+集合长度是可变的
+集合不可存储基本数据类型
+
+集合体系的共同父类 java.util.Collection
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="Poe&#39;s World" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="Poe&#39;s World" title="Poe&#39;s World"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Poe&#39;s World">Poe&#39;s World</a></h1>
+				<h2 class="blog-motto">Hello World</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/04/11/java集合框架/" title="java集合框架" itemprop="url">java集合框架</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://yoursite.com" title="zhpooer">zhpooer</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2014-04-11T08:38:52.000Z" itemprop="datePublished">4月 11 2014</time>
+    更新日期:<time datetime="2014-04-11T11:57:43.000Z" itemprop="dateModified">4月 11 2014</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">集合初识</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#iterator"><span class="toc-number">1.1.</span> <span class="toc-text">Iterator</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#collection-"><span class="toc-number">1.2.</span> <span class="toc-text">Collection 的继承结构图</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#list-set"><span class="toc-number">2.</span> <span class="toc-text">List 和 Set</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#java-util-list"><span class="toc-number">2.1.</span> <span class="toc-text">java.util.List</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#vector"><span class="toc-number">2.1.1.</span> <span class="toc-text">Vector</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#arraylist"><span class="toc-number">2.1.2.</span> <span class="toc-text">ArrayList</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#linkedlist"><span class="toc-number">2.1.3.</span> <span class="toc-text">LinkedList</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#set"><span class="toc-number">2.2.</span> <span class="toc-text">Set</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#hashset"><span class="toc-number">2.2.1.</span> <span class="toc-text">HashSet</span></a></li><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#linkedhashset"><span class="toc-number">2.2.1.1.</span> <span class="toc-text">LinkedHashSet</span></a></li></ol><li class="toc-item toc-level-3"><a class="toc-link" href="#treeset"><span class="toc-number">2.2.2.</span> <span class="toc-text">TreeSet</span></a></li></ol></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#map"><span class="toc-number">3.</span> <span class="toc-text">Map</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#hashtable"><span class="toc-number">3.1.</span> <span class="toc-text">Hashtable</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#hashmap"><span class="toc-number">3.2.</span> <span class="toc-text">HashMap</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#treemap"><span class="toc-number">3.3.</span> <span class="toc-text">TreeMap</span></a></li></ol>
+		</div>
+		
+		<h1 id="-">集合初识</h1>
+<p>集合类的由来:</p>
+<blockquote>
+<p>对象用于封装特有的数据, 对象多了需要存储, 如果对象不确定.
+存储就使用集合容器进行</p>
+</blockquote>
+<p>集合特点:</p>
+<ol>
+<li>用于存储对象的容器</li>
+<li>集合长度是可变的</li>
+<li>集合不可存储基本数据类型</li>
+</ol>
+<p>集合体系的共同父类 <code>java.util.Collection</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre>boolean <span class="function">add(E e)</span>;
+boolean <span class="function">contains(Object o)</span>;
+void <span class="function">clear()</span>
+boolean <span class="function">containsAll(Collection&lt;?&gt; c)</span>;
+boolean <span class="function">remove(Object o)</span>;
+boolean <span class="function">removeAll(Collection&lt;?&gt; c)</span>;
+int <span class="function">size()</span>;
+Iterator&lt;E&gt; <span class="function">iterator()</span>; <span class="comment">// 迭代器</span>
+boolean <span class="function">retainAll(Collection coll)</span>; <span class="comment">// 取交集</span>
+<span class="tag">Object</span><span class="attr_selector">[]</span> <span class="function">toArray()</span>; <span class="comment">// 集合转数组</span>
+</pre></td></tr></table></figure>
+
+<h2 id="iterator">Iterator</h2>
+<p>Iterator 对象必须依赖于具体容器, 因为每一个容器的数据结构都不同.
+所以该迭代器对象在容器中进行内部实现的.
+<strong>Iterator用法</strong></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="keyword">for</span>(iterator <span class="keyword">it</span> = coll.iterator(); <span class="keyword">it</span>.hasNext();){
+    <span class="keyword">it</span>.next();
+}
+</pre></td></tr></table></figure>
+
+<h2 id="collection-">Collection 的继承结构图</h2>
+<p><img src="/img/collections_hierachy.png" alt="Collection 的继承结构图"></p>
+<h1 id="list-set">List 和 Set</h1>
+<p>List 和 Set 都从 Collection 继承</p>
+<p>List: 有序,元素有索引, 元素可以重复</p>
+<p>Set: 元素不能重复, 无序</p>
+<h2 id="java-util-list">java.util.List</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre>void add(<span class="keyword">index</span>, element);
+void add(<span class="keyword">index</span>, collection);
+
+<span class="keyword">Object</span> remove(<span class="keyword">index</span>);
+<span class="keyword">Object</span> <span class="keyword">set</span>(<span class="keyword">index</span>, element);
+
+<span class="keyword">Object</span> get(<span class="keyword">index</span>);
+int indexOf(<span class="keyword">object</span>);
+int lastIndexOf(<span class="keyword">object</span>);
+List subList(from, <span class="keyword">to</span>);
+</pre></td></tr></table></figure>
+
+<p>Iterator 接口在迭代过程中不能执行添加操作,
+可以使用Iterator的子接口ListIterator进行操作.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>ListIterator it = list<span class="preprocessor">.listIterator</span>()<span class="comment">;</span>
+it<span class="preprocessor">.add</span>(<span class="string">"xx"</span>)<span class="comment">;</span>
+it<span class="preprocessor">.previous</span>()<span class="comment">;</span>
+it<span class="preprocessor">.hasPrevious</span>()<span class="comment">;//允许逆向便利</span>
+</pre></td></tr></table></figure>
+
+<h3 id="vector">Vector</h3>
+<p>内部是是数组数据结构, 是线程安全的, 长度可变, 增删查询都慢</p>
+<h3 id="arraylist">ArrayList</h3>
+<p>内部是是数组数据结构, 是线程不同步的, 长度可变, 查询速度快</p>
+<h3 id="linkedlist">LinkedList</h3>
+<p>内部是链表, 是不同步的, 增删元素的速度快</p>
+<h2 id="set">Set</h2>
+<p>Set接口中的方法和 Collection 接口的方法一致</p>
+<h3 id="hashset">HashSet</h3>
+<p>内部数据结构是哈希表, 是不同步的</p>
+<p>使用元素的hashCode方法来确定位置, 如果位置相同,
+在通过元素的equals来确定是否相同.
+所以在使用一个新类时要重写类的方法 <code>hashCode()</code> 和 <code>equals()</code></p>
+<h4 id="linkedhashset">LinkedHashSet</h4>
+<p>有序的HashSet</p>
+<h3 id="treeset">TreeSet</h3>
+<p>可以对Set集合中的元素进行排序(从小到大), 是不同步的.
+存储在里面的元素必须实现 <code>java.lang.Comparable</code> 接口,
+他根本不看哈希码, 他判断元素的唯一性, 是看比较结果</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre><span class="keyword">import</span> java.util.Comparator;
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ComparatorByName</span> <span class="keyword">implements</span> <span class="title">Comparator</span> {</span>
+   <span class="annotation">@Override</span> <span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span>(Object obj1, Object obj2){
+       <span class="keyword">return</span> <span class="number">0</span>;
+   }
+}
+
+ThreeSet ts = <span class="keyword">new</span> TreeSet(<span class="keyword">new</span> ComparatorByName());
+</pre></td></tr></table></figure>
+
+<h1 id="map">Map</h1>
+<p>Map: 一次添加一对元素. Collection 一次添加一个元素.
+Map集合中存储的是键值对, <strong>必须保证键的唯一性</strong>.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="code"><pre>void <span class="function">clear()</span>;
+
+V <span class="function">put(K key, V value)</span>; <span class="comment">//返回前一个和key关联的值, 如果没为null</span>
+V <span class="function">remove(K key)</span>; <span class="comment">// 删除键值对, 返回值</span>
+
+boolean <span class="function">containsKey(key)</span>;
+boolean <span class="function">containsValue(value)</span>;
+boolean <span class="function">isEmpty()</span>;
+
+value <span class="function">get(key)</span>; <span class="comment">// 如果没有则返回null</span>
+int <span class="function">size()</span>;
+
+Set <span class="function">keySet()</span>;
+Set&lt;<span class="tag">Map</span><span class="class">.Entry</span>&gt; <span class="function">entrySet()</span>;
+Collection&lt;V&gt; <span class="function">values()</span>;
+</pre></td></tr></table></figure>
+
+<h2 id="hashtable">Hashtable</h2>
+<p>内部结构是哈希表, 是同步的, 不支持空键和空值.</p>
+<blockquote>
+<p>Properties: 用来存储键值对型的配置文件信息, 可以和IO技术结合</p>
+<h2 id="hashmap">HashMap</h2>
+<p>内部结构是哈希表, 不是同步的. 允许空值和空键.</p>
+</blockquote>
+<h2 id="treemap">TreeMap</h2>
+<p>内部是二叉树, 不是同步的. 可以对Map中的键进行排序. </p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/java/">java</a><a href="/tags/集合/">集合</a>
+  </div>
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://yoursite.com/2014/04/11/java集合框架/" data-title="java集合框架 | Poe&#39;s World" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2014/04/11/java基本数据类型学习/"  title="java基本数据类型学习">
+ <strong>NEXT:</strong><br/> 
+ <span>java基本数据类型学习
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">集合初识</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#iterator"><span class="toc-number">1.1.</span> <span class="toc-text">Iterator</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#collection-"><span class="toc-number">1.2.</span> <span class="toc-text">Collection 的继承结构图</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#list-set"><span class="toc-number">2.</span> <span class="toc-text">List 和 Set</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#java-util-list"><span class="toc-number">2.1.</span> <span class="toc-text">java.util.List</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#vector"><span class="toc-number">2.1.1.</span> <span class="toc-text">Vector</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#arraylist"><span class="toc-number">2.1.2.</span> <span class="toc-text">ArrayList</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#linkedlist"><span class="toc-number">2.1.3.</span> <span class="toc-text">LinkedList</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#set"><span class="toc-number">2.2.</span> <span class="toc-text">Set</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#hashset"><span class="toc-number">2.2.1.</span> <span class="toc-text">HashSet</span></a></li><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#linkedhashset"><span class="toc-number">2.2.1.1.</span> <span class="toc-text">LinkedHashSet</span></a></li></ol><li class="toc-item toc-level-3"><a class="toc-link" href="#treeset"><span class="toc-number">2.2.2.</span> <span class="toc-text">TreeSet</span></a></li></ol></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#map"><span class="toc-number">3.</span> <span class="toc-text">Map</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#hashtable"><span class="toc-number">3.1.</span> <span class="toc-text">Hashtable</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#hashmap"><span class="toc-number">3.2.</span> <span class="toc-text">HashMap</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#treemap"><span class="toc-number">3.3.</span> <span class="toc-text">TreeMap</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/DOM/" title="DOM">DOM<sup>2</sup></a></li>
+		
+			<li><a href="/tags/SAX/" title="SAX">SAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/String/" title="String">String<sup>1</sup></a></li>
+		
+			<li><a href="/tags/StringBuffer/" title="StringBuffer">StringBuffer<sup>1</sup></a></li>
+		
+			<li><a href="/tags/css/" title="css">css<sup>1</sup></a></li>
+		
+			<li><a href="/tags/dtd/" title="dtd">dtd<sup>1</sup></a></li>
+		
+			<li><a href="/tags/eclipse/" title="eclipse">eclipse<sup>1</sup></a></li>
+		
+			<li><a href="/tags/emacs/" title="emacs">emacs<sup>1</sup></a></li>
+		
+			<li><a href="/tags/html/" title="html">html<sup>2</sup></a></li>
+		
+			<li><a href="/tags/http协议/" title="http协议">http协议<sup>1</sup></a></li>
+		
+			<li><a href="/tags/java/" title="java">java<sup>6</sup></a></li>
+		
+			<li><a href="/tags/javascript/" title="javascript">javascript<sup>3</sup></a></li>
+		
+			<li><a href="/tags/php/" title="php">php<sup>1</sup></a></li>
+		
+			<li><a href="/tags/schema/" title="schema">schema<sup>1</sup></a></li>
+		
+			<li><a href="/tags/servlet/" title="servlet">servlet<sup>1</sup></a></li>
+		
+			<li><a href="/tags/testdisk/" title="testdisk">testdisk<sup>1</sup></a></li>
+		
+			<li><a href="/tags/tomcat/" title="tomcat">tomcat<sup>1</sup></a></li>
+		
+			<li><a href="/tags/web开发/" title="web开发">web开发<sup>1</sup></a></li>
+		
+			<li><a href="/tags/xml/" title="xml">xml<sup>2</sup></a></li>
+		
+			<li><a href="/tags/基本数据类型/" title="基本数据类型">基本数据类型<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2014 
+		
+		<a href="http://yoursite.com" target="_blank" title="zhpooer">zhpooer</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"zhpoooer"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>

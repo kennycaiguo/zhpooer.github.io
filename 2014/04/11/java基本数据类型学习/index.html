@@ -4,14 +4,41 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>The first blog | Poe&#39;s World</title>
+    <title>java基本数据类型学习 | Poe&#39;s World</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="zhpooer">
     
-    <meta name="description" content="子曰：独学而无友，则孤陋而寡闻。我想开一个技术博客的想法由来已久，却一直兴致缺缺，可能跟我自己沉闷的性格有一点关系。
-从第一个工作到现在辞职，我看了很多书，专研了很多的技术，从java语言到函数式编程、从eclipse到emacs和vim、从windows到linux...
-到头来发现自己所有到知识">
+    <meta name="description" content="基本数据类型对象包装类
+为了方便操作基本数据类型, 将其封装成了对象,
+在对象中定义了属性和行为丰富了数据的操作.
+用于描述该对象的类就称为基本数据包装类型.
+
+
+
+数据类型
+包装类
+
+
+
+
+byte
+Byte
+
+
+short
+Short
+
+
+int
+Integer
+
+
+long
+Long
+
+
+fl">
     
     
     
@@ -70,15 +97,15 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2014/03/29/the-first-blog/" title="The first blog" itemprop="url">The first blog</a>
+      <a href="/2014/04/11/java基本数据类型学习/" title="java基本数据类型学习" itemprop="url">java基本数据类型学习</a>
   </h1>
   <p class="article-author">By
     
       <a href="http://yoursite.com" title="zhpooer">zhpooer</a>
     </p>
   <p class="article-time">
-    <time datetime="2014-03-29T06:51:46.000Z" itemprop="datePublished">3月 29 2014</time>
-    更新日期:<time datetime="2014-03-29T09:08:09.000Z" itemprop="dateModified">3月 29 2014</time>
+    <time datetime="2014-04-11T08:09:58.000Z" itemprop="datePublished">4月 11 2014</time>
+    更新日期:<time datetime="2014-04-11T08:36:36.000Z" itemprop="dateModified">4月 11 2014</time>
     
   </p>
 </header>
@@ -87,25 +114,102 @@
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">基本数据类型对象包装类</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.1.</span> <span class="toc-text">用法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.2.</span> <span class="toc-text">自动装箱</span></a></li></ol>
 		</div>
 		
-		<p>子曰：独学而无友，则孤陋而寡闻。我想开一个技术博客的想法由来已久，却一直兴致缺缺，可能跟我自己沉闷的性格有一点关系。
-从第一个工作到现在辞职，我看了很多书，专研了很多的技术，从java语言到函数式编程、从eclipse到emacs和vim、从windows到linux...
-到头来发现自己所有到知识都只有浅尝辄止，也没有形成一个系统，跟别说再去找一个好工作。希望以后这里可以作为我的一个交流阵地。</p>
-<p>子曰：天何言哉？四时行焉，百物生焉，天何言哉？老子又说：大音稀声。庄子还说：天地有大美而不言，四时有明法而不议，万物有成理而不说。
-一直以来，我都把少说当成自己的生活态度，以致我缺少必要的说话锻炼，以及语言思维锻炼，看来只有先成魔才能成佛。
-这种“不言”到艺术，也只能是辩者的专利了。有言道“知行合一”，我并不懂“知行合一”的真实意义，
-但是根据我浅显的理解，可以作为这个博客的指导思想。</p>
-<p>作为一个技术人员，写博客是一个锻炼，希望我把平常学到、用过到技术一一记录，也希望这也是对我从前从网络获取知识的一个反馈，
-也希望这个博客能鞭策我以后勤勤勉勉地学习。</p>
+		<h1 id="-">基本数据类型对象包装类</h1>
+<p>为了方便操作基本数据类型, 将其封装成了对象,
+在对象中定义了属性和行为丰富了数据的操作.
+用于描述该对象的类就称为基本数据包装类型.</p>
+<table>
+<thead>
+<tr>
+<th>数据类型</th>
+<th>包装类</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>byte</td>
+<td>Byte</td>
+</tr>
+<tr>
+<td>short</td>
+<td>Short</td>
+</tr>
+<tr>
+<td>int</td>
+<td>Integer</td>
+</tr>
+<tr>
+<td>long</td>
+<td>Long</td>
+</tr>
+<tr>
+<td>float</td>
+<td>Float</td>
+</tr>
+<tr>
+<td>double</td>
+<td>Double</td>
+</tr>
+<tr>
+<td>char</td>
+<td>Char</td>
+</tr>
+<tr>
+<td>boolean</td>
+<td>Boolean</td>
+</tr>
+</tbody>
+</table>
+<h2 id="-">用法</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre><span class="built_in">Integer</span><span class="built_in">.</span>parseInt(<span class="string">"123"</span>);
+<span class="built_in">Integer</span><span class="built_in">.</span>parseInt(<span class="string">"121"</span>, <span class="number">2</span>); <span class="comment">// 以2进制读取</span>
+Boolean<span class="built_in">.</span>parseBoolean(<span class="string">"true"</span>);
+<span class="built_in">Integer</span><span class="built_in">.</span>MAX_VALUE;
+<span class="built_in">Integer</span><span class="built_in">.</span>toBinaryString(<span class="subst">-</span><span class="number">6</span>);
+<span class="built_in">Integer</span><span class="built_in">.</span>toOctalString(<span class="subst">-</span><span class="number">6</span>);
+<span class="built_in">Integer</span><span class="built_in">.</span>toString(<span class="number">60</span>, <span class="number">2</span>); <span class="comment">// 转换成2进制</span>
+<span class="literal">new</span> <span class="built_in">Integer</span>(<span class="number">2</span>)<span class="built_in">.</span>intValue(); <span class="comment">// 转换成基本数据类型</span>
+</pre></td></tr></table></figure>
+
+<h2 id="-">自动装箱</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="code"><pre><span class="built_in">Integer</span> x <span class="subst">=</span> <span class="number">129</span>;
+<span class="built_in">Integer</span> y <span class="subst">=</span> <span class="number">129</span>;
+println(x<span class="subst">==</span>y); <span class="comment">// false</span>
+println(x<span class="built_in">.</span><span class="keyword">equals</span>(y)); <span class="comment">//true</span>
+
+<span class="comment">// jdk1.5以后, 自动装箱如果是一个字节, 那么数据不会创建一个新的空间</span>
+<span class="built_in">Integer</span> x <span class="subst">=</span> <span class="number">127</span>; 
+<span class="built_in">Integer</span> y <span class="subst">=</span> <span class="number">127</span>;
+println(x<span class="subst">==</span>y); <span class="comment">// true</span>
+</pre></td></tr></table></figure>
+
   
 	</div>
 		<footer class="article-footer clearfix">
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/随想/">随想</a>
+  <span></span> <a href="/tags/java/">java</a><a href="/tags/基本数据类型/">基本数据类型</a>
   </div>
 
 
@@ -113,7 +217,7 @@
 
 <div class="article-share" id="share">
 
-  <div data-url="http://yoursite.com/2014/03/29/the-first-blog/" data-title="The first blog | Poe&#39;s World" data-tsina="null" class="share clearfix">
+  <div data-url="http://yoursite.com/2014/04/11/java基本数据类型学习/" data-title="java基本数据类型学习 | Poe&#39;s World" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -123,13 +227,21 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2014/03/30/传智播客day01/" title="传智播客Day01">
+ <a href="/2014/04/11/java集合框架/" title="java集合框架">
   <strong>PREVIOUS:</strong><br/>
   <span>
-  传智播客Day01</span>
+  java集合框架</span>
 </a>
 </div>
 
+
+<div class="next">
+<a href="/2014/04/11/string类学习/"  title="string类学习">
+ <strong>NEXT:</strong><br/> 
+ <span>string类学习
+</span>
+</a>
+</div>
 
 </nav>
 
@@ -143,7 +255,7 @@
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">基本数据类型对象包装类</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.1.</span> <span class="toc-text">用法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.2.</span> <span class="toc-text">自动装箱</span></a></li></ol>
   </div>
 
 <div id="asidepart">
