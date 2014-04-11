@@ -4,24 +4,21 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>eclipse上的emacs | Poe&#39;s World</title>
+    <title>java泛型 | Poe&#39;s World</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="zhpooer">
     
-    <meta name="description" content="清明闲来无事，又要开始折腾 emacs 和我的编程环境。作为一个 emacser ，小指头总会忍受各种折磨，下面贴出我在Linux下解决办法 ^_^
-1
-2
-3
-4
-5
-6
-7
-8
-9
-;; 修改 ~/.XmodMap 
-;; 交换右ctrl键和Caps键
-keysym Menu = Super_L">
+    <meta name="description" content="泛型入门
+Jdk1.5 出现安全机制.
+好处:
+
+将运行时期的问题 ClasscastException 到了编译时期
+避免了强制类型转换的麻烦
+
+什么时候用&lt;&gt;, 当操作的引用数据类型不确定的时候.就使用&lt;&gt;.
+他表示一个用于接受具体引用数据类型的参数范围.
+泛型即使是给编">
     
     
     
@@ -80,15 +77,15 @@ keysym Menu = Super_L">
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2014/04/05/eclipse上的emacs/" title="eclipse上的emacs" itemprop="url">eclipse上的emacs</a>
+      <a href="/2014/04/11/java泛型/" title="java泛型" itemprop="url">java泛型</a>
   </h1>
   <p class="article-author">By
     
       <a href="http://yoursite.com" title="zhpooer">zhpooer</a>
     </p>
   <p class="article-time">
-    <time datetime="2014-04-05T12:19:30.000Z" itemprop="datePublished">4月 5 2014</time>
-    更新日期:<time datetime="2014-04-05T13:14:02.000Z" itemprop="dateModified">4月 5 2014</time>
+    <time datetime="2014-04-11T12:28:59.000Z" itemprop="datePublished">4月 11 2014</time>
+    更新日期:<time datetime="2014-04-11T13:14:16.000Z" itemprop="dateModified">4月 11 2014</time>
     
   </p>
 </header>
@@ -97,10 +94,22 @@ keysym Menu = Super_L">
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">泛型入门</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">2.</span> <span class="toc-text">泛型的通配符号</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">泛型的限定</span></a></li></ol>
 		</div>
 		
-		<p>清明闲来无事，又要开始折腾 emacs 和我的编程环境。<br>作为一个 emacser ，小指头总会忍受各种折磨，下面贴出我在Linux下解决办法 ^_^</p>
+		<h1 id="-">泛型入门</h1>
+<p>Jdk1.5 出现安全机制.</p>
+<p>好处:</p>
+<ol>
+<li>将运行时期的问题 ClasscastException 到了编译时期</li>
+<li>避免了强制类型转换的麻烦</li>
+</ol>
+<p>什么时候用&lt;&gt;, 当操作的引用数据类型不确定的时候.就使用&lt;&gt;.
+他表示一个用于接受具体引用数据类型的参数范围.</p>
+<p>泛型即使是给编译器使用的技术, 用于编译时期, 确保了编译的安全.
+运行时, 会将泛型去掉, 生成的class是不带泛型的, 称为泛型的擦除.</p>
+<p>泛型的补偿: 运行时, 通过获取元素的类型进行转换动作,
+不用进行强制转换.</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
 3
@@ -110,41 +119,77 @@ keysym Menu = Super_L">
 7
 8
 9
-</pre></td><td class="code"><pre>;; 修改 ~/.XmodMap 
-;; 交换右ctrl键和Caps键
-keysym Menu = Super_L
-remove <span class="operator"><span class="keyword">Lock</span> = Caps_Lock
-remove Control = Control_R
-keysym Control_R = Caps_Lock
-keysym Caps_Lock = Control_R
-<span class="keyword">add</span> <span class="keyword">Lock</span> = Caps_Lock
-<span class="keyword">add</span> Control = Control_R</span>
+10
+11
+12
+13
+14
+15
+16
+17
+</pre></td><td class="code"><pre><span class="comment">/** 泛型定义在类上 **/</span>
+<span class="class"><span class="keyword">class</span> <span class="title">Tool</span>&lt;<span class="title">e1</span>, <span class="title">e2</span>&gt; {</span>
+   <span class="comment">/** 泛型定义在方法上 **/</span>
+   <span class="keyword">public</span> &lt;W&gt; <span class="keyword">void</span> show(W <span class="keyword">str</span>) {}
+
+   <span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="keyword">void</span> method(T t) {}
+}
+
+<span class="class"><span class="keyword">class</span> <span class="title">Person</span> <span class="inheritance"><span class="keyword">implements</span></span> <span class="title">Comparable</span>&lt;<span class="title">Person</span>&gt;{</span>
+}
+
+<span class="comment">/**泛型接口**/</span>
+<span class="class"><span class="keyword">interface</span> <span class="title">Inter</span>&lt;<span class="title">T</span>&gt;{</span>
+   <span class="keyword">public</span> <span class="keyword">void</span> show(T t)
+}
+
+<span class="class"><span class="keyword">class</span> <span class="title">InterImpl</span>&lt;<span class="title">T</span>&gt; <span class="inheritance"><span class="keyword">implements</span></span> <span class="title">Inter</span>&lt;<span class="title">T</span>&gt; {</span>}
 </pre></td></tr></table></figure>
 
-<p>这个还是很有效果的，比以前使用左下角Ctrl轻松不少，不过用久了肩膀还是疼啊！！!
-泪奔,投奔vim党。</p>
-<p>以上是开胃菜，言归正传，身为一个Java程序猿，在IDE上编程总会有各种不适，从前研究过在
-emacs上使用emacs-jde编写java；在emacs上通过eclime使用eclipse的功能；或者在eclipse上用vim插件；
-均因为种种原因以失败告终，我可悲可叹的emacser人生，最后决定用 IdeaJ，他的按键绑定可以设置的很有emacs风格，
-不过还是和eclipse的使用习惯有一定的不习惯，特别是项目管理。直到今天，我发现了 <a href="&quot;http://blog.csdn.net/lzw_java/article/details/17016279&quot;">把Eclipse打造成Emacs</a></p>
-<p>先按装好插件Emacs+，具体的我就不多说了，秀一下我的按键绑定吧：</p>
-<ol>
-<li>Ctrl+C Ctrl+C : run</li>
-<li>Shift+Ctrl+/ : redo</li>
-<li>Ctrl+Q : quick fix</li>
-<li>Shift+Alt+&#39; :  Previous View</li>
-<li>Alt+&#39;: next View</li>
-<li>Alt+P : Previous Tab</li>
-<li>Alt+N: Next Tab</li>
-<li>Alt+O: Next Editor</li>
-</ol>
+<h1 id="-">泛型的通配符号</h1>
+<p>泛型的通配符: ?,代表未知类型</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">printCollection</span>(Collection&lt;?&gt; al){}
+</pre></td></tr></table></figure>
+
+<h1 id="-">泛型的限定</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="code"><pre><span class="javadoc">/**这里只能传Person类的对象**/</span>
+<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">printCollection</span>(Collection&lt;Person&gt; al){}
+
+<span class="javadoc">/**这里只可以传可以传Person类的子类对象  上限 **/</span>
+<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">printCollection</span>(Collection&lt;? extends Person&gt; al){}
+
+<span class="javadoc">/**这里只可以传可以传Person类的父类对象 下限 **/</span>
+<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">printCollection</span>(Collection&lt;? <span class="keyword">super</span> Person&gt; al){}
+
+class MyCollection&lt;E&gt;{
+   <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addAll</span>(MyCollection&lt;? extends E&gt; e){}
+}
+<span class="javadoc">/** 当对集合中的元素进行取出操作时, 可以用下限 **/</span>
+TreeSet(Comparator&lt;? <span class="keyword">super</span> E&gt; comparator)
+</pre></td></tr></table></figure>
+
   
 	</div>
 		<footer class="article-footer clearfix">
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/eclipse/">eclipse</a><a href="/tags/emacs/">emacs</a>
+  <span></span> <a href="/tags/java/">java</a><a href="/tags/泛型/">泛型</a>
   </div>
 
 
@@ -152,7 +197,7 @@ emacs上使用emacs-jde编写java；在emacs上通过eclime使用eclipse的功�
 
 <div class="article-share" id="share">
 
-  <div data-url="http://yoursite.com/2014/04/05/eclipse上的emacs/" data-title="eclipse上的emacs | Poe&#39;s World" data-tsina="null" class="share clearfix">
+  <div data-url="http://yoursite.com/2014/04/11/java泛型/" data-title="java泛型 | Poe&#39;s World" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -161,19 +206,11 @@ emacs上使用emacs-jde编写java；在emacs上通过eclime使用eclipse的功�
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2014/04/06/传智播客day06/" title="传智播客day06">
-  <strong>PREVIOUS:</strong><br/>
-  <span>
-  传智播客day06</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2014/04/04/传智播客day05/"  title="传智播客day05">
+<a href="/2014/04/11/java集合框架/"  title="java集合框架">
  <strong>NEXT:</strong><br/> 
- <span>传智播客day05
+ <span>java集合框架
 </span>
 </a>
 </div>
@@ -190,7 +227,7 @@ emacs上使用emacs-jde编写java；在emacs上通过eclime使用eclipse的功�
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">泛型入门</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">2.</span> <span class="toc-text">泛型的通配符号</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">泛型的限定</span></a></li></ol>
   </div>
 
 <div id="asidepart">
