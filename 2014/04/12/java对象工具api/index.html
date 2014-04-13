@@ -4,21 +4,21 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>java泛型 | Poe&#39;s World</title>
+    <title>java对象工具API | Poe&#39;s World</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="zhpooer">
     
-    <meta name="description" content="泛型入门
-Jdk1.5 出现安全机制.
-好处:
-
-将运行时期的问题 ClasscastException 到了编译时期
-避免了强制类型转换的麻烦
-
-什么时候用&lt;&gt;, 当操作的引用数据类型不确定的时候.就使用&lt;&gt;.
-他表示一个用于接受具体引用数据类型的参数范围.
-泛型即使是给编">
+    <meta name="description" content="System
+1
+2
+3
+4
+5
+System.long currentTimeMillis();  // 当前毫秒值
+System.exit();                // 退出
+System.getProperties(); 
+System.getProperty(&quot;line.sepa">
     
     
     
@@ -77,15 +77,15 @@ Jdk1.5 出现安全机制.
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2014/04/11/java泛型/" title="java泛型" itemprop="url">java泛型</a>
+      <a href="/2014/04/12/java对象工具api/" title="java对象工具API" itemprop="url">java对象工具API</a>
   </h1>
   <p class="article-author">By
     
       <a href="http://yoursite.com" title="zhpooer">zhpooer</a>
     </p>
   <p class="article-time">
-    <time datetime="2014-04-11T12:28:59.000Z" itemprop="datePublished">4月 11 2014</time>
-    更新日期:<time datetime="2014-04-11T13:14:16.000Z" itemprop="dateModified">4月 11 2014</time>
+    <time datetime="2014-04-12T11:38:05.000Z" itemprop="datePublished">4月 12 2014</time>
+    更新日期:<time datetime="2014-04-12T14:47:18.000Z" itemprop="dateModified">4月 12 2014</time>
     
   </p>
 </header>
@@ -94,22 +94,82 @@ Jdk1.5 出现安全机制.
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">泛型入门</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">2.</span> <span class="toc-text">泛型的通配符号</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">泛型的限定</span></a></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#system"><span class="toc-number">1.</span> <span class="toc-text">System</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#java-lang-runtime"><span class="toc-number">2.</span> <span class="toc-text">java.lang.Runtime</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#java-lang-math"><span class="toc-number">3.</span> <span class="toc-text">java.lang.Math</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#java-util-date"><span class="toc-number">4.</span> <span class="toc-text">java.util.Date</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#java-text-dateformat"><span class="toc-number">4.1.</span> <span class="toc-text">java.text.DateFormat</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">4.2.</span> <span class="toc-text">将日期格式的字符串 转成 日期对象</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">4.3.</span> <span class="toc-text">两个日期之间相隔多少天</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#java-util-calendar"><span class="toc-number">5.</span> <span class="toc-text">java.util.Calendar</span></a></li></ol>
 		</div>
 		
-		<h1 id="-">泛型入门</h1>
-<p>Jdk1.5 出现安全机制.</p>
-<p>好处:</p>
+		<h1 id="system">System</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre>System.<span class="keyword">long</span> currentTimeMillis();  <span class="comment">// 当前毫秒值</span>
+System.exit();                <span class="comment">// 退出</span>
+System.getProperties(); 
+System.getProperty(<span class="string">"line.separator"</span>);
+System.setProperty(key, <span class="keyword">value</span> ); <span class="comment">//给系统设置一些属性信息, 其他程序可以使用</span>
+</pre></td></tr></table></figure>
+
+<h1 id="java-lang-runtime">java.lang.Runtime</h1>
+<p>每个Java应用都有一个Runtime类实例, 与其运行的环境相连接</p>
+<blockquote>
+<p>查API文档, 没有构造方法提要, 就是私有构造方法</p>
+</blockquote>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre>Runtime r = Runtime.getRunTime();
+<span class="keyword">try</span> {
+    Process p = r.exec(<span class="string">"*.exe"</span>);
+} <span class="keyword">catch</span>( IOException e ){} <span class="comment">// 调用本地程序</span>
+p.destroy();
+</pre></td></tr></table></figure>
+
+<h1 id="java-lang-math">java.lang.Math</h1>
+<p>提供了数学方法, 是静态的</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre><span class="built_in">ceil</span>();    <span class="comment">// 取上值</span>
+<span class="built_in">floor</span>();   <span class="comment">// 取下值</span>
+<span class="built_in">round</span>();   <span class="comment">// 四舍五入</span>
+<span class="built_in">max</span>();
+<span class="built_in">pow</span>(<span class="number">3</span>, <span class="number">2</span>);     <span class="comment">// 三的二次方</span>
+Math.<span class="built_in">random</span>() <span class="comment">// 0 到 1 的伪随机值</span>
+Random r = new Random();
+r.nextInt();
+</pre></td></tr></table></figure>
+
+<h1 id="java-util-date">java.util.Date</h1>
+<blockquote>
+<p>Date月份是由 0 到 11 表示</p>
+</blockquote>
 <ol>
-<li>将运行时期的问题 ClasscastException 到了编译时期</li>
-<li>避免了强制类型转换的麻烦</li>
+<li><p>毫秒值 -&gt; 日期, 通过 <code>new Date(long time)</code> 完成  </p>
+<p> 还可以通过 <code>setTime()</code> 设置.</p>
+</li>
+<li>日期对象 -&gt; 毫秒值 <code>getTime()</code><figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="built_in">Date</span> d = <span class="keyword">new</span> <span class="built_in">Date</span>(); <span class="comment">//当前日期和时间</span>
+
+boolean after(<span class="built_in">Date</span> when);
+boolean before(<span class="built_in">Date</span> when);
+</pre></td></tr></table></figure>
+
+</li>
 </ol>
-<p>什么时候用&lt;&gt;, 当操作的引用数据类型不确定的时候.就使用&lt;&gt;.
-他表示一个用于接受具体引用数据类型的参数范围.</p>
-<p>泛型即使是给编译器使用的技术, 用于编译时期, 确保了编译的安全.
-运行时, 会将泛型去掉, 生成的class是不带泛型的, 称为泛型的擦除.</p>
-<p>泛型的补偿: 运行时, 通过获取元素的类型进行转换动作,
-不用进行强制转换.</p>
+<p>从JDK1.1开始使用Calendar类实现日期和时间字段之间的转换,
+使用DateFormat类来格式化和解析日期字符串.</p>
+<h2 id="java-text-dateformat">java.text.DateFormat</h2>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
 3
@@ -122,37 +182,37 @@ Jdk1.5 出现安全机制.
 10
 11
 12
-13
-14
-15
-16
-17
-</pre></td><td class="code"><pre><span class="comment">/** 泛型定义在类上 **/</span>
-<span class="class"><span class="keyword">class</span> <span class="title">Tool</span>&lt;<span class="title">e1</span>, <span class="title">e2</span>&gt; {</span>
-   <span class="comment">/** 泛型定义在方法上 **/</span>
-   <span class="keyword">public</span> &lt;W&gt; <span class="keyword">void</span> show(W <span class="keyword">str</span>) {}
+</pre></td><td class="code"><pre>// 日期 默认风格的日期
+String myString = DateFormat<span class="preprocessor">.getDateInstance</span>()<span class="preprocessor">.format</span>(myDate)
 
-   <span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="keyword">void</span> method(T t) {}
-}
+// 日期 + 时间 默认风格的日期和时间
+String myString = DateFormat<span class="preprocessor">.getDateTimeInstance</span>()<span class="preprocessor">.format</span>(myDate)
 
-<span class="class"><span class="keyword">class</span> <span class="title">Person</span> <span class="inheritance"><span class="keyword">implements</span></span> <span class="title">Comparable</span>&lt;<span class="title">Person</span>&gt;{</span>
-}
+DateFormat<span class="preprocessor">.getDateInstance</span>(DateFormate<span class="preprocessor">.LONG</span>)<span class="comment">;</span>
+DateFormat<span class="preprocessor">.getDateInstance</span>(DateFormate<span class="preprocessor">.MEDIUM</span>)<span class="comment">;</span>
+DateFormat<span class="preprocessor">.getDateTimeInstance</span>(DateFormate<span class="preprocessor">.LONG</span>, DateFormate<span class="preprocessor">.LONG</span>)
 
-<span class="comment">/**泛型接口**/</span>
-<span class="class"><span class="keyword">interface</span> <span class="title">Inter</span>&lt;<span class="title">T</span>&gt;{</span>
-   <span class="keyword">public</span> <span class="keyword">void</span> show(T t)
-}
-
-<span class="class"><span class="keyword">class</span> <span class="title">InterImpl</span>&lt;<span class="title">T</span>&gt; <span class="inheritance"><span class="keyword">implements</span></span> <span class="title">Inter</span>&lt;<span class="title">T</span>&gt; {</span>}
+// 自定义风格
+new SimpleDateFormat(<span class="string">"yyyyMMdd"</span>)
 </pre></td></tr></table></figure>
 
-<h1 id="-">泛型的通配符号</h1>
-<p>泛型的通配符: ?,代表未知类型</p>
+<h2 id="-">将日期格式的字符串 转成 日期对象</h2>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
-</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">printCollection</span>(Collection&lt;?&gt; al){}
+2
+3
+</pre></td><td class="code"><pre><span class="built_in">String</span> str_date = <span class="string">"2012-4-19"</span>;
+DateFormat format = DateFormat.getDateInstance(DateFormat.<span class="built_in">LONG</span>);
+<span class="built_in">Date</span> <span class="built_in">date</span> = format.parse(str_date);
 </pre></td></tr></table></figure>
 
-<h1 id="-">泛型的限定</h1>
+<h2 id="-">两个日期之间相隔多少天</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre>long separatTime = **
+<span class="built_in">Int</span> <span class="built_in">day</span> = separatTime/<span class="number">1000</span>/<span class="number">60</span>/<span class="number">60</span>/<span class="number">24</span>;
+</pre></td></tr></table></figure>
+
+<h1 id="java-util-calendar">java.util.Calendar</h1>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
 3
@@ -163,24 +223,16 @@ Jdk1.5 出现安全机制.
 8
 9
 10
-11
-12
-13
-14
-</pre></td><td class="code"><pre><span class="javadoc">/**这里只能传Person类的对象**/</span>
-<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">printCollection</span>(Collection&lt;Person&gt; al){}
+</pre></td><td class="code"><pre>Calendar c = Calendar<span class="preprocessor">.getInstance</span>()<span class="comment">;</span>
 
-<span class="javadoc">/**这里只可以传可以传Person类的子类对象  上限 **/</span>
-<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">printCollection</span>(Collection&lt;? extends Person&gt; al){}
+c<span class="preprocessor">.get</span>(Calendar<span class="preprocessor">.YEAR</span>)<span class="comment">;</span>
+c<span class="preprocessor">.get</span>(Calendar<span class="preprocessor">.MONTH</span>)<span class="comment">;</span>
+c<span class="preprocessor">.get</span>(Calendar<span class="preprocessor">.DAY</span>_OF_MONTH)<span class="comment">;</span>
 
-<span class="javadoc">/**这里只可以传可以传Person类的父类对象 下限 **/</span>
-<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">printCollection</span>(Collection&lt;? <span class="keyword">super</span> Person&gt; al){}
-
-class MyCollection&lt;E&gt;{
-   <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addAll</span>(MyCollection&lt;? extends E&gt; e){}
-}
-<span class="javadoc">/** 当对集合中的元素进行取出操作时, 可以用下限 **/</span>
-TreeSet(Comparator&lt;? <span class="keyword">super</span> E&gt; comparator)
+c<span class="preprocessor">.set</span>(<span class="number">2001</span>, <span class="number">3</span>, <span class="number">19</span>)<span class="comment">;</span>
+c<span class="preprocessor">.add</span>(Calendar<span class="preprocessor">.YEAR</span>, <span class="number">2</span>)<span class="comment">;</span>
+c<span class="preprocessor">.add</span>(Calendar<span class="preprocessor">.MONTH</span>, <span class="number">2</span>)<span class="comment">;</span>
+c<span class="preprocessor">.add</span>(Calendar<span class="preprocessor">.DAY</span>_OF_MONTH, <span class="number">2</span>)<span class="comment">;</span>
 </pre></td></tr></table></figure>
 
   
@@ -189,7 +241,7 @@ TreeSet(Comparator&lt;? <span class="keyword">super</span> E&gt; comparator)
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/java/">java</a><a href="/tags/泛型/">泛型</a>
+  <span></span> <a href="/tags/java/">java</a>
   </div>
 
 
@@ -197,7 +249,7 @@ TreeSet(Comparator&lt;? <span class="keyword">super</span> E&gt; comparator)
 
 <div class="article-share" id="share">
 
-  <div data-url="http://yoursite.com/2014/04/11/java泛型/" data-title="java泛型 | Poe&#39;s World" data-tsina="null" class="share clearfix">
+  <div data-url="http://yoursite.com/2014/04/12/java对象工具api/" data-title="java对象工具API | Poe&#39;s World" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -206,19 +258,11 @@ TreeSet(Comparator&lt;? <span class="keyword">super</span> E&gt; comparator)
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2014/04/12/传智播客day10-reqeust&response/" title="传智播客day10-reqeust&amp;response">
-  <strong>PREVIOUS:</strong><br/>
-  <span>
-  传智播客day10-reqeust&amp;response</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2014/04/11/java集合框架/"  title="java集合框架">
+<a href="/2014/04/12/专题-内省/"  title="专题-内省">
  <strong>NEXT:</strong><br/> 
- <span>java集合框架
+ <span>专题-内省
 </span>
 </a>
 </div>
@@ -235,7 +279,7 @@ TreeSet(Comparator&lt;? <span class="keyword">super</span> E&gt; comparator)
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">泛型入门</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">2.</span> <span class="toc-text">泛型的通配符号</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">泛型的限定</span></a></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#system"><span class="toc-number">1.</span> <span class="toc-text">System</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#java-lang-runtime"><span class="toc-number">2.</span> <span class="toc-text">java.lang.Runtime</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#java-lang-math"><span class="toc-number">3.</span> <span class="toc-text">java.lang.Math</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#java-util-date"><span class="toc-number">4.</span> <span class="toc-text">java.util.Date</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#java-text-dateformat"><span class="toc-number">4.1.</span> <span class="toc-text">java.text.DateFormat</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">4.2.</span> <span class="toc-text">将日期格式的字符串 转成 日期对象</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">4.3.</span> <span class="toc-text">两个日期之间相隔多少天</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#java-util-calendar"><span class="toc-number">5.</span> <span class="toc-text">java.util.Calendar</span></a></li></ol>
   </div>
 
 <div id="asidepart">
