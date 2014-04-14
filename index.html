@@ -51,7 +51,7 @@
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
 						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
-						<input type="hidden" name="q" value="site:yoursite.com">
+						<input type="hidden" name="q" value="site:zhpooer.github.io">
 					</form>
 					
 					</li>
@@ -62,6 +62,107 @@
     </header>
     <div id="container">
       <div id="main">
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2014/04/14/java反射学习/" title="java反射学习" itemprop="url">
+  
+    <h1 itemprop="name">java反射学习</h1>
+    
+     
+           <p itemprop="description" >反射
+动态获取类中的信息, 就是java反射. 可以理解为对类的解剖.
+对任意一个对象, 都能够调用他的任意一个方法和属性
+获取Class
+1
+2
+3
+4
+5
+6
+7
+8
+// 获取Class
+// 方式一
+Person p = new Person();
+Class clazz</p>
+        
+    
+    <time datetime="2014-04-14T13:33:07.000Z" itemprop="datePublished">4月 14 2014</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2014/04/14/java网络编程学习/" title="java网络编程学习" itemprop="url">
+  
+    <h1 itemprop="name">java网络编程学习</h1>
+    
+     
+           <p itemprop="description" >java.net.InetAddress
+Inet6Address ipv6协议
+1
+2
+3
+4
+5
+6
+InetAddress ip = InetAddress.getLocalHost();
+InetAddress ip = InetAddress.getByName();
+</p>
+        
+    
+    <time datetime="2014-04-14T09:00:05.000Z" itemprop="datePublished">4月 14 2014</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2014/04/13/io技术学习/" title="IO技术学习" itemprop="url">
+  
+    <h1 itemprop="name">IO技术学习</h1>
+    
+     
+           <p itemprop="description" >IO初识
+流按数据类型分类:
+
+字符流, 字节流读取文字自己数据后,
+不直接操作而是先查指定的编码表, 获取指定的文字.
+就是 字节流+编码表
+字节流
+
+流按操作方式分类:
+
+输入流, 将外设中的数据读取到内存中
+输出流, 将内存中的数据写到外设中
+
+字符流
+字符流的两个顶层父类</p>
+        
+    
+    <time datetime="2014-04-13T10:47:16.000Z" itemprop="datePublished">4月 13 2014</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2014/04/13/传智播客day11-cookie&session/" title="传智播客day11-cookie&amp;session" itemprop="url">
+  
+    <h1 itemprop="name">传智播客day11-cookie&amp;session</h1>
+    
+     
+           <p itemprop="description" >会话概述
+在一次会话中, 浏览器可以发出多次请求和收到多次服务器响应
+服务器为客户保存操作产生的数据, 比如购物网站的购物车
+解决方案: Cookie(客户端技术), Session(服务端技术)
+
+服务器发送 Set-Cookie: name=any
+客户端访问 cookie:</p>
+        
+    
+    <time datetime="2014-04-13T01:23:18.000Z" itemprop="datePublished">4月 13 2014</time>
+  </a>
+</section>
 
   <section class="post" itemscope itemprop="blogPost">
   
@@ -129,10 +230,13 @@ public class Person {
 
 给客户处发出信息
 由容器创建
-respponse.getOutputStream 和 respponse.getWriter 如果没有手动关 系统会自动关
+response.getOutputStream 和 response.getWriter 如果没有手动关 系统会自动关
 
-输出响应正文: 中文
-Response的字节流和字符流不能在一个Servlet中</p>
+1
+2
+3
+setStatus(int stauts); // 输出响应码
+addH</p>
         
     
     <time datetime="2014-04-12T01:26:31.000Z" itemprop="datePublished">4月 12 2014</time>
@@ -362,105 +466,6 @@ gout.wri</p>
   </a>
 </section>
 
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2014/04/07/php语法/" title="php基本语法" itemprop="url">
-  
-    <h1 itemprop="name">php基本语法</h1>
-    
-     
-           <p itemprop="description" >php语法
-php标签
-php是嵌入式语言，意味着代码的混编，为了区别，所以有四种标签
-
-两种标准标签
-1
-2
-3
-4
-5
-&lt;?php  `content` ?&gt;
-
-&lt;script language=“php&quot;&gt;
-echo &#39;php&#39;;
-&lt;/scri</p>
-        
-    
-    <time datetime="2014-04-07T11:51:06.000Z" itemprop="datePublished">4月 7 2014</time>
-  </a>
-</section>
-
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2014/04/07/传智播客day07-junit&jdk5新特性/" title="传智播客day07-junit&amp;jdk5新特性" itemprop="url">
-  
-    <h1 itemprop="name">传智播客day07-junit&amp;jdk5新特性</h1>
-    
-     
-           <p itemprop="description" >Tips
-1
-2
-3
-// propoties 的快捷方法
-ResourceBundle res = ResourceBundle.getBundle(&quot;db&quot;); //文件名为 db.prop
-res.getString(&quot;user&quot;)
-
-
-.properties 不支持中文。</p>
-        
-    
-    <time datetime="2014-04-07T01:01:39.000Z" itemprop="datePublished">4月 7 2014</time>
-  </a>
-</section>
-
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2014/04/06/传智播客day06-xml解析/" title="传智播客day06-xml解析" itemprop="url">
-  
-    <h1 itemprop="name">传智播客day06-xml解析</h1>
-    
-     
-           <p itemprop="description" >xml解析
-
-dom文档放入都内存中，方便CRUD
-sax逐行解析，方便查询，速度快，但不能CRUD
-
-DOM, jaxp
-解析包：javax.xml.parsers
-
-获取解析器的工厂对象DocumentBuilderFactory fac = DocumentBuilderF</p>
-        
-    
-    <time datetime="2014-04-06T00:47:01.000Z" itemprop="datePublished">4月 6 2014</time>
-  </a>
-</section>
-
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2014/04/05/eclipse上的emacs/" title="eclipse上的emacs" itemprop="url">
-  
-    <h1 itemprop="name">eclipse上的emacs</h1>
-    
-     
-           <p itemprop="description" >清明闲来无事，又要开始折腾 emacs 和我的编程环境。作为一个 emacser ，小指头总会忍受各种折磨，下面贴出我在Linux下解决办法 ^_^
-1
-2
-3
-4
-5
-6
-7
-8
-9
-;; 修改 ~/.XmodMap 
-;; 交换右ctrl键和Caps键
-keysym Menu</p>
-        
-    
-    <time datetime="2014-04-05T12:19:30.000Z" itemprop="datePublished">4月 5 2014</time>
-  </a>
-</section>
-
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" href="/page/2/">Next &raquo;</a>
@@ -482,6 +487,8 @@ keysym Menu</p>
 		
 			<li><a href="/tags/DOM/" title="DOM">DOM<sup>2</sup></a></li>
 		
+			<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
+		
 			<li><a href="/tags/SAX/" title="SAX">SAX<sup>1</sup></a></li>
 		
 			<li><a href="/tags/ServletRequest/" title="ServletRequest">ServletRequest<sup>1</sup></a></li>
@@ -491,6 +498,8 @@ keysym Menu</p>
 			<li><a href="/tags/String/" title="String">String<sup>1</sup></a></li>
 		
 			<li><a href="/tags/StringBuffer/" title="StringBuffer">StringBuffer<sup>1</sup></a></li>
+		
+			<li><a href="/tags/cookie/" title="cookie">cookie<sup>1</sup></a></li>
 		
 			<li><a href="/tags/css/" title="css">css<sup>1</sup></a></li>
 		
@@ -504,7 +513,7 @@ keysym Menu</p>
 		
 			<li><a href="/tags/http协议/" title="http协议">http协议<sup>1</sup></a></li>
 		
-			<li><a href="/tags/java/" title="java">java<sup>8</sup></a></li>
+			<li><a href="/tags/java/" title="java">java<sup>11</sup></a></li>
 		
 			<li><a href="/tags/javascript/" title="javascript">javascript<sup>3</sup></a></li>
 		
@@ -514,11 +523,7 @@ keysym Menu</p>
 		
 			<li><a href="/tags/servlet/" title="servlet">servlet<sup>2</sup></a></li>
 		
-			<li><a href="/tags/testdisk/" title="testdisk">testdisk<sup>1</sup></a></li>
-		
-			<li><a href="/tags/tomcat/" title="tomcat">tomcat<sup>1</sup></a></li>
-		
-			<li><a href="/tags/web开发/" title="web开发">web开发<sup>1</sup></a></li>
+			<li><a href="/tags/session/" title="session">session<sup>1</sup></a></li>
 		
 		</ul>
 </div>
@@ -547,7 +552,7 @@ keysym Menu</p>
 	</div>
 		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2014 
 		
-		<a href="http://yoursite.com" target="_blank" title="zhpooer">zhpooer</a>
+		<a href="http://zhpooer.github.io" target="_blank" title="zhpooer">zhpooer</a>
 		
 		</p>
 </div>

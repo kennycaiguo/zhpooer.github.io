@@ -13,11 +13,14 @@
 
 给客户处发出信息
 由容器创建
-respponse.getOutputStream 和 respponse.getWriter 如果没有手动关 系统会自动关
+response.getOutputStream 和 response.getWriter 如果没有手动关 系统会自动关
 
-输出响应正文: 中文
-Response的字节流和字符流不能在一个Servlet中同时使用
-字节流输出">
+1
+2
+3
+setStatus(int stauts); // 输出响应码
+addHeader();
+s">
     
     
     
@@ -61,7 +64,7 @@ Response的字节流和字符流不能在一个Servlet中同时使用
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
 						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
-						<input type="hidden" name="q" value="site:yoursite.com">
+						<input type="hidden" name="q" value="site:zhpooer.github.io">
 					</form>
 					
 					</li>
@@ -80,11 +83,11 @@ Response的字节流和字符流不能在一个Servlet中同时使用
   </h1>
   <p class="article-author">By
     
-      <a href="http://yoursite.com" title="zhpooer">zhpooer</a>
+      <a href="http://zhpooer.github.io" title="zhpooer">zhpooer</a>
     </p>
   <p class="article-time">
     <time datetime="2014-04-12T01:26:31.000Z" itemprop="datePublished">4月 12 2014</time>
-    更新日期:<time datetime="2014-04-12T09:16:57.000Z" itemprop="dateModified">4月 12 2014</time>
+    更新日期:<time datetime="2014-04-13T11:59:38.000Z" itemprop="dateModified">4月 13 2014</time>
     
   </p>
 </header>
@@ -93,15 +96,23 @@ Response的字节流和字符流不能在一个Servlet中同时使用
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#httpservletresponse"><span class="toc-number">1.</span> <span class="toc-text">HttpServletResponse</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.1.</span> <span class="toc-text">输出响应正文: 中文</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">1.1.1.</span> <span class="toc-text">字节流输出</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">1.1.2.</span> <span class="toc-text">字符流输出</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.2.</span> <span class="toc-text">中文文件的下载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.3.</span> <span class="toc-text">画验证码图片</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.4.</span> <span class="toc-text">定时刷新</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.5.</span> <span class="toc-text">控制资源的缓存时间</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#httpservletrequest"><span class="toc-number">2.</span> <span class="toc-text">HttpServletRequest</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.1.</span> <span class="toc-text">常用方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.2.</span> <span class="toc-text">获取请求消息头</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.3.</span> <span class="toc-text">获取客户端提交过来的请求参数</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">2.3.1.</span> <span class="toc-text">中文请求的转码</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.4.</span> <span class="toc-text">请求重定向</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.5.</span> <span class="toc-text">转发</span></a></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#httpservletresponse"><span class="toc-number">1.</span> <span class="toc-text">HttpServletResponse</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.1.</span> <span class="toc-text">输出响应正文: 中文</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">1.1.1.</span> <span class="toc-text">字节流输出</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">1.1.2.</span> <span class="toc-text">字符流输出</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.2.</span> <span class="toc-text">中文文件的下载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.3.</span> <span class="toc-text">画验证码图片</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.4.</span> <span class="toc-text">定时刷新</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.5.</span> <span class="toc-text">控制资源的缓存时间</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#httpservletrequest"><span class="toc-number">2.</span> <span class="toc-text">HttpServletRequest</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.1.</span> <span class="toc-text">常用方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.2.</span> <span class="toc-text">获取请求消息头</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.3.</span> <span class="toc-text">获取客户端提交过来的请求参数</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">2.3.1.</span> <span class="toc-text">各种表单输入域的获取</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">2.3.2.</span> <span class="toc-text">中文请求的转码</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#request-"><span class="toc-number">2.4.</span> <span class="toc-text">request域对象</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">2.4.1.</span> <span class="toc-text">请求重定向</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">2.4.2.</span> <span class="toc-text">转发</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.5.</span> <span class="toc-text">请求包含</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-url-"><span class="toc-number">2.6.</span> <span class="toc-text">各种URL地址的写法</span></a></li></ol>
 		</div>
 		
 		<h1 id="httpservletresponse">HttpServletResponse</h1>
 <ul>
 <li>给客户处发出信息</li>
 <li>由容器创建</li>
-<li>respponse.getOutputStream 和 respponse.getWriter 如果没有手动关 系统会自动关</li>
+<li>response.getOutputStream 和 response.getWriter 如果没有手动关 系统会自动关</li>
 </ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="function">setStatus(int stauts)</span>; <span class="comment">// 输出响应码</span>
+<span class="function">addHeader()</span>;
+<span class="function">setHeader()</span>; <span class="comment">// 输出响应消息头</span>
+</pre></td></tr></table></figure>
+
 <h2 id="-">输出响应正文: 中文</h2>
 <p>Response的字节流和字符流不能在一个Servlet中同时使用</p>
 <h3 id="-">字节流输出</h3>
@@ -146,16 +157,16 @@ res<span class="preprocessor">.setContentType</span>(<span class="string">"text/
 8
 9
 10
-</pre></td><td class="code"><pre>String s = <span class="string">"中文"</span><span class="comment">;</span>
-// 方式一: 推荐
-res<span class="preprocessor">.setCharacterEncoding</span>(<span class="string">"UTF-8"</span>)<span class="comment">;</span>
-res<span class="preprocessor">.setContentType</span>(<span class="string">"text/html;charset=UTF-8"</span>)<span class="comment">;</span>
+</pre></td><td class="code"><pre>String s = <span class="string">"中文"</span>;
+<span class="comment">// 方式一: 推荐</span>
+res.setCharacterEncoding(<span class="string">"UTF-8"</span>); <span class="comment">// 通知程序</span>
+res.setContentType(<span class="string">"text/html;charset=UTF-8"</span>); <span class="comment">// 通知客户端</span>
 
-// 方式二: 只用这一句, 两个作用, 通知程序和客户端 
-res<span class="preprocessor">.setContentType</span>(<span class="string">"text/html;charset=UTF-8"</span>)<span class="comment">;</span>
+<span class="comment">// 方式二: 只用这一句, 两个作用, 通知程序和客户端 </span>
+res.setContentType(<span class="string">"text/html;charset=UTF-8"</span>);
 
-PrintWriter <span class="keyword">out</span> = res<span class="preprocessor">.getWriter</span>()<span class="comment">;</span>
-<span class="keyword">out</span><span class="preprocessor">.write</span>(s)<span class="comment">; //默认编码是 iso-8859-1</span>
+PrintWriter <span class="keyword">out</span> = res.getWriter();
+<span class="keyword">out</span>.write(s); <span class="comment">//默认编码是 iso-8859-1</span>
 </pre></td></tr></table></figure>
 
 <h2 id="-">中文文件的下载</h2>
@@ -372,8 +383,6 @@ while(en<span class="preprocessor">.hasMoreElements</span>()){
 42
 43
 44
-45
-46
 </pre></td><td class="code"><pre><span class="comment">/* 根据之指定的名称获取请求参数 */</span>
 <span class="comment">/*
 * 没有对应的表单字段返回的是null
@@ -381,7 +390,6 @@ while(en<span class="preprocessor">.hasMoreElements</span>()){
 * 用户输入的都是字符串类型
 */</span>
 req.getParameter(<span class="string">"username"</span>);
-
 
 <span class="comment">/* 获取重名的请求 */</span>
 <span class="built_in">String</span> ps[] = req.getParameterValues(<span class="string">""</span>);
@@ -401,7 +409,6 @@ Enumeration&lt;<span class="built_in">String</span>&gt; names= req.getParameterN
 <span class="keyword">while</span>(names.hasMoreElements()){
     <span class="built_in">String</span> paramName = names.nextElement();
 	<span class="built_in">String</span>[] values = req.getParameterValues(paramName);
-    
 	<span class="comment">// 或用BeanUtils.setProperty(p, paramName, values);</span>
 	PropertyDescriptor pd = <span class="keyword">new</span> PropertyDescriptor(paramName, Person.class);
 	Method m = pd.getWriteMethod();
@@ -422,42 +429,304 @@ Map&lt;<span class="built_in">String</span>, <span class="built_in">String</span
 BeanUtils.populate(p, req.getParameterMap());
 </pre></td></tr></table></figure>
 
-<h3 id="-">中文请求的转码</h3>
-<p>如果客户端按照get方式发送请求, 我们只能手工进行指定字符集编码</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-</pre></td><td class="code"><pre>
-
-</pre></td></tr></table></figure>
-
-<p>如果客户端按照post方式发送请求, 设置请求对象的字符集</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-</pre></td><td class="code"><pre>req<span class="preprocessor">.setCharacterEncoding</span>(<span class="string">"utf-8"</span>)<span class="comment">;</span>
-req<span class="preprocessor">.getParameter</span>(<span class="string">"username"</span>)
-</pre></td></tr></table></figure>
-
-<h2 id="-">请求重定向</h2>
-<ol>
-<li>地址栏会变</li>
-<li>发两次请求</li>
-<li>跨服务器</li>
-</ol>
-<h2 id="-">转发</h2>
+<h3 id="-">各种表单输入域的获取</h3>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
 3
 4
 5
 6
-</pre></td><td class="code"><pre>req.setCharacterEncoding(<span class="string">"utf-8"</span>);
-<span class="built_in">String</span> userName = req.getParameter(<span class="string">"username"</span>);
-req.setAttribute(<span class="string">""</span>, <span class="string">""</span>); <span class="comment">// 传递参数</span>
-<span class="comment">// 获取RequestDispatcher, 用于实现请求转发</span>
-<span class="comment">// 将数据进行向下传递</span>
-getServletContext().getRequestDispatcher(<span class="string">"servleturl"</span>).forward(req, res); <span class="comment">// 内部转发</span>
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">body</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">form</span> <span class="attribute">action</span>=<span class="value">"/HelloServlet"</span> <span class="attribute">method</span>=<span class="value">"post"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">input</span> <span class="attribute">name</span>=<span class="value">"id"</span> <span class="attribute">value</span>=<span class="value">"436"</span> <span class="attribute">type</span>=<span class="value">"hidden"</span>/&gt;</span>
+        <span class="tag">&lt;<span class="title">table</span> <span class="attribute">border</span>=<span class="value">"1"</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">tr</span>&gt;</span>
+                <span class="tag">&lt;<span class="title">td</span>&gt;</span>姓名: <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
+                <span class="tag">&lt;<span class="title">td</span>&gt;</span> <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"text"</span> <span class="attribute">name</span>=<span class="value">"name"</span>/&gt;</span> <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
+            <span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">tr</span>&gt;</span>
+                <span class="tag">&lt;<span class="title">td</span>&gt;</span>密码 <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
+                <span class="tag">&lt;<span class="title">td</span>&gt;</span> <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"password"</span> <span class="attribute">name</span>=<span class="value">"password"</span>/&gt;</span><span class="tag">&lt;/<span class="title">td</span>&gt;</span>
+            <span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">tr</span>&gt;</span>
+                <span class="tag">&lt;<span class="title">td</span>&gt;</span>性别 <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
+                <span class="tag">&lt;<span class="title">td</span>&gt;</span>
+                    <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"radio"</span> <span class="attribute">name</span>=<span class="value">"gender"</span> <span class="attribute">value</span>=<span class="value">"0"</span>/&gt;</span>
+                    <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"radio"</span> <span class="attribute">name</span>=<span class="value">"gender"</span> <span class="attribute">value</span>=<span class="value">"1"</span>/&gt;</span>
+                <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
+            <span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">tr</span>&gt;</span>
+                <span class="tag">&lt;<span class="title">td</span>&gt;</span>已婚 <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
+                <span class="tag">&lt;<span class="title">td</span>&gt;</span>
+                    <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"checkbox"</span> <span class="attribute">name</span>=<span class="value">"married"</span>/&gt;</span>
+                <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
+            <span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">tr</span>&gt;</span>
+                <span class="tag">&lt;<span class="title">td</span>&gt;</span>爱好 <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
+                <span class="tag">&lt;<span class="title">td</span>&gt;</span>
+                    <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"checkbox"</span> <span class="attribute">name</span>=<span class="value">"hobby"</span> <span class="attribute">value</span>=<span class="value">"eat"</span>/&gt;</span>
+                    <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"checkbox"</span> <span class="attribute">name</span>=<span class="value">"hobby"</span> <span class="attribute">value</span>=<span class="value">"sleep"</span>/&gt;</span>
+                    <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"checkbox"</span> <span class="attribute">name</span>=<span class="value">"hobby"</span> <span class="attribute">value</span>=<span class="value">"java"</span>/&gt;</span>
+                <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
+            <span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">tr</span>&gt;</span>
+                <span class="tag">&lt;<span class="title">td</span>&gt;</span> 省份 <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
+                <span class="tag">&lt;<span class="title">td</span>&gt;</span>
+                    <span class="tag">&lt;<span class="title">select</span> <span class="attribute">name</span>=<span class="value">"province"</span>&gt;</span>
+                        <span class="tag">&lt;<span class="title">option</span> <span class="attribute">value</span>=<span class="value">"SH"</span>&gt;</span>上海 <span class="tag">&lt;/<span class="title">option</span>&gt;</span>
+                        <span class="tag">&lt;<span class="title">option</span> <span class="attribute">value</span>=<span class="value">"BJ"</span>&gt;</span>北京 <span class="tag">&lt;/<span class="title">option</span>&gt;</span>
+                    <span class="tag">&lt;/<span class="title">select</span>&gt;</span>
+                <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
+            <span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">tr</span>&gt;</span>
+                <span class="tag">&lt;<span class="title">td</span>&gt;</span> 简介 <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
+                <span class="tag">&lt;<span class="title">td</span>&gt;</span>
+                    <span class="tag">&lt;<span class="title">textarea</span> <span class="attribute">rows</span>=<span class="value">"3"</span> <span class="attribute">cols</span>=<span class="value">"23"</span> <span class="attribute">name</span>=<span class="value">"description"</span>&gt;</span> <span class="tag">&lt;/<span class="title">textarea</span>&gt;</span>
+                <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
+            <span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">tr</span>&gt;</span>
+                <span class="tag">&lt;<span class="title">td</span> <span class="attribute">colspan</span>=<span class="value">"2"</span>&gt;</span>
+                    <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"submit"</span>/&gt;</span>
+                    <span class="comment">&lt;!-- &lt;input type="button" value="注册" onclick="regist()"/&gt; --&gt;</span>
+                    <span class="comment">&lt;!-- &lt;input type="image" src="images/btn.png"/&gt; --&gt;</span>
+                    <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"reset"</span>/&gt;</span>
+                <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
+            <span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">table</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">form</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/javascript"</span>&gt;</span><span class="javascript">
+        <span class="function"><span class="keyword">function</span> <span class="title">regist</span><span class="params">()</span>{</span>
+            <span class="keyword">var</span> nameInput = document.getElementById(<span class="string">"name"</span>);
+            <span class="keyword">if</span>(nameInput.value==<span class="string">""</span>){
+                alert(<span class="string">"请输入正确名称"</span>);
+                <span class="keyword">return</span> <span class="literal">false</span>;
+            }
+            document.forms[<span class="number">0</span>].submit();
+        }
+    </span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">body</span>&gt;</span>
 </pre></td></tr></table></figure>
 
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="keyword">class</span> Student {
+   <span class="keyword">private</span> <span class="keyword">int</span> id;
+   <span class="keyword">private</span> String name;
+   <span class="keyword">private</span> String password;
+   <span class="keyword">private</span> String gender;  <span class="comment">// 单选和多选如果没选传回服务器是null</span>
+   <span class="keyword">private</span> boolean married;
+   <span class="keyword">private</span> String[] hobby;
+   <span class="keyword">private</span> String province;
+   <span class="keyword">private</span> String descriptioin;
+}
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doGet</span>(res, req){
+    Student s = <span class="keyword">new</span> Student();
+    BeanUtils.populate(s, request.getParameterMap());
+}
+</pre></td></tr></table></figure>
+
+<p>input type=text 这样的输入域, 用户没有输入值, 服务器得到的是空字符串</p>
+<p>type=radio/checkbox 用户没有输入值, 服务器得到的是null</p>
+<h3 id="-">中文请求的转码</h3>
+<p>浏览器以当前编码发送中文字符串到服务器,服务器默认会以 ISO8859-1 编码来解码</p>
+<p>如果客户端按照get方式发送请求, 我们只能手工进行指定字符集编码</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="comment">// 服务器以 IOS 解码, 所以重新取二进制编码</span>
+<span class="built_in">String</span> str = req.getParameter(<span class="string">"username"</span>).getBytes(<span class="string">"ISO8859-1"</span>);
+<span class="comment">// 再重新编码</span>
+<span class="built_in">String</span> uname = <span class="keyword">new</span> <span class="built_in">String</span>(str, <span class="string">"utf-8"</span>);
+</pre></td></tr></table></figure>
+
+<p>如果客户端按照post方式发送请求, 设置请求对象的字符集</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre>// 设置查询码表
+req<span class="preprocessor">.setCharacterEncoding</span>(<span class="string">"utf-8"</span>)<span class="comment">;</span>
+req<span class="preprocessor">.getParameter</span>(<span class="string">"username"</span>)<span class="comment">;</span>
+</pre></td></tr></table></figure>
+
+<h2 id="request-">request域对象</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="comment">// Servlet1</span>
+request.setAttribute(<span class="string">"p"</span>, <span class="string">"pp"</span>);
+
+<span class="comment">// Servlet2, Servlet 必须进行请求转发</span>
+request.getAttribute(<span class="string">"p"</span>);
+</pre></td></tr></table></figure>
+
+<h3 id="-">请求重定向</h3>
+<ol>
+<li>地址栏会变</li>
+<li>发两次请求</li>
+<li>跨服务器</li>
+<li>会发 302, Location</li>
+</ol>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre>// 方式一
+res<span class="preprocessor">.setStatus</span>(<span class="number">302</span>)<span class="comment">;</span>
+res<span class="preprocessor">.setHeader</span>(<span class="string">"Location"</span>, <span class="string">"www.sina.com"</span>)<span class="comment">;</span>
+// 方式二
+res<span class="preprocessor">.sendRedirect</span>(<span class="string">"www.sina.com"</span>)<span class="comment">;</span>
+</pre></td></tr></table></figure>
+
+<h3 id="-">转发</h3>
+<ol>
+<li>服务器的行为</li>
+<li>发一次请求</li>
+<li>地址栏不变<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre>req<span class="preprocessor">.setCharacterEncoding</span>(<span class="string">"utf-8"</span>)<span class="comment">;</span>
+String userName = req<span class="preprocessor">.getParameter</span>(<span class="string">"username"</span>)<span class="comment">;</span>
+req<span class="preprocessor">.setAttribute</span>(<span class="string">""</span>, <span class="string">""</span>)<span class="comment">; // 传递参数</span>
+// 获取RequestDispatcher, 用于实现请求转发
+// 将数据进行向下传递
+// 方式一: 转发的路径必须以斜线开头, <span class="string">"/"</span>
+getServletContext()<span class="preprocessor">.getRequestDispatcher</span>(<span class="string">"/servleturl"</span>)<span class="preprocessor">.forward</span>(req, res)<span class="comment">; // 内部转发</span>
+
+// 方式二:  转发的路径可以以斜线开头, 可以不以斜线开头, 表示相对路径
+req<span class="preprocessor">.getRequestDispatcher</span>(<span class="string">""</span>)<span class="preprocessor">.forward</span>(req, res)<span class="comment">;</span>
+</pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h2 id="-">请求包含</h2>
+<p>RequestDispatcher: 请求分发器</p>
+<ol>
+<li>实现转发, 源 -&gt; 目标</li>
+<li>实现包含, 目标 -&gt; 源<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code"><pre><span class="comment">/* 运行结果: "我喜欢你"*/</span>
+// Servlet1
+response<span class="preprocessor">.setContentType</span>(<span class="string">"text/html;charset=UTF-8"</span>)<span class="comment">;</span>
+PrintWriter <span class="keyword">out</span> = res<span class="preprocessor">.getWriter</span>()<span class="comment">;</span>
+<span class="keyword">out</span><span class="preprocessor">.write</span>(<span class="string">"我喜欢"</span>)
+RequestDispatcher rd = request<span class="preprocessor">.getRequestDispatcher</span>(<span class="string">"Servlet2"</span>)<span class="comment">;</span>
+rd<span class="preprocessor">.include</span>(req<span class="preprocessor">.res</span>)<span class="comment">;</span>
+
+// Servlet2
+response<span class="preprocessor">.setContentType</span>(<span class="string">"text/html;charset=UTF-8"</span>)<span class="comment">;</span>
+PrintWriter <span class="keyword">out</span> = res<span class="preprocessor">.getWriter</span>()<span class="comment">;</span>
+<span class="keyword">out</span><span class="preprocessor">.write</span>(<span class="string">"你"</span>)
+</pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h2 id="-url-">各种URL地址的写法</h2>
+<ul>
+<li>相对路径 </li>
+<li><p>绝对路径(开发中推荐), 拥抱变化, <code>/</code></p>
+<p>  给服务器用的地址 斜线就代表当前应用. 给浏览器用的地址, 必须加上应用名称</p>
+</li>
+</ul>
+<p>重定向: responst.sendRedirect()
+转发: request.getRequestDispatcher()
+超连接: <a ref=""/>
+表单: <form action=""/></p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -472,7 +741,7 @@ getServletContext().getRequestDispatcher(<span class="string">"servleturl"</span
 
 <div class="article-share" id="share">
 
-  <div data-url="http://yoursite.com/2014/04/12/传智播客day10-reqeust&response/" data-title="传智播客day10-reqeust&amp;response | Poe&#39;s World" data-tsina="null" class="share clearfix">
+  <div data-url="http://zhpooer.github.io/2014/04/12/传智播客day10-reqeust&response/" data-title="传智播客day10-reqeust&amp;response | Poe&#39;s World" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -510,7 +779,7 @@ getServletContext().getRequestDispatcher(<span class="string">"servleturl"</span
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#httpservletresponse"><span class="toc-number">1.</span> <span class="toc-text">HttpServletResponse</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.1.</span> <span class="toc-text">输出响应正文: 中文</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">1.1.1.</span> <span class="toc-text">字节流输出</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">1.1.2.</span> <span class="toc-text">字符流输出</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.2.</span> <span class="toc-text">中文文件的下载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.3.</span> <span class="toc-text">画验证码图片</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.4.</span> <span class="toc-text">定时刷新</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.5.</span> <span class="toc-text">控制资源的缓存时间</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#httpservletrequest"><span class="toc-number">2.</span> <span class="toc-text">HttpServletRequest</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.1.</span> <span class="toc-text">常用方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.2.</span> <span class="toc-text">获取请求消息头</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.3.</span> <span class="toc-text">获取客户端提交过来的请求参数</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">2.3.1.</span> <span class="toc-text">中文请求的转码</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.4.</span> <span class="toc-text">请求重定向</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.5.</span> <span class="toc-text">转发</span></a></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#httpservletresponse"><span class="toc-number">1.</span> <span class="toc-text">HttpServletResponse</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.1.</span> <span class="toc-text">输出响应正文: 中文</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">1.1.1.</span> <span class="toc-text">字节流输出</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">1.1.2.</span> <span class="toc-text">字符流输出</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.2.</span> <span class="toc-text">中文文件的下载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.3.</span> <span class="toc-text">画验证码图片</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.4.</span> <span class="toc-text">定时刷新</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.5.</span> <span class="toc-text">控制资源的缓存时间</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#httpservletrequest"><span class="toc-number">2.</span> <span class="toc-text">HttpServletRequest</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.1.</span> <span class="toc-text">常用方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.2.</span> <span class="toc-text">获取请求消息头</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.3.</span> <span class="toc-text">获取客户端提交过来的请求参数</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">2.3.1.</span> <span class="toc-text">各种表单输入域的获取</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">2.3.2.</span> <span class="toc-text">中文请求的转码</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#request-"><span class="toc-number">2.4.</span> <span class="toc-text">request域对象</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">2.4.1.</span> <span class="toc-text">请求重定向</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">2.4.2.</span> <span class="toc-text">转发</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.5.</span> <span class="toc-text">请求包含</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-url-"><span class="toc-number">2.6.</span> <span class="toc-text">各种URL地址的写法</span></a></li></ol>
   </div>
 
 <div id="asidepart">
@@ -526,6 +795,8 @@ getServletContext().getRequestDispatcher(<span class="string">"servleturl"</span
 		
 			<li><a href="/tags/DOM/" title="DOM">DOM<sup>2</sup></a></li>
 		
+			<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
+		
 			<li><a href="/tags/SAX/" title="SAX">SAX<sup>1</sup></a></li>
 		
 			<li><a href="/tags/ServletRequest/" title="ServletRequest">ServletRequest<sup>1</sup></a></li>
@@ -535,6 +806,8 @@ getServletContext().getRequestDispatcher(<span class="string">"servleturl"</span
 			<li><a href="/tags/String/" title="String">String<sup>1</sup></a></li>
 		
 			<li><a href="/tags/StringBuffer/" title="StringBuffer">StringBuffer<sup>1</sup></a></li>
+		
+			<li><a href="/tags/cookie/" title="cookie">cookie<sup>1</sup></a></li>
 		
 			<li><a href="/tags/css/" title="css">css<sup>1</sup></a></li>
 		
@@ -548,7 +821,7 @@ getServletContext().getRequestDispatcher(<span class="string">"servleturl"</span
 		
 			<li><a href="/tags/http协议/" title="http协议">http协议<sup>1</sup></a></li>
 		
-			<li><a href="/tags/java/" title="java">java<sup>8</sup></a></li>
+			<li><a href="/tags/java/" title="java">java<sup>11</sup></a></li>
 		
 			<li><a href="/tags/javascript/" title="javascript">javascript<sup>3</sup></a></li>
 		
@@ -558,11 +831,7 @@ getServletContext().getRequestDispatcher(<span class="string">"servleturl"</span
 		
 			<li><a href="/tags/servlet/" title="servlet">servlet<sup>2</sup></a></li>
 		
-			<li><a href="/tags/testdisk/" title="testdisk">testdisk<sup>1</sup></a></li>
-		
-			<li><a href="/tags/tomcat/" title="tomcat">tomcat<sup>1</sup></a></li>
-		
-			<li><a href="/tags/web开发/" title="web开发">web开发<sup>1</sup></a></li>
+			<li><a href="/tags/session/" title="session">session<sup>1</sup></a></li>
 		
 		</ul>
 </div>
@@ -591,7 +860,7 @@ getServletContext().getRequestDispatcher(<span class="string">"servleturl"</span
 	</div>
 		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2014 
 		
-		<a href="http://yoursite.com" target="_blank" title="zhpooer">zhpooer</a>
+		<a href="http://zhpooer.github.io" target="_blank" title="zhpooer">zhpooer</a>
 		
 		</p>
 </div>

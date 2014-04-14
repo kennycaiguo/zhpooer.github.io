@@ -1,0 +1,420 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>java反射学习 | Poe&#39;s World</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="zhpooer">
+    
+    <meta name="description" content="反射
+动态获取类中的信息, 就是java反射. 可以理解为对类的解剖.
+对任意一个对象, 都能够调用他的任意一个方法和属性
+获取Class
+1
+2
+3
+4
+5
+6
+7
+8
+// 获取Class
+// 方式一
+Person p = new Person();
+Class clazz = p.getCl">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="Poe&#39;s World" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="Poe&#39;s World" title="Poe&#39;s World"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Poe&#39;s World">Poe&#39;s World</a></h1>
+				<h2 class="blog-motto">Hello World</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:zhpooer.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/04/14/java反射学习/" title="java反射学习" itemprop="url">java反射学习</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://zhpooer.github.io" title="zhpooer">zhpooer</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2014-04-14T13:33:07.000Z" itemprop="datePublished">4月 14 2014</time>
+    更新日期:<time datetime="2014-04-14T13:52:59.000Z" itemprop="dateModified">4月 14 2014</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">反射</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-class"><span class="toc-number">1.1.</span> <span class="toc-text">获取Class</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-java-lang-constructor"><span class="toc-number">1.2.</span> <span class="toc-text">构造函数 java.lang.Constructor</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-java-lang-field"><span class="toc-number">1.3.</span> <span class="toc-text">获取字段 java.lang.Field</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-java-lang-method"><span class="toc-number">1.4.</span> <span class="toc-text">获取方法 java.lang.Method</span></a></li></ol>
+		</div>
+		
+		<h1 id="-">反射</h1>
+<p>动态获取类中的信息, 就是java反射. 可以理解为对类的解剖.</p>
+<p>对任意一个对象, 都能够调用他的任意一个方法和属性</p>
+<h2 id="-class">获取Class</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre><span class="comment">// 获取Class</span>
+<span class="comment">// 方式一</span>
+Person p = <span class="keyword">new</span> Person();
+Class clazz = p.getClass();
+<span class="comment">// 方式二</span>
+Class clazz = Person.<span class="keyword">class</span>;
+<span class="comment">// 方式三</span>
+Class clazz = Class.forName(<span class="string">"xx.xx.Person"</span>);
+</pre></td></tr></table></figure>
+
+<h2 id="-java-lang-constructor">构造函数 java.lang.Constructor</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre><span class="keyword">Object</span> obj = clazz.newInstance();
+
+<span class="comment">//构造函数要传参数</span>
+<span class="function"><span class="keyword">Constructor</span> <span class="title">cons</span> = <span class="title">clazz</span>.<span class="title">getConstructors</span><span class="params">()</span>;</span>
+clazz.getConstructor(<span class="keyword">String</span>.<span class="keyword">class</span>, <span class="keyword">String</span>.clazz);
+cons.newInstance()
+</pre></td></tr></table></figure>
+
+<h2 id="-java-lang-field">获取字段 java.lang.Field</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>Field f = clazz.getField(<span class="string">"age"</span>); <span class="comment">// 获取公共的字段</span>
+Field f = clazz.getDeclaredField(<span class="string">"age"</span>); <span class="comment">// 获取所有的字段</span>
+f.setAccessible(<span class="keyword">true</span>); <span class="comment">// 私有的变为可访问</span>
+f.<span class="keyword">get</span>(obj);
+</pre></td></tr></table></figure>
+
+<h2 id="-java-lang-method">获取方法 java.lang.Method</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="function"><span class="keyword">Method</span>[] <span class="title">ms</span> = <span class="title">clazz</span>.<span class="title">getMethods</span><span class="params">()</span>;</span> <span class="comment">// 获取都是公有的方法</span>
+<span class="function"><span class="keyword">Method</span> <span class="title">m</span> = <span class="title">clazz</span>.<span class="title">getDeclaredMethod</span><span class="params">("show", null)</span>;</span> <span class="comment">// 获取所有的方法</span>
+m.invoke(obj, null);
+</pre></td></tr></table></figure>
+
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/java/">java</a><a href="/tags/反射/">反射</a>
+  </div>
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://zhpooer.github.io/2014/04/14/java反射学习/" data-title="java反射学习 | Poe&#39;s World" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2014/04/14/java网络编程学习/"  title="java网络编程学习">
+ <strong>NEXT:</strong><br/> 
+ <span>java网络编程学习
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">反射</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-class"><span class="toc-number">1.1.</span> <span class="toc-text">获取Class</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-java-lang-constructor"><span class="toc-number">1.2.</span> <span class="toc-text">构造函数 java.lang.Constructor</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-java-lang-field"><span class="toc-number">1.3.</span> <span class="toc-text">获取字段 java.lang.Field</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-java-lang-method"><span class="toc-number">1.4.</span> <span class="toc-text">获取方法 java.lang.Method</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/DOM/" title="DOM">DOM<sup>2</sup></a></li>
+		
+			<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
+		
+			<li><a href="/tags/SAX/" title="SAX">SAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletRequest/" title="ServletRequest">ServletRequest<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletResponse/" title="ServletResponse">ServletResponse<sup>1</sup></a></li>
+		
+			<li><a href="/tags/String/" title="String">String<sup>1</sup></a></li>
+		
+			<li><a href="/tags/StringBuffer/" title="StringBuffer">StringBuffer<sup>1</sup></a></li>
+		
+			<li><a href="/tags/cookie/" title="cookie">cookie<sup>1</sup></a></li>
+		
+			<li><a href="/tags/css/" title="css">css<sup>1</sup></a></li>
+		
+			<li><a href="/tags/dtd/" title="dtd">dtd<sup>1</sup></a></li>
+		
+			<li><a href="/tags/eclipse/" title="eclipse">eclipse<sup>1</sup></a></li>
+		
+			<li><a href="/tags/emacs/" title="emacs">emacs<sup>1</sup></a></li>
+		
+			<li><a href="/tags/html/" title="html">html<sup>2</sup></a></li>
+		
+			<li><a href="/tags/http协议/" title="http协议">http协议<sup>1</sup></a></li>
+		
+			<li><a href="/tags/java/" title="java">java<sup>11</sup></a></li>
+		
+			<li><a href="/tags/javascript/" title="javascript">javascript<sup>3</sup></a></li>
+		
+			<li><a href="/tags/php/" title="php">php<sup>1</sup></a></li>
+		
+			<li><a href="/tags/schema/" title="schema">schema<sup>1</sup></a></li>
+		
+			<li><a href="/tags/servlet/" title="servlet">servlet<sup>2</sup></a></li>
+		
+			<li><a href="/tags/session/" title="session">session<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2014 
+		
+		<a href="http://zhpooer.github.io" target="_blank" title="zhpooer">zhpooer</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"zhpoooer"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>
