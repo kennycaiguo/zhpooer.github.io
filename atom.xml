@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Hello World]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://zhpooer.github.io/"/>
-  <updated>2014-04-14T13:53:57.102Z</updated>
+  <updated>2014-04-15T14:01:12.574Z</updated>
   <id>http://zhpooer.github.io/</id>
   
   <author>
@@ -13,6 +13,872 @@
   </author>
   
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[传智播客day12-jsp]]></title>
+    <link href="http://zhpooer.github.io/2014/04/15/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day12-jsp/"/>
+    <id>http://zhpooer.github.io/2014/04/15/传智播客day12-jsp/</id>
+    <published>2014-04-15T06:40:33.000Z</published>
+    <updated>2014-04-15T08:58:36.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="jsp">JSP</h1>
+<p>全称Java Server Pages, 是一种用于开发动态web资源的技术</p>
+<p>JSP=html中写java代码</p>
+<p>Servlet: 只能写java代码, 写html不是很方便</p>
+<h1 id="jsp-">JSP 的执行原理</h1>
+<p>jsp 翻译成 .Java 再 编译成 .class, 然后Tomcat加载</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="code"><pre><span class="comment">// JSP中可以取到的变量</span>
+PageContext pageContext = <span class="keyword">null</span>;
+HttpSession session = <span class="keyword">null</span>;
+ServletContext application = <span class="keyword">null</span>;
+ServletConfig config = <span class="keyword">null</span>;
+JspWriter <span class="keyword">out</span> = <span class="keyword">null</span>;
+Object page = <span class="keyword">this</span>;
+JspWriter _jspx_out = <span class="keyword">null</span>;
+PageContext _jspx_page_context = <span class="keyword">null</span>;
+</pre></td></tr></table></figure>
+
+<h1 id="jsp-">JSP语法</h1>
+<h2 id="-">模板元素</h2>
+<p>JSP中的HTML元素, 定义了JSP的外观和框架</p>
+<h2 id="-">脚本表达式</h2>
+<p>输出变量的值到页面上</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre>&lt;%=new Date()<span class="preprocessor">.toLocaleString</span>()%&gt;
+//translate to <span class="keyword">out</span><span class="preprocessor">.println</span>( new Date()<span class="preprocessor">.toLocaleString</span>() )<span class="comment">;</span>
+</pre></td></tr></table></figure>
+
+<h2 id="-">脚本片段</h2>
+<p>书写Java逻辑, 原封不动的java代码</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>&lt;<span class="comment">%</span>
+   语句一;
+   语句二;
+<span class="comment">%&gt;</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">table</span> <span class="attribute">border</span>=<span class="value">"1"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">tr</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">th</span>&gt;</span> <span class="tag">&lt;/<span class="title">th</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">th</span>&gt;</span> <span class="tag">&lt;/<span class="title">th</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
+    <span class="vbscript">&lt;%
+    <span class="keyword">for</span>(<span class="built_in">int</span> i=<span class="number">1</span>;i&lt;=<span class="number">10</span>;i++){
+    %&gt;</span>
+    <span class="tag">&lt;<span class="title">tr</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">td</span>&gt;</span><span class="vbscript">&lt;%=i%&gt;</span><span class="tag">&lt;/<span class="title">td</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">td</span>&gt;</span><span class="vbscript">&lt;%=<span class="string">"aaa"</span> + i%&gt;</span><span class="tag">&lt;/<span class="title">td</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
+    <span class="vbscript">&lt;%
+    }
+    %&gt;</span>
+<span class="tag">&lt;/<span class="title">table</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<h2 id="-">声明</h2>
+<p>定义类成员(静态变量, 静态方法, 实例变量, 实例方法)</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre>&lt;%!
+   <span class="comment">// 实例变量</span>
+   int i = <span class="number">100</span>;
+   <span class="keyword">public</span> void <span class="function"><span class="keyword">method</span><span class="params">()</span><span class="comment">{
+       println("hello world");
+   }</span>
+%&gt;</span>
+</pre></td></tr></table></figure>
+
+<h2 id="-">注释</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre>&lt;<span class="string">%--</span>
+   out.write(<span class="string">"helloworld"</span>)
+--%&gt;
+</pre></td></tr></table></figure>
+
+<p><code>&lt;%-- --%&gt;</code>: 被注释的代码, 根本不会被翻译到Servlet中</p>
+<p><code>&lt;!--  --&gt;</code>: 浏览器注释, 代码还是会被执行</p>
+<h2 id="-">指令</h2>
+<ul>
+<li>作用 给服务器用, 指示服务器应该如何对待JSP页面</li>
+<li>基本语法: <code>&lt;%@指令名称 指令属性=值 指令属性1=值1%&gt;</code></li>
+</ul>
+<h3 id="page">page</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>&lt;%<span class="annotation">@page</span>
+  language=<span class="string">"java"</span>
+  <span class="keyword">import</span>=<span class="string">"java.util.Data, java.util.Random"</span>
+%&gt;
+</pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>默认值</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>language</td>
+<td>java</td>
+<td>设置编写也语言</td>
+</tr>
+<tr>
+<td>import</td>
+<td></td>
+<td>导入包, 用逗号分隔</td>
+</tr>
+<tr>
+<td>session</td>
+<td>true</td>
+<td>是否生成 HttpSession 对象</td>
+</tr>
+<tr>
+<td>buffer</td>
+<td>8kb</td>
+<td>字符输出流的缓存, none</td>
+</tr>
+<tr>
+<td>autoFlush</td>
+<td>true</td>
+<td>自动刷新缓存</td>
+</tr>
+<tr>
+<td>isThreadPage</td>
+<td>false</td>
+<td>是否线程安全</td>
+</tr>
+<tr>
+<td>errorPage</td>
+<td></td>
+<td>页面出错时, 转到的页面, 如果以<code>/</code>开头,为绝对路径</td>
+</tr>
+<tr>
+<td>isErrorPage</td>
+<td>false</td>
+<td>是否产生Exception对象, 错误后可以调用 exceptioin.getStackTrace()</td>
+</tr>
+<tr>
+<td>contentType</td>
+<td></td>
+<td>改字符流编码,通知客户端显示字符集</td>
+</tr>
+<tr>
+<td>pageEncoding</td>
+<td>iso8859-1</td>
+<td>指示服务器读取JSP时所用的编码, 同时有 contentType 的功能</td>
+</tr>
+<tr>
+<td>isELIgnored</td>
+<td>false</td>
+<td>是否忽略EL表达式</td>
+</tr>
+</tbody>
+</table>
+<h3 id="taglib">taglib</h3>
+<p>引入外部的标签用的</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre><span class="vbscript">&lt;%@ taglib uri=<span class="string">""</span> prefix=<span class="string">"c"</span>%&gt;</span>
+<span class="tag">&lt;<span class="title">c:if</span> <span class="attribute">test</span>=<span class="value">""</span>&gt;</span><span class="tag">&lt;/<span class="title">c:if</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<h3 id="include">include</h3>
+<p>页面包含</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- 首选, 效率高, 静态包含, 两个 jsp 翻译成一个 jsp --&gt;</span>
+<span class="vbscript">&lt;%@ include
+    file=<span class="string">"/**.jsp"</span>
+%&gt;</span>
+<span class="comment">&lt;!-- 动态包含, 两个 jsp, 合并显示--&gt;</span>
+<span class="tag">&lt;<span class="title">jsp:include</span> <span class="attribute">page</span>=<span class="value">"/**.jsp"</span>/&gt;</span>
+</pre></td></tr></table></figure>
+
+<h2 id="jsp-">JSP 常用内置标签(动作元素)</h2>
+<table>
+<thead>
+<tr>
+<th>标签</th>
+<th>作用</th>
+<th>详细说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>jsp:include</td>
+<td>动态包含</td>
+<td>page:指向被包含页面</td>
+</tr>
+<tr>
+<td>jsp:forward</td>
+<td>转发</td>
+<td>page: 指向转发路径</td>
+</tr>
+<tr>
+<td>jsp:param</td>
+<td>传递请求参数</td>
+<td>name:键 value:值</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre><span class="comment">// 源页面</span>
+&lt;jsp:forward page=<span class="string">""</span>&gt;
+    &lt;jsp:param <span class="keyword">value</span>=<span class="string">'key'</span> name=<span class="string">'username'</span>/&gt;
+&lt;/jsp:forward&gt;
+
+<span class="comment">// 目的页面</span>
+request.getParameter(<span class="string">"username"</span>)
+</pre></td></tr></table></figure>
+
+<h1 id="error-">Error 的全局配置</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- error 全局配置 --&gt;</span>
+<span class="tag">&lt;<span class="title">error-page</span>&gt;</span>
+    <span class="comment">&lt;!-- 异常类型匹配--&gt;</span>
+    <span class="tag">&lt;<span class="title">exception-type</span>&gt;</span>java.lang.Exception <span class="tag">&lt;/<span class="title">exception-type</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">location</span>&gt;</span> /error.jsp<span class="tag">&lt;/<span class="title">location</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">error-page</span>&gt;</span>
+<span class="tag">&lt;<span class="title">error-page</span>&gt;</span>
+    <span class="comment">&lt;!-- 响应码匹配 --&gt;</span>
+    <span class="tag">&lt;<span class="title">error-code</span>&gt;</span>404<span class="tag">&lt;/<span class="title">error-code</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">location</span>&gt;</span> /error.jsp<span class="tag">&lt;/<span class="title">location</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">error-page</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+]]></content>
+    
+    
+      <category term="jsp" scheme="http://zhpooer.github.io/tags/jsp/"/>
+    
+      <category term="传智播客" scheme="http://zhpooer.github.io/tags/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[传智播客day12-session]]></title>
+    <link href="http://zhpooer.github.io/2014/04/15/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day12-session/"/>
+    <id>http://zhpooer.github.io/2014/04/15/传智播客day12-session/</id>
+    <published>2014-04-15T01:03:15.000Z</published>
+    <updated>2014-04-15T06:40:47.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="session">Session</h1>
+<p>默认情况下, 一个浏览器独占一个session对象</p>
+<ul>
+<li>HttpSession也是一个域对象</li>
+<li>session对象由服务器创建</li>
+<li>每一个session都有一个唯一的ID, 存到Cookie</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>void setAttribute(<span class="built_in">String</span> <span class="keyword">key</span>, <span class="built_in">Object</span> value);
+<span class="built_in">Object</span> getAttribute(<span class="built_in">String</span> <span class="keyword">key</span>);
+void removeAttribute(<span class="built_in">String</span> <span class="keyword">key</span>);
+<span class="built_in">String</span> getId();
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre><span class="comment">// 放数据</span>
+HttpSession session = req.getSession();
+session.setAttribute(<span class="string">"p"</span>, <span class="string">"ppp"</span>);
+<span class="comment">// 取数据</span>
+(<span class="built_in">String</span>) session.getAttribute(<span class="string">"p"</span>);
+
+session.getAttribute(<span class="literal">true</span>); <span class="comment">// 如果没有session, 就创建</span>
+session.getAttribute(<span class="literal">false</span>); <span class="comment">// 没有sessioin, 不创建, 返回null</span>
+</pre></td></tr></table></figure>
+
+<h1 id="session-">session访问延时</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>Cookie c = new Cookie(<span class="string">"JSESSIONID"</span>, session<span class="preprocessor">.getId</span>())<span class="comment">;</span>
+c<span class="preprocessor">.setPath</span>(req<span class="preprocessor">.getContextPath</span>())<span class="comment">;</span>
+c<span class="preprocessor">.setMaxAge</span>()<span class="comment">;</span>
+res<span class="preprocessor">.addCookie</span>(c)<span class="comment">;</span>
+</pre></td></tr></table></figure>
+
+<h1 id="-">案例</h1>
+<h2 id="-">简单的购物车</h2>
+<p><em>ShowAllBooksServlet</em></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="code"><pre>// 显示所有商品, 提供购买链接
+res<span class="preprocessor">.setContentType</span>(<span class="string">"text/html;charset=UTF-8"</span>)<span class="comment">;</span>
+PrintWriter <span class="keyword">out</span> = res<span class="preprocessor">.getWriter</span>()<span class="comment">;</span>
+<span class="keyword">out</span><span class="preprocessor">.write</span>(<span class="string">"&lt;h1&gt;本站有以下好书&lt;/h1&gt;"</span>)<span class="comment">;</span>
+Map&lt;String, Book&gt; books = BookDB<span class="preprocessor">.findAllBooks</span>()<span class="comment">;</span>
+for(Map<span class="preprocessor">.Entry</span>&lt;String, Book&gt; me:bookes<span class="preprocessor">.entrySet</span>()) {
+   <span class="keyword">out</span><span class="preprocessor">.write</span>(me<span class="preprocessor">.getValue</span>()<span class="preprocessor">.getName</span>() + <span class="string">"&lt;a href='/BuyServlet?bookId="</span> + me<span class="preprocessor">.getKey</span>() + <span class="string">"'&gt;购买&lt;/a&gt;&lt;br/&gt;"</span> )<span class="comment">;</span>
+}
+<span class="keyword">out</span><span class="preprocessor">.write</span>(<span class="string">"&lt;a href='/ShowCartServlet'&gt;查看购物车&lt;/a&gt;"</span>)
+</pre></td></tr></table></figure>
+
+<p><em>BuyServlet</em></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="code"><pre>
+String bookId  = req<span class="preprocessor">.getParameter</span>(<span class="string">"bookId"</span>)<span class="comment">;</span>
+Book book = BookDb<span class="preprocessor">.findBookById</span>(bookId)<span class="comment">;</span>
+HttpSession sessioin = request<span class="preprocessor">.getSession</span>()<span class="comment">;</span>
+// 生成购物车
+List&lt;Book&gt; cart = (List&lt;Book&gt;) session<span class="preprocessor">.getAttribute</span>(<span class="string">"cart"</span>)<span class="comment">;</span>
+if(cart = null) {
+    cart = new ArrayList&lt;Book&gt;()<span class="comment">;</span>
+    session<span class="preprocessor">.setAttribute</span>(<span class="string">"cart"</span>, cart)<span class="comment">;</span>
+}
+//
+cart<span class="preprocessor">.add</span>(book)<span class="comment">;</span>
+<span class="keyword">out</span><span class="preprocessor">.write</span>(book<span class="preprocessor">.getName</span> + <span class="string">"商品已经放入购物车"</span>)<span class="comment">;</span>
+<span class="keyword">out</span><span class="preprocessor">.write</span>(<span class="string">"&lt;a href='/ShowAllBooksServlet'&gt;继续购物&lt;/a&gt;"</span>)<span class="comment">;</span>
+</pre></td></tr></table></figure>
+
+<p><em>ShowCartServlet</em></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+</pre></td><td class="code"><pre>res<span class="preprocessor">.setContentType</span>(<span class="string">"text/html;charset=UTF-8"</span>)<span class="comment">;</span>
+PrintWriter <span class="keyword">out</span> = res<span class="preprocessor">.getWriter</span>()<span class="comment">;</span>
+HttpSession session = req<span class="preprocessor">.getSession</span>(false)<span class="comment">; // 只是查询</span>
+if(session == null){
+    <span class="keyword">out</span><span class="preprocessor">.write</span>(<span class="string">"赶紧购物"</span>)<span class="comment">;</span>
+    return<span class="comment">;</span>
+}
+
+List&lt;Book&gt; books = (List&lt;Book&gt;)session<span class="preprocessor">.getAttribute</span>(<span class="string">"cart"</span>)<span class="comment">;</span>
+if(books=null || books<span class="preprocessor">.size</span>()==<span class="number">0</span>){
+    <span class="keyword">out</span><span class="preprocessor">.write</span>(<span class="string">"您还没有购物"</span>)<span class="comment">;</span>
+} else {
+    <span class="keyword">out</span><span class="preprocessor">.write</span>(<span class="string">"您购买了如下购物出&lt;br/&gt;"</span>)<span class="comment">;</span>
+    for(Book book:books){
+        <span class="keyword">out</span><span class="preprocessor">.write</span>(book<span class="preprocessor">.getName</span> + <span class="string">"&lt;br/&gt;"</span>)<span class="comment">;</span>
+    }
+}
+
+<span class="keyword">out</span><span class="preprocessor">.write</span>(<span class="string">"&lt;a href='/ShowAllBooksServlet'&gt;继续购物&lt;/a&gt;"</span>)<span class="comment">;</span>
+<span class="keyword">out</span><span class="preprocessor">.write</span>(<span class="string">"&lt;a href='/ClearCartServlet'&gt;清空&lt;/a&gt;"</span>)<span class="comment">;</span>
+</pre></td></tr></table></figure>
+
+<p><em>ClearCartServlet</em></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre>res<span class="preprocessor">.setContentType</span>(<span class="string">"text/html;charset=UTF-8"</span>)<span class="comment">;</span>
+PrintWriter <span class="keyword">out</span> = res<span class="preprocessor">.getWriter</span>()<span class="comment">;</span>
+
+List&lt;Book&gt; books = (List&lt;Book&gt;)session<span class="preprocessor">.getAttribute</span>(<span class="string">"cart"</span>)<span class="comment">;</span>
+// 方式一: 干掉session对象
+session<span class="preprocessor">.invalidate</span>()<span class="comment">; // 让服务器端的HttpSession立即消失, 不推荐</span>
+
+// 方式二；值干掉购物车
+session<span class="preprocessor">.removeAttribute</span>(<span class="string">"cart"</span>)<span class="comment">;</span>
+res<span class="preprocessor">.setHeader</span>(<span class="string">"Refresh"</span>,<span class="string">"2;URL=/ShowAllBooksServlet"</span>)<span class="comment">;</span>
+<span class="keyword">out</span><span class="preprocessor">.write</span>(<span class="string">"清空成功, 2秒后转到主页"</span>)<span class="comment">;</span>
+</pre></td></tr></table></figure>
+
+<h2 id="-">用户登陆</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+</pre></td><td class="code"><pre><span class="keyword">public</span> class User{
+    <span class="keyword">private</span> <span class="built_in">String</span> username;
+    <span class="keyword">private</span> <span class="built_in">String</span> password;
+    <span class="keyword">private</span> <span class="built_in">String</span> nickname;
+}
+<span class="keyword">public</span> class UserDB{
+    <span class="keyword">private</span> static <span class="built_in">List</span><span class="subst">&lt;</span>User<span class="subst">&gt;</span> users <span class="subst">=</span> <span class="literal">new</span> ArrayList<span class="subst">&lt;</span>User<span class="subst">&gt;</span>;
+    static {
+        user<span class="built_in">.</span>add(<span class="literal">new</span> User(<span class="string">"u1"</span>, <span class="string">"123"</span>, <span class="string">"u11"</span>));
+        user<span class="built_in">.</span>add(<span class="literal">new</span> User(<span class="string">"u2"</span>, <span class="string">"123"</span>, <span class="string">"u22"</span>));
+        user<span class="built_in">.</span>add(<span class="literal">new</span> User(<span class="string">"u3"</span>, <span class="string">"123"</span>, <span class="string">"u33"</span>));
+    }
+    <span class="keyword">public</span> User find(<span class="built_in">String</span> username, <span class="built_in">String</span> password){
+         for(User u:users){
+              <span class="keyword">if</span>(u<span class="built_in">.</span>getName()<span class="built_in">.</span><span class="keyword">equals</span>(username)
+                  <span class="subst">&&</span> u<span class="built_in">.</span>getPassword()<span class="built_in">.</span><span class="keyword">equals</span>(password))
+              <span class="keyword">return</span> u;
+         }
+         <span class="keyword">return</span> <span class="built_in">null</span>;
+    }
+}
+<span class="subst">&lt;</span>body<span class="subst">&gt;</span>
+    <span class="subst">&lt;</span>form action<span class="subst">=</span><span class="string">"LoginServlet"</span> metho<span class="subst">=</span><span class="string">"post"</span><span class="subst">&gt;</span>
+        用户名: <span class="subst">&lt;</span>input name<span class="subst">=</span><span class="string">"username"</span><span class="subst">/</span><span class="subst">&gt;</span> <span class="subst">&lt;</span>br<span class="subst">/</span><span class="subst">&gt;</span>
+        密码: <span class="subst">&lt;</span>input name<span class="subst">=</span><span class="string">"password"</span> <span class="keyword">type</span><span class="subst">=</span><span class="string">'password'</span><span class="string">'/&gt; &lt;br/&gt;
+        &lt;input type=submit'</span><span class="subst">/</span><span class="subst">&gt;</span> <span class="subst">&lt;</span>br<span class="subst">/</span><span class="subst">&gt;</span>
+    <span class="subst">&lt;</span>/form<span class="subst">&gt;</span>
+<span class="subst">&lt;</span>/body<span class="subst">&gt;</span>
+</pre></td></tr></table></figure>
+
+<p><em>IndexServlet</em></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre>res<span class="preprocessor">.setContentType</span>(<span class="string">"text/html;charset=UTF-8"</span>)<span class="comment">;</span>
+PrintWriter <span class="keyword">out</span> = res<span class="preprocessor">.getWriter</span>()<span class="comment">;</span>
+
+HttpSession  session = req<span class="preprocessor">.getSession</span>()<span class="comment">;</span>
+User user = (User) session<span class="preprocessor">.getAttribute</span>(<span class="string">"user"</span>)<span class="comment">;</span>
+if(user==null) {
+    <span class="keyword">out</span><span class="preprocessor">.write</span>(<span class="string">"&lt; href='Login.html'&gt;登陆&lt;/a&gt;"</span>)
+} else {
+    <span class="keyword">out</span><span class="preprocessor">.write</span>(<span class="string">"欢迎你"</span> + user<span class="preprocessor">.getNickName</span>())<span class="comment">;</span>
+    <span class="keyword">out</span><span class="preprocessor">.write</span>(<span class="string">"&lt;a href='LogoutServlet'&gt;登出&lt;/a&gt;"</span>)<span class="comment">;</span>
+}
+</pre></td></tr></table></figure>
+
+<p><em>LoginServlet</em></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="code"><pre>res<span class="preprocessor">.setContentType</span>(<span class="string">"text/html;charset=UTF-8"</span>)<span class="comment">;</span>
+PrintWriter <span class="keyword">out</span> = res<span class="preprocessor">.getWriter</span>()<span class="comment">;</span>
+
+User user = new User()<span class="comment">;</span>
+BeanUtils<span class="preprocessor">.populate</span>(user, req<span class="preprocessor">.getParameterMap</span>())<span class="comment">;</span>
+
+User dbUser = UserDB<span class="preprocessor">.find</span>(user<span class="preprocessor">.getUsername</span>(), user<span class="preprocessor">.getPassword</span>())<span class="comment">;</span>
+if(dbUser==null){
+    res<span class="preprocessor">.setHeader</span>(<span class="string">"Refresh"</span>, <span class="string">"2;URL=Login.html"</span>)<span class="comment">;</span>
+    <span class="keyword">out</span><span class="preprocessor">.write</span>(<span class="string">"两秒后转到登陆页面"</span>)<span class="comment">;</span>
+    return<span class="comment">;</span>
+}
+req<span class="preprocessor">.getSession</span>()<span class="preprocessor">.setAttribute</span>(<span class="string">"user"</span>, dbUser)<span class="comment">;</span>
+res<span class="preprocessor">.setHeader</span>(<span class="string">"Refresh"</span>, <span class="string">"2;URL=/"</span>)<span class="comment">;</span>
+<span class="keyword">out</span><span class="preprocessor">.write</span>(<span class="string">"登陆成功, 两秒后到主页"</span>)<span class="comment">;</span>
+</pre></td></tr></table></figure>
+
+<p><em>LogoutServlet</em></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre>res<span class="preprocessor">.setContentType</span>(<span class="string">"text/html;charset=UTF-8"</span>)<span class="comment">;</span>
+PrintWriter <span class="keyword">out</span> = res<span class="preprocessor">.getWriter</span>()<span class="comment">;</span>
+
+session<span class="preprocessor">.removeAttribute</span>(<span class="string">"user"</span>)<span class="comment">;</span>
+res<span class="preprocessor">.setHeader</span>(<span class="string">"Refresh"</span>,<span class="string">"2;URL=/"</span>)<span class="comment">;</span>
+<span class="keyword">out</span><span class="preprocessor">.write</span>(<span class="string">"清空成功, 2秒后转到主页"</span>)<span class="comment">;</span>
+</pre></td></tr></table></figure>
+
+<h2 id="-">防止表单的重复提交</h2>
+<p>解决方案一: 客户端解决, 利用javascript</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">input</span> <span class="attribute">id</span>=<span class="value">"btn"</span> <span class="attribute">byte</span>=<span class="value">"button"</span> <span class="attribute">onclick</span>=<span class="value">"toSubmit()"</span>/&gt;</span>
+<span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">'text/javascript'</span>&gt;</span><span class="javascript">
+    <span class="function"><span class="keyword">function</span> <span class="title">toSubmit</span><span class="params">()</span>{</span>
+        document.forms[<span class="number">0</span>].submit();
+        document.getElementById(<span class="string">"btn"</span>).disabled = <span class="literal">true</span>;
+    }
+
+</span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<p>解决方案二: 令牌机制</p>
+<p>服务器一生成一个唯一的ID, 向HttpSession中放一个,向表单隐藏域中放一个.</p>
+<p>服务器二从中拿到ID,比对, 如果一样删掉HttpSession中的一个,
+如果不一样认为是重复提交.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code"><pre>// 方式一
+String token = System<span class="preprocessor">.nanoTime</span>() + <span class="string">""</span><span class="comment">; // 纳秒</span>
+// 方式二
+String token = UUID<span class="preprocessor">.randomUUID</span>()<span class="preprocessor">.toString</span>()<span class="comment">;</span>
+// 方式三,数据指纹
+System<span class="preprocessor">.nanoTime</span>() + new Random()<span class="preprocessor">.nextLong</span>()
+// sha | md5
+java<span class="preprocessor">.security</span><span class="preprocessor">.MessageDigest</span> md = MessageDigest<span class="preprocessor">.getInstance</span>(<span class="string">"md5"</span>)<span class="comment">;</span>
+byte b[] = md<span class="preprocessor">.digest</span>(s<span class="preprocessor">.getBytes</span>())<span class="comment">;</span>
+// b 不一定由对应的字符, 用Base64编码: <span class="number">3</span>字节----&gt;&gt; 四字节
+sun<span class="preprocessor">.misc</span><span class="preprocessor">.BASE</span>64Encoder base = new BASE64Encoder()<span class="comment">;</span>
+String token = base<span class="preprocessor">.encode</span>(b)<span class="comment">;</span>
+</pre></td></tr></table></figure>
+
+<h2 id="-cookie">客户端禁用Cookie</h2>
+<p>解决方案一: 提示: 为了更好的浏览网站, 请不要禁用你的cookie</p>
+<p>解决方案二: URL重写</p>
+<blockquote>
+<p><a href="http://localhost/Servlet;JSESSIONID=11" target="_blank">http://localhost/Servlet;JSESSIONID=11</a></p>
+<p>HttpServletResponse.encodeUrl(String url); // 重写</p>
+<p>但是要对所有URL重写</p>
+</blockquote>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre>req.getSession(); <span class="comment">// 一定要先运行, 生成一个session</span>
+<span class="comment">// 如果客户端没有禁用, 就不需要重写了.</span>
+res.encodeURL(url); <span class="comment">// http://localhost/Servlet;JSESSIONID=11</span>
+</pre></td></tr></table></figure>
+
+<h1 id="session-">session 生命周期</h1>
+<h2 id="session-">session的销毁</h2>
+<ol>
+<li>调用 session.invalidate(), 立刻销毁</li>
+<li>超时, 默认是30分钟; 在 web.xml 下配置</li>
+</ol>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">session-config</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">session-timeout</span>&gt;</span>30<span class="tag">&lt;/<span class="title">session-timeout</span>&gt;</span>
+    <span class="comment">&lt;!-- 单位是分钟 --&gt;</span>
+<span class="tag">&lt;/<span class="title">session-config</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<h2 id="session-">session的持久化状态</h2>
+<p>是由服务器管理, 称为钝化或搁置, 出现情况:</p>
+<ul>
+<li>HttpSession 长时间没有了</li>
+<li>内存用的太多</li>
+<li>服务器重启</li>
+</ul>
+<p>放在HttpSession中的数据所属的类, 必须实现 java.io.Serializable 接口</p>
+]]></content>
+    
+    
+      <category term="HttpSession" scheme="http://zhpooer.github.io/tags/HttpSession/"/>
+    
+      <category term="传智播客" scheme="http://zhpooer.github.io/tags/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[java正则学习]]></title>
+    <link href="http://zhpooer.github.io/2014/04/15/java%E6%AD%A3%E5%88%99%E5%AD%A6%E4%B9%A0/"/>
+    <id>http://zhpooer.github.io/2014/04/15/java正则学习/</id>
+    <published>2014-04-15T00:11:20.000Z</published>
+    <updated>2014-04-15T12:21:27.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="-">正则表达式</h1>
+<p>用于操作字符串的数据</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre>// 定义一个功能对QQ号进行校验
+// 长度 5-15, 只能是数字, 0不能开头
+boolean match = "938393".match("[<span class="link_label">1-9</span>][<span class="link_reference">0-9</span>]{4,14}");
+</pre></td></tr></table></figure>
+
+<h2 id="-">常见规则</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+</pre></td><td class="code"><pre>Character classes
+[abc] 	a, b, <span class="keyword">or</span> c (simple <span class="type">class</span>)
+[^abc] 	Any <span class="property">character</span> except a, b, <span class="keyword">or</span> c (negation)
+[a-zA-Z] 	a <span class="keyword">through</span> z <span class="keyword">or</span> A <span class="keyword">through</span> Z, inclusive (range)
+[a-d[m-p]] 	a <span class="keyword">through</span> d, <span class="keyword">or</span> m <span class="keyword">through</span> p: [a-dm-p] (union)
+[a-z&&[def]] 	d, e, <span class="keyword">or</span> f (intersection)
+[a-z&&[^bc]] 	a <span class="keyword">through</span> z, except <span class="keyword">for</span> b <span class="keyword">and</span> c: [ad-z] (subtraction)
+[a-z&&[^m-p]] 	a <span class="keyword">through</span> z, <span class="keyword">and</span> <span class="keyword">not</span> m <span class="keyword">through</span> p: [a-lq-z](subtraction)
+ 
+Predefined <span class="property">character</span> classes
+. 	Any <span class="property">character</span> (may <span class="keyword">or</span> may <span class="keyword">not</span> match line terminators)
+\d 	A digit: [<span class="number">0</span>-<span class="number">9</span>]
+\D 	A non-digit: [^<span class="number">0</span>-<span class="number">9</span>]
+\s 	A whitespace <span class="property">character</span>: [ \t\n\x0B\f\r]
+\S 	A non-whitespace <span class="property">character</span>: [^\s]
+\w 	A <span class="property">word</span> <span class="property">character</span>: [a-zA-Z_0-<span class="number">9</span>]
+\W 	A non-<span class="property">word</span> <span class="property">character</span>: [^\w]
+
+Boundary matchers
+^ 	The <span class="keyword">beginning</span> <span class="keyword">of</span> a line
+$ 	The <span class="keyword">end</span> <span class="keyword">of</span> a line
+\b 	A <span class="property">word</span> boundary
+\B 	A non-<span class="property">word</span> boundary
+
+Greedy quantifiers 贪懒
+X? 	X, once <span class="keyword">or</span> <span class="keyword">not</span> <span class="keyword">at</span> all
+X* 	X, zero <span class="keyword">or</span> more <span class="keyword">times</span>
+X+ 	X, one <span class="keyword">or</span> more <span class="keyword">times</span>
+X{n} 	X, exactly n <span class="keyword">times</span>
+X{n,} 	X, <span class="keyword">at</span> least n <span class="keyword">times</span>
+X{n,m} 	X, <span class="keyword">at</span> least n <span class="keyword">but</span> <span class="keyword">not</span> more than m <span class="keyword">times</span>
+ 
+Reluctant quantifiers
+X?? 	X, once <span class="keyword">or</span> <span class="keyword">not</span> <span class="keyword">at</span> all
+X*? 	X, zero <span class="keyword">or</span> more <span class="keyword">times</span>
+X+? 	X, one <span class="keyword">or</span> more <span class="keyword">times</span>
+X{n}? 	X, exactly n <span class="keyword">times</span>
+X{n,}? 	X, <span class="keyword">at</span> least n <span class="keyword">times</span>
+X{n,m}? 	X, <span class="keyword">at</span> least n <span class="keyword">but</span> <span class="keyword">not</span> more than m <span class="keyword">times</span>
+</pre></td></tr></table></figure>
+
+<h2 id="-">匹配</h2>
+<p><code>&quot;String&quot;.matches(regex)</code></p>
+<h2 id="-">切割</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre>String[] sep = <span class="keyword">str</span>.split(<span class="string">"\\s"</span>);
+<span class="keyword">str</span> = <span class="string">"zhangaaaaaaaaboccccccshen"</span>
+String[] sep = <span class="keyword">str</span>.split(<span class="string">"(.)\\1+"</span>); <span class="comment">// 组 &gt; zhang bo shen</span>
+</pre></td></tr></table></figure>
+
+<h2 id="-">组</h2>
+<p><code>((A)(B(C)))</code> 从左括号开始,第一个括号就是第一组, 第二个括号就是第二组</p>
+<h2 id="-">替换</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre><span class="keyword">str</span> = <span class="string">"zhangaaaaaaaaboccccccshen"</span>
+<span class="comment">// 叠词替换成一个</span>
+<span class="keyword">str</span>.replaceAll(<span class="string">"(.)\\1+"</span>, <span class="string">"$1"</span>);   <span class="comment">// zhangabocshen</span>
+
+<span class="keyword">str</span> = <span class="string">"15800001111"</span>;
+<span class="keyword">str</span>.replaceAll(<span class="string">"(\\d{3})\\d{4}(\\d{3})"</span>, <span class="string">"$1****$2"</span>);
+</pre></td></tr></table></figure>
+
+<h2 id="-">获取</h2>
+<p>java.util.regex.Pattern: 正则表达式的对象形式</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre><span class="comment">// 将正则封装成对象</span>
+Pattern p = Pattern.compile(<span class="string">"a*b"</span>);
+<span class="comment">// 通过正则对象的获取匹配器对象</span>
+Matcher m = p.matcher(<span class="string">"aaaab"</span>);
+<span class="comment">// 使用Matcher对象对字符串进行操作</span>
+<span class="keyword">boolean</span> b = m.matches();
+<span class="keyword">while</span>(m.find()){
+    m.<span class="keyword">group</span>();  <span class="comment">// 获取匹配的子序列</span>
+    m.start();  <span class="comment">// index of start</span>
+    m.end();
+}
+</pre></td></tr></table></figure>
+
+]]></content>
+    
+    
+      <category term="java" scheme="http://zhpooer.github.io/tags/java/"/>
+    
+      <category term="正则表达式" scheme="http://zhpooer.github.io/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[java反射学习]]></title>
@@ -244,7 +1110,7 @@ uc.getHeaderField(<span class="string">"Content-Type"</span>); <span class="comm
     <link href="http://zhpooer.github.io/2014/04/13/io%E6%8A%80%E6%9C%AF%E5%AD%A6%E4%B9%A0/"/>
     <id>http://zhpooer.github.io/2014/04/13/io技术学习/</id>
     <published>2014-04-13T10:47:16.000Z</published>
-    <updated>2014-04-14T12:50:16.000Z</updated>
+    <updated>2014-04-15T09:58:44.000Z</updated>
     <content type="html"><![CDATA[<h1 id="io-">IO初识</h1>
 <p>流按数据类型分类:</p>
 <ol>
@@ -447,7 +1313,7 @@ fis.read(buf);
 <span class="keyword">new</span> String(buf);
 </pre></td></tr></table></figure>
 
-<h3 id="-">读取一个键盘录入的数据, 并打印在控制台上</h3>
+<h2 id="-">读取一个键盘录入的数据, 并打印在控制台上</h2>
 <p><code>System.in</code> 关了之后, 就不能再用了, <em>千万别</em> <code>close()</code></p>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
@@ -804,11 +1670,11 @@ pis.<span class="keyword">connect</span>(<span class="keyword">pos</span>);
   </entry>
   
   <entry>
-    <title><![CDATA[传智播客day11-cookie&session]]></title>
-    <link href="http://zhpooer.github.io/2014/04/13/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day11-cookie&session/"/>
-    <id>http://zhpooer.github.io/2014/04/13/传智播客day11-cookie&session/</id>
+    <title><![CDATA[传智播客day11-cookie]]></title>
+    <link href="http://zhpooer.github.io/2014/04/13/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day11-cookie/"/>
+    <id>http://zhpooer.github.io/2014/04/13/传智播客day11-cookie/</id>
     <published>2014-04-13T01:23:18.000Z</published>
-    <updated>2014-04-13T10:43:01.000Z</updated>
+    <updated>2014-04-15T02:15:36.000Z</updated>
     <content type="html"><![CDATA[<h1 id="-">会话概述</h1>
 <p>在一次会话中, 浏览器可以发出多次请求和收到多次服务器响应</p>
 <p>服务器为客户保存操作产生的数据, 比如购物网站的购物车</p>
@@ -901,7 +1767,7 @@ response.addCookie(c);  <span class="comment">//覆盖掉原有的Cookie</span>
 </pre></td><td class="code"><pre>c<span class="preprocessor">.setPath</span>(req<span class="preprocessor">.getContextPath</span>())<span class="comment">; // 所有应用下的都能访问到该Cookie</span>
 </pre></td></tr></table></figure>
 
-<h4 id="-">案例一</h4>
+<h4 id="-">案例一: 录入用户信息</h4>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
 3
@@ -1000,7 +1866,7 @@ if(remember!=null){
 cookie<span class="preprocessor">.addCookie</span>(c)<span class="comment">;</span>
 </pre></td></tr></table></figure>
 
-<h4 id="-">案例二</h4>
+<h4 id="-">案例二: 购书</h4>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
 3
@@ -1217,8 +2083,6 @@ bookHistory=1               2           2-1
       <category term="传智播客" scheme="http://zhpooer.github.io/tags/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2/"/>
     
       <category term="cookie" scheme="http://zhpooer.github.io/tags/cookie/"/>
-    
-      <category term="session" scheme="http://zhpooer.github.io/tags/session/"/>
     
   </entry>
   
@@ -1498,7 +2362,7 @@ BeanUtils<span class="preprocessor">.getProperty</span>(p, <span class="string">
     <link href="http://zhpooer.github.io/2014/04/12/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day10-reqeust&response/"/>
     <id>http://zhpooer.github.io/2014/04/12/传智播客day10-reqeust&response/</id>
     <published>2014-04-12T01:26:31.000Z</published>
-    <updated>2014-04-13T11:59:38.000Z</updated>
+    <updated>2014-04-15T00:58:37.000Z</updated>
     <content type="html"><![CDATA[<h1 id="httpservletresponse">HttpServletResponse</h1>
 <ul>
 <li>给客户处发出信息</li>
@@ -2123,10 +2987,10 @@ PrintWriter <span class="keyword">out</span> = res<span class="preprocessor">.ge
 <p>  给服务器用的地址 斜线就代表当前应用. 给浏览器用的地址, 必须加上应用名称</p>
 </li>
 </ul>
-<p>重定向: responst.sendRedirect()
-转发: request.getRequestDispatcher()
-超连接: <a ref=""/>
-表单: <form action=""/></p>
+<p>重定向: responst.sendRedirect()</p>
+<p>转发: request.getRequestDispatcher()</p>
+<p>超连接: <code>&lt;a ref=&quot;&quot;/&gt;</code></p>
+<p>表单: <code>&lt;form action=&quot;&quot;/&gt;</code></p>
 ]]></content>
     
     
@@ -4062,7 +4926,7 @@ out.close();
 3
 4
 5
-</pre></td><td class="code"><pre><span class="php"><span class="class">&lt;?<span class="title">php</span>  `<span class="title">content</span>` ?&gt;</span></span>
+</pre></td><td class="code"><pre><span class="php"><span class="preprocessor">&lt;?php</span>  `content` <span class="preprocessor">?&gt;</span></span>
 
 <span class="tag">&lt;<span class="title">script</span> <span class="attribute">language</span>=<span class="value">“php"</span>&gt;</span><span class="javascript">
 echo <span class="string">'php'</span>;
@@ -4071,7 +4935,7 @@ echo <span class="string">'php'</span>;
 </li>
 <li><p>兼容标记<br>短标记,修改php配置,<code>open_short_tags=on</code></p>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
-</pre></td><td class="code"><pre><span class="preprocessor">&lt;?</span> <span class="keyword">echo</span> <span class="string">'h'</span>; <span class="preprocessor">?&gt;</span>
+</pre></td><td class="code"><pre><span class="php"><span class="preprocessor">&lt;?</span> <span class="keyword">echo</span> <span class="string">'h'</span>; <span class="preprocessor">?&gt;</span></span>
 </pre></td></tr></table></figure>
 </li>
 <li><p>asp标签风格, 修改配置 <code>aps_tags=on</code></p>
@@ -4083,7 +4947,7 @@ echo <span class="string">'php'</span>;
 </ul>
 <h2 id="html-php-">html模式和php模式</h2>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
-</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">html</span>&gt;</span><span class="php"><span class="class">&lt;? ?&gt;</span></span><span class="tag">&lt;/<span class="title">html</span>&gt;</span>
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">html</span>&gt;</span><span class="php"><span class="preprocessor">&lt;?</span> <span class="preprocessor">?&gt;</span></span><span class="tag">&lt;/<span class="title">html</span>&gt;</span>
 </pre></td></tr></table></figure>
 
 <h2 id="-">语句结束符</h2>
@@ -4109,12 +4973,12 @@ echo <span class="string">'php'</span>;
 4
 5
 6
-</pre></td><td class="code"><pre><span class="xml"><span class="php"><span class="preprocessor">&lt;?php</span>
+</pre></td><td class="code"><pre><span class="php"><span class="preprocessor">&lt;?php</span>
 <span class="variable">$name</span> = <span class="string">'itcast'</span>;
 <span class="keyword">echo</span> <span class="variable">$name</span>;
 functioni name(){
 }
-<span class="preprocessor">?&gt;</span></span></span>
+<span class="preprocessor">?&gt;</span></span>
 </pre></td></tr></table></figure>
 
 <h3 id="-">变量名</h3>
@@ -4731,355 +5595,6 @@ con<span class="preprocessor">.newInstance</span>(<span class="string">""</span>
       <category term="传智播客" scheme="http://zhpooer.github.io/tags/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2/"/>
     
       <category term="java" scheme="http://zhpooer.github.io/tags/java/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[传智播客day06-xml解析]]></title>
-    <link href="http://zhpooer.github.io/2014/04/06/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day06-xml%E8%A7%A3%E6%9E%90/"/>
-    <id>http://zhpooer.github.io/2014/04/06/传智播客day06-xml解析/</id>
-    <published>2014-04-06T00:47:01.000Z</published>
-    <updated>2014-04-12T05:55:41.000Z</updated>
-    <content type="html"><![CDATA[<h1 id="xml-">xml解析</h1>
-<ol>
-<li>dom<br>文档放入都内存中，方便CRUD</li>
-<li>sax<br>逐行解析，方便查询，速度快，但不能CRUD</li>
-</ol>
-<h2 id="dom-jaxp">DOM, jaxp</h2>
-<p>解析包：javax.xml.parsers</p>
-<ol>
-<li>获取解析器的工厂对象<br><code>DocumentBuilderFactory fac = DocumentBuilderFactory.newInstance();</code></li>
-<li>获取文档解析对象<br><code>DocumentBuilder docBuilder = factory.newDocumentBuilder;</code></li>
-<li>加载xml文件<br><code>docBuilder.parse(&quot;xml&quot;)</code></li>
-<li><p>获取Document对象</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-</pre></td><td class="code"><pre>import org<span class="preprocessor">.w</span>3c<span class="preprocessor">.dom</span><span class="preprocessor">.Document</span><span class="comment">;</span>
-Document document = documentBuilder<span class="preprocessor">.newDocument</span>()<span class="comment">;</span>
-</pre></td></tr></table></figure>
-</li>
-<li><p>操作<br>节点Node： 文本是一个节点，属性也是一个节点</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-</pre></td><td class="code"><pre>NodeList nodeList = document<span class="preprocessor">.getElementByTagName</span>(<span class="string">"book"</span>)<span class="comment">;</span>
-Node node = nodelist<span class="preprocessor">.item</span>()<span class="comment">;</span>
-</pre></td></tr></table></figure>
-
-</li>
-</ol>
-<h3 id="node-">Node继承结构</h3>
-<p>Node是中心<br><code>nodelist.getNodeType()</code><br>继承Node： Text，Attr，Comment，Document, Element...<br>Text: 空白行也算<br><code>fac.setIgnoringElementContentWhitespace(true)// 忽略回车换行</code>,只对有约束的文档起作用</p>
-<h3 id="-">操作元素</h3>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-</pre></td><td class="code"><pre><span class="comment">//1.创建元素</span>
-<span class="keyword">val</span> elm  = doc.createElement(<span class="string">"div"</span>)
-<span class="comment">//2.创建文本</span>
-<span class="keyword">val</span> txtElm = doc.createTextNode(<span class="string">"hello dom"</span>)
-<span class="comment">//3. 添加</span>
-elm.appendChild(txtElm)
-<span class="comment">//4. 删除</span>
-txtElm.getParentNode().removeChild(txtElm);
-<span class="comment">//5. 回写</span>
-<span class="keyword">val</span> transFac = TransformerFactory.newInstance()
-<span class="keyword">val</span> trans = transFac.newTransformer()
-trans.transform(<span class="keyword">new</span> DOMSource(doc), <span class="keyword">new</span> StreamResult(<span class="string">"filepath"</span>))
-</pre></td></tr></table></figure>
-
-<h2 id="sax">SAX</h2>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-</pre></td><td class="code"><pre><span class="keyword">val</span> saxFac = SAXParserFactory.newInstance()
-<span class="keyword">val</span> saxPaser = saxFac.newSAXParser()
-<span class="keyword">val</span> handler = <span class="keyword">new</span> DefaultHandler {
-    <span class="keyword">override</span> <span class="keyword">def</span> characters(ch:Array[Char], start:Int, length:Int):Unit = println(ch)
-    <span class="keyword">override</span> <span class="keyword">def</span> startDocument() = println(<span class="string">"start doc"</span>)
-    <span class="keyword">override</span> <span class="keyword">def</span> endDocument() = println(<span class="string">"end doc"</span>)
-
-    <span class="keyword">override</span> <span class="keyword">def</span> startElement(uri:String, localName:String, qname:String, attr:Attributes) = println(	<span class="string">"start attr"</span>)
-    <span class="keyword">override</span> <span class="keyword">def</span> endElement(uri:String, localName:String, qname:String) = println(<span class="string">"end elm"</span>)
-}
-saxPaser.parse(<span class="string">"filepath.xml"</span>, handler)
-</pre></td></tr></table></figure>
-
-<h2 id="dom4j">DOM4j</h2>
-<p>结合了SAX和japx<br>核心是Element，japx核心是Node</p>
-]]></content>
-    
-    
-      <category term="传智播客" scheme="http://zhpooer.github.io/tags/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2/"/>
-    
-      <category term="xml" scheme="http://zhpooer.github.io/tags/xml/"/>
-    
-      <category term="DOM" scheme="http://zhpooer.github.io/tags/DOM/"/>
-    
-      <category term="SAX" scheme="http://zhpooer.github.io/tags/SAX/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[eclipse上的emacs]]></title>
-    <link href="http://zhpooer.github.io/2014/04/05/eclipse%E4%B8%8A%E7%9A%84emacs/"/>
-    <id>http://zhpooer.github.io/2014/04/05/eclipse上的emacs/</id>
-    <published>2014-04-05T12:19:30.000Z</published>
-    <updated>2014-04-11T14:25:21.000Z</updated>
-    <content type="html"><![CDATA[<p>清明闲来无事，又要开始折腾 emacs 和我的编程环境。<br>作为一个 emacser ，小指头总会忍受各种折磨，下面贴出我在Linux下解决办法 ^_^</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-</pre></td><td class="code"><pre>;; 修改 ~/.XmodMap 
-;; 交换右ctrl键和Caps键
-keysym Menu = Super_L
-remove <span class="operator"><span class="keyword">Lock</span> = Caps_Lock
-remove Control = Control_R
-keysym Control_R = Caps_Lock
-keysym Caps_Lock = Control_R
-<span class="keyword">add</span> <span class="keyword">Lock</span> = Caps_Lock
-<span class="keyword">add</span> Control = Control_R</span>
-</pre></td></tr></table></figure>
-
-<p>这个还是很有效果的，比以前使用左下角Ctrl轻松不少，不过用久了肩膀还是疼啊！！!
-泪奔,投奔vim党。</p>
-<p>以上是开胃菜，言归正传，身为一个Java程序猿，在IDE上编程总会有各种不适，从前研究过在
-emacs上使用emacs-jde编写java；在emacs上通过eclime使用eclipse的功能；或者在eclipse上用vim插件；
-均因为种种原因以失败告终，我可悲可叹的emacser人生，最后决定用 IdeaJ，他的按键绑定可以设置的很有emacs风格，
-不过还是和eclipse的使用习惯有一定的不习惯，特别是项目管理。直到今天，我发现了 <a href="http://blog.csdn.net/lzw_java/article/details/17016279" target="_blank">把Eclipse打造成Emacs</a></p>
-<p>先按装好插件Emacs+，具体的我就不多说了，秀一下我的按键绑定吧：</p>
-<ol>
-<li>Ctrl+C Ctrl+C : run</li>
-<li>Shift+Ctrl+/ : redo</li>
-<li>Ctrl+Q : quick fix</li>
-<li>Shift+Alt+&#39; :  Previous View</li>
-<li>Alt+&#39;: next View</li>
-<li>Alt+P : Previous Tab</li>
-<li>Alt+N: Next Tab</li>
-<li>Alt+O: Next Editor</li>
-</ol>
-]]></content>
-    
-    
-      <category term="eclipse" scheme="http://zhpooer.github.io/tags/eclipse/"/>
-    
-      <category term="emacs" scheme="http://zhpooer.github.io/tags/emacs/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[传智播客day05-xml&dtd&schema]]></title>
-    <link href="http://zhpooer.github.io/2014/04/04/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day05-xml&dtd&schema/"/>
-    <id>http://zhpooer.github.io/2014/04/04/传智播客day05-xml&dtd&schema/</id>
-    <published>2014-04-04T01:20:29.000Z</published>
-    <updated>2014-04-12T05:51:55.000Z</updated>
-    <content type="html"><![CDATA[<h1 id="xml-">xml语言</h1>
-<ul>
-<li>作用：传输数据 存储数据</li>
-</ul>
-<h2 id="xml-">xml结构</h2>
-<ul>
-<li>xml1.1 发一次请求，多次响应</li>
-<li>xml1.0 发一次请求，一次响应<figure class="highlight xml:"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-</pre></td><td class="code"><pre><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span> <span class="comment">&lt;!--声明--&gt;</span>
-
-<span class="tag">&lt;<span class="title">books</span>&gt;</span>  <span class="comment">&lt;!--必须要有根元素--&gt;</span>
-    <span class="tag">&lt;<span class="title">book</span> <span class="attribute">id</span>=<span class="value">"first"</span>&gt;</span> cnontent <span class="tag">&lt;/<span class="title">book</span>&gt;</span>
-<span class="tag">&lt;/<span class="title">books</span>&gt;</span>
-</pre></td></tr></table></figure>
-
-</li>
-</ul>
-<p><strong> 注意： 大小写敏感 </strong></p>
-<h2 id="dtd-xml-">dtd xml约束</h2>
-<ul>
-<li>DOCTYPE: 内部声明</li>
-<li>ELEMENT: 元素声明</li>
-</ul>
-<figure class="highlight dtd:"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-</pre></td><td class="code"><pre><span class="pi">&lt;?xml version="1.0" encoding="gbk"?&gt;</span>
-<span class="tag">&lt;<span class="title">!ELEMENT</span> <span class="attribute">books</span> (<span class="attribute">book</span>?)&gt;</span>  <span class="comment">&lt;!-- + * ?: 出现一次或多次--&gt;</span>
-<span class="tag">&lt;<span class="title">!ELEMENT</span> <span class="attribute">book</span> (<span class="attribute">name</span>, <span class="attribute">price</span>)&gt;</span>
-<span class="tag">&lt;<span class="title">!ELEMENT</span> <span class="attribute">name</span> (#<span class="attribute">PCDATA</span>)&gt;</span>
-<span class="tag">&lt;<span class="title">!ELEMENT</span> <span class="attribute">price</span> (#<span class="attribute">PCDATA</span>)&gt;</span>
-<span class="tag">&lt;<span class="title">!ATTLIST</span> <span class="attribute">book</span> <span class="attribute">bid</span> <span class="attribute">CDATA</span> #<span class="attribute">REQUIRED</span> &gt;</span>
-</pre></td></tr></table></figure>
-
-<figure class="highlight xml:"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-</pre></td><td class="code"><pre><span class="pi">&lt;?xml version="1.0" encoding="gbk"?&gt;</span>
-<span class="doctype">&lt;!DOCTYPE books [
-   &lt;!ELEMENT books(book)&gt;
-   &lt;!ELEMENT book(name, price, author|publish)&gt; &lt;!-- 必须按顺序写 --&gt;
-   &lt;!ELEMENT name(#PCDATA)&gt;
-   &lt;!ELEMENT price(#PCDATA)&gt;
-]&gt;</span> <span class="comment">&lt;!-- 声明在头部 or --&gt;</span>
-
-<span class="doctype">&lt;!DOCTYPE books SYSTEM "**path.dtd**"&gt;</span> <span class="comment">&lt;!-- 从本地引入dtd文件 --&gt;</span>
-
-<span class="doctype">&lt;!DOCTYPE books PUBLIC "//UNKNOWN/" "unknown.dtd"&gt;</span> <span class="comment">&lt;!-- 从互联网引入 --&gt;</span>
-</pre></td></tr></table></figure>
-
-<h3 id="-">类型</h3>
-<ul>
-<li>CDATA: 字符数据</li>
-<li>ID: id</li>
-</ul>
-<h3 id="-">约束</h3>
-<ul>
-<li>#REQUIRED</li>
-<li>#FIXED value: 固定</li>
-<li>#IMPLIED: 不是必须</li>
-</ul>
-<h3 id="cdata">CDATA</h3>
-<blockquote>
-<p><code>&lt;![CDATA[will be not parsed content]]&gt;</code></p>
-</blockquote>
-<h3 id="xml-css">xml css</h3>
-<blockquote>
-<p><code>&lt;?xml-stylesheet type=&quot;text/css&quot; href=&quot;book.css&quot;?&gt;</code></p>
-</blockquote>
-<h3 id="-entity">实体 entity</h3>
-<blockquote>
-<p><code>&lt;!ENTITY site &quot;www.itcast.cn&quot;&gt;</code></p>
-<p><code>&lt;publish&gt;&amp;my;&lt;/publish&gt; &lt;!-- 引用 --&gt;</code></p>
-</blockquote>
-<h3 id="-">混合型</h3>
-<blockquote>
-<p><code>&lt;!ELEMENT note (#PCDATA|to|from|header|message)*&gt;</code></p>
-</blockquote>
-<h2 id="schema">schema</h2>
-<p>Schema是一个xml文件扩展为xsd，替代dtd</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">schema</span> <span class="attribute">xmlns</span>=<span class="value">""</span>
-        <span class="attribute">targetNamespace</span>=<span class="value">"*any*"</span><span class="value">i</span>
-        <span class="attribute">xml</span> <span class="attribute">ns:tns</span>=<span class="value">"*any*"</span>
-        <span class="attribute">elementForDefault</span>=<span class="value">"qualified"</span>&gt;</span>
-    <span class="tag">&lt;<span class="title">element</span> <span class="attribute">name</span>=<span class="value">"books"</span>&gt;</span>
-        <span class="tag">&lt;<span class="title">complexType</span>&gt;</span>
-            <span class="tag">&lt;<span class="title">sequence</span>&gt;</span>
-                <span class="tag">&lt;<span class="title">element</span> <span class="attribute">name</span>=<span class="value">"book"</span> <span class="attribute">minOcdcurs</span>=<span class="value">"2"</span> <span class="attribute">maxOccurs</span>=<span class="value">"3"</span>&gt;</span>
-                    <span class="tag">&lt;<span class="title">complexType</span>&gt;</span>
-                        <span class="tag">&lt;<span class="title">sequence</span>&gt;</span>
-                            <span class="tag">&lt;<span class="title">element</span> <span class="attribute">name</span>=<span class="value">"name"</span> <span class="attribute">type</span>=<span class="value">"string"</span>&gt;</span> <span class="tag">&lt;/<span class="title">element</span>&gt;</span>
-                            <span class="tag">&lt;<span class="title">element</span> <span class="attribute">name</span>=<span class="value">"price"</span> <span class="attribute">type</span>=<span class="value">"tns:myprice"</span>&gt;</span> <span class="tag">&lt;/<span class="title">element</span>&gt;</span> <span class="comment">&lt;!--注意：自定义类型使用 --&gt;</span>
-                            <span class="tag">&lt;<span class="title">element</span> <span class="attribute">name</span>=<span class="value">"publishtime"</span> <span class="attribute">type</span>=<span class="value">"date"</span>&gt;</span> <span class="tag">&lt;/<span class="title">element</span>&gt;</span>
-                            <span class="tag">&lt;<span class="title">element</span> <span class="attribute">name</span>=<span class="value">"tel"</span> <span class="attribute">type</span>=<span class="value">"tns:mytel"</span>&gt;</span> <span class="tag">&lt;/<span class="title">element</span>&gt;</span>
-                        <span class="tag">&lt;/<span class="title">sequence</span>&gt;</span>
-                    <span class="tag">&lt;/<span class="title">complexType</span>&gt;</span>
-                <span class="tag">&lt;/<span class="title">element</span>&gt;</span>
-            <span class="tag">&lt;/<span class="title">sequence</span>&gt;</span>
-            <span class="tag">&lt;<span class="title">attribute</span> <span class="attribute">name</span>=<span class="value">"bid"</span> <span class="attribute">type</span>=<span class="value">"int"</span> <span class="attribute">use</span>=<span class="value">"option"</span>&gt;</span>
-            <span class="tag">&lt;/<span class="title">attribute</span>&gt;</span>
-        <span class="tag">&lt;/<span class="title">complexType</span>&gt;</span>
-    <span class="tag">&lt;/<span class="title">element</span>&gt;</span>
-    <span class="comment">&lt;!-- 自定义元素 --&gt;</span>
-    <span class="tag">&lt;<span class="title">simpleType</span> <span class="attribute">name</span>=<span class="value">"mytel"</span>&gt;</span>
-        <span class="tag">&lt;<span class="title">restriction</span> <span class="attribute">base</span>=<span class="value">"striing"</span>&gt;</span> <span class="comment">&lt;!-- 指定元素类型 进行加强 --&gt;</span>
-            <span class="tag">&lt;<span class="title">parttern</span> <span class="attribute">value</span>=<span class="value">"\d{3}-\d{4}-\d{4}"</span>&gt;</span>
-            <span class="tag">&lt;/<span class="title">parttern</span>&gt;</span>
-        <span class="tag">&lt;/<span class="title">restriction</span>&gt;</span>
-    <span class="tag">&lt;/<span class="title">simpleType</span>&gt;</span>
-    <span class="tag">&lt;<span class="title">simpleType</span> <span class="attribute">name</span>=<span class="value">"myprice"</span>&gt;</span>
-        <span class="tag">&lt;<span class="title">restriction</span> <span class="attribute">base</span>=<span class="value">"double"</span>&gt;</span>
-            <span class="tag">&lt;<span class="title">maxInclusive</span> <span class="attribute">value</span>=<span class="value">"200"</span>&gt;</span> <span class="tag">&lt;/<span class="title">maxInclusive</span>&gt;</span>
-            <span class="tag">&lt;<span class="title">minInclusive</span> <span class="attribute">value</span>=<span class="value">"100"</span>&gt;</span> <span class="tag">&lt;/<span class="title">minInclusive</span>&gt;</span>
-        <span class="tag">&lt;/<span class="title">restriction</span>&gt;</span>
-    <span class="tag">&lt;/<span class="title">simpleType</span>&gt;</span>
-<span class="tag">&lt;/<span class="title">schema</span>&gt;</span>
-</pre></td></tr></table></figure>
-
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">books</span> <span class="attribute">xmlns</span>=<span class="value">""</span> <span class="attribute">xmlns:xsi</span>=<span class="value">""</span> <span class="attribute">xsi:schemaLocation</span>=<span class="value">""</span>&gt;</span>
-<span class="tag">&lt;/<span class="title">books</span>&gt;</span>
-</pre></td></tr></table></figure>
-
-]]></content>
-    
-    
-      <category term="传智播客" scheme="http://zhpooer.github.io/tags/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2/"/>
-    
-      <category term="xml" scheme="http://zhpooer.github.io/tags/xml/"/>
-    
-      <category term="dtd" scheme="http://zhpooer.github.io/tags/dtd/"/>
-    
-      <category term="schema" scheme="http://zhpooer.github.io/tags/schema/"/>
     
   </entry>
   

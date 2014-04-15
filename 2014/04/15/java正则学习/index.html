@@ -4,22 +4,34 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>java网络编程学习 | Poe&#39;s World</title>
+    <title>java正则学习 | Poe&#39;s World</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="zhpooer">
     
-    <meta name="description" content="java.net.InetAddress
-Inet6Address ipv6协议
+    <meta name="description" content="正则表达式
+用于操作字符串的数据
+1
+2
+3
+// 定义一个功能对QQ号进行校验
+// 长度 5-15, 只能是数字, 0不能开头
+boolean match = &quot;938393&quot;.match(&quot;[1-9][0-9]{4,14}&quot;);
+
+
+常见规则
 1
 2
 3
 4
 5
 6
-InetAddress ip = InetAddress.getLocalHost();
-InetAddress ip = InetAddress.getByName();
-InetAddres">
+7
+8
+9
+10
+11
+1">
     
     
     
@@ -78,15 +90,15 @@ InetAddres">
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2014/04/14/java网络编程学习/" title="java网络编程学习" itemprop="url">java网络编程学习</a>
+      <a href="/2014/04/15/java正则学习/" title="java正则学习" itemprop="url">java正则学习</a>
   </h1>
   <p class="article-author">By
     
       <a href="http://zhpooer.github.io" title="zhpooer">zhpooer</a>
     </p>
   <p class="article-time">
-    <time datetime="2014-04-14T09:00:05.000Z" itemprop="datePublished">4月 14 2014</time>
-    更新日期:<time datetime="2014-04-14T13:30:49.000Z" itemprop="dateModified">4月 14 2014</time>
+    <time datetime="2014-04-15T00:11:20.000Z" itemprop="datePublished">4月 15 2014</time>
+    更新日期:<time datetime="2014-04-15T12:21:27.000Z" itemprop="dateModified">4月 15 2014</time>
     
   </p>
 </header>
@@ -95,67 +107,20 @@ InetAddres">
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#java-net-inetaddress"><span class="toc-number">1.</span> <span class="toc-text">java.net.InetAddress</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#socket"><span class="toc-number">2.</span> <span class="toc-text">Socket</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#java-net-datagramsocket"><span class="toc-number">2.1.</span> <span class="toc-text">java.net.DatagramSocket</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#socket-serversocket"><span class="toc-number">2.2.</span> <span class="toc-text">Socket 和 ServerSocket</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">2.2.1.</span> <span class="toc-text">多线程服务端</span></a></li></ol></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#url-urlconnection"><span class="toc-number">3.</span> <span class="toc-text">URL&amp;URLConnection</span></a></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">正则表达式</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.1.</span> <span class="toc-text">常见规则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.2.</span> <span class="toc-text">匹配</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.3.</span> <span class="toc-text">切割</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.4.</span> <span class="toc-text">组</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.5.</span> <span class="toc-text">替换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.6.</span> <span class="toc-text">获取</span></a></li></ol>
 		</div>
 		
-		<h1 id="java-net-inetaddress">java.net.InetAddress</h1>
-<p><code>Inet6Address</code> ipv6协议</p>
+		<h1 id="-">正则表达式</h1>
+<p>用于操作字符串的数据</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
 3
-4
-5
-6
-</pre></td><td class="code"><pre>InetAddress ip = InetAddress<span class="preprocessor">.getLocalHost</span>()<span class="comment">;</span>
-InetAddress ip = InetAddress<span class="preprocessor">.getByName</span>()<span class="comment">;</span>
-InetAddress[] ip = InetAddress<span class="preprocessor">.getAllByName</span>()<span class="comment">; // 所有的地址</span>
-
-ip<span class="preprocessor">.getHostAddress</span>()<span class="comment">; // 192.168.1.11</span>
-ip<span class="preprocessor">.getHostName</span>()<span class="comment">; // www.google.com</span>
+</pre></td><td class="code"><pre>// 定义一个功能对QQ号进行校验
+// 长度 5-15, 只能是数字, 0不能开头
+boolean match = "938393".match("[<span class="link_label">1-9</span>][<span class="link_reference">0-9</span>]{4,14}");
 </pre></td></tr></table></figure>
 
-<h1 id="socket">Socket</h1>
-<ul>
-<li>Socket 就是为网络服务提供的一种机制.</li>
-<li>通信两端都有Socket</li>
-<li>网络通信其实就是Socket间的通信</li>
-<li>数据在两个Socket间通过IO传输</li>
-</ul>
-<h2 id="java-net-datagramsocket">java.net.DatagramSocket</h2>
-<p>DatagramPacket: 用于发送或者接受的数据包</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-</pre></td><td class="code"><pre>DatagramSocket ds = <span class="keyword">new</span> DatagramSocket();
-<span class="built_in">String</span> s = <span class="string">"xxxxxxxxxxx"</span>;
-byte[] buf = str.getBytes();
-<span class="comment">// 发送, 可以用192.1.1.255发广播</span>
-DatagramPacket dp = <span class="keyword">new</span> DatagramPacket(buf, buf.length,InetAddress.getByName(<span class="string">"192.168.1.100"</span>), <span class="number">10000</span>);
-ds.send(dp);
-ds.close();
-
-<span class="comment">// 接收</span>
-DatagramSocket ds = <span class="keyword">new</span> DatagramSocket(<span class="number">10000</span>); <span class="comment">// 要明确接受端口</span>
-DatagramPacket dp = <span class="keyword">new</span> DatagramPacket(buf, buf.length);
-ds.receive(dp); <span class="comment">// 阻塞式的</span>
-<span class="built_in">String</span> ip = dp.getAddress.getHostAddress();
-int port = dp.getPort();
-<span class="keyword">new</span> <span class="built_in">String</span>(dp.getData(), <span class="number">0</span>, dp.getLength());
-</pre></td></tr></table></figure>
-
-<h2 id="socket-serversocket">Socket 和 ServerSocket</h2>
+<h2 id="-">常见规则</h2>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
 3
@@ -174,42 +139,98 @@ int port = dp.getPort();
 16
 17
 18
-</pre></td><td class="code"><pre>// 客户端
-Socket s = new Socket(<span class="string">"192.168.1.100"</span>, <span class="number">10000</span>)<span class="comment">;</span>
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+</pre></td><td class="code"><pre>Character classes
+[abc] 	a, b, <span class="keyword">or</span> c (simple <span class="type">class</span>)
+[^abc] 	Any <span class="property">character</span> except a, b, <span class="keyword">or</span> c (negation)
+[a-zA-Z] 	a <span class="keyword">through</span> z <span class="keyword">or</span> A <span class="keyword">through</span> Z, inclusive (range)
+[a-d[m-p]] 	a <span class="keyword">through</span> d, <span class="keyword">or</span> m <span class="keyword">through</span> p: [a-dm-p] (union)
+[a-z&&[def]] 	d, e, <span class="keyword">or</span> f (intersection)
+[a-z&&[^bc]] 	a <span class="keyword">through</span> z, except <span class="keyword">for</span> b <span class="keyword">and</span> c: [ad-z] (subtraction)
+[a-z&&[^m-p]] 	a <span class="keyword">through</span> z, <span class="keyword">and</span> <span class="keyword">not</span> m <span class="keyword">through</span> p: [a-lq-z](subtraction)
+ 
+Predefined <span class="property">character</span> classes
+. 	Any <span class="property">character</span> (may <span class="keyword">or</span> may <span class="keyword">not</span> match line terminators)
+\d 	A digit: [<span class="number">0</span>-<span class="number">9</span>]
+\D 	A non-digit: [^<span class="number">0</span>-<span class="number">9</span>]
+\s 	A whitespace <span class="property">character</span>: [ \t\n\x0B\f\r]
+\S 	A non-whitespace <span class="property">character</span>: [^\s]
+\w 	A <span class="property">word</span> <span class="property">character</span>: [a-zA-Z_0-<span class="number">9</span>]
+\W 	A non-<span class="property">word</span> <span class="property">character</span>: [^\w]
 
-OutputStream <span class="keyword">out</span> = s<span class="preprocessor">.getOutputStream</span>()<span class="comment">; // s.getInputStream();</span>
-<span class="keyword">out</span><span class="preprocessor">.write</span>(<span class="string">"xxxx"</span><span class="preprocessor">.getBytes</span>())<span class="comment">;</span>
-s<span class="preprocessor">.shutdownOutput</span>()<span class="comment">; // 告诉服务端, 这边数据发送完毕,让服务端停止读取</span>
-s<span class="preprocessor">.close</span>()<span class="comment">;</span>
+Boundary matchers
+^ 	The <span class="keyword">beginning</span> <span class="keyword">of</span> a line
+$ 	The <span class="keyword">end</span> <span class="keyword">of</span> a line
+\b 	A <span class="property">word</span> boundary
+\B 	A non-<span class="property">word</span> boundary
 
-// 服务端
-ServerSocket ss = new ServerSocket(<span class="number">100000</span>)<span class="comment">;</span>
-Socket s == ss<span class="preprocessor">.accept</span>()<span class="comment">; // 获取客户端对象, 阻塞</span>
-
-s<span class="preprocessor">.getInputStream</span>()<span class="comment">;</span>
-<span class="keyword">in</span><span class="preprocessor">.read</span>(buf)<span class="comment">;</span>
-new String(buf, <span class="number">0</span>, len)<span class="comment">;</span>
-
-s<span class="preprocessor">.close</span>()<span class="comment">;</span>
-ss<span class="preprocessor">.close</span>()<span class="comment">;</span>
+Greedy quantifiers 贪懒
+X? 	X, once <span class="keyword">or</span> <span class="keyword">not</span> <span class="keyword">at</span> all
+X* 	X, zero <span class="keyword">or</span> more <span class="keyword">times</span>
+X+ 	X, one <span class="keyword">or</span> more <span class="keyword">times</span>
+X{n} 	X, exactly n <span class="keyword">times</span>
+X{n,} 	X, <span class="keyword">at</span> least n <span class="keyword">times</span>
+X{n,m} 	X, <span class="keyword">at</span> least n <span class="keyword">but</span> <span class="keyword">not</span> more than m <span class="keyword">times</span>
+ 
+Reluctant quantifiers
+X?? 	X, once <span class="keyword">or</span> <span class="keyword">not</span> <span class="keyword">at</span> all
+X*? 	X, zero <span class="keyword">or</span> more <span class="keyword">times</span>
+X+? 	X, one <span class="keyword">or</span> more <span class="keyword">times</span>
+X{n}? 	X, exactly n <span class="keyword">times</span>
+X{n,}? 	X, <span class="keyword">at</span> least n <span class="keyword">times</span>
+X{n,m}? 	X, <span class="keyword">at</span> least n <span class="keyword">but</span> <span class="keyword">not</span> more than m <span class="keyword">times</span>
 </pre></td></tr></table></figure>
 
-<h3 id="-">多线程服务端</h3>
+<h2 id="-">匹配</h2>
+<p><code>&quot;String&quot;.matches(regex)</code></p>
+<h2 id="-">切割</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre>String[] sep = <span class="keyword">str</span>.split(<span class="string">"\\s"</span>);
+<span class="keyword">str</span> = <span class="string">"zhangaaaaaaaaboccccccshen"</span>
+String[] sep = <span class="keyword">str</span>.split(<span class="string">"(.)\\1+"</span>); <span class="comment">// 组 &gt; zhang bo shen</span>
+</pre></td></tr></table></figure>
+
+<h2 id="-">组</h2>
+<p><code>((A)(B(C)))</code> 从左括号开始,第一个括号就是第一组, 第二个括号就是第二组</p>
+<h2 id="-">替换</h2>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
 3
 4
 5
-</pre></td><td class="code"><pre><span class="keyword">while</span>(<span class="literal">true</span>){
-    Socket s <span class="subst">=</span> ss<span class="built_in">.</span>accept();
-    <span class="keyword">Thread</span> <span class="keyword">thread</span> <span class="subst">=</span> <span class="literal">new</span> <span class="keyword">Thread</span>(<span class="literal">new</span> Handler(s));
-    <span class="keyword">thread</span><span class="built_in">.</span>start();
-}
+6
+</pre></td><td class="code"><pre><span class="keyword">str</span> = <span class="string">"zhangaaaaaaaaboccccccshen"</span>
+<span class="comment">// 叠词替换成一个</span>
+<span class="keyword">str</span>.replaceAll(<span class="string">"(.)\\1+"</span>, <span class="string">"$1"</span>);   <span class="comment">// zhangabocshen</span>
+
+<span class="keyword">str</span> = <span class="string">"15800001111"</span>;
+<span class="keyword">str</span>.replaceAll(<span class="string">"(\\d{3})\\d{4}(\\d{3})"</span>, <span class="string">"$1****$2"</span>);
 </pre></td></tr></table></figure>
 
-<h1 id="url-urlconnection">URL&amp;URLConnection</h1>
-<p>URL: 同一资源定位符, http协议</p>
-<p>URI: 统一资源标识, mailto等 包括URL</p>
+<h2 id="-">获取</h2>
+<p>java.util.regex.Pattern: 正则表达式的对象形式</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
 3
@@ -221,19 +242,17 @@ ss<span class="preprocessor">.close</span>()<span class="comment">;</span>
 9
 10
 11
-12
-</pre></td><td class="code"><pre><span class="built_in">String</span> str_url = <span class="string">"http://www.google.com/index.html?name.lisi"</span>;
-URL url = <span class="keyword">new</span> URL(str_url);
-url.getProtocol(); <span class="comment">// http</span>
-url.getHost();  <span class="comment">// 192.168.1.100</span>
-url.getFile();  <span class="comment">// /index.html?name.lisi</span>
-url.getPath(); <span class="comment">//  /index.html</span>
-url.getQuery(); <span class="comment">// name.lisi</span>
-
-url.openStream(); <span class="comment">// url.openConnection().openStream();</span>
-
-URLConnection uc = url.openConnection();
-uc.getHeaderField(<span class="string">"Content-Type"</span>); <span class="comment">//text/html</span>
+</pre></td><td class="code"><pre><span class="comment">// 将正则封装成对象</span>
+Pattern p = Pattern.compile(<span class="string">"a*b"</span>);
+<span class="comment">// 通过正则对象的获取匹配器对象</span>
+Matcher m = p.matcher(<span class="string">"aaaab"</span>);
+<span class="comment">// 使用Matcher对象对字符串进行操作</span>
+<span class="keyword">boolean</span> b = m.matches();
+<span class="keyword">while</span>(m.find()){
+    m.<span class="keyword">group</span>();  <span class="comment">// 获取匹配的子序列</span>
+    m.start();  <span class="comment">// index of start</span>
+    m.end();
+}
 </pre></td></tr></table></figure>
 
   
@@ -242,7 +261,7 @@ uc.getHeaderField(<span class="string">"Content-Type"</span>); <span class="comm
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/java/">java</a><a href="/tags/网络编程/">网络编程</a>
+  <span></span> <a href="/tags/java/">java</a><a href="/tags/正则表达式/">正则表达式</a>
   </div>
 
 
@@ -250,7 +269,7 @@ uc.getHeaderField(<span class="string">"Content-Type"</span>); <span class="comm
 
 <div class="article-share" id="share">
 
-  <div data-url="http://zhpooer.github.io/2014/04/14/java网络编程学习/" data-title="java网络编程学习 | Poe&#39;s World" data-tsina="null" class="share clearfix">
+  <div data-url="http://zhpooer.github.io/2014/04/15/java正则学习/" data-title="java正则学习 | Poe&#39;s World" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -260,18 +279,18 @@ uc.getHeaderField(<span class="string">"Content-Type"</span>); <span class="comm
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2014/04/14/java反射学习/" title="java反射学习">
+ <a href="/2014/04/15/传智播客day12-session/" title="传智播客day12-session">
   <strong>PREVIOUS:</strong><br/>
   <span>
-  java反射学习</span>
+  传智播客day12-session</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2014/04/13/io技术学习/"  title="IO技术学习">
+<a href="/2014/04/14/java反射学习/"  title="java反射学习">
  <strong>NEXT:</strong><br/> 
- <span>IO技术学习
+ <span>java反射学习
 </span>
 </a>
 </div>
@@ -288,7 +307,7 @@ uc.getHeaderField(<span class="string">"Content-Type"</span>); <span class="comm
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#java-net-inetaddress"><span class="toc-number">1.</span> <span class="toc-text">java.net.InetAddress</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#socket"><span class="toc-number">2.</span> <span class="toc-text">Socket</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#java-net-datagramsocket"><span class="toc-number">2.1.</span> <span class="toc-text">java.net.DatagramSocket</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#socket-serversocket"><span class="toc-number">2.2.</span> <span class="toc-text">Socket 和 ServerSocket</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">2.2.1.</span> <span class="toc-text">多线程服务端</span></a></li></ol></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#url-urlconnection"><span class="toc-number">3.</span> <span class="toc-text">URL&amp;URLConnection</span></a></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">正则表达式</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.1.</span> <span class="toc-text">常见规则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.2.</span> <span class="toc-text">匹配</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.3.</span> <span class="toc-text">切割</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.4.</span> <span class="toc-text">组</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.5.</span> <span class="toc-text">替换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.6.</span> <span class="toc-text">获取</span></a></li></ol>
   </div>
 
 <div id="asidepart">
