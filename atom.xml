@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Hello World]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://zhpooer.github.io/"/>
-  <updated>2014-04-15T14:01:12.574Z</updated>
+  <updated>2014-04-16T14:32:03.729Z</updated>
   <id>http://zhpooer.github.io/</id>
   
   <author>
@@ -13,6 +13,656 @@
   </author>
   
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[Linux-find手记]]></title>
+    <link href="http://zhpooer.github.io/2014/04/16/linux-find%E6%89%8B%E8%AE%B0/"/>
+    <id>http://zhpooer.github.io/2014/04/16/linux-find手记/</id>
+    <published>2014-04-16T13:40:07.000Z</published>
+    <updated>2014-04-16T14:31:44.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="-">常用方法</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="code"><pre>find ./ -name <span class="string">"*.log"</span> -type f  <span class="comment"># 找到文件后缀为.log的文件, 注意:一定要有引号</span>
+find . -perm <span class="number">755</span> -<span class="keyword">print</span>       <span class="comment"># 找到权限为755的文件</span>
+find ./ -user poe –<span class="keyword">print</span> <span class="comment"># 找到用户为poe的文件</span>
+find /apps -group gem –<span class="keyword">print</span>
+find / -mtime -<span class="number">5</span> –<span class="keyword">print</span> <span class="comment">#在系统根目录下查找更改时间在5日以内的文件</span>
+find /<span class="keyword">var</span>/adm -mtime +<span class="number">3</span> –<span class="keyword">print</span> <span class="comment"># 在/var/adm目录下查找更改时间在3日以前的文件</span>
+find /usr/sam -path <span class="string">"/usr/sam/dir1"</span> -prune -o –<span class="keyword">print</span> <span class="comment"># 在/usr/sam目录下查找不在dir1子目录之内的所有文件</span>
+find . -maxdepth <span class="number">1</span> -name <span class="string">"*.zip"</span> -<span class="keyword">print</span> <span class="comment"># 只在的文件</span>
+find . -perm <span class="number">755</span> -exec ls {} \; <span class="comment">##执行命令, 注意;和{}之间的空格</span>
+</pre></td></tr></table></figure>
+
+<h1 id="-type-"><code>-type</code></h1>
+<p>查找某一类型的文件，诸如：</p>
+<p>b - 块设备文件</p>
+<p>d - 目录</p>
+<p>c - 字符设备文件</p>
+<p>p - 管道文件</p>
+<p>l - 符号链接文件</p>
+<p>f - 普通文件</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>find . ! -<span class="built_in">type</span> d –<span class="built_in">print</span> # 在当前目录下查找除目录以外的所有类型的文件
+</pre></td></tr></table></figure>
+
+<h1 id="-ok-"><code>-ok</code></h1>
+<p>和-exec的作用相同，只不过以一种更为安全的模式来执行该参数所给出的shell命令，在执行每一个命令之前，都会给出提示，让用户来确定是否执行。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre><span class="preprocessor">#在当前目录中查找所有文件名以.LOG结尾、更改时间在5日以上的文件，并删除它们，只不过在删除之前先给出提示</span>
+find . -name <span class="string">"*.conf"</span>  -mtime +<span class="number">5</span> -ok rm {  } \;
+</pre></td></tr></table></figure>
+
+<h1 id="-">其他有用指令</h1>
+<p><code>-follow</code>：如果find命令遇到符号链接文件，就跟踪至链接所指向的文件</p>
+<p><code>-depth</code>：在查找文件时，首先查找当前目录中的文件，然后再在其子目录中查找 </p>
+<p><code>-xdev</code> 只查找当前目录下的文件 </p>
+<p><code>-nogroup</code>: 查找无有效所属组的文件，即该文件所属的组在/etc/groups中不存在</p>
+<h1 id="find-xargs">find 与 xargs</h1>
+<p>类似于 <code>-exec</code> 指令, 但是效率高</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="preprocessor"># 查找系统中的每一个普通文件，然后使用xargs命令来测试它们分别属于哪类文件</span>
+<span class="title">find</span> . -<span class="typedef"><span class="keyword">type</span> f -print | xargs file</span>
+<span class="title">find</span> ./ -size <span class="number">0</span> | xargs rm -f & 删除文件大小为零的文件
+</pre></td></tr></table></figure>
+
+]]></content>
+    
+    
+      <category term="linux" scheme="http://zhpooer.github.io/tags/linux/"/>
+    
+      <category term="find" scheme="http://zhpooer.github.io/tags/find/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[传智播客day13-EL表达式]]></title>
+    <link href="http://zhpooer.github.io/2014/04/16/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day13-el%E8%A1%A8%E8%BE%BE%E5%BC%8F/"/>
+    <id>http://zhpooer.github.io/2014/04/16/传智播客day13-el表达式/</id>
+    <published>2014-04-16T03:42:31.000Z</published>
+    <updated>2014-04-16T08:34:02.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="el-">EL表达式</h1>
+<ul>
+<li>作用, 向界面输出内容, 只适合显示数据</li>
+<li>基本语法形式: ${EL表达式}</li>
+<li><strong>不支持字符串连接操作</strong></li>
+<li><strong>永远没有空指针</strong></li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">jsp:JavaBean</span> <span class="attribute">id</span>=<span class="value">"p"</span> <span class="attribute">class</span>=<span class="value">"cn.itcast.Person"</span>&gt;</span><span class="tag">&lt;/<span class="title">jsp:JavaBean</span>&gt;</span>
+<span class="vbscript">&lt;%=p.getName()%&gt;</span> <span class="comment">&lt;!--Java表达式, 官方不建议使用--&gt;</span>
+${p.name} <span class="comment">&lt;!--EL表达式, 官方推荐--&gt;</span>
+</pre></td></tr></table></figure>
+
+<ul>
+<li><p>作用分解</p>
+<ol>
+<li>获取数据, 替换JSP中的<code>&lt;%= %&gt;</code></li>
+<li>执行简单的数学或逻辑运输</li>
+<li>EL隐式对象(难点, 容易和JSP的隐式对象混淆)</li>
+<li>调用Java中的静态方法</li>
+</ol>
+</li>
+</ul>
+<h2 id="-">获取数据</h2>
+<p>只能获取四大域对象中的数据</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+</pre></td><td class="code"><pre><span class="vbscript">&lt;%
+   pageContext.setAttribute(<span class="string">"p"</span>, p, page|<span class="built_in">request</span>|session|application);
+%&gt;</span>
+
+${p} <span class="comment">&lt;!--依次查找名字为p的对象, 没有找到页面什么都不显示你--&gt;</span>
+${p.name} <span class="comment">&lt;!-- 获取对象属性的值,显示到页面上 --&gt;</span>
+${p.addreess.province}
+
+<span class="comment">&lt;!-- 使用`[]`运算符, 获取 List 和 Map 中的数据
+   但是无法获取 Set 中的数据
+--&gt;</span>
+<span class="vbscript">&lt;%
+    List&lt;Person&gt; ps = <span class="keyword">new</span> ArrayList&lt;Person&gt;
+    ps.add(<span class="keyword">new</span> Person(<span class="string">"a"</span>));
+    ps.add(<span class="keyword">new</span> Person(<span class="string">"b"</span>));
+    ps.add(<span class="keyword">new</span> Person(<span class="string">"c"</span>));
+    ps.add(<span class="keyword">new</span> Person(<span class="string">"d"</span>));
+    pageContent.setAttribute(<span class="string">"ps"</span>, ps);
+    Map&lt;<span class="built_in">String</span>, Person&gt; m = <span class="keyword">new</span> HashMap&lt;<span class="built_in">String</span>, Person&gt;;
+    m.put(<span class="string">"aa"</span>, <span class="keyword">new</span> Person(<span class="string">"a"</span>));
+%&gt;</span>
+
+${ps[2].name}  <span class="comment">&lt;!-- output: d --&gt;</span>
+${ps[2]['name']}
+
+${m.aa.name}   <span class="comment">&lt;!-- output: a --&gt;</span>
+${m['a'].name} <span class="comment">&lt;!-- output: a --&gt;</span>
+</pre></td></tr></table></figure>
+
+<h2 id="-">执行数据</h2>
+<ul>
+<li>empty 运算符: 判断一个对象是不是null,
+还能判断一个集合中是否有元素, 是否为空字符串</li>
+<li>三元判断符: <code>${empty user? &quot;true&quot;:&quot;false&quot;}</code></li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre>${<span class="number">1</span>+<span class="number">1</span>}      <span class="number">2</span>
+${<span class="number">1</span>==<span class="number">2</span>}     <span class="literal">false</span>
+
+${empty p}  p=<span class="string">""</span><span class="function"> =&gt;</span> <span class="literal">true</span>; p=<span class="literal">null</span><span class="function"> =&gt;</span> <span class="literal">true</span>; p=List<span class="function"><span class="params">()</span> =&gt;</span> <span class="literal">true</span>; p=List<span class="function"><span class="params">(<span class="string">"dfjk"</span>)</span> =&gt;</span> <span class="literal">false</span>
+
+${empty user?<span class="string">"您还没有登陆"</span>:<span class="string">"欢迎您"</span>}
+${<span class="string">"a"</span> + <span class="string">"b"</span>} &lt;!--报错!!!!!!!!!!!!不能字符串相加--<span class="function">-&gt;</span>
+</pre></td></tr></table></figure>
+
+<h2 id="el-11-">EL中的11个隐式对象</h2>
+<table>
+<thead>
+<tr>
+<th>内置对象</th>
+<th>表示类型</th>
+<th>备注</th>
+<th>对应的JSP内置对象</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>pageContext</em></td>
+<td>javax.servlet.jsp.PageContext</td>
+<td>和jsp的内置对象完全一样</td>
+<td>pageContext</td>
+</tr>
+<tr>
+<td><em>requestScope</em></td>
+<td>java.util.Map</td>
+<td>代表servletRequest中的那个Map</td>
+<td>没有</td>
+</tr>
+<tr>
+<td><em>pageScope</em></td>
+<td>java.util.Map</td>
+<td>代表pageContext中的那个Map</td>
+<td>没有</td>
+</tr>
+<tr>
+<td><em>sessionScope</em></td>
+<td>java.util.Map</td>
+<td>代表session中的那个Map</td>
+<td>没有</td>
+</tr>
+<tr>
+<td><em>applicationScope</em></td>
+<td>java.util.Map</td>
+<td>代表application中的那个Map</td>
+<td>没有</td>
+</tr>
+<tr>
+<td><em>param</em></td>
+<td>Map<String,String></td>
+<td>获取单一请求参数</td>
+<td>没有</td>
+</tr>
+<tr>
+<td>paramValues</td>
+<td>Map<String,String[]></td>
+<td>获取重名请求参数</td>
+<td>没有</td>
+</tr>
+<tr>
+<td>header</td>
+<td>Map<String,String></td>
+<td>单一请求消息头</td>
+<td>没有</td>
+</tr>
+<tr>
+<td>headerValues</td>
+<td>Map<String,String[]></td>
+<td>重名请求消息头</td>
+<td>没有</td>
+</tr>
+<tr>
+<td>initParam</td>
+<td>Map<String,String></td>
+<td>代表web.xml中的全局变量</td>
+<td>没有</td>
+</tr>
+<tr>
+<td>cookie</td>
+<td>Map<String,Cookie></td>
+<td>获取Cookie对象</td>
+<td>没有</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- pageContent --&gt;</span>
+<span class="vbscript">&lt;%= <span class="built_in">request</span>.getContextPath() %&gt;</span>
+${pageContext.request.contextPath}  <span class="comment">&lt;!-- request.contextPath 非法 --&gt;</span>
+
+${param.name} <span class="comment">&lt;!-- 获取单一请求参数的值 --&gt;</span>
+${paramValues.password[0]}  <span class="comment">&lt;!-- 获取多个请求参数的值 --&gt;</span>
+
+${header['Accept-Language']}  <span class="comment">&lt;!-- 请求消息头 --&gt;</span>
+${headerValues['Accept-Language'][0]}  <span class="comment">&lt;!-- 重名的请求消息头 --&gt;</span>
+
+${cookie.JSESSIONID} <span class="comment">&lt;!-- cookie对象 --&gt;</span>
+${cookie.JSESSIONID.value} <span class="comment">&lt;!-- cookie对象的value --&gt;</span>
+${cookie.JSESSIONID.name} <span class="comment">&lt;!-- cookie对象的name --&gt;</span>
+</pre></td></tr></table></figure>
+
+<h2 id="-java-">调用Java中的静态方法</h2>
+<p>产生原因: EL表达式不支持字符串的相关功能</p>
+<p>EL 能调用普通Java类的静态方法, 但是不能调用实例的方法</p>
+<p>开发步骤:</p>
+<ol>
+<li>定义一个静态类, 提供静态方法</li>
+<li>在WEB-INF目录下建立一个扩展名为tld的xml文件</li>
+<li>在jsp中使用</li>
+</ol>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre>&lt;%<span class="at_rule">@ taglib uri=<span class="string">"http://www.itcast.cn/jsp/myfunction"</span> prefix=<span class="string">"myfn"</span> %&gt;
+$</span>{<span class="tag">myfn</span><span class="pseudo">:toUppercase(s)</span>}
+</pre></td></tr></table></figure>
+
+<p>WEB-INF/myfn.tld</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">taglib</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">tlib-version</span>&gt;</span>1.0 <span class="tag">&lt;/<span class="title">tlib-version</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">short-name</span>&gt;</span>myfn <span class="tag">&lt;/<span class="title">short-name</span>&gt;</span>
+    <span class="comment">&lt;!-- 定位符 --&gt;</span>
+    <span class="tag">&lt;<span class="title">uri</span>&gt;</span>http://www.itcast.cn/jsp/myfunction <span class="tag">&lt;/<span class="title">uri</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">function</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">description</span>&gt;</span>toUppercase the string<span class="tag">&lt;/<span class="title">description</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">name</span>&gt;</span>toUppercase <span class="tag">&lt;/<span class="title">name</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">function-class</span>&gt;</span>cn.itcast.MyFunctions <span class="tag">&lt;/<span class="title">function-class</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">function-signature</span>&gt;</span>java.lang.String toUppercase(java.lang.String)<span class="tag">&lt;/<span class="title">function-signature</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">function</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">taglib</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<h2 id="jstl">JSTL</h2>
+<p>sun提供了标准的EL函数</p>
+<ul>
+<li><p>JSTL标签库</p>
+<ul>
+<li>core: 核心</li>
+<li>fmt: 国际化</li>
+<li>sql: 数据库</li>
+<li>xml: 操作xml</li>
+<li>functions: EL函数</li>
+</ul>
+</li>
+<li><p>由 Apache 实现, 需要导入 jstl.jar, standard.jar</p>
+<p> 所有的java开发规范由JCP.org发布的, 代号 JSR-XXX
+ JCP组织由: Oracle\Apache\Jboss 等知名开源组织构成</p>
+</li>
+<li>使用JSTL中的EL函数<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+</pre></td><td class="code"><pre><span class="vbscript">&lt;% taglib uri=<span class="string">"http://java.sun.com/jsp/jstl/functions"</span> prefix=fn %&gt;</span> <span class="comment">&lt;!--导入--&gt;</span>
+${fn:toLowerCase(s1)}
+${fn:toUpperCase(s1)}
+${fn:trim(s1)}
+${fn:length(s1)}
+${fn:escapeXml(s1)}  <span class="comment">&lt;!-- &lt;hr/&gt; 转义成 &lt;hr/&gt; --&gt;</span>
+${fn:split(s1, "-")[0]}
+${fn:join(s1, "-")[0]}  <span class="comment">&lt;!-- 联接 --&gt;</span>
+${fn:indexOf(s1, "f")} <span class="comment">&lt;!--打印字符索引--&gt;</span>
+${fn:contains(s1, "a")}  <span class="comment">&lt;!--是否包含字母--&gt;</span>
+${fn:subString(s1, 0, 2)}  <span class="comment">&lt;!-- abcdefg =&gt; abc  --&gt;</span>
+${fn:subString(s1, 5, 1000)}  <span class="comment">&lt;!-- abcdefg =&gt; fg, 数组不会越界, 只能是三个参数--&gt;</span>
+<span class="comment">&lt;!-- startWith --&gt;</span>
+<span class="comment">&lt;!-- endsWith --&gt;</span>
+<span class="comment">&lt;!-- replace --&gt;</span>
+<span class="comment">&lt;!-- subStringAfter --&gt;</span>
+<span class="comment">&lt;!-- subStringBefore --&gt;</span>
+</pre></td></tr></table></figure>
+
+</li>
+</ul>
+]]></content>
+    
+    
+      <category term="java" scheme="http://zhpooer.github.io/tags/java/"/>
+    
+      <category term="EL表达式" scheme="http://zhpooer.github.io/tags/EL%E8%A1%A8%E8%BE%BE%E5%BC%8F/"/>
+    
+      <category term="传智播客" scheme="http://zhpooer.github.io/tags/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[传智播客day13-JSP&JavaBean]]></title>
+    <link href="http://zhpooer.github.io/2014/04/16/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day13-jsp&JavaBean/"/>
+    <id>http://zhpooer.github.io/2014/04/16/传智播客day13-jsp&JavaBean/</id>
+    <published>2014-04-16T01:18:59.000Z</published>
+    <updated>2014-04-16T08:15:44.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="jsp-">JSP中的九大隐式对象</h1>
+<p>就是JSP对应的Servlet那些变量</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="code"><pre><span class="comment">// JSP中可以取到的变量</span>
+PageContext pageContext = <span class="keyword">null</span>;
+HttpSession session = <span class="keyword">null</span>;
+ServletContext application = <span class="keyword">null</span>;
+ServletConfig config = <span class="keyword">null</span>;
+JspWriter <span class="keyword">out</span> = <span class="keyword">null</span>;
+Object page = <span class="keyword">this</span>;
+JspWriter _jspx_out = <span class="keyword">null</span>;
+PageContext _jspx_page_context = <span class="keyword">null</span>;
+</pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>内置对象名称</th>
+<th>对应的类型</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>request</td>
+<td>javax.servlet.http.HttpServletRequest</td>
+<td></td>
+</tr>
+<tr>
+<td>response</td>
+<td>javax.servlet.http.HttpServletResponse</td>
+<td></td>
+</tr>
+<tr>
+<td>session</td>
+<td>javax.servlet.http.HttpSession</td>
+<td>jsp指令 session=&quot;true&quot;</td>
+</tr>
+<tr>
+<td>application</td>
+<td>javax.servlet.ServletContext</td>
+<td></td>
+</tr>
+<tr>
+<td>config</td>
+<td>javax.servlet.ServletConfig</td>
+<td></td>
+</tr>
+<tr>
+<td>page</td>
+<td>java.lang.Object</td>
+<td>代表当前servlet对象本身</td>
+</tr>
+<tr>
+<td>exception</td>
+<td>java.lang.Throwable</td>
+<td>jsp指令 isErrorPage=&quot;true&quot;</td>
+</tr>
+<tr>
+<td>out</td>
+<td>javax.servlet.jsp.JspWriter</td>
+<td>和 reponse.getWriter()一样</td>
+</tr>
+<tr>
+<td>pageContext</td>
+<td>javax.servlet.jsp.PageContext</td>
+</tr>
+</tbody>
+</table>
+<h2 id="-out-">隐式对象 out的使用</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="vbscript">&lt;%
+    out.write(<span class="string">"123"</span>); // JspWriter, 缓存<span class="number">8</span>kb
+    <span class="built_in">response</span>.getWriter.write(<span class="string">"456"</span>);
+%&gt;</span>
+<span class="comment">&lt;!--结果是 456123--&gt;</span>
+</pre></td></tr></table></figure>
+
+<h2 id="pagecontext-">pageContext 内置对象</h2>
+<p>作用:</p>
+<ul>
+<li><p>是一个域对象, 存的数据只能是当前页面来访问.
+还能操作其他三个域对象(ServletRequest, HttpSession, ServletContext)的数据</p>
+<p>  可以操作本身的域对象和其他的域对象</p>
+<ol>
+<li>setAttribute(String key, Object value, int scope)</li>
+<li>getAttribute(String key, int scope)</li>
+<li>removeAttribute(int scope)</li>
+<li>scope: <code>PageContext.PAGE_SCOPE</code>
+, <code>PageContext.REQUEST_SCOPE</code>
+, <code>PageContext.SESSION_SCOPE</code>
+, <code>PageContext.APPLICATION_SCOPE</code></li>
+<li>findAttribute(String key), <strong>依次从页面、请求、会话、应用范围找对应的值</strong></li>
+</ol>
+</li>
+<li><p>获得其他8个隐式对象</p>
+<ol>
+<li><code>pageContext.getRequest();</code></li>
+<li><code>pageContext.getSession();</code></li>
+<li>...</li>
+</ol>
+</li>
+<li><p>提供了转发和包含的简单方法</p>
+<ol>
+<li><code>pageContext.forward(&quot;&quot;);</code></li>
+<li><code>pageContext.include(&quot;&quot;);</code></li>
+</ol>
+</li>
+</ul>
+<h1 id="-">四大域对象</h1>
+<ul>
+<li>PageContext: 页面范围的数据, 用的很少</li>
+<li>ServletRequest: 请求范围的数据, 用的很多. 显示一次数据后就没有用了</li>
+<li>HttpSession: 会话范围内的数据, 用的很多, 每次请求和响应都需要的共享数据</li>
+<li>ServletContext: 应用范围内的数据, 用的不多, 是所有的客户端都共享的信息. 注意同步!!!</li>
+</ul>
+<p>数据能不能取到, 关键是不是从一个地方取的数据</p>
+<h1 id="javabean-">JavaBean 概念</h1>
+<ul>
+<li>什么是JavaBean(VO, Value Object; DO: Data Object; POJO: 简单Java对象)
+  遵循一定的命名规则:<ol>
+<li>必须由默认的构造方法</li>
+<li>类的声明为public类型</li>
+<li>字段都是私有的 <code>private boolean married</code>;</li>
+<li>提供公有的getter或setter方法(属性)</li>
+<li>一般实现 java.io.Serializable 接口</li>
+</ol>
+</li>
+<li><p>应用场景</p>
+<p> 封装数据, 便于传递数据</p>
+</li>
+</ul>
+<h1 id="javaweb-">JavaWeb开发模型</h1>
+<ul>
+<li><p>模型一: JavaBean + JSP,只能开发很简单的应用,不适合企业级应用</p>
+</li>
+<li><p>模型二: MVC, Model+View+Controller</p>
+<ul>
+<li>Model: JavaBean 数据</li>
+<li>View: JSP</li>
+<li><p>Controller: Servlet</p>
+<p>MVC只是三层架构模式中的前段展示层</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="-">三层架构模型</h2>
+<p><img src="/img/3layerstructor.png" alt="三层架构模型"></p>
+<h2 id="-jsp-javabean">在JSP中使用JavaBean</h2>
+<p>使用动作元素(内置标签)</p>
+<ul>
+<li><p>jsp:useBean: 用于从指定范围根据名称查找Javabean,
+如果没有找到, 创建该 JavaBean 的实例, 然后放到指定的范围.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">jsp:useBean</span> <span class="attribute">id</span>=<span class="value">"p"</span> <span class="attribute">class</span>=<span class="value">"cn.itcast.Person"</span> 
+             <span class="attribute">scope</span>=<span class="value">"page|request|session|application"</span>&gt;</span><span class="tag">&lt;/<span class="title">jsp:useBean</span>&gt;</span>
+<span class="vbscript">&lt;% // 等价代码
+   cn.itcast.Person p = <span class="literal">null</span>;
+   p = (Person) pageContext.getAttribute(<span class="string">"p"</span>, pageContext.PAGE_SCOPE);
+   <span class="keyword">if</span>(p==<span class="literal">null</span>){
+       p = <span class="keyword">new</span> Person();
+       pageContext.setAttribute(<span class="string">"p"</span>, p, pageContext.PAGE_SCOPE);
+   }
+%&gt;</span>
+</pre></td></tr></table></figure>
+</li>
+<li><p>jsp:setProperty: 给指定名称的对象设置值</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>&lt;<span class="symbol">jsp:</span>setProperty property=<span class="string">"name"</span> name=<span class="string">"p"</span> value=<span class="string">"xxx"</span>/&gt;
+&lt;<span class="string">%//</span> 等价代码
+p.setName(<span class="string">"xxx"</span>);
+%&gt;
+</pre></td></tr></table></figure>
+</li>
+<li><p>jsp:getProperty: 如果一个属性的值是null, 界面就会显示null</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">jsp:getProperty</span> <span class="attribute">property</span>=<span class="value">"name"</span> <span class="attribute">name</span>=<span class="value">"p"</span>/&gt;</span>
+<span class="vbscript">&lt;%=p.getName()%&gt;</span> <span class="comment">&lt;!-- 等价代码 --&gt;</span>
+</pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="-javabean-">用请求参数设置 JavaBean 中的值</h3>
+<p>在模型一中用到</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">form</span> <span class="attribute">action</span>=<span class="value">"Bean.jsp"</span> <span class="attribute">method</span>=<span class="value">"post"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"text"</span> <span class="attribute">name</span>=<span class="value">"name"</span>/&gt;</span>
+    <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"radio"</span> <span class="attribute">name</span>=<span class="value">"gender"</span> <span class="attribute">value</span>=<span class="value">"female"</span>/&gt;</span> 先生
+    <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"radio"</span> <span class="attribute">name</span>=<span class="value">"gender"</span> <span class="attribute">value</span>=<span class="value">"male"</span>/&gt;</span> 小姐
+    <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"submit"</span>/&gt;</span>
+<span class="tag">&lt;/<span class="title">form</span>&gt;</span>
+
+<span class="comment">&lt;!-- Bean.jsp --&gt;</span>
+<span class="tag">&lt;<span class="title">jsp:setProperty</span> <span class="attribute">property</span>=<span class="value">"name"</span> <span class="attribute">name</span>=<span class="value">"p"</span> <span class="attribute">param</span>=<span class="value">"name"</span>/&gt;</span>
+<span class="tag">&lt;<span class="title">jsp:setProperty</span> <span class="attribute">property</span>=<span class="value">"name"</span> <span class="attribute">name</span>=<span class="value">"p"</span> <span class="attribute">param</span>=<span class="value">"gender"</span>/&gt;</span>
+<span class="comment">&lt;!-- 使用通配符, 简化上面调用, 前提: 表单的字段名和JavaBean的字段名一致 --&gt;</span>
+<span class="tag">&lt;<span class="title">jsp:setProperty</span> <span class="attribute">property</span>=<span class="value">"*"</span> <span class="attribute">name</span>=<span class="value">"p"</span>/&gt;</span>
+</pre></td></tr></table></figure>
+
+]]></content>
+    
+    
+      <category term="java" scheme="http://zhpooer.github.io/tags/java/"/>
+    
+      <category term="JSP" scheme="http://zhpooer.github.io/tags/JSP/"/>
+    
+      <category term="传智播客" scheme="http://zhpooer.github.io/tags/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2/"/>
+    
+      <category term="JavaBean" scheme="http://zhpooer.github.io/tags/JavaBean/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[传智播客day12-jsp]]></title>
@@ -725,7 +1375,7 @@ res.encodeURL(url); <span class="comment">// http://localhost/Servlet;JSESSIONID
     <link href="http://zhpooer.github.io/2014/04/15/java%E6%AD%A3%E5%88%99%E5%AD%A6%E4%B9%A0/"/>
     <id>http://zhpooer.github.io/2014/04/15/java正则学习/</id>
     <published>2014-04-15T00:11:20.000Z</published>
-    <updated>2014-04-15T12:21:27.000Z</updated>
+    <updated>2014-04-15T23:29:58.000Z</updated>
     <content type="html"><![CDATA[<h1 id="-">正则表达式</h1>
 <p>用于操作字符串的数据</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
@@ -4572,1029 +5222,6 @@ cl.getResourceAsStream(<span class="string">"cn/itcast/sc/cfg.properties"</span>
       <category term="传智播客" scheme="http://zhpooer.github.io/tags/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2/"/>
     
       <category term="servlet" scheme="http://zhpooer.github.io/tags/servlet/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[传智播客day08-web开发&tomcat]]></title>
-    <link href="http://zhpooer.github.io/2014/04/09/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day08-web%E5%BC%80%E5%8F%91&tomcat/"/>
-    <id>http://zhpooer.github.io/2014/04/09/传智播客day08-web开发&tomcat/</id>
-    <published>2014-04-09T00:55:30.000Z</published>
-    <updated>2014-04-12T05:56:09.000Z</updated>
-    <content type="html"><![CDATA[<h1 id="tips">Tips</h1>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-</pre></td><td class="code"><pre>ByteArrayOutputStream baos = <span class="keyword">new</span> ByteArrayOutputStream();<span class="comment">//带缓冲的输出流</span>
-GZIPOutputStream gout = <span class="keyword">new</span> GZIPOutputStream(baos);
-gout.<span class="keyword">write</span>(b);
-baos.toByteArray();
-</pre></td></tr></table></figure>
-
-<h1 id="web-">web开发</h1>
-<p>web资源: 静态web资源, 动态web资源</p>
-<p>静态资源:  </p>
-<ol>
-<li>*.html</li>
-<li>*.css</li>
-<li>*.js</li>
-<li>图片</li>
-</ol>
-<p>动态资源:  </p>
-<ol>
-<li>servlet</li>
-<li>*.jsp</li>
-</ol>
-<h2 id="-">常见服务器</h2>
-<p>WebLogic: Oracle公司产品, 支持JavaEE规范, 收费</p>
-<p>WebShpereAS (Application Server): IBM, 支持JavaEE规范</p>
-<p>JbossAS: redhat公司产品, 支持JavaEE规范</p>
-<p>Tomcat: 轻量级, <em>只实现了 Servlet/JSP 规范</em></p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-</pre></td><td class="code"><pre>ServerSocket <span class="built_in">server</span> = <span class="keyword">new</span> ServerSocket(<span class="number">8888</span>);
-Socket client = <span class="built_in">server</span>.accept();
-OutputStream out = client.getOutputStream();
-InputStream <span class="keyword">in</span> = <span class="keyword">new</span> FileInputStream(<span class="string">""</span>);
-
-<span class="built_in">int</span> <span class="built_in">len</span> = -<span class="number">1</span>;
-byte b[] = <span class="keyword">new</span> byte[<span class="number">1024</span>];
-<span class="keyword">while</span>((<span class="built_in">len</span> = <span class="keyword">in</span>.read(b)) != -<span class="number">1</span>) {
-    out.write(b, <span class="number">0</span>, <span class="built_in">len</span>);
-}
-out.close();
-<span class="built_in">server</span>.close();
-<span class="keyword">in</span>.close();
-</pre></td></tr></table></figure>
-
-<h2 id="javaee-">JavaEE 规范</h2>
-<p>是很多技术的总称, 有很多接口或抽象类组成, 如:<br>Servlet/JSP, JDBC, JNDI, JTA, JPA, JMS ...</p>
-<p>我们按照规范的要求来开发web应用, 然后部署到服务器上运行</p>
-<h1 id="tomcat-">Tomcat服务器</h1>
-<table>
-<thead>
-<tr>
-<th>Tomcat</th>
-<th>servlet</th>
-<th>j2ee版本</th>
-<th>jdk版本</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>8.0</td>
-<td>3.2</td>
-<td>*</td>
-<td>1.7</td>
-</tr>
-<tr>
-<td>7.0</td>
-<td>3.0</td>
-<td>6.0</td>
-<td>1.6</td>
-</tr>
-<tr>
-<td>6.0</td>
-<td>2.5</td>
-<td>5.0</td>
-<td>1.5</td>
-</tr>
-</tbody>
-</table>
-<p>启动成功后,访问 <a href="http://localhost:8080" target="_blank">http://localhost:8080</a></p>
-<p>修改端口: server.xml</p>
-<p>webapps目录存放开发的app应用</p>
-<h2 id="web-">web应用的目录结构</h2>
-<p><em>WEB-INF</em>: 放在web应用的根目录, 用户无法直接访问</p>
-<p>classes: 在WEB-INFO下, 放class字节码文件</p>
-<p>lib: 在WEB-INFO下, 放应用需要的jar包</p>
-<p>web.xml: 在WEB-INFO下, 应用的配置文件</p>
-<h3 id="-">存放类的地方</h3>
-<ol>
-<li>本应用的classes目录</li>
-<li>本应用的lib中的jar包</li>
-<li>Tomcat的lib目录</li>
-</ol>
-<p>按照123依次搜索</p>
-<h3 id="-">发布</h3>
-<ol>
-<li>直接把应用目录放到 webapps 下</li>
-<li>打包成war包, 放到webapps下 <code>jar -cvf</code></li>
-</ol>
-<h2 id="tomcat-">tomcat的组成结构</h2>
-<h3 id="server-xml">server.xml</h3>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">Server</span>&gt;</span>
-    <span class="tag">&lt;<span class="title">Service</span>&gt;</span>
-        <span class="tag">&lt;<span class="title">Connector</span>&gt;</span>
-        <span class="tag">&lt;/<span class="title">Connector</span>&gt;</span>
-        <span class="tag">&lt;<span class="title">Engine</span>&gt;</span>
-            <span class="tag">&lt;<span class="title">Host</span>&gt;</span>
-            <span class="tag">&lt;/<span class="title">Host</span>&gt;</span>
-        <span class="tag">&lt;/<span class="title">Engine</span>&gt;</span>
-    <span class="tag">&lt;/<span class="title">Service</span>&gt;</span>
-<span class="tag">&lt;/<span class="title">Server</span>&gt;</span>
-</pre></td></tr></table></figure>
-
-<p>用户的访问都是通过Tomcat连接器连接过来的,</p>
-<p>tomcat应用管理这很多主机(Host)</p>
-<p>每个主机管理着很多应用(Context)</p>
-<h3 id="-context-">配置虚拟目录(Context)</h3>
-<p>把任意目录配成Tomcat管理的应用</p>
-<p>方式一: 弊端，需要重启</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">Host</span>&gt;</span>
-    <span class="comment">&lt;!-- path: 用户访问的应用目录了, 一般以/ 开头 --&gt;</span>
-    <span class="comment">&lt;!-- doBase: 应用的真是存放目录 --&gt;</span>
-    <span class="comment">&lt;!-- localhost/shit/1.html --&gt;</span>
-    <span class="tag">&lt;<span class="title">Context</span> <span class="attribute">path</span>=<span class="value">"/shit"</span> <span class="attribute">docBase</span>=<span class="value">"E://"</span>&gt;</span>
-    <span class="tag">&lt;/<span class="title">Context</span>&gt;</span>
-<span class="tag">&lt;/<span class="title">Host</span>&gt;</span>
-</pre></td></tr></table></figure>
-
-<p>方式二: 推荐，优点不用重启</p>
-<ol>
-<li><p>新建SH.xml</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">Context</span> <span class="attribute">docBase</span>=<span class="value">"fullpath"</span>&gt;</span>
-<span class="tag">&lt;/<span class="title">Context</span>&gt;</span>
-</pre></td></tr></table></figure>
-</li>
-<li><p>放在 Tomcat_home/conf/localhost/SH.xml</p>
-</li>
-<li>访问 <a href="http://localhost/SH/*.html" target="_blank">http://localhost/SH/*.html</a></li>
-</ol>
-<p><strong> 实际开发中直接把文件拷贝到webapp目录 </strong></p>
-<h3 id="-">配置虚拟主机主机</h3>
-<p>虚拟主机：不同域名下的访问目录</p>
-<ul>
-<li>在Engine添加以下内容<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">Host</span> <span class="attribute">name</span>=<span class="value">"www.google.com"</span> <span class="attribute">appBase</span>=<span class="value">"dir"</span>
-      <span class="attribute">unpackWARS</span>=<span class="value">"true"</span> <span class="attribute">autoDeploy</span>=<span class="value">"true"</span>&gt;</span>
-    <span class="tag">&lt;<span class="title">Context</span>&gt;</span> <span class="tag">&lt;/<span class="title">Context</span>&gt;</span>
-<span class="tag">&lt;/<span class="title">Host</span>&gt;</span>
-</pre></td></tr></table></figure>
-
-</li>
-</ul>
-<h3 id="-">配置默认应用, 默认主页, 默认端口</h3>
-<p><code>http://localhost:8080/home/index.html</code> =&gt; <code>http://localhost</code></p>
-<ol>
-<li><p>修改端口</p>
-<p> server.xml 8080 -&gt; 80</p>
-</li>
-<li><p>修改默认应用</p>
-<ol>
-<li><p>修改应用名称为ROOT</p>
-</li>
-<li><p>touch tomcat/conf/Catalina/localhost/ROOT.xml</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-</pre></td><td class="code"><pre><span class="pi">&lt;?xml version="1.0"?&gt;</span>
-<span class="tag">&lt;<span class="title">Context</span> <span class="attribute">docBase</span>=<span class="value">"Myapp"</span>/&gt;</span>
-</pre></td></tr></table></figure>
-</li>
-</ol>
-</li>
-<li><p>修改应用默认主页
-修改应用下的web.xml</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-</pre></td><td class="code"><pre>&lt;welcome-<span class="type">file</span>-<span class="type">list</span>&gt;
-    &lt;welcome-<span class="type">file</span>&gt;<span class="number">1.</span>html&lt;/welcome-<span class="type">file</span>&gt;
-&lt;/welcome-<span class="type">file</span>-<span class="type">list</span>&gt;
-</pre></td></tr></table></figure>
-
-</li>
-</ol>
-<h1 id="http-">http协议</h1>
-<ol>
-<li>作用: 描述客户端和服务端的数据的传递的协议</li>
-<li>全称: 超文本传输协议.</li>
-<li><p>版本: 1.0, 1.1</p>
-<p> 1.0: 连接 请求 响应 关闭, 无状态</p>
-<p> 1.1: 连接 (请求 响应)*n 关闭</p>
-</li>
-</ol>
-<h2 id="html-">html协议的组成</h2>
-<h3 id="-">请求部分</h3>
-<ul>
-<li><p>请求消息行,位于请求部分第一行, 必须小于1KB, 如 <code>GET /  HTTP/1.1</code></p>
-<p>  默认的请求方式是GET,常用的为GET POST HEAD OPTIONS</p>
-<p>  URL: 协议+ip:端口+资源地址</p>
-<p>  URI: 资源地址</p>
-</li>
-<li><p>请求消息头, 从第二行开始至第一个空行结束</p>
-<p>  作用: 向服务器端传递一些附加信息</p>
-<p>  形式: Header-Name: headervalue1, headerValue2</p>
-<p>  Accept: 告知服务器, 浏览器能接受的MIME类型, 在<code>conf/web.xml</code>里面查看</p>
-<p>  Accept-Charset: 告知服务器, 客户端能接受的字符集</p>
-<p>  Accept-Encoding: 告知服务器, 客户端能接受的压缩编码</p>
-<p>  Accept-Language: 告知服务器, 客户端能支持的语言</p>
-<p>  Referer: 告知服务器, 当前页面是由哪一个页面转过来的.
-  若用户是直接访问,就没有.</p>
-<p>  Content-Type: 告知服务器,客户端提交的正文的MIME类型.默认是
-  application/x-formdata-urlencode. 可以通过表单的form的enctype属性指定.
-  可选值multipart/form-data(文件上传)</p>
-<p>  If-Modified-Since: 告知服务器, 本地所缓存的资源的最后的修改时间</p>
-<p>  User-Agent: 浏览器类型</p>
-<p>  Content-Length: 请求正文的长度</p>
-<p>  Connection: 需要持久连接</p>
-<p>  Cookie: 向服务器发送cookie数据</p>
-<p>  Date: 发送请求的时间</p>
-</li>
-<li><p>请求体, 从第一个空行到结束</p>
-</li>
-</ul>
-<h3 id="-">响应部分</h3>
-<ul>
-<li><p>响应码, 如 <code>HTTP/1.1 200 OK</code></p>
-<p>  状态码,说明了本次请求的结果状态</p>
-</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>状态码</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>2xx</td>
-<td>成功接受请求</td>
-</tr>
-<tr>
-<td>200</td>
-<td>成功</td>
-</tr>
-<tr>
-<td>304</td>
-<td>未修改</td>
-</tr>
-<tr>
-<td>302</td>
-<td>307: 临时重定向</td>
-</tr>
-<tr>
-<td>404</td>
-<td>访问的资源不存在</td>
-</tr>
-<tr>
-<td>500</td>
-<td>服务器内部错误</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li><p>响应消息头,从第二行开始至第一个空行结束</p>
-<p>  Location: 返回一个地址, 和302一起使用,实现请求重定向</p>
-<p>  Server: 显示服务器类型</p>
-<p>  Content-Encoding: 告知客户端,服务端的压缩格式</p>
-<p>  Content-Length: 告知客户端,响应正文的内容长度</p>
-<p>  Content-Type: 告知客户端,响应正文的MIME类型
-  <code>Content-Type: text/html;charset=utf-8</code></p>
-<p>  Last-Modified: 文件的最后修改时间, 节省带宽</p>
-<p>  Refresh: 浏览器定时刷新时间</p>
-<p>  Content-Disposition: 告知客户端, 以下载方式打开
-  <code>Content-Disposition:attachment:filename=1.jpg</code></p>
-<p>  Expire: -1<br>  Cache-Control:no-cache  (1.1)<br>  Progma:no-cache (1.0)  </p>
-</li>
-<li><p>响应正文, 从第一个空行到结束  </p>
-</li>
-</ul>
-]]></content>
-    
-    
-      <category term="传智播客" scheme="http://zhpooer.github.io/tags/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2/"/>
-    
-      <category term="java" scheme="http://zhpooer.github.io/tags/java/"/>
-    
-      <category term="web开发" scheme="http://zhpooer.github.io/tags/web%E5%BC%80%E5%8F%91/"/>
-    
-      <category term="tomcat" scheme="http://zhpooer.github.io/tags/tomcat/"/>
-    
-      <category term="http协议" scheme="http://zhpooer.github.io/tags/http%E5%8D%8F%E8%AE%AE/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[php基本语法]]></title>
-    <link href="http://zhpooer.github.io/2014/04/07/php%E8%AF%AD%E6%B3%95/"/>
-    <id>http://zhpooer.github.io/2014/04/07/php语法/</id>
-    <published>2014-04-07T11:51:06.000Z</published>
-    <updated>2014-04-10T05:51:37.000Z</updated>
-    <content type="html"><![CDATA[<h1 id="php-">php语法</h1>
-<h2 id="php-">php标签</h2>
-<p>php是嵌入式语言，意味着代码的混编，为了区别，所以有四种标签</p>
-<ul>
-<li><p>两种标准标签</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-</pre></td><td class="code"><pre><span class="php"><span class="preprocessor">&lt;?php</span>  `content` <span class="preprocessor">?&gt;</span></span>
-
-<span class="tag">&lt;<span class="title">script</span> <span class="attribute">language</span>=<span class="value">“php"</span>&gt;</span><span class="javascript">
-echo <span class="string">'php'</span>;
-</span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
-</pre></td></tr></table></figure>
-</li>
-<li><p>兼容标记<br>短标记,修改php配置,<code>open_short_tags=on</code></p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-</pre></td><td class="code"><pre><span class="php"><span class="preprocessor">&lt;?</span> <span class="keyword">echo</span> <span class="string">'h'</span>; <span class="preprocessor">?&gt;</span></span>
-</pre></td></tr></table></figure>
-</li>
-<li><p>asp标签风格, 修改配置 <code>aps_tags=on</code></p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-</pre></td><td class="code"><pre>&lt;% <span class="built_in">echo</span> <span class="string">'h'</span>;  %&gt;
-</pre></td></tr></table></figure>
-
-</li>
-</ul>
-<h2 id="html-php-">html模式和php模式</h2>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">html</span>&gt;</span><span class="php"><span class="preprocessor">&lt;?</span> <span class="preprocessor">?&gt;</span></span><span class="tag">&lt;/<span class="title">html</span>&gt;</span>
-</pre></td></tr></table></figure>
-
-<h2 id="-">语句结束符</h2>
-<p>语句结束符是<code>;</code></p>
-<blockquote>
-<p><code>echo &quot;Yes&quot;;</code></p>
-</blockquote>
-<h2 id="-">注释</h2>
-<ul>
-<li>单行: <code>//</code> 或 <code>#</code></li>
-<li>多行: <code>/**  **/</code></li>
-</ul>
-<h2 id="-zend">解释器zend</h2>
-<blockquote>
-<p>php是编译型语言和解释型语言</p>
-</blockquote>
-<p>流程: 读入源代码 -&gt; 词法分析 -&gt; 语法分析 -&gt; 生成opcode -&gt; 由zendEngine执行</p>
-<h2 id="-">变量</h2>
-<p><code>$</code> 不是变量的一部分,只是语法,使用变量用<code>$</code>来引用</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-</pre></td><td class="code"><pre><span class="php"><span class="preprocessor">&lt;?php</span>
-<span class="variable">$name</span> = <span class="string">'itcast'</span>;
-<span class="keyword">echo</span> <span class="variable">$name</span>;
-functioni name(){
-}
-<span class="preprocessor">?&gt;</span></span>
-</pre></td></tr></table></figure>
-
-<h3 id="-">变量名</h3>
-<p>定义语法, 由字母 下划线 数字 组成</p>
-<blockquote>
-<p>$student_name = &#39;&#39;</p>
-</blockquote>
-<h3 id="-">变量的操作</h3>
-<ul>
-<li>增加 <code>$name = &#39;itcast&#39;;</code></li>
-<li>删除 <code>unset($name)</code></li>
-</ul>
-<h3 id="-">变量的赋值</h3>
-<h4 id="-">值传递</h4>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-</pre></td><td class="code"><pre><span class="variable">$var_name</span> = <span class="string">"value"</span>;
-<span class="variable">$new_var_name</span> = <span class="variable">$var_name</span>;
-<span class="variable">$var_name</span> = <span class="string">"change"</span>;
-<span class="keyword">echo</span> <span class="variable">$new_var_name</span>;  <span class="comment">// value</span>
-</pre></td></tr></table></figure>
-
-<h4 id="-">引用传递</h4>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-</pre></td><td class="code"><pre><span class="variable">$var_name</span> = <span class="string">"value"</span>;
-<span class="variable">$new_var_name</span> = &<span class="variable">$var_name</span>;
-<span class="variable">$new_var_name</span> = <span class="string">"change"</span>
-<span class="keyword">echo</span> <span class="variable">$var_name</span>; <span class="comment">// change</span>
-</pre></td></tr></table></figure>
-
-<h3 id="-">可变变量</h3>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-</pre></td><td class="code"><pre><span class="variable">$name</span> = <span class="string">"hello"</span>;
-<span class="variable">$hello</span> = <span class="string">"itcast-php"</span>;
-<span class="keyword">echo</span> <span class="variable">$$name</span> <span class="comment">//itcast-php</span>
-
-<span class="function"><span class="keyword">function</span> <span class="title">f1</span><span class="params">()</span> {</span>}
-<span class="variable">$f_name</span> = <span class="string">'f1'</span>;
-<span class="variable">$f_name</span>();
-</pre></td></tr></table></figure>
-
-<h2 id="-">常量</h2>
-<figure class="highlight php:"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-</pre></td><td class="code"><pre><span class="class"><span class="keyword">define</span></span>(<span class="string">'pai'</span>, <span class="number">3.1415926</span>);
-echo pai;
-
-<span class="class"><span class="keyword">define</span></span>(<span class="string">"-_-"</span>, <span class="string">"haha"</span>);
-<span class="comment">// echo -_-, 非法</span>
-echo constant(<span class="string">"-_-"</span>);
-</pre></td></tr></table></figure>
-
-<blockquote>
-<p>Define(&#39;变量名&#39;,&#39;值&#39;,&#39;是否区分大小写&#39;) //0 区分, 1 不区分</p>
-</blockquote>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-</pre></td><td class="code"><pre><span class="keyword">defined</span>(<span class="string">"pai"</span>); <span class="regexp">//</span>常量是否被定义
-</pre></td></tr></table></figure>
-
-<h3 id="-">常量相关函数</h3>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-</pre></td><td class="code"><pre>get_defined_constants(); <span class="comment">//获取所有定义的常量</span>
-<span class="comment">//预定义常量</span>
-<span class="keyword">echo</span> PHP_OS;
-<span class="keyword">echo</span> PHP_VERSION;
-<span class="comment">//魔术常量</span>
-<span class="keyword">echo</span> <span class="keyword">__FILE__</span>;  <span class="comment">//文件在的路径</span>
-<span class="keyword">echo</span> <span class="keyword">__LINE__</span>;  <span class="comment">//当前行数</span>
-<span class="keyword">echo</span> <span class="keyword">__DIR__</span>;  <span class="comment">//目录绝对地址</span>
-</pre></td></tr></table></figure>
-
-<h3 id="const-">const 定义</h3>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-</pre></td><td class="code"><pre><span class="keyword">const</span> SOME = <span class="string">"some"</span>;
-<span class="keyword">echo</span> SOME;
-</pre></td></tr></table></figure>
-
-<h3 id="-">数据类型</h3>
-<p>php是弱类型语言,指变量没有类型之分,一个变量可以存储任意格式的数据,而数据是有类型之分的.</p>
-<blockquote>
-<p><code>var_dump()</code> 输出数据的值和类型</p>
-</blockquote>
-<ol>
-<li><p>整型, int, integer<br>存储需求: 4byte, 32bit<br><code>PHP_INT_MAX</code> int最大值<br>如果再增加,会变为其他数据类型,<code>PHP_INT_MAX+1; //float()</code><br><code>echo time();</code> 获取时间戳
-进制间转换, 16-hex, 10-Dec, 8-oct, 2-bin,
-<code>hexdec(); deccbin(); decoct();</code></p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-</pre></td><td class="code"><pre><span class="variable">$int1</span> = <span class="number">10</span>;
-<span class="variable">$int2</span> = <span class="number">010</span>; <span class="regexp">//</span>进制
-<span class="variable">$int3</span> = <span class="number">0x16</span>; <span class="regexp">//</span><span class="number">16</span>进制
-</pre></td></tr></table></figure>
-</li>
-<li><p>浮点<br>php能存储精度为14位的有效数字, 理论最大值是1.8E308<br>不能相信浮点数的比较</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-</pre></td><td class="code"><pre><span class="php"><span class="preprocessor">&lt;?php</span>
-<span class="variable">$f1</span> = <span class="number">1.23</span>*<span class="number">10</span>^<span class="number">10</span>;
-<span class="variable">$f2</span> = <span class="number">1.23E10</span>;
-<span class="variable">$f3</span> = <span class="number">1234E-10</span>;
-<span class="preprocessor">?&gt;</span></span>
-</pre></td></tr></table></figure>
-</li>
-<li><p>布尔  </p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-</pre></td><td class="code"><pre><span class="char">$b</span>1 = <span class="keyword">true</span><span class="localvars">|flase|</span><span class="class">TRUR</span>|<span class="class">FALSE</span>;
-</pre></td></tr></table></figure>
-</li>
-<li><p>字符串<br>定义方法: 单引号,双引号,heredoc,nowdoc(定界符)<br>单引号: 所有内容都当字符看待<br>双引号: 可以解析一切特殊的<br><code>chr(65)</code> 转成字符<br>heredoc: 定义复杂字符<br>nowdoc: 不可以解析变量</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-</pre></td><td class="code"><pre><span class="php"><span class="preprocessor">&lt;?php</span>
-<span class="variable">$s1</span> = <span class="string">"itcast"</span>;
-var_dump(<span class="variable">$s1</span>); <span class="comment">// String(6) "itcast"</span>
-
-<span class="variable">$s2</span> = <span class="string">"hello, $s1"</span>;
-<span class="variable">$s2</span> = <span class="string">"hello, ${s1}"</span>;
-<span class="variable">$s3</span> = <span class="string">"\122"</span>; <span class="comment">// ascii</span>
-
-<span class="comment">/* heredoc */</span>
-<span class="variable">$s4</span> = <span class="string">&lt;&lt;&lt;END
-$变量名
-content0
-END;</span>
-
-<span class="comment">/* nowdoc */</span>
-<span class="variable">$s4</span> = <span class="string">&lt;&lt;&lt;'END'
-content
-content0
-END;</span>
-<span class="preprocessor">?&gt;</span></span>
-</pre></td></tr></table></figure>
-</li>
-<li><p>数组<br>数据的组合, 数据的集合<br>一个元素也称为一个键值对, 键只能是整形和字符串</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-</pre></td><td class="code"><pre><span class="php"><span class="preprocessor">&lt;?php</span>
-<span class="variable">$a1</span> = <span class="keyword">array</span>(<span class="string">'key'</span> =&gt; <span class="string">'value'</span>, <span class="string">'key0'</span> =&gt; <span class="string">'value0'</span>);
-<span class="keyword">echo</span> <span class="variable">$a1</span>[<span class="string">"key"</span>];
-
-<span class="variable">$a2</span>[<span class="string">'new'</span>] = <span class="string">'new value'</span>;
-
-<span class="variable">$a3</span> = <span class="keyword">array</span>(<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>);
-<span class="keyword">echo</span> <span class="variable">$a3</span>[<span class="number">0</span>]; <span class="comment">// 'a'</span>
-<span class="preprocessor">?&gt;</span></span>
-</pre></td></tr></table></figure>
-</li>
-<li><p>对象<br>一个对象可以保存多个值, 每个数据称之为属性.</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-</pre></td><td class="code"><pre><span class="variable">$o1</span> = <span class="keyword">new</span> Stdclass();
-
-<span class="variable">$o1</span>-&gt;name = <span class="string">"name"</span>;
-<span class="variable">$o1</span>-&gt;age = <span class="number">22</span>;
-<span class="variable">$o2</span>-&gt;gender=<span class="string">'male'</span>;
-
-<span class="class"><span class="keyword">class</span> <span class="title">Stu</span>{</span>
-    <span class="keyword">public</span> <span class="variable">$name</span>;
-    <span class="keyword">public</span> <span class="variable">$age</span>;
-    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">addAge</span><span class="params">()</span>{</span>
-        <span class="variable">$this</span>-&gt;age++;
-    }
-}
-<span class="variable">$o2</span> = <span class="keyword">new</span> Stu;
-<span class="variable">$o2</span>-&gt;addAge();
-</pre></td></tr></table></figure>
-</li>
-<li><p>NULL<br>表示什么数据都没有<br>常见的输出Null, 只有一个值, 不区分大小写.</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-</pre></td><td class="code"><pre><span class="keyword">echo</span> <span class="variable">$not_defined</span>;
-
-<span class="function"><span class="keyword">function</span> <span class="title">f1</span><span class="params">()</span>{</span>};
-<span class="keyword">echo</span> f1();
-</pre></td></tr></table></figure>
-</li>
-<li><p>资源<br>外部资源, 不能手动创建, 只能通过php内置函数得到.</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-</pre></td><td class="code"><pre>$link = mysql_connect(<span class="string">'127.0.0.1'</span><span class="keyword">...</span>);
-var_dump($link);    // resource
-</pre></td></tr></table></figure>
-
-</li>
-</ol>
-<h2 id="-">类型转换</h2>
-<ul>
-<li><p>期望类型和得到类型不一致</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-</pre></td><td class="code"><pre><span class="variable">$cond</span> = <span class="number">1243</span>;
-<span class="keyword">if</span>(<span class="variable">$cond</span>) {  <span class="regexp">//</span>转换为<span class="constant">True</span>
-}
-</pre></td></tr></table></figure>
-</li>
-<li><p>参与运算的不一致</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-</pre></td><td class="code"><pre><span class="variable">$s1</span> = <span class="string">"12abc"</span>;
-<span class="variable">$i1</span> = <span class="number">23</span>;
-<span class="keyword">echo</span> <span class="variable">$s1</span> + <span class="variable">$i1</span>; <span class="comment">// 12abc23</span>
-
-<span class="variable">$cond1</span> = <span class="string">"abc"</span>; <span class="comment">// =&gt; 0</span>
-<span class="variable">$cond2</span> = <span class="number">0</span>; 
-<span class="keyword">echo</span> <span class="variable">$cond1</span> == <span class="variable">$cond2</span>; <span class="comment">//true</span>
-</pre></td></tr></table></figure>
-
-</li>
-</ul>
-<p>转换的方式:</p>
-<ol>
-<li>php自己完成, 称之为自动类型转换<br>按照默认的行为完成</li>
-<li><p>用户强制完成, 称之为强制类型转换  </p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-</pre></td><td class="code"><pre>(<span class="keyword">bool</span>)<span class="string">'abc'</span>;
-</pre></td></tr></table></figure>
-</li>
-<li><p>不同类型转换</p>
-</li>
-<li>布尔类型转换<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-</pre></td><td class="code"><pre>&lt;?php
-<span class="comment">// 只有空数组,0,null 转为false</span>
-(<span class="keyword">bool</span>) <span class="string">'abce'</span>; <span class="comment">//true</span>
-(<span class="keyword">bool</span>) <span class="string">'0'</span>; <span class="comment">//false</span>
-(<span class="keyword">bool</span>) <span class="string">'0.0'</span>; <span class="comment">//true</span>
-(<span class="keyword">bool</span>) <span class="string">'00'</span>; <span class="comment">//true</span>
-(<span class="keyword">bool</span>) <span class="string">'null'</span>; <span class="comment">//true</span>
-(<span class="keyword">bool</span>) array(); <span class="comment">//false</span>
-(<span class="keyword">bool</span>) <span class="number">0.0</span> ; <span class="comment">//false</span>
-(<span class="keyword">bool</span>) array(<span class="keyword">false</span>) ; <span class="comment">//true</span>
-(<span class="keyword">bool</span>) array(<span class="keyword">null</span>) ; <span class="comment">//false</span>
-?&gt;
-</pre></td></tr></table></figure>
-
-</li>
-</ol>
-<h3 id="-">类型和变量中常用的函数</h3>
-<p><code>var_dump()</code> <code>unset()</code> <code>isset()</code> <code>empty()</code></p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-</pre></td><td class="code"><pre><span class="variable">$a</span> = array(<span class="string">'a'</span> =&gt; <span class="number">10</span>, <span class="number">20</span>);
-var_dump(<span class="variable">$a</span>[<span class="number">0</span>]); <span class="regexp">//</span> <span class="number">20</span>
-unset(<span class="variable">$a</span>[<span class="number">0</span>]);
-var_dump(<span class="variable">$a</span>);
-
-<span class="variable">$c</span> = <span class="constant">NULL</span>;
-isset(<span class="variable">$c</span>); <span class="regexp">//</span> <span class="keyword">false</span>
-
-empty(<span class="number">0</span>); <span class="regexp">//</span> null array() <span class="number">0</span>.<span class="number">0</span> <span class="string">''</span> <span class="string">'0'</span> ==&gt; <span class="keyword">true</span> (bool)反义词
-
-is_array();
-is_int(<span class="string">'10'</span>); <span class="regexp">//</span> <span class="keyword">true</span>
-is_numeric(<span class="string">'10'</span>); <span class="regexp">//</span> <span class="keyword">true</span>
-</pre></td></tr></table></figure>
-
-]]></content>
-    
-    
-      <category term="php" scheme="http://zhpooer.github.io/tags/php/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[传智播客day07-junit&jdk5新特性]]></title>
-    <link href="http://zhpooer.github.io/2014/04/07/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day07-junit&jdk5%E6%96%B0%E7%89%B9%E6%80%A7/"/>
-    <id>http://zhpooer.github.io/2014/04/07/传智播客day07-junit&jdk5新特性/</id>
-    <published>2014-04-07T01:01:39.000Z</published>
-    <updated>2014-04-12T05:50:14.000Z</updated>
-    <content type="html"><![CDATA[<h1 id="tips">Tips</h1>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-</pre></td><td class="code"><pre><span class="comment">// propoties 的快捷方法</span>
-ResourceBundle res = ResourceBundle.getBundle(<span class="string">"db"</span>); <span class="comment">//文件名为 db.prop</span>
-res.getString(<span class="string">"user"</span>)
-</pre></td></tr></table></figure>
-
-<p>.properties 不支持中文。使用jdk工具字符串转码工具</p>
-<blockquote>
-<p>native2ascii</p>
-</blockquote>
-<h1 id="junit-">junit 使用</h1>
-<ol>
-<li>线程独立</li>
-<li>测试方法<br>1.public<br>2.没有返回<br>3.方法不能有参数  </li>
-<li>独立测试体，调用指定对象</li>
-</ol>
-<blockquote>
-<p>类一般为Test结尾，如果类名没有以Test结尾，类继承TestCase类</p>
-</blockquote>
-<h1 id="-">泛型</h1>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-</pre></td><td class="code"><pre>val entrys = maps<span class="preprocessor">.entrySet</span>()<span class="comment">;</span>
-entrys<span class="preprocessor">.iterator</span>()<span class="comment">;</span>
-</pre></td></tr></table></figure>
-
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-</pre></td><td class="code"><pre><span class="comment">// T 不能是基本数据类型</span>
-<span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; T <span class="title">print</span>(T [] arr){
-    
-}
-</pre></td></tr></table></figure>
-
-<h1 id="-">可变参数</h1>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">getSum</span>(<span class="keyword">int</span>... <span class="keyword">params</span>) {
-
-}
-</pre></td></tr></table></figure>
-
-<h1 id="for-">for循环</h1>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-</pre></td><td class="code"><pre><span class="built_in">List</span><span class="subst">&lt;</span><span class="built_in">String</span><span class="subst">&gt;</span> <span class="built_in">list</span> <span class="subst">=</span> Arrays<span class="built_in">.</span>asList(arr);
-for (<span class="built_in">String</span> str : <span class="built_in">list</span>) println(str); <span class="comment">// 实现的对象要实现 iterable 接口</span>
-</pre></td></tr></table></figure>
-
-<h1 id="-">枚举</h1>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-</pre></td><td class="code"><pre><span class="keyword">enum</span> <span class="title">Role</span> {
-    boss, manager, emp; <span class="comment">//私有构造类</span>
-}
-Role.values() <span class="comment">//返回对象数组</span>
-</pre></td></tr></table></figure>
-
-<h2 id="-">枚举的扩展</h2>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-</pre></td><td class="code"><pre><span class="keyword">enum</span> Week {
-   Mon(<span class="string">"星期一"</span>){<span class="annotation">@Override</span> <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getName</span>(){}}, Tue(<span class="string">"星期二"</span>);
-   <span class="keyword">private</span> String week;
-
-   <span class="keyword">private</span> <span class="title">Week</span>(String week) {
-       <span class="keyword">this</span>.week = week;
-   }
-   <span class="comment">// getWeek(); setWeek();</span>
-   
-   <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">getName</span>();
-}
-
-Week.Mon.name();
-Week.Mon.ordinal(); <span class="comment">//脚标，0</span>
-</pre></td></tr></table></figure>
-
-<h1 id="-">反射</h1>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-</pre></td><td class="code"><pre>Class clazz = Class<span class="preprocessor">.forName</span>(<span class="string">""</span>)<span class="comment">;</span>
-Class clazz = ref<span class="preprocessor">.getClass</span>()<span class="comment">;</span>
-
-// 字段
-Object instance = clazz<span class="preprocessor">.newInstance</span>()<span class="comment">;</span>
-Field field = clazz<span class="preprocessor">.getDeclaredField</span>(<span class="string">"field"</span>)<span class="comment">; // or getField() 获取public的字段</span>
-field<span class="preprocessor">.setAccessible</span>(true)<span class="comment">; // private 变为 public</span>
-field<span class="preprocessor">.set</span>(instance, <span class="string">"list"</span>)<span class="comment">;</span>
-
-// 获取方法
-Method m = clazz<span class="preprocessor">.getDeclaredMethod</span>(<span class="string">"print"</span>, String<span class="preprocessor">.class</span>)<span class="comment">; //方法的名字和方法的参数</span>
-// <span class="keyword">or</span>  clazz<span class="preprocessor">.getDeclaredMethod</span>(<span class="string">"print"</span>, null)<span class="comment">;</span>
-m<span class="preprocessor">.setAccessible</span>(true)<span class="comment">; // private to public</span>
-m<span class="preprocessor">.invoke</span>(instance, <span class="string">"parameters"</span>)<span class="comment">;</span>
-
-Constructor con = clazz<span class="preprocessor">.getConstructor</span>(String<span class="preprocessor">.class</span>, String<span class="preprocessor">.class</span>)<span class="comment">;</span>
-con<span class="preprocessor">.newInstance</span>(<span class="string">""</span>)<span class="comment">;</span>
-</pre></td></tr></table></figure>
-
-<p>用scala实现的调用的java反射</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
-51
-52
-53
-54
-55
-</pre></td><td class="code"><pre><span class="keyword">package</span> io.zhpooer.test
-
-<span class="keyword">import</span> org.scalatest.FlatSpec
-<span class="keyword">import</span> org.scalatest.matchers.ShouldMatchers
-<span class="keyword">import</span> scala.beans.BeanProperty
-
-<span class="class"><span class="keyword">class</span> <span class="title">Person</span> {</span>
-  <span class="annotation">@BeanProperty</span> <span class="keyword">var</span> name: String = _
-  <span class="annotation">@BeanProperty</span> <span class="keyword">var</span> age: Int = _
-  <span class="keyword">override</span> <span class="keyword">def</span> toString = name + <span class="string">", "</span> + age 
-}
-
-<span class="class"><span class="keyword">class</span> <span class="title">ReflectSpec</span> <span class="keyword">extends</span> <span class="title">FlatSpec</span> <span class="keyword">with</span> <span class="title">ShouldMatchers</span> {</span>
-  it should <span class="string">"通过Java反射机制得到类的包名和类名"</span> in {
-    <span class="keyword">val</span> p = <span class="keyword">new</span> Person;
-    println(<span class="string">"包名字: "</span> + p.getClass().getPackage().getName())
-    println(<span class="string">"类名: "</span> + p.getClass().getSimpleName())
-    println(<span class="string">"完整类名: "</span> + p.getClass().getName())
-  }
-
-  it should <span class="string">"通过Java反射机制，用 Class 创建类对"</span> in {
-    <span class="keyword">val</span> clazz = Class.forName(<span class="string">"io.zhpooer.test.Person"</span>)
-
-    clazz.newInstance() <span class="keyword">match</span> {
-      <span class="keyword">case</span> p: Person =&gt;
-        p.setAge(<span class="number">12</span>)
-        p.setName(<span class="string">"lest"</span>)
-        println(p)
-    }
-  }
-  
-  it should <span class="string">"通过Java反射机制，用 Field 设置属性"</span> in {
-    <span class="keyword">val</span> clazz = Class.forName(<span class="string">"io.zhpooer.test.Person"</span>)
-    <span class="keyword">val</span> p = <span class="keyword">new</span> Person;
-    p.setAge(<span class="number">12</span>);
-    p.setName(<span class="string">"test"</span>)
-    
-    <span class="keyword">val</span> field = clazz.getDeclaredField(<span class="string">"name"</span>) 
-    field.setAccessible(<span class="keyword">true</span>)
-    field.set(p, <span class="string">"change"</span>)
-    println(field.get(p) +  <span class="string">" "</span> + p)
-  }
-  
-  it should <span class="string">"通过Java反射机制得到类的一些成员信息 方法等"</span> in {
-    <span class="keyword">val</span> clazz = Class.forName(<span class="string">"io.zhpooer.test.Person"</span>)
-
-    <span class="keyword">for</span> ( field &lt;- clazz.getDeclaredFields()) {
-      println(field.getModifiers() + <span class="string">" "</span> + field.getName())
-    }
-    
-    <span class="keyword">for</span> ( method &lt;- clazz.getDeclaredMethods()) {
-      println(method.getModifiers() + <span class="string">" "</span> + method.getReturnType() + <span class="string">" "</span> + method.getName())
-    }
-  }
-}
-</pre></td></tr></table></figure>
-
-]]></content>
-    
-    
-      <category term="传智播客" scheme="http://zhpooer.github.io/tags/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2/"/>
-    
-      <category term="java" scheme="http://zhpooer.github.io/tags/java/"/>
     
   </entry>
   

@@ -65,6 +65,84 @@
 
   <section class="post" itemscope itemprop="blogPost">
   
+    <a href="/2014/04/16/linux-find手记/" title="Linux-find手记" itemprop="url">
+  
+    <h1 itemprop="name">Linux-find手记</h1>
+    
+     
+           <p itemprop="description" >常用方法
+1
+2
+3
+4
+5
+6
+7
+8
+9
+find ./ -name &quot;*.log&quot; -type f  # 找到文件后缀为.log的文件, 注意:一定要有引号
+find . -perm 755 -print       # 找到权限为755的文件
+find ./ -user </p>
+        
+    
+    <time datetime="2014-04-16T13:40:07.000Z" itemprop="datePublished">4月 16 2014</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2014/04/16/传智播客day13-el表达式/" title="传智播客day13-EL表达式" itemprop="url">
+  
+    <h1 itemprop="name">传智播客day13-EL表达式</h1>
+    
+     
+           <p itemprop="description" >EL表达式
+
+作用, 向界面输出内容, 只适合显示数据
+基本语法形式: ${EL表达式}
+不支持字符串连接操作
+永远没有空指针
+
+1
+2
+3
+&lt;jsp:JavaBean id=&quot;p&quot; class=&quot;cn.itcast.Person&quot;&gt;&lt;/jsp:JavaBean</p>
+        
+    
+    <time datetime="2014-04-16T03:42:31.000Z" itemprop="datePublished">4月 16 2014</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2014/04/16/传智播客day13-jsp&JavaBean/" title="传智播客day13-JSP&amp;JavaBean" itemprop="url">
+  
+    <h1 itemprop="name">传智播客day13-JSP&amp;JavaBean</h1>
+    
+     
+           <p itemprop="description" >JSP中的九大隐式对象
+就是JSP对应的Servlet那些变量
+1
+2
+3
+4
+5
+6
+7
+8
+9
+// JSP中可以取到的变量
+PageContext pageContext = null;
+HttpSession session = null;
+ServletContext </p>
+        
+    
+    <time datetime="2014-04-16T01:18:59.000Z" itemprop="datePublished">4月 16 2014</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
     <a href="/2014/04/15/传智播客day12-jsp/" title="传智播客day12-jsp" itemprop="url">
   
     <h1 itemprop="name">传智播客day12-jsp</h1>
@@ -374,111 +452,9 @@ Jdk1.5 出现安全机制.
   </a>
 </section>
 
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2014/04/11/java基本数据类型学习/" title="java基本数据类型学习" itemprop="url">
-  
-    <h1 itemprop="name">java基本数据类型学习</h1>
-    
-     
-           <p itemprop="description" >基本数据类型对象包装类
-为了方便操作基本数据类型, 将其封装成了对象,
-在对象中定义了属性和行为丰富了数据的操作.
-用于描述该对象的类就称为基本数据包装类型.
-
-
-
-数据类型
-包装类
-
-
-
-
-byte
-Byte
-
-
-short
-Short
-
-
-int
-Integer
-
-
-long</p>
-        
-    
-    <time datetime="2014-04-11T08:09:58.000Z" itemprop="datePublished">4月 11 2014</time>
-  </a>
-</section>
-
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2014/04/11/string类学习/" title="string类学习" itemprop="url">
-  
-    <h1 itemprop="name">string类学习</h1>
-    
-     
-           <p itemprop="description" >字符串初识
-
-字符串是一个特殊的对象
-
-字符串一旦初始化, 就不可以被改变
- 字符串初始化在字符串常量池
-1
-2
-3
-4
-String s = &quot;abc&quot;; // 在常量池当中
-String s1 = new String(&quot;abc&quot;); // 在堆内存中生成
-println(s</p>
-        
-    
-    <time datetime="2014-04-11T06:34:24.000Z" itemprop="datePublished">4月 11 2014</time>
-  </a>
-</section>
-
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2014/04/10/java线程学习/" title="java线程学习" itemprop="url">
-  
-    <h1 itemprop="name">java线程学习</h1>
-    
-     
-           <p itemprop="description" >运行java程序两个线程
-
-执行main函数的线程
- 该线程的任务代码都定义在main函数中
-
-负责垃圾回收的线程, 调用 System.gc()
-
-
-多线程的创建方法
-
-继承Thread
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-class MyThread ext</p>
-        
-    
-    <time datetime="2014-04-10T12:14:27.000Z" itemprop="datePublished">4月 10 2014</time>
-  </a>
-</section>
-
 
   <nav id="page-nav" class="clearfix">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" href="/page/2/">Next &raquo;</a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" href="/page/2/">Next &raquo;</a>
   </nav>
 
 </div>
@@ -497,9 +473,15 @@ class MyThread ext</p>
 		
 			<li><a href="/tags/DOM/" title="DOM">DOM<sup>2</sup></a></li>
 		
+			<li><a href="/tags/EL表达式/" title="EL表达式">EL表达式<sup>1</sup></a></li>
+		
 			<li><a href="/tags/HttpSession/" title="HttpSession">HttpSession<sup>1</sup></a></li>
 		
 			<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JSP/" title="JSP">JSP<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaBean/" title="JavaBean">JavaBean<sup>1</sup></a></li>
 		
 			<li><a href="/tags/SAX/" title="SAX">SAX<sup>1</sup></a></li>
 		
@@ -521,19 +503,13 @@ class MyThread ext</p>
 		
 			<li><a href="/tags/emacs/" title="emacs">emacs<sup>1</sup></a></li>
 		
+			<li><a href="/tags/find/" title="find">find<sup>1</sup></a></li>
+		
 			<li><a href="/tags/html/" title="html">html<sup>2</sup></a></li>
 		
 			<li><a href="/tags/http协议/" title="http协议">http协议<sup>1</sup></a></li>
 		
-			<li><a href="/tags/java/" title="java">java<sup>12</sup></a></li>
-		
-			<li><a href="/tags/javascript/" title="javascript">javascript<sup>3</sup></a></li>
-		
-			<li><a href="/tags/jsp/" title="jsp">jsp<sup>1</sup></a></li>
-		
-			<li><a href="/tags/php/" title="php">php<sup>1</sup></a></li>
-		
-			<li><a href="/tags/schema/" title="schema">schema<sup>1</sup></a></li>
+			<li><a href="/tags/java/" title="java">java<sup>14</sup></a></li>
 		
 		</ul>
 </div>

@@ -4,15 +4,12 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>java反射学习 | Poe&#39;s World</title>
+    <title>Linux-find手记 | Poe&#39;s World</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="zhpooer">
     
-    <meta name="description" content="反射
-动态获取类中的信息, 就是java反射. 可以理解为对类的解剖.
-对任意一个对象, 都能够调用他的任意一个方法和属性
-获取Class
+    <meta name="description" content="常用方法
 1
 2
 3
@@ -21,10 +18,10 @@
 6
 7
 8
-// 获取Class
-// 方式一
-Person p = new Person();
-Class clazz = p.getCl">
+9
+find ./ -name &quot;*.log&quot; -type f  # 找到文件后缀为.log的文件, 注意:一定要有引号
+find . -perm 755 -print       # 找到权限为755的文件
+find ./ -user poe –print">
     
     
     
@@ -83,15 +80,15 @@ Class clazz = p.getCl">
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2014/04/14/java反射学习/" title="java反射学习" itemprop="url">java反射学习</a>
+      <a href="/2014/04/16/linux-find手记/" title="Linux-find手记" itemprop="url">Linux-find手记</a>
   </h1>
   <p class="article-author">By
     
       <a href="http://zhpooer.github.io" title="zhpooer">zhpooer</a>
     </p>
   <p class="article-time">
-    <time datetime="2014-04-14T13:33:07.000Z" itemprop="datePublished">4月 14 2014</time>
-    更新日期:<time datetime="2014-04-14T13:52:59.000Z" itemprop="dateModified">4月 14 2014</time>
+    <time datetime="2014-04-16T13:40:07.000Z" itemprop="datePublished">4月 16 2014</time>
+    更新日期:<time datetime="2014-04-16T14:31:44.000Z" itemprop="dateModified">4月 16 2014</time>
     
   </p>
 </header>
@@ -100,13 +97,10 @@ Class clazz = p.getCl">
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">反射</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-class"><span class="toc-number">1.1.</span> <span class="toc-text">获取Class</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-java-lang-constructor"><span class="toc-number">1.2.</span> <span class="toc-text">构造函数 java.lang.Constructor</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-java-lang-field"><span class="toc-number">1.3.</span> <span class="toc-text">获取字段 java.lang.Field</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-java-lang-method"><span class="toc-number">1.4.</span> <span class="toc-text">获取方法 java.lang.Method</span></a></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">常用方法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-type-"><span class="toc-number">2.</span> <span class="toc-text">-type</code></span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-ok-"><span class="toc-number">3.</span> <span class="toc-text">-ok</code></span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">4.</span> <span class="toc-text">其他有用指令</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#find-xargs"><span class="toc-number">5.</span> <span class="toc-text">find 与 xargs</span></a></li></ol>
 		</div>
 		
-		<h1 id="-">反射</h1>
-<p>动态获取类中的信息, 就是java反射. 可以理解为对类的解剖.</p>
-<p>对任意一个对象, 都能够调用他的任意一个方法和属性</p>
-<h2 id="-class">获取Class</h2>
+		<h1 id="-">常用方法</h1>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
 3
@@ -115,49 +109,51 @@ Class clazz = p.getCl">
 6
 7
 8
-</pre></td><td class="code"><pre><span class="comment">// 获取Class</span>
-<span class="comment">// 方式一</span>
-Person p = <span class="keyword">new</span> Person();
-Class clazz = p.getClass();
-<span class="comment">// 方式二</span>
-Class clazz = Person.<span class="keyword">class</span>;
-<span class="comment">// 方式三</span>
-Class clazz = Class.forName(<span class="string">"xx.xx.Person"</span>);
+9
+</pre></td><td class="code"><pre>find ./ -name <span class="string">"*.log"</span> -type f  <span class="comment"># 找到文件后缀为.log的文件, 注意:一定要有引号</span>
+find . -perm <span class="number">755</span> -<span class="keyword">print</span>       <span class="comment"># 找到权限为755的文件</span>
+find ./ -user poe –<span class="keyword">print</span> <span class="comment"># 找到用户为poe的文件</span>
+find /apps -group gem –<span class="keyword">print</span>
+find / -mtime -<span class="number">5</span> –<span class="keyword">print</span> <span class="comment">#在系统根目录下查找更改时间在5日以内的文件</span>
+find /<span class="keyword">var</span>/adm -mtime +<span class="number">3</span> –<span class="keyword">print</span> <span class="comment"># 在/var/adm目录下查找更改时间在3日以前的文件</span>
+find /usr/sam -path <span class="string">"/usr/sam/dir1"</span> -prune -o –<span class="keyword">print</span> <span class="comment"># 在/usr/sam目录下查找不在dir1子目录之内的所有文件</span>
+find . -maxdepth <span class="number">1</span> -name <span class="string">"*.zip"</span> -<span class="keyword">print</span> <span class="comment"># 只在的文件</span>
+find . -perm <span class="number">755</span> -exec ls {} \; <span class="comment">##执行命令, 注意;和{}之间的空格</span>
 </pre></td></tr></table></figure>
 
-<h2 id="-java-lang-constructor">构造函数 java.lang.Constructor</h2>
+<h1 id="-type-"><code>-type</code></h1>
+<p>查找某一类型的文件，诸如：</p>
+<p>b - 块设备文件</p>
+<p>d - 目录</p>
+<p>c - 字符设备文件</p>
+<p>p - 管道文件</p>
+<p>l - 符号链接文件</p>
+<p>f - 普通文件</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>find . ! -<span class="built_in">type</span> d –<span class="built_in">print</span> # 在当前目录下查找除目录以外的所有类型的文件
+</pre></td></tr></table></figure>
+
+<h1 id="-ok-"><code>-ok</code></h1>
+<p>和-exec的作用相同，只不过以一种更为安全的模式来执行该参数所给出的shell命令，在执行每一个命令之前，都会给出提示，让用户来确定是否执行。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre><span class="preprocessor">#在当前目录中查找所有文件名以.LOG结尾、更改时间在5日以上的文件，并删除它们，只不过在删除之前先给出提示</span>
+find . -name <span class="string">"*.conf"</span>  -mtime +<span class="number">5</span> -ok rm {  } \;
+</pre></td></tr></table></figure>
+
+<h1 id="-">其他有用指令</h1>
+<p><code>-follow</code>：如果find命令遇到符号链接文件，就跟踪至链接所指向的文件</p>
+<p><code>-depth</code>：在查找文件时，首先查找当前目录中的文件，然后再在其子目录中查找 </p>
+<p><code>-xdev</code> 只查找当前目录下的文件 </p>
+<p><code>-nogroup</code>: 查找无有效所属组的文件，即该文件所属的组在/etc/groups中不存在</p>
+<h1 id="find-xargs">find 与 xargs</h1>
+<p>类似于 <code>-exec</code> 指令, 但是效率高</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
 3
-4
-5
-6
-</pre></td><td class="code"><pre><span class="keyword">Object</span> obj = clazz.newInstance();
-
-<span class="comment">//构造函数要传参数</span>
-<span class="function"><span class="keyword">Constructor</span> <span class="title">cons</span> = <span class="title">clazz</span>.<span class="title">getConstructors</span><span class="params">()</span>;</span>
-clazz.getConstructor(<span class="keyword">String</span>.<span class="keyword">class</span>, <span class="keyword">String</span>.clazz);
-cons.newInstance()
-</pre></td></tr></table></figure>
-
-<h2 id="-java-lang-field">获取字段 java.lang.Field</h2>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-</pre></td><td class="code"><pre>Field f = clazz.getField(<span class="string">"age"</span>); <span class="comment">// 获取公共的字段</span>
-Field f = clazz.getDeclaredField(<span class="string">"age"</span>); <span class="comment">// 获取所有的字段</span>
-f.setAccessible(<span class="keyword">true</span>); <span class="comment">// 私有的变为可访问</span>
-f.<span class="keyword">get</span>(obj);
-</pre></td></tr></table></figure>
-
-<h2 id="-java-lang-method">获取方法 java.lang.Method</h2>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-</pre></td><td class="code"><pre><span class="function"><span class="keyword">Method</span>[] <span class="title">ms</span> = <span class="title">clazz</span>.<span class="title">getMethods</span><span class="params">()</span>;</span> <span class="comment">// 获取都是公有的方法</span>
-<span class="function"><span class="keyword">Method</span> <span class="title">m</span> = <span class="title">clazz</span>.<span class="title">getDeclaredMethod</span><span class="params">("show", null)</span>;</span> <span class="comment">// 获取所有的方法</span>
-m.invoke(obj, null);
+</pre></td><td class="code"><pre><span class="preprocessor"># 查找系统中的每一个普通文件，然后使用xargs命令来测试它们分别属于哪类文件</span>
+<span class="title">find</span> . -<span class="typedef"><span class="keyword">type</span> f -print | xargs file</span>
+<span class="title">find</span> ./ -size <span class="number">0</span> | xargs rm -f & 删除文件大小为零的文件
 </pre></td></tr></table></figure>
 
   
@@ -166,7 +162,7 @@ m.invoke(obj, null);
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/java/">java</a><a href="/tags/反射/">反射</a>
+  <span></span> <a href="/tags/linux/">linux</a><a href="/tags/find/">find</a>
   </div>
 
 
@@ -174,7 +170,7 @@ m.invoke(obj, null);
 
 <div class="article-share" id="share">
 
-  <div data-url="http://zhpooer.github.io/2014/04/14/java反射学习/" data-title="java反射学习 | Poe&#39;s World" data-tsina="null" class="share clearfix">
+  <div data-url="http://zhpooer.github.io/2014/04/16/linux-find手记/" data-title="Linux-find手记 | Poe&#39;s World" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -183,19 +179,11 @@ m.invoke(obj, null);
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2014/04/15/java正则学习/" title="java正则学习">
-  <strong>PREVIOUS:</strong><br/>
-  <span>
-  java正则学习</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2014/04/14/java网络编程学习/"  title="java网络编程学习">
+<a href="/2014/04/16/传智播客day13-el表达式/"  title="传智播客day13-EL表达式">
  <strong>NEXT:</strong><br/> 
- <span>java网络编程学习
+ <span>传智播客day13-EL表达式
 </span>
 </a>
 </div>
@@ -212,7 +200,7 @@ m.invoke(obj, null);
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">反射</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-class"><span class="toc-number">1.1.</span> <span class="toc-text">获取Class</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-java-lang-constructor"><span class="toc-number">1.2.</span> <span class="toc-text">构造函数 java.lang.Constructor</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-java-lang-field"><span class="toc-number">1.3.</span> <span class="toc-text">获取字段 java.lang.Field</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-java-lang-method"><span class="toc-number">1.4.</span> <span class="toc-text">获取方法 java.lang.Method</span></a></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">常用方法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-type-"><span class="toc-number">2.</span> <span class="toc-text">-type</code></span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-ok-"><span class="toc-number">3.</span> <span class="toc-text">-ok</code></span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">4.</span> <span class="toc-text">其他有用指令</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#find-xargs"><span class="toc-number">5.</span> <span class="toc-text">find 与 xargs</span></a></li></ol>
   </div>
 
 <div id="asidepart">
