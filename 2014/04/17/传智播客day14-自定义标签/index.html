@@ -1,0 +1,912 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>传智播客day14-自定义标签 | Poe&#39;s World</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="zhpooer">
+    
+    <meta name="description" content="自定义标签
+作用: 替换JSP页面中的java脚本 &lt;%%&gt;
+且每次调用JSP都会生成新的标签对象
+1
+2
+3
+4
+&lt;%
+Date time = new Date();
+out.write(time.toLocaleString());
+%&gt;
+
+
+开发步骤
+
+编写一个类 ja">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="Poe&#39;s World" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="Poe&#39;s World" title="Poe&#39;s World"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Poe&#39;s World">Poe&#39;s World</a></h1>
+				<h2 class="blog-motto">Hello World</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:zhpooer.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/04/17/传智播客day14-自定义标签/" title="传智播客day14-自定义标签" itemprop="url">传智播客day14-自定义标签</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://zhpooer.github.io" title="zhpooer">zhpooer</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2014-04-17T01:04:00.000Z" itemprop="datePublished">4月 17 2014</time>
+    更新日期:<time datetime="2014-04-18T02:49:14.000Z" itemprop="dateModified">4月 18 2014</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">自定义标签</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.1.</span> <span class="toc-text">开发步骤</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.2.</span> <span class="toc-text">实现简单功能</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.3.</span> <span class="toc-text">执行原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#tld-"><span class="toc-number">1.4.</span> <span class="toc-text">tld 文件中的一些配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.5.</span> <span class="toc-text">开发属于自己的标签库</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#-if-"><span class="toc-number">1.5.1.</span> <span class="toc-text">实现if功能的标签</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-if-else-"><span class="toc-number">1.5.2.</span> <span class="toc-text">实现if else功能的标签库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-for-"><span class="toc-number">1.5.3.</span> <span class="toc-text">实现 for 功能的标签</span></a></li><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#-"><span class="toc-number">1.5.3.1.</span> <span class="toc-text">数组的反射</span></a></li></ol><li class="toc-item toc-level-3"><a class="toc-link" href="#-html-"><span class="toc-number">1.5.4.</span> <span class="toc-text">实现html转义标签</span></a></li></ol></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#jstl-"><span class="toc-number">2.</span> <span class="toc-text">JSTL中的核心标签</span></a></li></ol>
+		</div>
+		
+		<h1 id="-">自定义标签</h1>
+<p>作用: 替换JSP页面中的java脚本 <code>&lt;%%&gt;</code></p>
+<p>且每次调用JSP都会生成新的标签对象</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="vbscript">&lt;%
+<span class="built_in">Date</span> <span class="built_in">time</span> = <span class="keyword">new</span> <span class="built_in">Date</span>();
+out.write(<span class="built_in">time</span>.toLocaleString());
+%&gt;</span>
+</pre></td></tr></table></figure>
+
+<h2 id="-">开发步骤</h2>
+<ol>
+<li><p>编写一个类 <code>javax.sevlet.jsp.tagext.SimpleTag</code>,
+覆盖掉 <code>doTag()</code> 方法   <strong>ShowTimeSimpleTag.java</strong>:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ShowTimeSimpleTag</span> <span class="keyword">extends</span> <span class="title">SimpleTagSupport</span>{</span>
+   <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doTag</span>() <span class="keyword">throws</span> JspException, IOExcetpion {
+       Date time = <span class="keyword">new</span> Date();
+       PageContext pc = (PageContext) getJSPContext();
+       pc.getOut().write(time.toLocaleString());
+   }
+}
+</pre></td></tr></table></figure>
+</li>
+<li><p><strong>itcast.tld</strong>:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">taglib</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">tlib-version</span>&gt;</span>1.0<span class="tag">&lt;/<span class="title">tlib-version</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">short-name</span>&gt;</span>myfn<span class="tag">&lt;/<span class="title">short-name</span>&gt;</span>
+    <span class="comment">&lt;!-- 定位符 --&gt;</span>
+    <span class="tag">&lt;<span class="title">uri</span>&gt;</span>http://www.itcast.cn/jsp/myfunction <span class="tag">&lt;/<span class="title">uri</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">tag</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">name</span>&gt;</span>showTime<span class="tag">&lt;/<span class="title">name</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">tag-class</span>&gt;</span>cn.itcast.ShowTimeSimpleTag <span class="tag">&lt;/<span class="title">tag-class</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">body-content</span>&gt;</span> empty <span class="tag">&lt;/<span class="title">body-content</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">tag</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">taglib</span>&gt;</span>
+</pre></td></tr></table></figure>
+</li>
+<li><p>通过Taglib指令导入外部标签库, 以及使用</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre><span class="vbscript">&lt;%@ taglib uri=<span class="string">"http://"</span> prefix=<span class="string">"itcast"</span> %&gt;</span>
+<span class="tag">&lt;<span class="title">itcast:showTime</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h2 id="-">实现简单功能</h2>
+<ol>
+<li><p>控制页面中某部分内容不显示</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">itcast:hidden</span>&gt;</span>隐藏的内容<span class="tag">&lt;/<span class="title">itcast:hidden</span>&gt;</span>
+public doTag(){
+   // 不让标签主体内容显示, 就设么都不写
+   // 要让主体内容显示, 就这么写
+   JspFragment jf = getJSPBody();
+   jf.invoke(out);  //  与 jf.invoke(null) 相同
+}
+<span class="tag">&lt;<span class="title">tag</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">body-content</span>&gt;</span>scriptless<span class="tag">&lt;/<span class="title">body-content</span>&gt;</span> <span class="comment">&lt;!--标签里面有内容单, 不写&lt;% %&gt;--&gt;</span>
+<span class="tag">&lt;/<span class="title">tag</span>&gt;</span>
+</pre></td></tr></table></figure>
+</li>
+<li><p>控制结束标签后的JSP内容不执行</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">itcast:hidden</span>/&gt;</span>隐藏的内容
+public doTag(){
+    throw new SkipPageException(); // 忽略结束标签后的内容
+}
+<span class="tag">&lt;<span class="title">tag</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">body-content</span>&gt;</span>empty<span class="tag">&lt;/<span class="title">body-content</span>&gt;</span> <span class="comment">&lt;!--标签里面有内容单, 不写&lt;% %&gt;--&gt;</span>
+<span class="tag">&lt;/<span class="title">tag</span>&gt;</span>
+</pre></td></tr></table></figure>
+</li>
+<li><p>控制主题内容重复执行</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">itcast:repeat</span> <span class="attribute">count</span>=<span class="value">"10"</span>&gt;</span>重复的内容<span class="tag">&lt;/<span class="title">itcast:repeat</span>&gt;</span>
+public void setCount(int count); // 注入, 自动转换,仅限基本类型
+public doTag(){
+    for(1 to count){
+        getJSPBody().invoke(null);
+    }
+}
+<span class="tag">&lt;<span class="title">tag</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">body-content</span>&gt;</span>scriptless<span class="tag">&lt;/<span class="title">body-content</span>&gt;</span> <span class="comment">&lt;!--标签里面有内容单, 不写&lt;% %&gt;--&gt;</span>
+    <span class="tag">&lt;<span class="title">attribute</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">name</span>&gt;</span>count<span class="tag">&lt;/<span class="title">name</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">required</span>&gt;</span>true<span class="tag">&lt;/<span class="title">required</span>&gt;</span>
+        <span class="comment">&lt;!-- 是否支持表达式 count="${3+3}"--&gt;</span>
+        <span class="tag">&lt;<span class="title">rtexprvalue</span>&gt;</span> true <span class="tag">&lt;/<span class="title">rtexprvalue</span>&gt;</span>
+        <span class="comment">&lt;!-- rt:RunTime expr:Expression value --&gt;</span>
+    <span class="tag">&lt;/<span class="title">attribute</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">tag</span>&gt;</span>
+</pre></td></tr></table></figure>
+</li>
+<li><p>获取标签主题内容, 改变后再输出</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">itcast:upcase</span>&gt;</span>lower<span class="tag">&lt;<span class="title">itcast:upcase</span>&gt;</span>
+public doTag(){
+    JspFragment jf = getJSPBody();
+    // 带有缓冲的数据字符输出流
+    StringWriter sw = new StringWriter();
+    jf.invoke(sw);
+    String content = sw.getBuffer().toString();
+    PageContext pc = (PageContext) getJSPContext();
+    pc.getOut().write(content);
+}
+<span class="tag">&lt;<span class="title">tag</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">body-content</span>&gt;</span> scriptless <span class="tag">&lt;/<span class="title">body-content</span>&gt;</span> <span class="comment">&lt;!--标签里面有内容单, 不写&lt;% %&gt;--&gt;</span>
+<span class="tag">&lt;/<span class="title">tag</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h2 id="-">执行原理</h2>
+<p>SimpleTag 接口中的执行原理:</p>
+<ul>
+<li><code>void doTag()</code>: 有服务器调用. 在JSP</li>
+<li><code>JspTag getParent()</code>: 由程序员调用, 获取该标签的父标签对象, 没有返回null</li>
+<li><code>void setJspBody(JspFragment jspBody)</code>: 服务器, 传入标签的内容</li>
+<li><code>void setJspContext(JspContext pc)</code>: 服务器, 传入当前页面的的 pageContext</li>
+<li><code>void setParent(JspFragment jf)</code>: 由服务器调用, 设置该标签的父标签对象, 没有返回null</li>
+</ul>
+<h2 id="tld-">tld 文件中的一些配置</h2>
+<p>body-content的取值内容</p>
+<ul>
+<li>JSP: 不考虑, (给传统标签处理用到)</li>
+<li>empty: 传统和简单标签都可以使用</li>
+<li>scriptless: 给简单标签用的, 开始标签和结束标签内不能写 <code>&lt;%%&gt;</code>,
+但是可以有<code>${1+2}</code></li>
+<li>tagdependent: 给简单标签用的, 告诉标签类, 主体只是普通文本</li>
+</ul>
+<h2 id="-">开发属于自己的标签库</h2>
+<h3 id="-if-">实现if功能的标签</h3>
+<p>如果test为true 就输出主题内容, 如果是false就不输出</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">itcast:if</span> <span class="attribute">test</span>=<span class="value">"true"</span>&gt;</span>你好<span class="tag">&lt;<span class="title">itcast:if</span>&gt;</span>
+public setTest(boolean test){}
+public doTag(){
+    JspFragment jf = getJSPBody();
+    if(test) jf.invoke(null);
+
+}
+<span class="tag">&lt;<span class="title">tag</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">body-content</span>&gt;</span> scriptless <span class="tag">&lt;/<span class="title">body-content</span>&gt;</span> <span class="comment">&lt;!--标签里面有内容单, 不写&lt;% %&gt;--&gt;</span>
+    <span class="tag">&lt;<span class="title">attribute</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">name</span>&gt;</span>test<span class="tag">&lt;/<span class="title">name</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">required</span>&gt;</span>true<span class="tag">&lt;/<span class="title">required</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">rtexprvalue</span>&gt;</span> true <span class="tag">&lt;/<span class="title">rtexprvalue</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">attribute</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">tag</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<h3 id="-if-else-">实现if else功能的标签库</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+</pre></td><td class="code"><pre>&lt;itcast:choose&gt;
+    &lt;itcast:when test=<span class="string">"true"</span>&gt; <span class="keyword">this</span> is <span class="keyword">if</span> &lt;/itcast:when&gt;
+    &lt;itcast:otherwise&gt; <span class="keyword">this</span> is <span class="keyword">else</span> &lt;/itcast:otherwise&gt;
+&lt;/itcast:choose&gt;
+
+<span class="comment">// chooseTag</span>
+<span class="annotation">@BeanProperty</span> <span class="keyword">var</span> flag:Boolean;
+
+<span class="comment">// whenTag</span>
+<span class="annotation">@BeanPropertyvar</span> test:Boolean;
+<span class="keyword">def</span> doTag(){
+    <span class="keyword">if</span>(test){
+        getJSPBody().invoke(<span class="keyword">null</span>);
+        (ChooseTag)getParent().setFlag(<span class="keyword">true</span>);
+    }
+}
+<span class="comment">// otherwise</span>
+<span class="keyword">def</span> doTag(){
+    <span class="keyword">if</span>((ChooseTag)getParent().isFlag()){
+        getJSPBody().invoke(<span class="keyword">null</span>);
+    }
+}
+</pre></td></tr></table></figure>
+
+<h3 id="-for-">实现 for 功能的标签</h3>
+<p>简单版本</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="code"><pre>&lt;itcast:forEach items=<span class="string">"${list}"</span> <span class="keyword">var</span>=<span class="string">"s"</span>&gt;
+    ${s}&lt;br/&gt;
+&lt;/itcast:forEach&gt;
+
+<span class="annotation">@BeanProperty</span> List items;
+<span class="annotation">@BeanProperty</span> String <span class="keyword">var</span>;
+<span class="keyword">def</span> doTag(){
+    <span class="keyword">val</span> pc = (PageContext)getJSPContext();
+    <span class="keyword">if</span>(items!=<span class="keyword">null</span>){
+        <span class="keyword">for</span>(Object obj:items){
+            pc.setAttribute(<span class="keyword">var</span>, obj);
+            getJSPBody.invoke(<span class="keyword">null</span>);
+        }
+    }
+}
+</pre></td></tr></table></figure>
+
+<p>复杂版本</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+</pre></td><td class="code"><pre>&lt;!--<span class="keyword">or</span> items=&lt;%= <span class="keyword">list</span> %&gt; --&gt;
+&lt;itcast:<span class="keyword">forEach</span> items=<span class="string">"${list}"</span> <span class="keyword">var</span>=<span class="string">"s"</span>&gt; 
+    ${s}&lt;br/&gt;
+&lt;/itcast:<span class="keyword">forEach</span>&gt;
+
+@BeanProperty Object items;
+@BeanProperty String <span class="keyword">var</span>;
+val collection:Collection = <span class="keyword">new</span> ArrayList();
+def setItems(Object items) {
+    <span class="keyword">if</span>(items <span class="keyword">instanceof</span> <span class="keyword">List</span>){
+        collection = (<span class="keyword">List</span>)items;
+    } <span class="keyword">else</span> <span class="keyword">if</span>(items <span class="keyword">instanceof</span> Map){
+        collectoin = ((Map)items).entrySet();
+    } <span class="keyword">else</span> <span class="keyword">if</span>(items.getClass().isArray()) {
+        int len = <span class="keyword">Array</span>.getLength(items);
+        <span class="keyword">for</span>(int i=<span class="number">0</span>;i&lt;len;i++){
+            collection.add(java.reflect.<span class="keyword">Array</span>.get(items, i));
+        }
+    } <span class="keyword">else</span> {
+        <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"不支持的类型"</span>);
+    }
+}
+def doTag(){
+    val pc = (PageContext)getJSPContext();
+    <span class="keyword">for</span>(Object obj:collection){
+        pc.setAttribute(<span class="keyword">var</span>, obj);
+        getJSPBody.invoke(<span class="keyword">null</span>);
+    }
+
+}
+</pre></td></tr></table></figure>
+
+<h4 id="-">数组的反射</h4>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre><span class="built_in">int</span> ii[] = {<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>};
+<span class="built_in">String</span> strs[] = {<span class="string">"a"</span>, <span class="string">"b"</span>};
+<span class="keyword">Class</span> clazz1 = ii.getClass();
+<span class="keyword">Class</span> clazz2 = strs.getClass();
+clazz1.<span class="built_in">isArray</span>();
+
+<span class="built_in">int</span> <span class="built_in">len</span> = <span class="built_in">Array</span>.getLength(items);
+<span class="keyword">for</span>(<span class="built_in">int</span> i=<span class="number">0</span>;i&lt;<span class="built_in">len</span>;i++){
+    collection.add(java.reflect.<span class="built_in">Array</span>.<span class="keyword">get</span>(items, i));
+}
+</pre></td></tr></table></figure>
+
+<h3 id="-html-">实现html转义标签</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre>&lt;% pageContext<span class="preprocessor">.setAttribute</span>(<span class="string">"s"</span>, <span class="string">"&lt;hr/&gt;"</span>) %&gt;
+&lt;itcast:htmlFilter&gt;
+    ${s}
+&lt;/itcast:htmlFilter&gt;
+def doTag(){
+    StringWriter sw = new StringWriter()<span class="comment">;</span>
+    getJSPBody()<span class="preprocessor">.invoke</span>(sw)<span class="comment">;</span>
+    String content = sw<span class="preprocessor">.getBuffer</span>()<span class="preprocessor">.toString</span>()<span class="comment">;</span>
+    content = filter(content)<span class="comment">;</span>
+}
+</pre></td></tr></table></figure>
+
+<h1 id="jstl-">JSTL中的核心标签</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+</pre></td><td class="code"><pre><span class="vbscript">&lt;%@ taglib uri=<span class="string">"http://java.sun.com/jsp/jstl/core"</span> prefix=<span class="string">"c"</span> %&gt;</span>
+<span class="comment">&lt;!-- 输出, 可转义 --&gt;</span>
+<span class="tag">&lt;<span class="title">c:out</span> <span class="attribute">value</span>=<span class="value">"${p}"</span> <span class="attribute">default</span>=<span class="value">"没有值"</span> <span class="attribute">escapeXml</span>=<span class="value">"true"</span>&gt;</span> <span class="tag">&lt;/<span class="title">c:out</span>&gt;</span>
+
+<span class="comment">&lt;!-- 设置值 --&gt;</span>
+<span class="tag">&lt;<span class="title">c:set</span> <span class="attribute">value</span>=<span class="value">"上海"</span> <span class="attribute">var</span>=<span class="value">"s"</span> <span class="attribute">scope</span>=<span class="value">"page"</span>&gt;</span><span class="tag">&lt;/<span class="title">c:set</span>&gt;</span>
+<span class="comment">&lt;!-- 设置JavaBean的属性 --&gt;</span>
+<span class="tag">&lt;<span class="title">jsp:useBean</span> <span class="attribute">id</span>=<span class="value">"person"</span> <span class="attribute">class</span>=<span class="value">"cn.itcast.domain.Person"</span>&gt;</span><span class="tag">&lt;/<span class="title">jsp:useBean</span>&gt;</span>
+<span class="tag">&lt;<span class="title">c:set</span> <span class="attribute">property</span>=<span class="value">"name"</span> <span class="attribute">target</span>=<span class="value">"${person}"</span> <span class="attribute">value</span>=<span class="value">"xxx"</span>&gt;</span> <span class="tag">&lt;/<span class="title">c:set</span>&gt;</span>
+<span class="comment">&lt;!-- 设置Map的key和value的值 --&gt;</span>
+<span class="tag">&lt;<span class="title">c:set</span> <span class="attribute">property</span>=<span class="value">"b"</span> <span class="attribute">value</span>=<span class="value">"bbb"</span> <span class="attribute">target</span>=<span class="value">"${map}"</span>&gt;</span> <span class="tag">&lt;/<span class="title">c:set</span>&gt;</span>
+
+<span class="comment">&lt;!-- 从指定域范围中删除数据, 不指定scope会全删除 --&gt;</span>
+<span class="tag">&lt;<span class="title">c:remove</span> <span class="attribute">var</span>=<span class="value">"s1"</span> <span class="attribute">scope</span>=<span class="value">"page"</span>&gt;</span> <span class="tag">&lt;/<span class="title">c:remove</span>&gt;</span>
+
+<span class="comment">&lt;!-- 相当于java的catch --&gt;</span>
+<span class="tag">&lt;<span class="title">c:catch</span> <span class="attribute">var</span>=<span class="value">"e"</span>&gt;</span> <span class="vbscript">&lt;%=<span class="number">1</span>/<span class="number">0</span>%&gt;</span> <span class="tag">&lt;/<span class="title">c:catch</span>&gt;</span> ${e.message}
+
+<span class="comment">&lt;!-- foreach --&gt;</span>
+<span class="tag">&lt;<span class="title">c:forEach</span> <span class="attribute">begin</span>=<span class="value">"1"</span> <span class="attribute">end</span>=<span class="value">"10"</span> <span class="attribute">var</span>=<span class="value">"s"</span>&gt;</span> ${s} <span class="tag">&lt;/<span class="title">c:forEach</span>&gt;</span>
+<span class="comment">&lt;!-- strs = abcdefg --&gt;</span>
+<span class="tag">&lt;<span class="title">c:forEach</span> <span class="attribute">items</span>=<span class="value">${strs}</span> <span class="attribute">begin</span>=<span class="value">"1"</span> <span class="attribute">end</span>=<span class="value">"10"</span> <span class="attribute">step</span>=<span class="value">"2"</span> <span class="attribute">var</span>=<span class="value">"s"</span>&gt;</span> ${s} <span class="tag">&lt;/<span class="title">c:forEach</span>&gt;</span>
+<span class="tag">&lt;<span class="title">table</span> <span class="attribute">border</span>=<span class="value">"1"</span> <span class="attribute">width</span>=<span class="value">"438"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">tr</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">th</span>&gt;</span> 姓名 <span class="tag">&lt;/<span class="title">th</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">th</span>&gt;</span> 性别 <span class="tag">&lt;/<span class="title">th</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">th</span>&gt;</span> 城市 <span class="tag">&lt;/<span class="title">th</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">th</span>&gt;</span>成绩 <span class="tag">&lt;/<span class="title">th</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
+    <span class="comment">&lt;!-- vs指向一个对象, 该对象记录着当前遍历 的元素的一些信息 --&gt;</span>
+    <span class="comment">&lt;!-- int getIndex(): 当前遍历的元素的索引号,从零开始 --&gt;</span>
+    <span class="comment">&lt;!-- int getCount(); 当前遍历元素的位数, 从一开始 --&gt;</span>
+    <span class="comment">&lt;!-- boolean isLast(); --&gt;</span>
+    <span class="comment">&lt;!-- boolean isFirst(); --&gt;</span>
+    <span class="tag">&lt;<span class="title">c:forEach</span> <span class="attribute">items</span>=<span class="value">"${ps}"</span> <span class="attribute">var</span>=<span class="value">"p"</span> <span class="attribute">varStatus</span>=<span class="value">"vs"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">th</span>&gt;</span> ${p.name}  <span class="tag">&lt;/<span class="title">th</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">th</span>&gt;</span> ${p.gender} <span class="tag">&lt;/<span class="title">th</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">th</span>&gt;</span> ${p.city} <span class="tag">&lt;/<span class="title">th</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">th</span>&gt;</span> ${p.grade} <span class="tag">&lt;/<span class="title">th</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">c:forEach</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">table</span>&gt;</span>
+
+<span class="comment">&lt;!-- 遍历字符串 20140417--&gt;</span>
+<span class="tag">&lt;<span class="title">c:set</span> <span class="attribute">var</span>=<span class="value">"s3"</span> <span class="attribute">value</span>=<span class="value">"2014-04-17"</span>&gt;</span> <span class="tag">&lt;/<span class="title">c:set</span>&gt;</span>
+<span class="tag">&lt;<span class="title">c:forToken</span> <span class="attribute">items</span>=<span class="value">"${s3}"</span> <span class="attribute">delims</span>=<span class="value">"=-"</span> <span class="attribute">var</span>=<span class="value">"s"</span>&gt;</span> ${s}<span class="tag">&lt;/<span class="title">c:forToken</span>&gt;</span>
+
+<span class="comment">&lt;!-- 可以包含任何页面,包括任何界面 --&gt;</span>
+<span class="tag">&lt;<span class="title">c:import</span> <span class="attribute">url</span>=<span class="value">"/3.jsp"</span>&gt;</span> <span class="tag">&lt;/<span class="title">c:import</span>&gt;</span>
+<span class="tag">&lt;<span class="title">c:import</span> <span class="attribute">url</span>=<span class="value">"http://www.baidu.com"</span>&gt;</span> <span class="tag">&lt;/<span class="title">c:import</span>&gt;</span>
+
+<span class="comment">&lt;!-- 转发 --&gt;</span>
+<span class="tag">&lt;<span class="title">c:redirect</span> <span class="attribute">url</span>=<span class="value">"**.jsp"</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">c:redirect</span>&gt;</span>
+
+<span class="comment">&lt;!-- 对中文参数进行url编码, 能对其进行URL重写 --&gt;</span>
+<span class="comment">&lt;!-- pageContext.setAttribute("url", request.getContextPath()+"/3.jsp?") --&gt;</span>
+<span class="tag">&lt;<span class="title">c:url</span> <span class="attribute">value</span>=<span class="value">"3.jsp"</span> <span class="attribute">var</span>=<span class="value">"url"</span> <span class="attribute">scope</span>=<span class="value">"page"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">c:param</span> <span class="attribute">name</span>=<span class="value">"username"</span> <span class="attribute">value</span>=<span class="value">"我擦"</span>&gt;</span> <span class="tag">&lt;/<span class="title">c:param</span>&gt;</span> 
+<span class="tag">&lt;/<span class="title">c:url</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/传智播客/">传智播客</a><a href="/tags/自定义标签/">自定义标签</a>
+  </div>
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://zhpooer.github.io/2014/04/17/传智播客day14-自定义标签/" data-title="传智播客day14-自定义标签 | Poe&#39;s World" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2014/04/18/linux-grep手记/" title="linux-grep手记">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  linux-grep手记</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2014/04/17/scala和dom4j的xml操作/"  title="scala和Dom4j的xml操作">
+ <strong>NEXT:</strong><br/> 
+ <span>scala和Dom4j的xml操作
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">自定义标签</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.1.</span> <span class="toc-text">开发步骤</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.2.</span> <span class="toc-text">实现简单功能</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.3.</span> <span class="toc-text">执行原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#tld-"><span class="toc-number">1.4.</span> <span class="toc-text">tld 文件中的一些配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.5.</span> <span class="toc-text">开发属于自己的标签库</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#-if-"><span class="toc-number">1.5.1.</span> <span class="toc-text">实现if功能的标签</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-if-else-"><span class="toc-number">1.5.2.</span> <span class="toc-text">实现if else功能的标签库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-for-"><span class="toc-number">1.5.3.</span> <span class="toc-text">实现 for 功能的标签</span></a></li><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#-"><span class="toc-number">1.5.3.1.</span> <span class="toc-text">数组的反射</span></a></li></ol><li class="toc-item toc-level-3"><a class="toc-link" href="#-html-"><span class="toc-number">1.5.4.</span> <span class="toc-text">实现html转义标签</span></a></li></ol></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#jstl-"><span class="toc-number">2.</span> <span class="toc-text">JSTL中的核心标签</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/DOM/" title="DOM">DOM<sup>2</sup></a></li>
+		
+			<li><a href="/tags/EL表达式/" title="EL表达式">EL表达式<sup>1</sup></a></li>
+		
+			<li><a href="/tags/HttpSession/" title="HttpSession">HttpSession<sup>1</sup></a></li>
+		
+			<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JSP/" title="JSP">JSP<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaBean/" title="JavaBean">JavaBean<sup>1</sup></a></li>
+		
+			<li><a href="/tags/SAX/" title="SAX">SAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletRequest/" title="ServletRequest">ServletRequest<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletResponse/" title="ServletResponse">ServletResponse<sup>1</sup></a></li>
+		
+			<li><a href="/tags/String/" title="String">String<sup>1</sup></a></li>
+		
+			<li><a href="/tags/StringBuffer/" title="StringBuffer">StringBuffer<sup>1</sup></a></li>
+		
+			<li><a href="/tags/cookie/" title="cookie">cookie<sup>1</sup></a></li>
+		
+			<li><a href="/tags/css/" title="css">css<sup>1</sup></a></li>
+		
+			<li><a href="/tags/dom4j/" title="dom4j">dom4j<sup>1</sup></a></li>
+		
+			<li><a href="/tags/dtd/" title="dtd">dtd<sup>1</sup></a></li>
+		
+			<li><a href="/tags/eclipse/" title="eclipse">eclipse<sup>1</sup></a></li>
+		
+			<li><a href="/tags/emacs/" title="emacs">emacs<sup>1</sup></a></li>
+		
+			<li><a href="/tags/find/" title="find">find<sup>1</sup></a></li>
+		
+			<li><a href="/tags/grep/" title="grep">grep<sup>1</sup></a></li>
+		
+			<li><a href="/tags/html/" title="html">html<sup>2</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2014 
+		
+		<a href="http://zhpooer.github.io" target="_blank" title="zhpooer">zhpooer</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"zhpoooer"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>

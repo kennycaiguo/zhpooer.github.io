@@ -4,19 +4,14 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>专题-内省 | Poe&#39;s World</title>
+    <title>java动态代理 | Poe&#39;s World</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="zhpooer">
     
-    <meta name="description" content="内省
-
-JavaBean和属性的概念
- javaBean的特点
-
-必须由默认的构造方法
-字段都是私有的
-提供针对字段的 getter 或 setter 方法(属性)1
+    <meta name="description" content="java.lang.reflect.Proxy
+它提供了一组静态方法来为一组接口动态地生成代理类及其对象
+1
 2
 3
 4
@@ -26,8 +21,9 @@ JavaBean和属性的概念
 8
 9
 10
-public class Person {
-   private String name; /">
+11
+// 方法 1: 该方法用于获取指定代理对象所关联的调用处理器
+static InvocationHandler getInvocationHan">
     
     
     
@@ -86,15 +82,15 @@ public class Person {
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2014/04/12/专题-内省/" title="专题-内省" itemprop="url">专题-内省</a>
+      <a href="/2014/04/18/java动态代理/" title="java动态代理" itemprop="url">java动态代理</a>
   </h1>
   <p class="article-author">By
     
       <a href="http://zhpooer.github.io" title="zhpooer">zhpooer</a>
     </p>
   <p class="article-time">
-    <time datetime="2014-04-12T06:29:13.000Z" itemprop="datePublished">4月 12 2014</time>
-    更新日期:<time datetime="2014-04-12T07:03:00.000Z" itemprop="dateModified">4月 12 2014</time>
+    <time datetime="2014-04-18T12:14:52.000Z" itemprop="datePublished">4月 18 2014</time>
+    更新日期:<time datetime="2014-04-18T12:22:02.000Z" itemprop="dateModified">4月 18 2014</time>
     
   </p>
 </header>
@@ -103,17 +99,12 @@ public class Person {
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">内省</span></a></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#java-lang-reflect-proxy"><span class="toc-number">1.</span> <span class="toc-text">java.lang.reflect.Proxy</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#java-lang-reflect-invocationhandler"><span class="toc-number">2.</span> <span class="toc-text">java.lang.reflect.InvocationHandler</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">实例</span></a></li></ol>
 		</div>
 		
-		<h1 id="-">内省</h1>
-<ol>
-<li><p>JavaBean和属性的概念</p>
-<p> javaBean的特点</p>
-<ol>
-<li>必须由默认的构造方法</li>
-<li>字段都是私有的</li>
-<li>提供针对字段的 getter 或 setter 方法(属性)<figure class="highlight"><table><tr><td class="gutter"><pre>1
+		<h1 id="java-lang-reflect-proxy">java.lang.reflect.Proxy</h1>
+<p>它提供了一组静态方法来为一组接口动态地生成代理类及其对象</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
 3
 4
@@ -123,23 +114,32 @@ public class Person {
 8
 9
 10
-</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span> {</span>
-   <span class="keyword">private</span> String name; <span class="comment">// 叫字段</span>
-   <span class="keyword">public</span> String <span class="title">getName</span>(){}  <span class="comment">// 读属性</span>
-   <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span>(String name){}  <span class="comment">//写属性</span>
+11
+</pre></td><td class="code"><pre><span class="comment">// 方法 1: 该方法用于获取指定代理对象所关联的调用处理器</span>
+<span class="keyword">static</span> InvocationHandler getInvocationHandler(<span class="keyword">Object</span> proxy) 
 
-   <span class="keyword">private</span> <span class="keyword">boolean</span> married;
-   <span class="comment">//类似于  public boolean getMarried(){}</span>
-   <span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isMarried</span>(){}
-   <span class="keyword">public</span> <span class="keyword">void</span>  <span class="title">setMarried</span>(){}
-}
+<span class="comment">// 方法 2：该方法用于获取关联于指定类装载器和一组接口的动态代理类的类对象</span>
+<span class="keyword">static</span> <span class="keyword">Class</span> getProxyClass(ClassLoader loader, <span class="keyword">Class</span>[] interfaces) 
+
+<span class="comment">// 方法 3：该方法用于判断指定类对象是否是一个动态代理类</span>
+<span class="keyword">static</span> boolean isProxyClass(<span class="keyword">Class</span> cl) 
+
+<span class="comment">// 方法 4：该方法用于为指定类装载器、一组接口及调用处理器生成动态代理类实例</span>
+<span class="keyword">static</span> <span class="keyword">Object</span> newProxyInstance(ClassLoader loader, <span class="keyword">Class</span>[] interfaces, InvocationHandler h)
 </pre></td></tr></table></figure>
-</li>
-</ol>
-</li>
-<li><p>内省就通过getter和setter设置 JavaBean 的属性</p>
-</li>
-</ol>
+
+<h1 id="java-lang-reflect-invocationhandler">java.lang.reflect.InvocationHandler</h1>
+<p>每次生成动态代理类对象时都需要指定一个实现了该接口的调用处理器对象（参见 Proxy 静态方法 4 的第三个参数）</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="comment">// 该方法负责集中处理动态代理类上的所有方法调用。第一个参数既是代理类实例，第二个参数是被调用的方法对象</span>
+<span class="comment">// 第三个方法是调用参数。调用处理器根据这三个参数进行预处理或分派到委托类实例上发射执行</span>
+Object invoke(Object proxy, <span class="function"><span class="keyword">Method</span> <span class="title">method</span>, <span class="title">Object</span>[] <span class="title">args</span>)</span>
+</pre></td></tr></table></figure>
+
+<h1 id="-">实例</h1>
+<p>注意: 这是Scala实现</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
 3
@@ -166,49 +166,32 @@ public class Person {
 24
 25
 26
-27
-28
-29
-30
-</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testIt</span>() <span class="keyword">throws</span> Exception {
-    Class&lt;?&gt; clazz = Class.forName(<span class="string">"io.zhpooer.test.Person"</span>);
-    Person bean = (Person) clazz.newInstance();
-    PropertyDescriptor pd1 = <span class="keyword">new</span> PropertyDescriptor(<span class="string">"name"</span>, clazz);
-    Method m1 = pd1.getWriteMethod(); <span class="comment">// 获取name的写方法</span>
-    m1.invoke(bean, <span class="string">"呵呵"</span>);
-
-    Method m2 = pd1.getReadMethod();
-    String name = (String)m2.invoke(bean, <span class="keyword">null</span>);
-    
-    System.out.println(name);
+</pre></td><td class="code"><pre><span class="class"><span class="keyword">trait</span> <span class="title">Stub</span> {</span>
+  <span class="keyword">def</span> doSome(): Unit;
 }
 
-<span class="annotation">@Test</span>
-<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test2</span>() <span class="keyword">throws</span> Exception {
-        Class&lt;?&gt; clazz = Class.forName(<span class="string">"io.zhpooer.test.Person"</span>);
-    BeanInfo binfo = Introspector.getBeanInfo(clazz);
-    PropertyDescriptor pds[] = binfo.getPropertyDescriptors();
-    <span class="keyword">for</span>(PropertyDescriptor p : pds){
-    	System.out.println(p.getName());
-    }
+<span class="class"><span class="keyword">class</span> <span class="title">StubImpl</span> <span class="keyword">extends</span> <span class="title">Stub</span> {</span>
+  <span class="keyword">override</span> <span class="keyword">def</span> doSome() {
+    println(<span class="string">"hello world"</span>);
+  }
 }
-
-<span class="javadoc">/**
-ouput: 
-呵呵
-age
-class
-name
-**/</span>
-</pre></td></tr></table></figure>
-
-<p>借助 org.apache.commons.beanutils.BeanUtils;</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-</pre></td><td class="code"><pre>Person p = (Person) clazz<span class="preprocessor">.newInstance</span>()<span class="comment">;</span>
-BeanUtils<span class="preprocessor">.setProperty</span>(p, <span class="string">"name"</span>, <span class="string">"钟欣桐"</span>)<span class="comment">;</span>
-BeanUtils<span class="preprocessor">.getProperty</span>(p, <span class="string">"name"</span>)<span class="comment">;</span>
+<span class="comment">// 定义处理对象的代理方法</span>
+<span class="class"><span class="keyword">class</span> <span class="title">ProxyHandler</span><span class="params">(proxied: Object)</span> <span class="keyword">extends</span> <span class="title">InvocationHandler</span> {</span>
+  <span class="keyword">def</span> <span class="keyword">this</span>() = <span class="keyword">this</span>(<span class="keyword">null</span>)
+  <span class="keyword">override</span> <span class="keyword">def</span> invoke(proxy: Object, method: Method, args: Array[Object]): AnyRef = {
+    println(<span class="string">"before invoke"</span>)
+    <span class="keyword">val</span> result = method.invoke(proxied)  <span class="comment">// 调用主体方法, 可以在调用方法上下插入处理</span>
+    println(<span class="string">"after invoke"</span>)
+    result
+  }
+}
+<span class="comment">//主方法</span>
+it should <span class="string">"通过反射实现实现动态代理"</span> in {
+  <span class="keyword">val</span> proxy = Proxy.newProxyInstance(<span class="keyword">this</span>.getClass().getClassLoader(), Array(classOf[Stub]), <span class="keyword">new</span> ProxyHandler(<span class="keyword">new</span> StubImpl))
+  proxy <span class="keyword">match</span> {
+    <span class="keyword">case</span> p: Stub =&gt; p.doSome();
+  }
+}
 </pre></td></tr></table></figure>
 
   
@@ -217,7 +200,7 @@ BeanUtils<span class="preprocessor">.getProperty</span>(p, <span class="string">
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/内省/">内省</a><a href="/tags/传智播客/">传智播客</a>
+  <span></span> <a href="/tags/java/">java</a><a href="/tags/动态代理/">动态代理</a>
   </div>
 
 
@@ -225,7 +208,7 @@ BeanUtils<span class="preprocessor">.getProperty</span>(p, <span class="string">
 
 <div class="article-share" id="share">
 
-  <div data-url="http://zhpooer.github.io/2014/04/12/专题-内省/" data-title="专题-内省 | Poe&#39;s World" data-tsina="null" class="share clearfix">
+  <div data-url="http://zhpooer.github.io/2014/04/18/java动态代理/" data-title="java动态代理 | Poe&#39;s World" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -234,19 +217,11 @@ BeanUtils<span class="preprocessor">.getProperty</span>(p, <span class="string">
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2014/04/12/java对象工具api/" title="java对象工具API">
-  <strong>PREVIOUS:</strong><br/>
-  <span>
-  java对象工具API</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2014/04/12/传智播客day10-reqeust&response/"  title="传智播客day10-reqeust&amp;response">
+<a href="/2014/04/18/linux-grep手记/"  title="linux-grep手记">
  <strong>NEXT:</strong><br/> 
- <span>传智播客day10-reqeust&amp;response
+ <span>linux-grep手记
 </span>
 </a>
 </div>
@@ -263,7 +238,7 @@ BeanUtils<span class="preprocessor">.getProperty</span>(p, <span class="string">
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">内省</span></a></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#java-lang-reflect-proxy"><span class="toc-number">1.</span> <span class="toc-text">java.lang.reflect.Proxy</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#java-lang-reflect-invocationhandler"><span class="toc-number">2.</span> <span class="toc-text">java.lang.reflect.InvocationHandler</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">实例</span></a></li></ol>
   </div>
 
 <div id="asidepart">
