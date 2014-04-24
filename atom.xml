@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Hello World]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://zhpooer.github.io/"/>
-  <updated>2014-04-23T14:58:37.862Z</updated>
+  <updated>2014-04-24T14:18:02.821Z</updated>
   <id>http://zhpooer.github.io/</id>
   
   <author>
@@ -13,6 +13,125 @@
   </author>
   
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[测试用数据库H2db]]></title>
+    <link href="http://zhpooer.github.io/2014/04/24/%E6%B5%8B%E8%AF%95%E7%94%A8%E6%95%B0%E6%8D%AE%E5%BA%93h2db/"/>
+    <id>http://zhpooer.github.io/2014/04/24/测试用数据库h2db/</id>
+    <published>2014-04-24T12:59:45.000Z</published>
+    <updated>2014-04-24T14:12:02.000Z</updated>
+    <content type="html"><![CDATA[<p>在写上一个项目时, 在运行测试和真实运行项目时, 连接的是同一个Mysql数据库.
+但是运行单元测试必须要有可重复性和隔离性, 测试时连接真实数据库,
+造成了单元测试不能重复运行, 所以需要一个机制, 在运行测试时,
+新建一个隔离的数据库, 等测试完, 把这个数据库清空或者废除. 详细需求如下:</p>
+<ol>
+<li>根据配置文件, 让系统选择加载数据库, 如在测试时连接一个数据库, 运行时连接另一个数据</li>
+<li>如果是测试, 那么系统在加载数据库之后需要运行一些SQL脚本, 初始化数据库</li>
+<li>运行完测试, 这个数据库要重置, 或者废除</li>
+<li>数据库不能是Mysql的外部安装的数据库, 这样可以在没有Mysql的机子上重复测试</li>
+</ol>
+<p>so, 根据谷歌搜索, 找到了java内嵌数据库<code>Derby</code>, 它是用纯Java写的数据库,
+只用加载一个Jar包, 就可以在Java程序中内嵌运行一个数据库. 运行代码如下</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre>Class<span class="preprocessor">.forName</span>(<span class="string">"org.apache.derby.jdbc.EmbeddedDriver"</span>)<span class="comment">;</span>
+DriverManager<span class="preprocessor">.getConnection</span>(<span class="string">"jdbc:derby:sample;create=true"</span>)<span class="comment">;</span>
+</pre></td></tr></table></figure>
+
+<p>这样就连接了一个Sample数据库, 且Derby会在工作目录下新建一个文件夹,
+存储Sample数据库的数据. 所以可以通过指定新建数据库文件夹在一个临时文件夹下, 来满足条件三.
+如Linux可以把新建文件建在 <code>/tmp</code> 目录下, 代码如下</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>DriverManager.getConnection("jdbc:derby:/tmp/sample;<span class="operator"><span class="keyword">create</span>=<span class="keyword">true</span><span class="string">");</span></span>
+</pre></td></tr></table></figure>
+
+<p>因为每次运行测试不能连同一个数据库文件, 所以要用Java生成一个临时文件夹</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+</pre></td><td class="code"><pre>DriverManager.getConnection(makeDerbyTempURL(<span class="string">"sample"</span>));
+
+<span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">makeDerbyTempURL</span>(String db) {
+    Path p = makeTmpDir();
+	<span class="keyword">return</span> <span class="string">"jdbc:derby:"</span> + p.toUri().getPath() + <span class="string">"/"</span> + db + <span class="string">";create=true"</span>;
+}
+<span class="keyword">private</span> <span class="keyword">static</span> Path <span class="title">makeTmpDir</span>() {
+    Path path = <span class="keyword">new</span> File(<span class="string">"/tmp"</span>).toPath();
+	Path p = <span class="keyword">null</span>;
+	<span class="keyword">try</span> {
+	    p = Files.createTempDirectory(path, <span class="string">"derby"</span>);
+	} <span class="keyword">catch</span> (IOException e) {
+	    <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(e);
+	}
+	<span class="keyword">return</span> p;
+}
+</pre></td></tr></table></figure>
+
+<p>但是如何满足条件二呢? 我猜想Derby提供了在内嵌数据库模式下直接导入SQL脚本的API,
+就一直通过谷歌搜索, 找这个解决方案, 可惜做了很多无用功.
+后来发现, 其实可以换个思路, 通过JDBC, 来直接执行SQL语句, 但是如何执行脚本呢?
+要我重新写一个程序, 加载脚本, 分析出SQL语句, 然后通过JDBC一条一条执行? no!
+有其他人已经解决过这个问题, 并且有Jar包可以直接使用, 通过这个思路,
+两三下就直接找到了<a href="http://www.cnblogs.com/zencorn/archive/2011/01/27/1946348.html" target="_blank">解决方案</a>.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="code"><pre>public static void execSQL(String scriptPath, String driveClass,
+        String url, String user, String passwd) {
+	SQLExec sqlExec = new SQLExec()<span class="comment">;</span>
+	sqlExec<span class="preprocessor">.setDriver</span>(driveClass)<span class="comment">;</span>
+	sqlExec<span class="preprocessor">.setUrl</span>(url)<span class="comment">;</span>
+	sqlExec<span class="preprocessor">.setUserid</span>(user)<span class="comment">;</span>
+	sqlExec<span class="preprocessor">.setPassword</span>(passwd)<span class="comment">;</span>
+	sqlExec<span class="preprocessor">.setSrc</span>(new File(scriptPath))<span class="comment">;</span>
+	sqlExec<span class="preprocessor">.setOnerror</span>((SQLExec<span class="preprocessor">.OnError</span>) (EnumeratedAttribute<span class="preprocessor">.getInstance</span>(
+	        SQLExec<span class="preprocessor">.OnError</span><span class="preprocessor">.class</span>, <span class="string">"abort"</span>)))<span class="comment">;</span>
+	sqlExec<span class="preprocessor">.setPrint</span>(false)<span class="comment">;</span>
+	sqlExec<span class="preprocessor">.setProject</span>(new Project())<span class="comment">;</span>
+	sqlExec<span class="preprocessor">.execute</span>()<span class="comment">;</span>
+}
+</pre></td></tr></table></figure>
+
+<p>所以说如何看待一个问题, 是解决一个问题的关键点.</p>
+<p>至于需求一, 可以通过配置<code>properties</code>来解决, 感兴趣的童鞋可以
+<a href="https://github.com/zhpooer/itcast-customer-demo/blob/master/src/java/io/zhpooer/util/ConnManager.java" target="_blank">猛击这里</a></p>
+<p>到这里, 已经基本解决了问题, 不过又出现了一个问题, Derby 不支持语句 <code>create table if exists tablename()...</code>, 
+而且每次运行测试时, 发现Derby创建数据库时, 总会造成硬盘忙的状态, 卡一小段时间.
+那么是不是可以有一个数据库直接在内存里运行, 测试运行完之后, 数据库直接删除.</p>
+<p>这个可以有, 那就是<code>H2db</code>, 它既支持内存数据库, 又支持内嵌数据.
+不过经我测试, 在H2内存数据库模式下, 只要运行完 <code>connection.close()</code>, 数据库就会被重置(有谁指正一下如何可以避免这个问题).
+这和我的项目需求不一致, 但是我发现他在内嵌模式下启动速度比Derby快. 所以直接换掉Derby.</p>
+<p><a href="https://github.com/zhpooer/itcast-customer-demo/blob/master/src/java/io/zhpooer/util/ConnManager.java" target="_blank">具体代码猛击这里</a></p>
+]]></content>
+    
+    
+      <category term="java" scheme="http://zhpooer.github.io/tags/java/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[传智播客day18-大结果集和大数据处理]]></title>
@@ -6512,157 +6631,6 @@ bookHistory=1               2           2-1
       <category term="传智播客" scheme="http://zhpooer.github.io/tags/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2/"/>
     
       <category term="cookie" scheme="http://zhpooer.github.io/tags/cookie/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[java对象工具API]]></title>
-    <link href="http://zhpooer.github.io/2014/04/12/java%E5%AF%B9%E8%B1%A1%E5%B7%A5%E5%85%B7api/"/>
-    <id>http://zhpooer.github.io/2014/04/12/java对象工具api/</id>
-    <published>2014-04-12T11:38:05.000Z</published>
-    <updated>2014-04-12T14:47:18.000Z</updated>
-    <content type="html"><![CDATA[<h1 id="system">System</h1>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-</pre></td><td class="code"><pre>System.<span class="keyword">long</span> currentTimeMillis();  <span class="comment">// 当前毫秒值</span>
-System.exit();                <span class="comment">// 退出</span>
-System.getProperties(); 
-System.getProperty(<span class="string">"line.separator"</span>);
-System.setProperty(key, <span class="keyword">value</span> ); <span class="comment">//给系统设置一些属性信息, 其他程序可以使用</span>
-</pre></td></tr></table></figure>
-
-<h1 id="java-lang-runtime">java.lang.Runtime</h1>
-<p>每个Java应用都有一个Runtime类实例, 与其运行的环境相连接</p>
-<blockquote>
-<p>查API文档, 没有构造方法提要, 就是私有构造方法</p>
-</blockquote>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-</pre></td><td class="code"><pre>Runtime r = Runtime.getRunTime();
-<span class="keyword">try</span> {
-    Process p = r.exec(<span class="string">"*.exe"</span>);
-} <span class="keyword">catch</span>( IOException e ){} <span class="comment">// 调用本地程序</span>
-p.destroy();
-</pre></td></tr></table></figure>
-
-<h1 id="java-lang-math">java.lang.Math</h1>
-<p>提供了数学方法, 是静态的</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-</pre></td><td class="code"><pre><span class="built_in">ceil</span>();    <span class="comment">// 取上值</span>
-<span class="built_in">floor</span>();   <span class="comment">// 取下值</span>
-<span class="built_in">round</span>();   <span class="comment">// 四舍五入</span>
-<span class="built_in">max</span>();
-<span class="built_in">pow</span>(<span class="number">3</span>, <span class="number">2</span>);     <span class="comment">// 三的二次方</span>
-Math.<span class="built_in">random</span>() <span class="comment">// 0 到 1 的伪随机值</span>
-Random r = new Random();
-r.nextInt();
-</pre></td></tr></table></figure>
-
-<h1 id="java-util-date">java.util.Date</h1>
-<blockquote>
-<p>Date月份是由 0 到 11 表示</p>
-</blockquote>
-<ol>
-<li><p>毫秒值 -&gt; 日期, 通过 <code>new Date(long time)</code> 完成  </p>
-<p> 还可以通过 <code>setTime()</code> 设置.</p>
-</li>
-<li>日期对象 -&gt; 毫秒值 <code>getTime()</code><figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-</pre></td><td class="code"><pre><span class="built_in">Date</span> d = <span class="keyword">new</span> <span class="built_in">Date</span>(); <span class="comment">//当前日期和时间</span>
-
-boolean after(<span class="built_in">Date</span> when);
-boolean before(<span class="built_in">Date</span> when);
-</pre></td></tr></table></figure>
-
-</li>
-</ol>
-<p>从JDK1.1开始使用Calendar类实现日期和时间字段之间的转换,
-使用DateFormat类来格式化和解析日期字符串.</p>
-<h2 id="java-text-dateformat">java.text.DateFormat</h2>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-</pre></td><td class="code"><pre>// 日期 默认风格的日期
-String myString = DateFormat<span class="preprocessor">.getDateInstance</span>()<span class="preprocessor">.format</span>(myDate)
-
-// 日期 + 时间 默认风格的日期和时间
-String myString = DateFormat<span class="preprocessor">.getDateTimeInstance</span>()<span class="preprocessor">.format</span>(myDate)
-
-DateFormat<span class="preprocessor">.getDateInstance</span>(DateFormate<span class="preprocessor">.LONG</span>)<span class="comment">;</span>
-DateFormat<span class="preprocessor">.getDateInstance</span>(DateFormate<span class="preprocessor">.MEDIUM</span>)<span class="comment">;</span>
-DateFormat<span class="preprocessor">.getDateTimeInstance</span>(DateFormate<span class="preprocessor">.LONG</span>, DateFormate<span class="preprocessor">.LONG</span>)
-
-// 自定义风格
-new SimpleDateFormat(<span class="string">"yyyyMMdd"</span>)
-</pre></td></tr></table></figure>
-
-<h2 id="-">将日期格式的字符串 转成 日期对象</h2>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-</pre></td><td class="code"><pre><span class="built_in">String</span> str_date = <span class="string">"2012-4-19"</span>;
-DateFormat format = DateFormat.getDateInstance(DateFormat.<span class="built_in">LONG</span>);
-<span class="built_in">Date</span> <span class="built_in">date</span> = format.parse(str_date);
-</pre></td></tr></table></figure>
-
-<h2 id="-">两个日期之间相隔多少天</h2>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-</pre></td><td class="code"><pre>long separatTime = **
-<span class="built_in">Int</span> <span class="built_in">day</span> = separatTime/<span class="number">1000</span>/<span class="number">60</span>/<span class="number">60</span>/<span class="number">24</span>;
-</pre></td></tr></table></figure>
-
-<h1 id="java-util-calendar">java.util.Calendar</h1>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-</pre></td><td class="code"><pre>Calendar c = Calendar<span class="preprocessor">.getInstance</span>()<span class="comment">;</span>
-
-c<span class="preprocessor">.get</span>(Calendar<span class="preprocessor">.YEAR</span>)<span class="comment">;</span>
-c<span class="preprocessor">.get</span>(Calendar<span class="preprocessor">.MONTH</span>)<span class="comment">;</span>
-c<span class="preprocessor">.get</span>(Calendar<span class="preprocessor">.DAY</span>_OF_MONTH)<span class="comment">;</span>
-
-c<span class="preprocessor">.set</span>(<span class="number">2001</span>, <span class="number">3</span>, <span class="number">19</span>)<span class="comment">;</span>
-c<span class="preprocessor">.add</span>(Calendar<span class="preprocessor">.YEAR</span>, <span class="number">2</span>)<span class="comment">;</span>
-c<span class="preprocessor">.add</span>(Calendar<span class="preprocessor">.MONTH</span>, <span class="number">2</span>)<span class="comment">;</span>
-c<span class="preprocessor">.add</span>(Calendar<span class="preprocessor">.DAY</span>_OF_MONTH, <span class="number">2</span>)<span class="comment">;</span>
-</pre></td></tr></table></figure>
-
-]]></content>
-    
-    
-      <category term="java" scheme="http://zhpooer.github.io/tags/java/"/>
     
   </entry>
   
