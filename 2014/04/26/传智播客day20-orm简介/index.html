@@ -84,7 +84,7 @@ Mapping: 映射(存在在着对应关系)
     </p>
   <p class="article-time">
     <time datetime="2014-04-26T01:28:23.000Z" itemprop="datePublished">4月 26 2014</time>
-    更新日期:<time datetime="2014-04-28T05:56:54.000Z" itemprop="dateModified">4月 28 2014</time>
+    更新日期:<time datetime="2014-05-05T02:20:24.000Z" itemprop="dateModified">5月 5 2014</time>
     
   </p>
 </header>
@@ -128,9 +128,9 @@ Mapping: 映射(存在在着对应关系)
 4
 5
 </pre></td><td class="code"><pre><span class="operator"><span class="keyword">create</span> <span class="keyword">table</span> <span class="keyword">user</span>(
-id <span class="keyword">int</span> <span class="keyword">primary</span> <span class="keyword">key</span>,
-name <span class="keyword">varchar</span>(<span class="number">20</span>),
-birthday <span class="keyword">date</span>
+    id <span class="keyword">int</span> <span class="keyword">primary</span> <span class="keyword">key</span>,
+    name <span class="keyword">varchar</span>(<span class="number">20</span>),
+    birthday <span class="keyword">date</span>
 );</span>
 </pre></td></tr></table></figure>
 
@@ -140,9 +140,9 @@ birthday <span class="keyword">date</span>
 4
 5
 </pre></td><td class="code"><pre><span class="keyword">public</span> <span class="keyword">class</span> User{
-<span class="keyword">private</span> <span class="keyword">int</span> id;
-<span class="keyword">private</span> String name;
-<span class="keyword">private</span> Date birthday;
+    <span class="keyword">private</span> <span class="keyword">int</span> id;
+    <span class="keyword">private</span> String name;
+    <span class="keyword">private</span> Date birthday;
 }
 </pre></td></tr></table></figure>
 
@@ -174,29 +174,29 @@ birthday <span class="keyword">date</span>
 26
 </pre></td><td class="code"><pre><span class="keyword">private</span> QueryRunner qr = <span class="keyword">new</span> QueryRunner(datasource);
 <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testAdd</span>(){
-qr.update(<span class="string">"insert into user values(?, ?, ?)"</span>, <span class="number">1</span>, <span class="string">"aaa"</span>, <span class="keyword">new</span> Date());
+    qr.update(<span class="string">"insert into user values(?, ?, ?)"</span>, <span class="number">1</span>, <span class="string">"aaa"</span>, <span class="keyword">new</span> Date());
 }
 <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testUpdate</span>(){
-qr.update(<span class="string">"update user set name=? where id=?"</span>, <span class="string">"aaa"</span>, <span class="keyword">new</span> Date(), <span class="number">1</span>);
+    qr.update(<span class="string">"update user set name=? where id=?"</span>, <span class="string">"aaa"</span>, <span class="keyword">new</span> Date(), <span class="number">1</span>);
 }
 <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testDel</span>(){
-qr.update(<span class="string">"delete from user where id=?"</span>, <span class="number">1</span>);
+    qr.update(<span class="string">"delete from user where id=?"</span>, <span class="number">1</span>);
 }
 <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testQueryOne</span>(){
-User u = qr.query(<span class="string">"select * from user where id=1"</span>, <span class="keyword">new</span> BeanHandler&lt;User&gt;(User.class), <span class="number">1</span>);
+    User u = qr.query(<span class="string">"select * from user where id=1"</span>, <span class="keyword">new</span> BeanHandler&lt;User&gt;(User.class), <span class="number">1</span>);
 }
 <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testQuery1</span>(){
-User u = qr.query(<span class="string">"select * from user"</span>, <span class="keyword">new</span> BeanHandler&lt;User&gt;(User.class));
+    User u = qr.query(<span class="string">"select * from user"</span>, <span class="keyword">new</span> BeanHandler&lt;User&gt;(User.class));
 }
 <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testMulti</span>(){
-List&lt;User&gt; us = qr.query(<span class="string">"select * from user"</span>, <span class="keyword">new</span> ListBeanHandler&lt;User&gt;(User.class));
+    List&lt;User&gt; us = qr.query(<span class="string">"select * from user"</span>, <span class="keyword">new</span> ListBeanHandler&lt;User&gt;(User.class));
 }
 <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testBatch</span>(){
-Object <span class="keyword">params</span>[][] = <span class="keyword">new</span> Object[<span class="number">10</span>][];
-<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="keyword">params</span>.length;i++){
-<span class="keyword">params</span>[i] = <span class="keyword">new</span> Object[]{i+<span class="number">1</span>, <span class="string">"aaa"</span> + ()i+<span class="number">1</span>), <span class="keyword">new</span> Date()}
-}
-qr.batch(<span class="string">"insert into user values(?,?,?)"</span>, <span class="keyword">params</span>);
+    Object <span class="keyword">params</span>[][] = <span class="keyword">new</span> Object[<span class="number">10</span>][];
+    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="keyword">params</span>.length;i++){
+        <span class="keyword">params</span>[i] = <span class="keyword">new</span> Object[]{i+<span class="number">1</span>, <span class="string">"aaa"</span> + ()i+<span class="number">1</span>), <span class="keyword">new</span> Date()}
+    }
+    qr.batch(<span class="string">"insert into user values(?,?,?)"</span>, <span class="keyword">params</span>);
 }
 </pre></td></tr></table></figure>
 
@@ -240,38 +240,38 @@ qr.batch(<span class="string">"insert into user values(?,?,?)"</span>, <span cla
 </pre></td><td class="code"><pre>
 <span class="comment">// 把结果集的第一条记录封装到数组中, 数组中的元素就是每一列的值</span>
 <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testArrayHandler</span>(){
-Object objs[] = qr.query(<span class="string">"select * from user"</span>, <span class="keyword">new</span> ArrayHandler());
+    Object objs[] = qr.query(<span class="string">"select * from user"</span>, <span class="keyword">new</span> ArrayHandler());
 }
 
 <span class="comment">// 把结果集中的每条记录封装到一个List中, 元素是Object[],</span>
 <span class="comment">// 适合查询结果由多条的记录</span>
 <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testArrayListHandler</span>(){
-List&lt;Object[]&gt; list = qr.query(<span class="string">"select * from user"</span>, <span class="keyword">new</span> ArrayListHandler());
+    List&lt;Object[]&gt; list = qr.query(<span class="string">"select * from user"</span>, <span class="keyword">new</span> ArrayListHandler());
 }
 
 <span class="comment">//把查询结果中的某一列封装到List中</span>
 <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testColumnListHandler</span>(){
-List&lt;Object&gt; list = qr.query(<span class="string">"select * from user"</span>, <span class="keyword">new</span> ColumnListHandler(<span class="string">"name"</span>));
+    List&lt;Object&gt; list = qr.query(<span class="string">"select * from user"</span>, <span class="keyword">new</span> ColumnListHandler(<span class="string">"name"</span>));
 }
 
 <span class="comment">// 把查询结果封装到一个Map中, Map中的key值是你指定的列值</span>
 <span class="comment">// value 也是一个Map, map的key是字段名, value是字段值</span>
 <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testKeyedHandler</span>(){
-Map&lt;Object,Map&lt;String,Object&gt;&gt; bmap = qr.query(<span class="string">"select * from user"</span>, <span class="keyword">new</span> KeyedHandler(<span class="string">"id"</span>));
+    Map&lt;Object,Map&lt;String,Object&gt;&gt; bmap = qr.query(<span class="string">"select * from user"</span>, <span class="keyword">new</span> KeyedHandler(<span class="string">"id"</span>));
 }
 
 <span class="comment">// 把结果集中的第一条记录封装到Map中, key是字段名, value是字段值</span>
 <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testMapHandler</span>(){
-Map&lt;String, Object&gt; map = qr.query(<span class="string">"select * from user"</span>, <span class="keyword">new</span> MapHandler());
+    Map&lt;String, Object&gt; map = qr.query(<span class="string">"select * from user"</span>, <span class="keyword">new</span> MapHandler());
 }
 <span class="comment">// 每个元的代表一条记录, 用Map 封装, key是字段名, value是字段值</span>
 <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testMapListHandler</span>(){
-List&lt;Map&lt;String, Object&gt;&gt; list = qr.query(<span class="string">"select * from user"</span>, <span class="keyword">new</span> MapListHandler);
+    List&lt;Map&lt;String, Object&gt;&gt; list = qr.query(<span class="string">"select * from user"</span>, <span class="keyword">new</span> MapListHandler);
 }
 
 <span class="comment">// 单行, 单列</span>
 <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testScalarHandler</span>(){
-Object list = qr.query(<span class="string">"select count(*) from user"</span>, <span class="keyword">new</span> ScalarHandler(<span class="number">1</span>));
+    Object list = qr.query(<span class="string">"select count(*) from user"</span>, <span class="keyword">new</span> ScalarHandler(<span class="number">1</span>));
 }
 </pre></td></tr></table></figure>
 
@@ -294,16 +294,16 @@ Object list = qr.query(<span class="string">"select count(*) from user"</span>, 
 11
 12
 </pre></td><td class="code"><pre><span class="keyword">public</span> <span class="keyword">class</span> ThreadLocal&lt;T&gt;{
-<span class="keyword">private</span> Map&lt;Runnable, T&gt; map = <span class="keyword">new</span> HashMap&lt;Runnable, T&gt;();
-<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">set</span>(T t){
-map.put(Thread.currentThread(), t); <span class="comment">// 把传入的参数绑定到当前线程上</span>
-}
-<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">remove</span>(){
-map.remove(Thread.currentThread());
-}
-<span class="keyword">public</span> T <span class="title">get</span>(){
-<span class="keyword">return</span> map.<span class="keyword">get</span>(Thread.currentThread()); <span class="comment">// 获取当前线程绑定的脆响</span>
-}
+    <span class="keyword">private</span> Map&lt;Runnable, T&gt; map = <span class="keyword">new</span> HashMap&lt;Runnable, T&gt;();
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">set</span>(T t){
+        map.put(Thread.currentThread(), t); <span class="comment">// 把传入的参数绑定到当前线程上</span>
+    }
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">remove</span>(){
+        map.remove(Thread.currentThread());
+    }
+    <span class="keyword">public</span> T <span class="title">get</span>(){
+        <span class="keyword">return</span> map.<span class="keyword">get</span>(Thread.currentThread()); <span class="comment">// 获取当前线程绑定的脆响</span>
+    }
 }
 </pre></td></tr></table></figure>
 
@@ -326,11 +326,11 @@ map.remove(Thread.currentThread());
 6
 7
 </pre></td><td class="code"><pre><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">findAccontByName</span>(acconntname){
-Account account = qr.query(<span class="string">"select * from account where name=?"</span>, <span class="keyword">new</span> BeanHandler&lt;Account&gt;(Account.class), accountName);
+    Account account = qr.query(<span class="string">"select * from account where name=?"</span>, <span class="keyword">new</span> BeanHandler&lt;Account&gt;(Account.class), accountName);
 }
 
 <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">updateAccount</span>(Account account){
-qr.update(<span class="string">"udpate set "</span>, account.id, account.name)
+    qr.update(<span class="string">"udpate set "</span>, account.id, account.name)
 }
 </pre></td></tr></table></figure>
 
@@ -394,35 +394,35 @@ conn<span class="preprocessor">.setAutoCommit</span>(true)<span class="comment">
 30
 31
 </pre></td><td class="code"><pre><span class="keyword">public</span> <span class="keyword">class</span> TransactionManager{
-<span class="keyword">private</span> <span class="keyword">static</span> ThreadLocal&lt;Connection&gt; t1 = <span class="keyword">new</span> ThreadLocal&lt;Connection&gt;();
-<span class="keyword">public</span> <span class="keyword">static</span> <span class="title">Connection</span>(){
-Connecton conn = t1.<span class="keyword">get</span>(); <span class="comment">// 从当前线程上获取</span>
-<span class="keyword">if</span>(conn==<span class="keyword">null</span>){
-conn = dataSource.getConnection(); <span class="comment">// 没有就从池中取一个</span>
-t1.<span class="keyword">set</span>(conn);
-}
-<span class="keyword">return</span> conn;
-}
+    <span class="keyword">private</span> <span class="keyword">static</span> ThreadLocal&lt;Connection&gt; t1 = <span class="keyword">new</span> ThreadLocal&lt;Connection&gt;();
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="title">Connection</span>(){
+        Connecton conn = t1.<span class="keyword">get</span>(); <span class="comment">// 从当前线程上获取</span>
+        <span class="keyword">if</span>(conn==<span class="keyword">null</span>){
+            conn = dataSource.getConnection(); <span class="comment">// 没有就从池中取一个</span>
+            t1.<span class="keyword">set</span>(conn);
+        }
+        <span class="keyword">return</span> conn;
+    }
 
-<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">startTransaction</span>(){
-Connection conn = getConnection();
-conn.setAutoCommit(<span class="keyword">false</span>);
-}
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">startTransaction</span>(){
+        Connection conn = getConnection();
+        conn.setAutoCommit(<span class="keyword">false</span>);
+    }
 
-<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">commit</span>(){
-Connection conn = getConnection();
-conn.commit();
-}
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">commit</span>(){
+        Connection conn = getConnection();
+        conn.commit();
+    }
 
-<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">rollback</span>(){
-Connection conn = getConnection();
-conn.rollback();
-}
-<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">release</span>(){
-Connection conn = getConnection();
-conn.close();
-t1.remove();  <span class="comment">// 从当前线程解绑, 因为服务器使用了线程池技术</span>
-}
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">rollback</span>(){
+        Connection conn = getConnection();
+        conn.rollback();
+    }
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">release</span>(){
+        Connection conn = getConnection();
+        conn.close();
+        t1.remove();  <span class="comment">// 从当前线程解绑, 因为服务器使用了线程池技术</span>
+    }
 }
 </pre></td></tr></table></figure>
 
@@ -466,11 +466,11 @@ TransactionManager<span class="preprocessor">.release</span>()<span class="comme
 6
 7
 </pre></td><td class="code"><pre><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">findAccontByName</span>(acconntname){
-Account account = qr.query(TransactionManager.getConnection(), <span class="string">"select * from account where name=?"</span>, <span class="keyword">new</span> BeanHandler&lt;Account&gt;(Account.class), accountName);
+    Account account = qr.query(TransactionManager.getConnection(), <span class="string">"select * from account where name=?"</span>, <span class="keyword">new</span> BeanHandler&lt;Account&gt;(Account.class), accountName);
 }
 
 <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">updateAccount</span>(Account account){
-qr.update(TransactionManager.getConnection(), <span class="string">"udpate set "</span>, account.id, account.name)
+    qr.update(transactionmanager.getconnection(), <span class="string">"udpate set "</span>, account.id, account.name)
 }
 </pre></td></tr></table></figure>
 
@@ -480,7 +480,7 @@ qr.update(TransactionManager.getConnection(), <span class="string">"udpate set "
 2
 3
 </pre></td><td class="code"><pre><span class="keyword">public</span> Interface BusinessService{
-<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">transform</span>(){}
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">transform</span>(){}
 }
 </pre></td></tr></table></figure>
 
@@ -506,21 +506,21 @@ qr.update(TransactionManager.getConnection(), <span class="string">"udpate set "
 </pre></td><td class="code"><pre><span class="keyword">public</span> <span class="keyword">class</span> BeanFactory {
 <span class="comment">// 返回BusinessService的实现类的代理对象</span>
 <span class="comment">// 面向切面编程</span>
-<span class="keyword">public</span> <span class="keyword">static</span> BusinessService <span class="title">getBusinessService</span>(){
-BusinessService s = <span class="keyword">new</span> BusinessService();
-BusinessService proxy = Proxy.newProxyInstancee(
-getClassLoader(), s.getClass().getInterfaces(),
-<span class="keyword">new</span> InvocationHandler() {
-@Override <span class="keyword">public</span> Object <span class="title">invoke</span>() {
-TransactionManager.startTransaction();
-Object rtValue = method.invoke(s, args);
-TransactionManager.commit();
-TransactionManager.rollback(); <span class="comment">// try catch</span>
-TransactionManager.release(); <span class="comment">// finally</span>
-<span class="keyword">return</span> rtValue;
-}
-});
-}
+    <span class="keyword">public</span> <span class="keyword">static</span> BusinessService <span class="title">getBusinessService</span>(){
+    BusinessService s = <span class="keyword">new</span> BusinessService();
+    BusinessService proxy = Proxy.newProxyInstancee(
+        getClassLoader(), s.getClass().getInterfaces(),
+        <span class="keyword">new</span> InvocationHandler() {
+            @Override <span class="keyword">public</span> Object <span class="title">invoke</span>() {
+                TransactionManager.startTransaction();
+                Object rtValue = method.invoke(s, args);
+                    TransactionManager.commit();
+                    TransactionManager.rollback(); <span class="comment">// try catch</span>
+                    TransactionManager.release(); <span class="comment">// finally</span>
+                    <span class="keyword">return</span> rtValue;
+            }
+        });
+    }
 }
 </pre></td></tr></table></figure>
 
@@ -540,15 +540,15 @@ TransactionManager.release(); <span class="comment">// finally</span>
 10
 11
 </pre></td><td class="code"><pre><span class="operator"><span class="keyword">create</span> <span class="keyword">table</span> customer(
-id <span class="keyword">int</span> <span class="keyword">primary</span> <span class="keyword">key</span>,
-name <span class="keyword">varchar</span>(<span class="number">100</span>)
+    id <span class="keyword">int</span> <span class="keyword">primary</span> <span class="keyword">key</span>,
+    name <span class="keyword">varchar</span>(<span class="number">100</span>)
 )
 <span class="keyword">create</span> <span class="keyword">table</span> orders(
-id <span class="keyword">int</span> <span class="keyword">primary</span> <span class="keyword">key</span>,
-num <span class="keyword">varchar</span>(<span class="number">100</span>),
-money <span class="keyword">float</span>(<span class="number">8</span>,<span class="number">0</span>),
-customer_id <span class="keyword">int</span>,
-<span class="keyword">constraint</span> customer_id_ref <span class="keyword">foreign</span> <span class="keyword">key</span> (customer_id) referrence customer(id)
+    id <span class="keyword">int</span> <span class="keyword">primary</span> <span class="keyword">key</span>,
+    num <span class="keyword">varchar</span>(<span class="number">100</span>),
+    money <span class="keyword">float</span>(<span class="number">8</span>,<span class="number">0</span>),
+    customer_id <span class="keyword">int</span>,
+    <span class="keyword">constraint</span> customer_id_ref <span class="keyword">foreign</span> <span class="keyword">key</span> (customer_id) referrence customer(id)
 )</span>
 </pre></td></tr></table></figure>
 
@@ -564,15 +564,15 @@ customer_id <span class="keyword">int</span>,
 10
 11
 </pre></td><td class="code"><pre><span class="keyword">public</span> <span class="keyword">class</span> Customer {
-<span class="keyword">private</span> <span class="keyword">int</span> id;
-<span class="keyword">private</span> String name;
-<span class="keyword">private</span> List&lt;Orders&gt; orders = <span class="keyword">new</span> ArrayList&lt;Orders&gt;
+    <span class="keyword">private</span> <span class="keyword">int</span> id;
+    <span class="keyword">private</span> String name;
+    <span class="keyword">private</span> List&lt;Orders&gt; orders = <span class="keyword">new</span> ArrayList&lt;Orders&gt;
 }
 <span class="keyword">public</span> <span class="keyword">class</span> Orders {
-<span class="keyword">private</span> <span class="keyword">int</span> id;
-<span class="keyword">private</span> String num;
-<span class="keyword">private</span> <span class="keyword">float</span> money;
-<span class="keyword">private</span> Customer customer;
+    <span class="keyword">private</span> <span class="keyword">int</span> id;
+    <span class="keyword">private</span> String num;
+    <span class="keyword">private</span> <span class="keyword">float</span> money;
+    <span class="keyword">private</span> Customer customer;
 }
 </pre></td></tr></table></figure>
 
@@ -601,27 +601,27 @@ customer_id <span class="keyword">int</span>,
 22
 23
 </pre></td><td class="code"><pre><span class="keyword">public</span> <span class="keyword">class</span> CustomerDaoImpl{
-<span class="keyword">private</span> QueryRunner rq;
-<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addCustomer</span>(Customer c){
-rq.update(<span class="string">""</span>, c.getId(), c.getName());
-List&lt;Orders&gt; os = c.getOrders();
-<span class="keyword">if</span>(os!=<span class="keyword">null</span>&&os.size()&gt;<span class="number">0</span>){
-<span class="keyword">for</span>(Orders o:os){
-os.update(<span class="string">""</span>, o.getId...);
-}
-}
-}
+    <span class="keyword">private</span> QueryRunner rq;
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addCustomer</span>(Customer c){
+        rq.update(<span class="string">""</span>, c.getId(), c.getName());
+        List&lt;Orders&gt; os = c.getOrders();
+        <span class="keyword">if</span>(os!=<span class="keyword">null</span>&&os.size()&gt;<span class="number">0</span>){
+            <span class="keyword">for</span>(Orders o:os){
+                os.update(<span class="string">""</span>, o.getId...);
+            }
+        }
+    }
 
 <span class="comment">// 查询客户时,要不要查询客户拥有的订单? 看需求(Hibernate用的是延迟加载)</span>
-<span class="keyword">public</span> Customer <span class="title">findByCustomerId</span>(<span class="keyword">int</span> id){
-Customer c = rq.query(<span class="string">"select * from customer where id=?"</span>, <span class="keyword">new</span> BeanHandler&lt;Customer&gt;(), id);
-<span class="keyword">if</span>(c!=<span class="keyword">null</span>){
-<span class="comment">// 有查询结果, 查询该客户的订单</span>
-List&lt;Orders&gt; os = qr.query(<span class="string">"select * from orders where customer_id=?"</span>), <span class="keyword">new</span> BeanListHander&lt;Orders&gt;, c.getId());
-c.setOrders(os);
-}
-<span class="keyword">return</span> c;
-}
+    <span class="keyword">public</span> Customer <span class="title">findByCustomerId</span>(<span class="keyword">int</span> id){
+        Customer c = rq.query(<span class="string">"select * from customer where id=?"</span>, <span class="keyword">new</span> BeanHandler&lt;Customer&gt;(), id);
+        <span class="keyword">if</span>(c!=<span class="keyword">null</span>){
+            <span class="comment">// 有查询结果, 查询该客户的订单</span>
+            List&lt;Orders&gt; os = qr.query(<span class="string">"select * from orders where customer_id=?"</span>), <span class="keyword">new</span> BeanListHander&lt;Orders&gt;, c.getId());
+            c.setOrders(os);
+        }
+        <span class="keyword">return</span> c;
+    }
 }
 </pre></td></tr></table></figure>
 
@@ -651,29 +651,29 @@ c.setOrders(os);
 24
 25
 </pre></td><td class="code"><pre><span class="keyword">public</span> <span class="keyword">class</span> CustomerDaoTest {
-<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testAdd</span>(){
-Customer c = <span class="keyword">new</span> Customer();
-c.setId(<span class="number">1</span>);
-c.setName(<span class="string">""</span>);
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testAdd</span>(){
+        Customer c = <span class="keyword">new</span> Customer();
+        c.setId(<span class="number">1</span>);
+        c.setName(<span class="string">""</span>);
 
-Orders o1 = <span class="keyword">new</span> Orders();
-o1.setId(<span class="number">1</span>);
-o1.setNum(<span class="string">"201401"</span>);
-o1.setMoney(<span class="number">1000</span>);
-c.getOrders().add(o1);
+        Orders o1 = <span class="keyword">new</span> Orders();
+        o1.setId(<span class="number">1</span>);
+        o1.setNum(<span class="string">"201401"</span>);
+        o1.setMoney(<span class="number">1000</span>);
+        c.getOrders().add(o1);
 
-Orders o2 = <span class="keyword">new</span> Orders();
-o2.setId(<span class="number">1</span>);
-o2.setNum(<span class="string">"201401"</span>);
-o2.setMoney(<span class="number">1000</span>);
-c.getOrders().add(o2);
-dao.addCustomer(c);
-}
+        Orders o2 = <span class="keyword">new</span> Orders();
+        o2.setId(<span class="number">1</span>);
+        o2.setNum(<span class="string">"201401"</span>);
+        o2.setMoney(<span class="number">1000</span>);
+        c.getOrders().add(o2);
+        dao.addCustomer(c);
+    }
 
-<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testQuery</span>(){
-Customer c = dao.findByCustomerId(<span class="number">1</span>);
-List&lt;Orders&gt; os = c.getOrders();
-}
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testQuery</span>(){
+        Customer c = dao.findByCustomerId(<span class="number">1</span>);
+        List&lt;Orders&gt; os = c.getOrders();
+    }
 }
 </pre></td></tr></table></figure>
 
@@ -697,21 +697,21 @@ List&lt;Orders&gt; os = c.getOrders();
 16
 17
 </pre></td><td class="code"><pre><span class="operator"><span class="keyword">create</span> <span class="keyword">table</span> teacher (
-id <span class="keyword">int</span> <span class="keyword">primary</span> <span class="keyword">key</span>,
-name <span class="keyword">varchar</span>(<span class="number">100</span>),
-salary <span class="keyword">float</span>(<span class="number">8</span>,<span class="number">0</span>)
+    id <span class="keyword">int</span> <span class="keyword">primary</span> <span class="keyword">key</span>,
+    name <span class="keyword">varchar</span>(<span class="number">100</span>),
+    salary <span class="keyword">float</span>(<span class="number">8</span>,<span class="number">0</span>)
 );</span>
 <span class="operator"><span class="keyword">create</span> <span class="keyword">table</span> student(
-id <span class="keyword">int</span> <span class="keyword">primary</span> <span class="keyword">key</span>,
-name <span class="keyword">varchar</span>(<span class="number">100</span>),
-grade <span class="keyword">varchar</span>(<span class="number">100</span>)
+    id <span class="keyword">int</span> <span class="keyword">primary</span> <span class="keyword">key</span>,
+    name <span class="keyword">varchar</span>(<span class="number">100</span>),
+    grade <span class="keyword">varchar</span>(<span class="number">100</span>)
 );</span>
 <span class="operator"><span class="keyword">create</span> <span class="keyword">table</span> teacher_student(
-t_id <span class="keyword">int</span>,
-s_id <span class="keyword">int</span>,
-<span class="keyword">primary</span> <span class="keyword">key</span>(t_id, s_id),
-<span class="keyword">constraint</span> t_id_fk <span class="keyword">foreign</span> <span class="keyword">key</span>(t_id) referrences teacher(id),
-<span class="keyword">constraint</span> s_id_fk <span class="keyword">foreign</span> <span class="keyword">key</span>(s_id) referrences student(id)
+    t_id <span class="keyword">int</span>,
+    s_id <span class="keyword">int</span>,
+    <span class="keyword">primary</span> <span class="keyword">key</span>(t_id, s_id),
+    <span class="keyword">constraint</span> t_id_fk <span class="keyword">foreign</span> <span class="keyword">key</span>(t_id) referrences teacher(id),
+    <span class="keyword">constraint</span> s_id_fk <span class="keyword">foreign</span> <span class="keyword">key</span>(s_id) referrences student(id)
 );</span>
 </pre></td></tr></table></figure>
 
@@ -728,16 +728,16 @@ s_id <span class="keyword">int</span>,
 11
 12
 </pre></td><td class="code"><pre><span class="keyword">public</span> <span class="keyword">class</span> Teacher {
-<span class="keyword">private</span> <span class="keyword">int</span> id;
-<span class="keyword">private</span> String name;
-<span class="keyword">private</span> <span class="keyword">float</span> salary;
-<span class="keyword">private</span> List&lt;Student&gt; studnents = <span class="keyword">new</span> ArrayList();
+    <span class="keyword">private</span> <span class="keyword">int</span> id;
+    <span class="keyword">private</span> String name;
+    <span class="keyword">private</span> <span class="keyword">float</span> salary;
+    <span class="keyword">private</span> List&lt;Student&gt; studnents = <span class="keyword">new</span> ArrayList();
 }
 <span class="keyword">public</span> <span class="keyword">class</span> Student{
-<span class="keyword">private</span> <span class="keyword">int</span> id;
-<span class="keyword">private</span> String name;
-<span class="keyword">private</span> String grade;
-<span class="keyword">private</span> List&lt;Teacher&gt; teachers = <span class="keyword">new</span> ArrayList();
+    <span class="keyword">private</span> <span class="keyword">int</span> id;
+    <span class="keyword">private</span> String name;
+    <span class="keyword">private</span> String grade;
+    <span class="keyword">private</span> List&lt;Teacher&gt; teachers = <span class="keyword">new</span> ArrayList();
 }
 </pre></td></tr></table></figure>
 
@@ -770,31 +770,31 @@ s_id <span class="keyword">int</span>,
 26
 27
 </pre></td><td class="code"><pre><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addTeacher</span>(){
-<span class="comment">// 保存老师的基本信息</span>
-qr.update(<span class="string">"insert int teacher values(?,?,?)"</span>, t.getId(), t.getName());
-List&lt;Student&gt; sts = t.getStudnets();
-<span class="comment">// 查看学生的信息在不在, 不在才保存</span>
-<span class="keyword">if</span>(students!=<span class="keyword">null</span>&& students.size()&gt;<span class="number">0</span>){
-<span class="keyword">for</span>(Student s:students){
-Student dbs = qr.query(<span class="string">"select * from student where id=?"</span>, BeanHandler(), s.getId());
-<span class="keyword">if</span>(dbs==<span class="keyword">null</span>){
-qr.update(<span class="string">"insert into student values(?,?,?)"</span>);
-}
-qr.update(<span class="string">"insert into teacher_student values(?,?)"</span>, t.getId(), s.getId());
-}
-}
-<span class="comment">// 同时保存老师和学生的关联关系</span>
+    <span class="comment">// 保存老师的基本信息</span>
+    qr.update(<span class="string">"insert int teacher values(?,?,?)"</span>, t.getId(), t.getName());
+    List&lt;Student&gt; sts = t.getStudnets();
+    <span class="comment">// 查看学生的信息在不在, 不在才保存</span>
+    <span class="keyword">if</span>(students!=<span class="keyword">null</span>&& students.size()&gt;<span class="number">0</span>){
+        <span class="keyword">for</span>(Student s:students){
+            Student dbs = qr.query(<span class="string">"select * from student where id=?"</span>, BeanHandler(), s.getId());
+            <span class="keyword">if</span>(dbs==<span class="keyword">null</span>){
+                qr.update(<span class="string">"insert into student values(?,?,?)"</span>);
+            }
+            qr.update(<span class="string">"insert into teacher_student values(?,?)"</span>, t.getId(), s.getId());
+        }
+    }
+    <span class="comment">// 同时保存老师和学生的关联关系</span>
 }
 <span class="comment">// 要不要查询老师教过的学员? 看需求</span>
 <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">findTeacherById</span>(<span class="keyword">int</span> id){
-Teacher t = qr.query(<span class="string">"select * from teacher where id=?"</span>, BeanHandler, teacher.getId);
-<span class="keyword">if</span>(t!=<span class="keyword">null</span>){
-<span class="comment">// String sql = "select * from student where id in(select s_id from teacher_student where t_id=?)"; // 子查询</span>
-<span class="comment">// String sql = "select s.* from teacher_student ts, student s where s.id=ts.s.id and ts.t_id=?"; // 隐式内连接</span>
-String sql = <span class="string">"select s.* from teacher_student inner join student s on s.id=ts.s_id where ts.t_id=?"</span>; <span class="comment">// 显式内连接</span>
-List&lt;Student&gt; ss = qr.query(sql, <span class="keyword">new</span> BeanListHander&lt;Student&gt;);
-t.setStudents(ss);
-}
+    Teacher t = qr.query(<span class="string">"select * from teacher where id=?"</span>, BeanHandler, teacher.getId);
+    <span class="keyword">if</span>(t!=<span class="keyword">null</span>){
+        <span class="comment">// String sql = "select * from student where id in(select s_id from teacher_student where t_id=?)"; // 子查询</span>
+        <span class="comment">// String sql = "select s.* from teacher_student ts, student s where s.id=ts.s.id and ts.t_id=?"; // 隐式内连接</span>
+        String sql = <span class="string">"select s.* from teacher_student inner join student s on s.id=ts.s_id where ts.t_id=?"</span>; <span class="comment">// 显式内连接</span>
+        List&lt;Student&gt; ss = qr.query(sql, <span class="keyword">new</span> BeanListHander&lt;Student&gt;);
+        t.setStudents(ss);
+    }
 }
 </pre></td></tr></table></figure>
 
@@ -822,27 +822,27 @@ t.setStudents(ss);
 22
 23
 </pre></td><td class="code"><pre>public void testAddTeacher(){
-Teacher t1 = new Teacher()<span class="comment">;</span>
-t1<span class="preprocessor">.setId</span>(<span class="number">1</span>)<span class="comment">;</span>
-t1<span class="preprocessor">.setName</span>(<span class="string">"qb"</span>)<span class="comment">;</span>
-t1<span class="preprocessor">.setSalary</span>(<span class="number">10</span>)<span class="comment">;</span>
+    Teacher t1 = new Teacher()<span class="comment">;</span>
+    t1<span class="preprocessor">.setId</span>(<span class="number">1</span>)<span class="comment">;</span>
+    t1<span class="preprocessor">.setName</span>(<span class="string">"qb"</span>)<span class="comment">;</span>
+    t1<span class="preprocessor">.setSalary</span>(<span class="number">10</span>)<span class="comment">;</span>
 
-Teacher t2 = new Teacher()<span class="comment">;</span>
-t2<span class="preprocessor">.setId</span>(<span class="number">1</span>)<span class="comment">;</span>
-t2<span class="preprocessor">.setName</span>(<span class="string">"wzt"</span>)<span class="comment">;</span>
-t2<span class="preprocessor">.setSalary</span>(<span class="number">10</span>)<span class="comment">;</span>
+    Teacher t2 = new Teacher()<span class="comment">;</span>
+    t2<span class="preprocessor">.setId</span>(<span class="number">1</span>)<span class="comment">;</span>
+    t2<span class="preprocessor">.setName</span>(<span class="string">"wzt"</span>)<span class="comment">;</span>
+    t2<span class="preprocessor">.setSalary</span>(<span class="number">10</span>)<span class="comment">;</span>
 
-Student s1 = new Student()<span class="comment">;</span>
-s1<span class="preprocessor">.setId</span>(<span class="number">1</span>)<span class="comment">;</span>
-s1<span class="preprocessor">.setName</span>(<span class="string">"hcH"</span>)<span class="comment">;</span>
-s1<span class="preprocessor">.setGrade</span>(<span class="string">"A"</span>)<span class="comment">;</span>
+    Student s1 = new Student()<span class="comment">;</span>
+    s1<span class="preprocessor">.setId</span>(<span class="number">1</span>)<span class="comment">;</span>
+    s1<span class="preprocessor">.setName</span>(<span class="string">"hcH"</span>)<span class="comment">;</span>
+    s1<span class="preprocessor">.setGrade</span>(<span class="string">"A"</span>)<span class="comment">;</span>
 
-t1<span class="preprocessor">.getStudents</span>()<span class="preprocessor">.add</span>(s1)<span class="comment">;</span>
-t2<span class="preprocessor">.getStudents</span>()<span class="preprocessor">.add</span>(s1)<span class="comment">;</span>
+    t1<span class="preprocessor">.getStudents</span>()<span class="preprocessor">.add</span>(s1)<span class="comment">;</span>
+    t2<span class="preprocessor">.getStudents</span>()<span class="preprocessor">.add</span>(s1)<span class="comment">;</span>
 }
 
 public void testQuery(){
-Teacher t = dao<span class="preprocessor">.findTeacherById</span>(<span class="number">1</span>)<span class="comment">;</span>
+    Teacher t = dao<span class="preprocessor">.findTeacherById</span>(<span class="number">1</span>)<span class="comment">;</span>
 }
 </pre></td></tr></table></figure>
 
@@ -859,13 +859,13 @@ Teacher t = dao<span class="preprocessor">.findTeacherById</span>(<span class="n
 8
 9
 </pre></td><td class="code"><pre><span class="operator"><span class="keyword">create</span> <span class="keyword">table</span> person (
-id <span class="keyword">int</span> <span class="keyword">primary</span> <span class="keyword">key</span>,
-name <span class="keyword">varchar</span>(<span class="number">100</span>)
+    id <span class="keyword">int</span> <span class="keyword">primary</span> <span class="keyword">key</span>,
+    name <span class="keyword">varchar</span>(<span class="number">100</span>)
 );</span>
 <span class="operator"><span class="keyword">create</span> <span class="keyword">table</span> idcard (
-id <span class="keyword">int</span> <span class="keyword">primary</span> <span class="keyword">key</span>,
-num <span class="keyword">varchar</span>(<span class="number">100</span>),
-<span class="keyword">constraint</span> i_id_fk <span class="keyword">foreign</span> <span class="keyword">key</span>(id) <span class="keyword">references</span> person(id)
+    id <span class="keyword">int</span> <span class="keyword">primary</span> <span class="keyword">key</span>,
+    num <span class="keyword">varchar</span>(<span class="number">100</span>),
+    <span class="keyword">constraint</span> i_id_fk <span class="keyword">foreign</span> <span class="keyword">key</span>(id) <span class="keyword">references</span> person(id)
 );</span>
 </pre></td></tr></table></figure>
 
@@ -881,15 +881,15 @@ num <span class="keyword">varchar</span>(<span class="number">100</span>),
 10
 11
 </pre></td><td class="code"><pre><span class="keyword">public</span> <span class="keyword">class</span> Person{
-<span class="keyword">private</span> <span class="keyword">int</span> id;
-<span class="keyword">private</span> String name;
-<span class="keyword">private</span> IdCard idCard;
+    <span class="keyword">private</span> <span class="keyword">int</span> id;
+    <span class="keyword">private</span> String name;
+    <span class="keyword">private</span> IdCard idCard;
 }
 
 <span class="keyword">public</span> <span class="keyword">class</span> IdCard {
-<span class="keyword">private</span> ind id;
-<span class="keyword">private</span> String num;
-<span class="keyword">private</span> Person person;
+    <span class="keyword">private</span> ind id;
+    <span class="keyword">private</span> String num;
+    <span class="keyword">private</span> Person person;
 }
 </pre></td></tr></table></figure>
 
@@ -910,19 +910,19 @@ num <span class="keyword">varchar</span>(<span class="number">100</span>),
 14
 15
 </pre></td><td class="code"><pre><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addPerson</span>(Person p){
-qr.update(<span class="string">"insert into person values(?,?)"</span>);
-IdCard idcard = p.getIdCard();
-<span class="keyword">if</span>(idcard!=<span class="keyword">null</span>){
-qr.update(<span class="string">"insert into idcard values(?,?)"</span>)
-}
+    qr.update(<span class="string">"insert into person values(?,?)"</span>);
+    IdCard idcard = p.getIdCard();
+    <span class="keyword">if</span>(idcard!=<span class="keyword">null</span>){
+        qr.update(<span class="string">"insert into idcard values(?,?)"</span>)
+    }
 }
 <span class="comment">//要不要查对应的身份证, 看需求(建议查)</span>
 <span class="keyword">public</span> Person <span class="title">findPersonById</span>(<span class="keyword">int</span> id) {
-Person p = qr.query(<span class="string">"select * from person where id=?"</span>, <span class="keyword">new</span> BeanHandler&lt;Person&gt;, id)
-<span class="keyword">if</span>(p!=<span class="keyword">null</span>){
-IdCard idCard = qr.query(<span class="string">"select * from idcard where id=?"</span>, BeanHandler&lt;IdCard),id)
-p.setIdCard(idcard);
-}
+    Person p = qr.query(<span class="string">"select * from person where id=?"</span>, <span class="keyword">new</span> BeanHandler&lt;Person&gt;, id)
+    <span class="keyword">if</span>(p!=<span class="keyword">null</span>){
+        IdCard idCard = qr.query(<span class="string">"select * from idcard where id=?"</span>, BeanHandler&lt;IdCard),id)
+        p.setIdCard(idcard);
+    }
 }
 </pre></td></tr></table></figure>
 
