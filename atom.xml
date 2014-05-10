@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Hello World]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://zhpooer.github.io/"/>
-  <updated>2014-05-06T11:48:32.396Z</updated>
+  <updated>2014-05-10T12:21:01.423Z</updated>
   <id>http://zhpooer.github.io/</id>
   
   <author>
@@ -15,11 +15,935 @@
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
   
   <entry>
+    <title><![CDATA[传智播客day26-estore3]]></title>
+    <link href="http://zhpooer.github.io/2014/05/09/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day26-estore3/"/>
+    <id>http://zhpooer.github.io/2014/05/09/传智播客day26-estore3/</id>
+    <published>2014-05-09T01:05:29.000Z</published>
+    <updated>2014-05-09T10:34:36.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="-">修改购物车</h1>
+<p>解决页面 中数字显示, 保留位数问题</p>
+<p>服务器Java代码解决方案<code>java.text.NumberFormat</code></p>
+<p>页面中解决方案: jstl 提供的 fmt 标签库 (用于国际化显示, 和格式化显示)</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="vbscript">&lt;%@ taglib uri=<span class="string">"....jstl/fmt"</span> frefix=<span class="string">"c"</span> %&gt;</span>
+<span class="tag">&lt;<span class="title">fmt:formatNumber</span> <span class="attribute">value</span>=<span class="value">"${0.111111}"</span> <span class="attribute">maxFractionDigits</span>=<span class="value">"2"</span>
+                  <span class="attribute">minFractionDigits</span>=<span class="value">"2"</span> /&gt;</span>
+</pre></td></tr></table></figure>
+
+<h2 id="-">修改购物车商品数量</h2>
+<p>修改数量后, 通过 js 的 blur 事件, 提交请求给服务器,
+服务器根据请求修改购物车中的商品数量</p>
+<ol>
+<li>为页面添加 onblur 事件, 函数接受商品编号和修改后的数量</li>
+<li>判断修改后的数量, 必须为正整数(不能是字母, 负数, 小数, 允许为0)</li>
+<li>提交请求给服务器, 根据商品编号, 修改 Session 的购物车对象商品对应的数量.
+如果修改后的数量为0, 删除购物商品</li>
+<li>修改数量后, 回到购物车页面</li>
+</ol>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"text"</span> <span class="attribute">value</span>=<span class="value">"${entry.value}"</span>
+       <span class="attribute">onblur</span>=<span class="value">"changeBuyNum(${entry.key.id}, ${entry.key.pnum}, this.value);"</span>/&gt;</span>
+
+<span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/javascript"</span>&gt;</span><span class="javascript">
+<span class="function"><span class="keyword">function</span> <span class="title">changeBuyNum</span><span class="params">(id, maxnum, num)</span>{</span>
+    <span class="comment">// 对修改后的合法性, 进行校验</span>
+    <span class="keyword">var</span> regex = <span class="regexp">/^[0-9]+$/</span>
+    <span class="keyword">if</span>(regex.test(num)) {
+        <span class="keyword">if</span>(num&gt;maxnum) {
+            <span class="comment">// 存货不足</span>
+            alert(<span class="string">"商品库存数量不能草果库存数量"</span>)
+        } <span class="keyword">else</span> {
+            window.locatioin.href=<span class="string">"${pageContext.request.contextPath}/"</span> + 
+            +<span class="string">"upldateCartItem?id="</span> + id + <span class="string">"&num="</span>  + num
+        }
+    } <span class="keyword">else</span> {
+        alert(<span class="string">"请输入正确格式"</span>)
+    }
+}
+</span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+</pre></td><td class="code"><pre><span class="comment">// UpdateCartItemServlet</span>
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doGet</span>(req, resp){
+    <span class="keyword">int</span> id = Integer.parseInt(req.getParameter(<span class="string">"id"</span>));
+    <span class="keyword">int</span> num = Integer.parseInt(req.getParameter(<span class="string">"num"</span>));
+    
+    <span class="comment">// 从session获取购物车对象</span>
+    Map cart = req.getSession.getAttribute(<span class="string">"cart"</span>);
+    
+    <span class="comment">// 服务器校验商品数量(根据id查询商品数量)</span>
+    ProductService productService = <span class="keyword">new</span> ProductService();
+    <span class="keyword">int</span> num = productService.findProductNumById(id);
+    <span class="keyword">if</span>(num&gt;pnum) {
+        <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"库存不足"</span>);
+    }
+
+    <span class="comment">// 修改数量</span>
+    Product product = <span class="keyword">new</span> Product();
+    product.setId(id);
+    <span class="keyword">if</span>(num==<span class="number">0</span>){
+        cart.remove(product);
+    } <span class="keyword">else</span> {
+        cart.put(product, num); <span class="comment">// key不会覆盖, value覆盖</span>
+    }
+    resp.sendRedirect(<span class="string">"/cart.jsp"</span>);
+}
+
+<span class="comment">// ProductService</span>
+<span class="keyword">public</span> <span class="keyword">int</span> <span class="title">findProductNumById</span>(<span class="keyword">int</span> id){
+    <span class="keyword">return</span> productDao.findProductNumById(id);
+}
+
+<span class="comment">// ProductDao</span>
+<span class="keyword">public</span> <span class="keyword">int</span> <span class="title">findProductNumById</span>(<span class="keyword">int</span> id){
+    String sql = <span class="string">"select pnum from project where id = ?"</span>;
+    <span class="keyword">return</span> queryRunner.query(conn, sql, <span class="keyword">new</span> ScalarHandler(<span class="string">"pnum"</span>), id);
+}
+</pre></td></tr></table></figure>
+
+<h2 id="-">商品删除</h2>
+<ol>
+<li>在页面中显示购物车信息时, 每个商品后, 提供删除按钮</li>
+<li>点击删除按钮, 将不需要购买商品编号, 发送到服务器</li>
+<li>根据商品编号, 从Session的cart对象, 移除商品<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">a</span> <span class="attribute">href</span>=<span class="value">"deleteCartItem?id=${entry.key.id}"</span>&gt;</span><span class="tag">&lt;/<span class="title">a</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+</li>
+</ol>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="code"><pre><span class="comment">// DelCartItemServlet</span>
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doGet</span>(){
+    <span class="keyword">int</span> id = req.getParameter(<span class="string">"id"</span>);
+    Map cart = req.getSession().getAttribute(<span class="string">"cart"</span>);
+
+    Product product = <span class="keyword">new</span> Product();
+    product.setId(id);
+
+    <span class="comment">// 因为重写的hashCode和equals</span>
+    cart.remove(product);
+    <span class="comment">// 跳转回购物车页面</span>
+    resp.sendRedirect(<span class="string">"/cart.jsp"</span>);
+}
+</pre></td></tr></table></figure>
+
+<h1 id="-">订单生成</h1>
+<p>在购物车选好后, 点击结算按钮, 跳转到订单生成页面</p>
+<ol>
+<li>在生成订单页面中, 生成真实的页面信息, 参考 cart.jsp 实现</li>
+<li>产生订单</li>
+</ol>
+<p>分析数据变化:</p>
+<ul>
+<li>Order订单表: 存放订单整体信息(总金额, 创建时间, 支付状态, 收货人信息)</li>
+<li>OrderItem 订单项目表, 存放每个商品购买几件</li>
+</ul>
+<p>生成订单页面, 需要提交收货人信息 和 订单总金额 到服务器<br>订单总金额用<code>&lt;input type=&#39;hidden&#39; value=&quot;totalprice&quot; name=&quot;totalprice&quot;/&gt;</code>来存放</p>
+<h2 id="-">服务器代码</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+</pre></td><td class="code"><pre><span class="comment">// OrderAddServlet</span>
+<span class="keyword">public</span> <span class="keyword">void</span> doGet(){
+    <span class="comment">// 将请求数据封装到model对象中</span>
+    Order <span class="keyword">order</span> = <span class="keyword">new</span> Order();
+    BeanUtils.populate(<span class="keyword">order</span>, req.getParameter());
+
+    <span class="comment">// 生成订单号</span>
+    DateFormat dateFormat = <span class="keyword">new</span> SimpleDateFormat(<span class="string">"yyyyMMdd"</span>);
+    String id = <span class="string">"estore_"</span> + dateFormat.format(<span class="keyword">new</span> Date()) + <span class="string">"_"</span> + UUID;
+    <span class="keyword">order</span>.setId(id);
+
+    <span class="keyword">order</span>.sestPaystate(<span class="number">0</span>);
+    <span class="keyword">order</span>.setCreateTime(<span class="keyword">new</span> TimeStamp(System.currentTimeMillis()));
+
+    User user = req.getSession().getAttribute(<span class="string">"user"</span>);
+    <span class="keyword">order</span>.setUser_id(user.getId());
+
+    List&lt;OrderItem&gt; orderItems = <span class="keyword">new</span> ArrayList&lt;OrderItem&gt;();
+    <span class="comment">// 封转订单项项目</span>
+    Map cart = req.getSession.getAttribute(<span class="string">"cart"</span>);
+    <span class="keyword">for</span> (entry &lt;- cart.entrySet()) {
+        OrderItem orderItem = <span class="keyword">new</span> OrderItem();
+        orderItem.setOrder_id(orderid);
+        orderItem.setProduct_id(entry.getKey().getId());
+        orderItem.setBuynum(entry.getValue);
+        orderItems.add(orderItem);
+    }
+    orderService.addOrder(<span class="keyword">order</span>, orderItems);
+
+    req.getSession().removeAttribue(<span class="string">"cart"</span>);
+}
+
+<span class="comment">// OrderServiceImpl</span>
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OrderServiceImpl</span> <span class="inheritance"><span class="keyword">implements</span></span> <span class="title">OrderService</span>{</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> addOrder(Order <span class="keyword">order</span> , List&lt;OrderItem&gt; orderItems){
+        orderDao.insert(<span class="keyword">order</span>, orderItems);
+    }
+}
+
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OrderDaoImpl</span> <span class="inheritance"><span class="keyword">implements</span></span> <span class="title">OrderDao</span> {</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> insert(Order <span class="keyword">order</span> , List&lt;OrderItem&gt; orderItems){
+        String orderSql = <span class="string">"insert into orders values(?...)"</span>;
+        queryRunner.update(conn, orderSql, <span class="keyword">order</span>.getId);
+        <span class="comment">// 保存订单项数据</span>
+        String orderitemSql = <span class="string">"insert into orderitem values(?,?,?)"</span>
+        List&lt;Order []&gt; argList = <span class="keyword">new</span> ArrayList&lt;Order[]&gt;();
+        <span class="keyword">for</span>(OrderItem orderItem : orderItems){
+            <span class="comment">// 用 batch, 先将参数保存到二维数组</span>
+            Object[] orderitemArgs = {orderItem.getOrder_id(), orderItem.getProduct_id(), any}
+            argList.add(orderitemArgs);
+        }
+        <span class="comment">// 将多种参数, 一次提交给服务器, 提高效率</span>
+        QueryRunner.update(conn, orderitemSql, argList.toArray(<span class="keyword">new</span> Object[<span class="number">0</span>][]));
+    }
+}
+</pre></td></tr></table></figure>
+
+<p>tips: <code>Connection.setSavePoint()</code> 以及 <code>Connection.commit()</code> 要放在 错误处理里</p>
+<h3 id="tips-">tips: 回滚点</h3>
+<p>回滚点, 可以在事务执行过程中进行记录, 从而在回滚事物的时候, 不会滚到事务最开始,
+而回滚到指定保存点.</p>
+<p>主流场景: 大规模批量插入数据.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+</pre></td><td class="code"><pre>Connection conn = <span class="keyword">null</span>;
+Savepoint savepoint = <span class="keyword">null</span>;
+<span class="keyword">try</span>{
+    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;<span class="number">1000000</span>; i++) {
+        <span class="comment">// 每1000条, 发送一次</span>
+        String sql = <span class="string">""</span>;
+        Statement statement.addBatch(sql);
+        <span class="keyword">if</span>(i%<span class="number">1000</span>==<span class="number">0</span>){
+        <span class="comment">// 1000条发送一次, 清除缓存</span>
+            statement.excuteBatch();
+            statement.clearBatch();
+            savepoint = connn.setSavePoint();
+        }
+        <span class="comment">// 如果插入1000条没有问题保存一个回滚点</span>
+    }
+} <span class="keyword">catch</span> {
+    conn.rollback(savepoint);
+} <span class="keyword">finally</span> {
+    conn.commit();
+}
+</pre></td></tr></table></figure>
+
+<h1 id="-">订单查询</h1>
+<p>点击订单查看功能按钮, 在服务器端将订单信息输出, 显示页面</p>
+<ul>
+<li>管理员显示所有人的订单</li>
+<li>用户显示自己的订单</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+</pre></td><td class="code"><pre><span class="comment">// OrderSearchServlet</span>
+<span class="keyword">public</span> <span class="literal">void</span> doGet(req, resp) {
+    <span class="comment">// 从Session中获取用户登陆信息</span>
+    User user <span class="subst">=</span> req<span class="built_in">.</span>getSession()<span class="built_in">.</span>getAttribute(<span class="string">"user"</span>);
+    <span class="built_in">List</span><span class="subst">&lt;</span><span class="keyword">Order</span><span class="subst">&gt;</span> orders <span class="subst">=</span> orderService<span class="built_in">.</span>showOrders(user);
+    req<span class="built_in">.</span>setAttribute(<span class="string">"orders"</span>, orders);
+    req<span class="built_in">.</span>getRequestDispatcher(<span class="string">"orders.jsp"</span>)<span class="built_in">.</span>forward(req, resp);
+}
+<span class="comment">// OrderService</span>
+<span class="keyword">public</span> <span class="built_in">List</span><span class="subst">&lt;</span><span class="keyword">Order</span><span class="subst">&gt;</span> showOrders(User user) {
+    <span class="keyword">if</span>(user<span class="built_in">.</span>getRole()<span class="built_in">.</span><span class="keyword">equals</span>(<span class="string">"normal"</span>)){
+        <span class="comment">// 普通用户</span>
+        <span class="keyword">return</span> orderDao<span class="built_in">.</span>findOrdersByUser(user<span class="built_in">.</span>getId());
+    } <span class="keyword">else</span> <span class="keyword">if</span>(user<span class="built_in">.</span>getRole()<span class="built_in">.</span><span class="keyword">equals</span>(<span class="string">"admin"</span>)){
+        <span class="comment">// 管理员</span>
+        <span class="keyword">return</span> orderDao<span class="built_in">.</span>findAllOrders();
+    }
+}
+<span class="comment">// OrderDao</span>
+<span class="keyword">public</span> <span class="built_in">List</span><span class="subst">&lt;</span><span class="keyword">Order</span><span class="subst">&gt;</span> findAllOrders(){
+    <span class="built_in">String</span> sql <span class="subst">=</span> <span class="string">"select * from order"</span>
+    <span class="comment">// 其余代码 参照 findOrdersByUser</span>
+}
+<span class="keyword">public</span> <span class="built_in">List</span><span class="subst">&lt;</span><span class="keyword">Order</span><span class="subst">&gt;</span> findOrdersByUser(int id){
+    <span class="built_in">String</span> sql <span class="subst">=</span> <span class="string">"select * from order where user_id = ?"</span>
+    <span class="built_in">List</span><span class="subst">&lt;</span><span class="keyword">Order</span><span class="subst">&gt;</span> orders <span class="subst">=</span> queryRunner<span class="built_in">.</span>query(conn, sql, <span class="literal">new</span> BeanListHandler<span class="subst">&lt;&gt;</span>(), id);
+
+    <span class="comment">// 根据用户id, 查询用户信息</span>
+    sql <span class="subst">=</span> <span class="string">"select * from user where id=?"</span>;
+    for(<span class="keyword">order</span> <span class="subst">&lt;-</span> orders){
+        <span class="built_in">String</span> nickname <span class="subst">=</span> queryRunner<span class="built_in">.</span>query(sql, <span class="literal">new</span> ScalarHandler(<span class="string">"nickname"</span>), <span class="keyword">order</span><span class="built_in">.</span>getUser_id());
+        <span class="keyword">order</span><span class="built_in">.</span>setNickname(nickname);
+        <span class="comment">// 订单关联订单项, 查询订单项</span>
+        <span class="built_in">String</span> sql2 <span class="subst">=</span> <span class="string">"select * from orderitem where order_id=?"</span>;
+        <span class="built_in">List</span><span class="subst">&lt;</span>OrderItem<span class="subst">&gt;</span> orderItems <span class="subst">=</span> queryRunner<span class="built_in">.</span>query(conn, sql2, <span class="literal">new</span> BeanListHandler<span class="subst">&lt;&gt;</span>(), <span class="keyword">order</span><span class="built_in">.</span>getId);
+        <span class="keyword">order</span><span class="built_in">.</span>setOrderItems(orderItems);
+        <span class="comment">// 查询每个订单项 关联商品信息</span>
+        for(OrderItem orderItem : orderItems) {
+            <span class="built_in">String</span> sql4 <span class="subst">=</span> <span class="string">"select * from product where id=?"</span>;
+            Product product <span class="subst">=</span> queryRunner<span class="built_in">.</span>query(conn, sql4, <span class="literal">new</span> BeanHandler(), orderItem<span class="built_in">.</span>getProduct_id);
+            orderItem<span class="built_in">.</span>setProduct(product);
+        }
+    }
+    <span class="keyword">return</span> orders;
+}
+</pre></td></tr></table></figure>
+
+<h1 id="-">在线支付</h1>
+<ul>
+<li>支付方案一: 网站直接与银行对接<ul>
+<li>服务器根据银行的接入规范, 生成银行需要的数据, 然后通知用户浏览器重定向到银行,
+并把这些数据发给银行, 以完成支付</li>
+<li>缺点, 网站需要针对不同银行开发不同的支付程序, 且银行规范一旦发生变动, 网站也要跟着改</li>
+</ul>
+</li>
+<li>支付方案二: 网站通过第三方支付公司与银行对接<ul>
+<li>用户登陆商城, 选择银行, 只需要根据根据第三方公司的接入规范,
+将参数发给第三方支付公司, 再由第三方支付公司, 根据不同银行接入规范, 对接银行</li>
+<li>缺点, 网站与第三方支付公司定期资金结算, 资金安全是个大问题,
+也收取一定的手续费, 这种支付方案只适合金额在百万以下的公司</li>
+</ul>
+</li>
+</ul>
+<h2 id="-">易宝支付</h2>
+<p>支付流程</p>
+<ol>
+<li>商城在易宝网站 商家注册(审核), 易宝提供给商家: 商家编号, 密钥</li>
+<li>用户支付流程<ul>
+<li>用户选择银行, 获取银行编码</li>
+<li>商城根据订单号 金额 银行, 根据第三方公司接入规范,
+将参数发送给第三方支付公司(302重定向)</li>
+<li>第三方公司转到网银支付页面, 支付</li>
+<li>支付完成, 网银重定向到支付公司页面, 支付公司通知商城, 并调用商城的返回页面</li>
+</ul>
+</li>
+</ol>
+<p>密钥解决数字签名</p>
+<ul>
+<li>商城将订单号 金额 callback 商家编号, 发送给支付公司,
+支付公司为了验证消息来自商城, 商城将发送数据, 使用商家提供密码,
+进行加密获取数字签名；支付公司将发送来的数据, 采用通用密钥也加密一次,
+对比两个签名</li>
+<li>支付公司在通知商城支付成功, 也要使用数字签名</li>
+</ul>
+<h2 id="-">编程实现</h2>
+<ol>
+<li>需要商家编号和加密密钥</li>
+<li>在支付的第一步, 选择银行, 发送支付银行id<ul>
+<li>修改Order.jsp, 将订单号和金额发送给选择银行的界面</li>
+<li>选择好银行, 转到商城 Servlet, 根据第三方接入规范, 加密数据</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+</pre></td><td class="code"><pre><span class="comment">// PayServlet</span>
+<span class="keyword">public</span> <span class="literal">void</span> doGet(req, resp) {
+    <span class="built_in">String</span> orderId <span class="subst">=</span> req<span class="built_in">.</span>getParameter(<span class="string">"orderid"</span>);
+    <span class="built_in">String</span> money <span class="subst">=</span> req<span class="built_in">.</span>getParameter(<span class="string">"mondey"</span>);
+    <span class="built_in">String</span> pd_FrpId <span class="subst">=</span> req<span class="built_in">.</span>getParameter(<span class="string">"pd_FrpId"</span>);
+
+    <span class="comment">// 根据第三方接入, 准备参数</span>
+    <span class="built_in">String</span> p0_Cmd <span class="subst">=</span> <span class="string">"Buy"</span>;
+    <span class="built_in">String</span> p1_MerId <span class="subst">=</span> <span class="string">"1234566"</span>;
+
+    <span class="comment">// 将所有数据进行数字签名</span>
+    <span class="built_in">String</span> key <span class="subst">=</span> <span class="string">""</span>; <span class="comment">// 密钥</span>
+    <span class="built_in">String</span> hmac <span class="subst">=</span> PaymentUtil<span class="built_in">.</span>buildHmac(p0_cmd, p1_MerId);
+
+    <span class="comment">// 将所有的数据发送给易宝指定页面</span>
+    <span class="comment">// 或跳转到 确认支付页面</span>
+    req<span class="built_in">.</span>getRequestDispatcher(<span class="string">""</span>)<span class="built_in">.</span>forward(req, resp);
+}
+</pre></td></tr></table></figure>
+
+<p>当用户付款后, 第三方支付方重定向(第一次)商城支付结果页面, 提供给用户付款已经
+成功提示,(并没有真正收到钱), 当银行通过程序通知第三方支付, 钱已经支付了,
+第三方支付通知商城(第二次), 钱到了, 商城修改订单状态</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+</pre></td><td class="code"><pre><span class="comment">// CallBackServlet 付款后回调程序</span>
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doGet</span>(){
+    <span class="comment">// 校验, 易宝数字签名</span>
+    String p0 = req.getParameter(<span class="string">"p0"</span>);
+    String hmac = req.getParameter(<span class="string">""</span>);
+
+    <span class="comment">// 将响应数据加密, 校验 hmac</span>
+    <span class="keyword">boolean</span> isValid = PaymentUtil.verifyCallback(hmac, ...);
+    <span class="keyword">if</span>(isValid) {
+        <span class="comment">// 区分两次访问类型</span>
+        <span class="keyword">if</span>(r9_BType == <span class="number">1</span>){
+            <span class="comment">//银行付款后的友好页面</span>
+        } <span class="keyword">else</span> <span class="keyword">if</span>(r9_BType == <span class="number">1</span>) {
+            <span class="comment">// 银行已经真正收到钱, 修改订单状态</span>
+        }
+    } <span class="keyword">else</span> {
+        <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"数字签名错误"</span>);
+    }
+}
+</pre></td></tr></table></figure>
+
+]]></content>
+    
+    
+      <category term="传智播客" scheme="http://zhpooer.github.io/tags/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[传智播客day25-estore2]]></title>
+    <link href="http://zhpooer.github.io/2014/05/08/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day25-estore2/"/>
+    <id>http://zhpooer.github.io/2014/05/08/传智播客day25-estore2/</id>
+    <published>2014-05-08T00:52:58.000Z</published>
+    <updated>2014-05-08T07:04:41.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="-">添加商品功能(图片上传)</h1>
+<p>修改 Product_add.jsp</p>
+<h2 id="-">文件上传必要知识</h2>
+<p>文件上传, HTTP 请求格式, 符合MIME协议(Content-Type, Content-Disposition)</p>
+<p>客户端: 请求提交方式必须是POST, 编码格式 multipart/form-data,
+上传文件输入框必须提供 name 属性</p>
+<p>服务端: 采用 apache commons-fileupload (早期流行技术 jsp smartload),
+内置文件上传技术 Part 技术</p>
+<p>上传文件问题:</p>
+<ul>
+<li>文件名乱码问题</li>
+<li>上传文件重名问题</li>
+<li>大文件上传, 空间占用</li>
+</ul>
+<h2 id="-">表现层</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+</pre></td><td class="code"><pre><span class="comment">// ProductAddServlet</span>
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doGet</span>(req, resp){
+    <span class="comment">// 请求是否为文件上传</span>
+    <span class="keyword">if</span>(ServletFileUpload.isMultipartContent(req)){
+        <span class="comment">// 构造自定义请求参数 Map</span>
+        Map parameterMap = <span class="keyword">new</span> HashMap&lt;String, String&gt;();
+        DiskFileItemFactory fac = <span class="keyword">new</span> DiskFileItemFactory();
+        ServletFileUpload sfu = <span class="keyword">new</span> ServletFileUpload(fac);
+        List fileItems = sfu.parseRequest(req);
+        <span class="keyword">for</span>(f &lt;- fileItems) {
+            <span class="keyword">if</span>(f.isFormField()){
+                <span class="comment">// 是普通元素</span>
+                parameterMap.put(f.getFieldName(), f.getString(<span class="string">"UTF-8"</span>));
+            } <span class="keyword">else</span> {
+                <span class="comment">// 是上传元素</span>
+                <span class="comment">// 上传图片, 唯一文件名字, 目录分散</span>
+                InputStream <span class="keyword">in</span> = <span class="keyword">new</span> BufferInputStream(fileItem.getInputStream());
+                <span class="comment">// 将图片信息保存到服务器</span>
+                <span class="comment">// 商品图片是可以直接访问的, 建立在 WebRoot 下</span>
+                String realName = fileItem.geName();
+                <span class="comment">//根据真实文件名, 生成唯一文件名 UUID.扩展名</span>
+                String filename = UploadUtils.generateRandomFileName(realName);
+                String hashDir = UploadUtils.generateRandomDir(filename); <span class="comment">// /E8/A9</span>
+                <span class="comment">// 存放文件的绝对路径</span>
+                String absoluteDir = <span class="keyword">this</span>.getServletContext().getRealPath(<span class="string">"/upload"</span>) + hasDir;
+                <span class="keyword">new</span> File(absoluteDir).mkdirs();
+
+                <span class="comment">// 创建文件输出流</span>
+                OutputStream <span class="keyword">out</span> = <span class="keyword">new</span> FileOutputStream(absoluteDir + File.pathSaperate + filename);
+                <span class="comment">// apache commonio.jar 拷贝文件 FileUtils.copyFile();</span>
+                <span class="comment">// CopyUtils 拷贝文件 apache工具包, 简化下面操作</span>
+                OutputStream <span class="keyword">out</span> = <span class="keyword">new</span> BufferedOutputStream(<span class="keyword">out</span>);
+                <span class="keyword">int</span> b;
+                <span class="keyword">while</span>(b=<span class="keyword">in</span>.read()!=-<span class="number">1</span>){
+                     <span class="keyword">out</span>.write(b);
+                }
+                <span class="keyword">in</span>.close();
+                <span class="keyword">out</span>.close();
+                <span class="comment">// 在浏览器显示图片</span>
+                parameterMap.put(<span class="string">"imgurl"</span>, <span class="string">"/upload"</span> + hashDir + <span class="string">"/"</span> + filename);
+            }
+        }
+        <span class="comment">//将那个求取的的数据封装java对象</span>
+        Product product = <span class="keyword">new</span> Product();
+        BeanUtils.populate(product, parameterMap);
+        productService.addProduct(product);
+        <span class="comment">// 跳转</span>
+    } <span class="keyword">else</span> {
+        <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"添加上传, 必须为 multipart/form-data"</span>)
+    }
+}
+</pre></td></tr></table></figure>
+
+<h2 id="-">业务层</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ProductService</span>{</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addProduct</span>(Product product);
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ProductServiceImpl</span> <span class="keyword">implements</span> <span class="title">ProductService</span>{</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addProduct</span>(Product product) {
+        productDao.insert(product);
+    }
+}
+</pre></td></tr></table></figure>
+
+<h2 id="-">持久层</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ProductDaoImpl</span> <span class="keyword">implements</span> <span class="title">ProductDao</span>{</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insert</span>(Product product){
+        String sql = <span class="string">"insert into product values(...);"</span>
+        queryRunner.update(conn, sql, product.getName, ...);
+    }
+}
+</pre></td></tr></table></figure>
+
+<h1 id="-">查看商品</h1>
+<p>查询所有商品功能, 先访问Servlet, 查询所有商品信息, 保存request对象, 转发, 用 jstl 显示</p>
+<p><strong>把页面中的所有相对路径 都换成绝对路径</strong>,
+如果 从 1.jsp 转发到 2.jsp, 但是url是 1.jsp, 会产生路径问题</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+</pre></td><td class="code"><pre><span class="comment">// ProductSearchServlet</span>
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doGet</span>(req, resp) {
+    <span class="comment">// 调用业务层, 查询商品集合列表</span>
+    List products = products.listAllProducts()
+    req.setAttribute(<span class="string">"products"</span>, products)
+    <span class="comment">// 将列表通过request对象, 传递给jsp对象</span>
+    req.getRequestDispatcher(<span class="string">"/product.jsp"</span>).forward(req,resp);
+}
+
+<span class="comment">// ProductService</span>
+<span class="keyword">public</span> List <span class="title">listAllProducts</span>(){
+    <span class="keyword">return</span> productDao.listAllProducts(); 
+}
+
+<span class="comment">// ProductDao</span>
+<span class="keyword">public</span> List <span class="title">listAllProducts</span>(){
+    String sql = <span class="string">"select * from Product"</span>;
+    <span class="keyword">return</span> queryRunner.query(conn, sql, <span class="keyword">new</span> BeanListHandler());
+}
+</pre></td></tr></table></figure>
+
+<h2 id="-">显示结果数据</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre>&lt;c:<span class="keyword">for</span>Each var=<span class="string">"p"</span> items=<span class="string">"<span class="variable">${requestScope.products}</span>"</span>&gt;
+    
+&lt;/c:<span class="keyword">for</span>Each&gt;
+</pre></td></tr></table></figure>
+
+<p>展示列表的图片要使用缩略图</p>
+<ul>
+<li>使用 img 标签 width 和 height 缩放图片(但是不建议, 浪费带宽)</li>
+<li>在上传图片过程中, 对图片缩放(老师工具包PicUtils)</li>
+</ul>
+<h1 id="-">购物车功能</h1>
+<h2 id="-">添加商品到购物车</h2>
+<p>在商品列表中点击购买, 将商品加入到购物车, 提示用户商品已经添加到购物车,
+继续购物还是查看购物车. (修改product.jsp)</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="code"><pre>// 购买链接
+<span class="tag">&lt;<span class="title">a</span> <span class="attribute">onclick</span>=<span class="value">"buy(${product.id}, ${procuct.pnum})"</span>&gt;</span>购买<span class="tag">&lt;/<span class="title">a</span>&gt;</span>
+<span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/javascript"</span>&gt;</span><span class="javascript">
+<span class="function"><span class="keyword">function</span> <span class="title">buy</span><span class="params">(id, pnum)</span>{</span>
+    <span class="comment">//判断商品是否有货</span>
+    <span class="keyword">if</span>(pnum==<span class="number">0</span>) {
+        <span class="comment">// 无货</span>
+        alert(<span class="string">"您购买的商品, 已经售罄"</span>);
+        <span class="keyword">return</span>;
+    }
+    <span class="comment">// 递交请求给服务器, 加入购物车</span>
+    window.loacation.href = <span class="string">"${pageContext.request.contextPath}/addCart?id="</span> + id;
+}
+</span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+</pre></td><td class="code"><pre><span class="comment">// AddCartServlet</span>
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doGet</span>(req, resp){
+    <span class="comment"><span class="xmlDocTag">///</span> 对 product 重写 hashcode 和 equals, 根据id生成</span>
+    Map&lt;Product, Integer&gt; cart = req.getSession().getAttribute(<span class="string">"cart"</span>);
+    <span class="keyword">if</span>(cart==<span class="keyword">null</span>) cart = <span class="keyword">new</span> HashMap();
+    <span class="comment">// 判断是否存在在购物车中</span>
+    <span class="keyword">int</span> id = Integer.parseInt(req.getParameter(<span class="string">"id"</span>));
+    Product product = <span class="keyword">new</span> Product();
+    product.setId(id);
+    <span class="keyword">if</span>(cart.contains(product)) {
+        cart.put(product, cart.<span class="keyword">get</span>(product) + <span class="number">1</span>);
+    } <span class="keyword">else</span> {
+        <span class="comment">// 商品没有在购物中, 放入新的商品, 数量为1</span>
+        productService.findProduct(id);
+        cart.put(p, <span class="number">1</span>);
+        <span class="comment">// 调用业务层, 查询完整的商品信息</span>
+    }
+    req.getSession().setAttribute(<span class="string">"cart"</span>, cart);
+    <span class="keyword">out</span>.print(<span class="string">"商品已经加入购物车, 查看购物车, 继续购物"</span>);
+}
+
+<span class="comment">// ProductService</span>
+<span class="keyword">public</span> Product <span class="title">findProduct</span>(<span class="keyword">int</span> id) {
+    <span class="keyword">return</span> productDao.findById(id);
+}
+
+<span class="comment">// ProductDao</span>
+<span class="keyword">public</span> Product <span class="title">findById</span>(<span class="keyword">int</span> id) {
+    String sql = <span class="string">"select * from product where id=?"</span>;
+    <span class="keyword">return</span> queryRunner.query(conn,sql, <span class="keyword">new</span> Beanhandler&lt;&gt;(), id)
+}
+</pre></td></tr></table></figure>
+
+<h2 id="-">查看购物车</h2>
+<p>查看购物车, 只要修改 jsp 页面</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- 计算节省和公花费 --&gt;</span>
+<span class="comment">&lt;!-- 定义变量 --&gt;</span>
+<span class="tag">&lt;<span class="title">c:set</span> <span class="attribute">var</span>=<span class="value">"saveprice"</span> <span class="attribute">scope</span>=<span class="value">"page"</span> <span class="attribute">value</span>=<span class="value">"0"</span>&gt;</span> <span class="tag">&lt;/<span class="title">c:set</span>&gt;</span>
+<span class="tag">&lt;<span class="title">c:set</span> <span class="attribute">var</span>=<span class="value">"totalprice"</span> <span class="attribute">scope</span>=<span class="value">"page"</span> <span class="attribute">value</span>=<span class="value">"0"</span>&gt;</span> <span class="tag">&lt;/<span class="title">c:set</span>&gt;</span>
+<span class="comment">&lt;!-- 计算价格 --&gt;</span>
+<span class="tag">&lt;<span class="title">set</span> <span class="attribute">var</span>=<span class="value">"saveprice"</span> <span class="attribute">scope</span>=<span class="value">"page"</span> <span class="attribute">value</span>=<span class="value">"${saveprice+**}"</span>&gt;</span> <span class="tag">&lt;/<span class="title">set</span>&gt;</span>
+<span class="tag">&lt;<span class="title">set</span> <span class="attribute">var</span>=<span class="value">"totalprice"</span> <span class="attribute">scope</span>=<span class="value">"page"</span> <span class="attribute">value</span>=<span class="value">"${totalprice+**}"</span>&gt;</span><span class="tag">&lt;/<span class="title">set</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+]]></content>
+    
+    
+      <category term="传智播客" scheme="http://zhpooer.github.io/tags/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[传智播客day24-Estore商城项目]]></title>
     <link href="http://zhpooer.github.io/2014/05/06/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day24-estore%E5%95%86%E5%9F%8E%E9%A1%B9%E7%9B%AE/"/>
     <id>http://zhpooer.github.io/2014/05/06/传智播客day24-estore商城项目/</id>
     <published>2014-05-06T01:07:03.000Z</published>
-    <updated>2014-05-06T11:36:29.000Z</updated>
+    <updated>2014-05-07T06:55:50.000Z</updated>
     <content type="html"><![CDATA[<p>Javaweb 课程 是 Javaee 课程基础, 课程定位网站开发(PHP .NET一样)</p>
 <h1 id="-">软件开发流程</h1>
 <ol>
@@ -349,6 +1273,7 @@ msg<span class="built_in">.</span>setContent(<span class="string">"&lt;a href='x
 </pre></td></tr></table></figure>
 
 <h4 id="-">发送一封邮件</h4>
+<p><a href="http://pringles.iteye.com/blog/125196" target="_blank">更加详细的介绍</a></p>
 <p>JavaMail 核心类:</p>
 <ul>
 <li>Message 代表一封邮件</li>
@@ -379,7 +1304,7 @@ msg<span class="built_in">.</span>setContent(<span class="string">"&lt;a href='x
 Properties p = new Properties()<span class="comment">;</span>
 p<span class="preprocessor">.setProperty</span>(<span class="string">"mail.smtp.host"</span>, <span class="string">"localhost"</span>)<span class="comment">;</span>
 p<span class="preprocessor">.setProperty</span>(<span class="string">"mail.transport.protocol"</span>, <span class="string">"smtp"</span>)<span class="comment">;</span>
-
+p<span class="preprocessor">.put</span>(<span class="string">"mail.smtp.auth"</span>,<span class="string">"true"</span>)<span class="comment">; // 如果是163需要验证, 要加上这句</span>
 Session session = Session<span class="preprocessor">.getInstance</span>(p)<span class="comment">;</span>
 
 // 第二步, 编写邮件, 按照上一节代码
@@ -8974,561 +9899,6 @@ ${fn:subString(s1, 5, 1000)}  <span class="comment">&lt;!-- abcdefg =&gt; fg, �
       <category term="java" scheme="http://zhpooer.github.io/tags/java/"/>
     
       <category term="EL表达式" scheme="http://zhpooer.github.io/tags/EL%E8%A1%A8%E8%BE%BE%E5%BC%8F/"/>
-    
-      <category term="传智播客" scheme="http://zhpooer.github.io/tags/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[传智播客day13-JSP&JavaBean]]></title>
-    <link href="http://zhpooer.github.io/2014/04/16/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day13-jsp&JavaBean/"/>
-    <id>http://zhpooer.github.io/2014/04/16/传智播客day13-jsp&JavaBean/</id>
-    <published>2014-04-16T01:18:59.000Z</published>
-    <updated>2014-04-16T08:15:44.000Z</updated>
-    <content type="html"><![CDATA[<h1 id="jsp-">JSP中的九大隐式对象</h1>
-<p>就是JSP对应的Servlet那些变量</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-</pre></td><td class="code"><pre><span class="comment">// JSP中可以取到的变量</span>
-PageContext pageContext = <span class="keyword">null</span>;
-HttpSession session = <span class="keyword">null</span>;
-ServletContext application = <span class="keyword">null</span>;
-ServletConfig config = <span class="keyword">null</span>;
-JspWriter <span class="keyword">out</span> = <span class="keyword">null</span>;
-Object page = <span class="keyword">this</span>;
-JspWriter _jspx_out = <span class="keyword">null</span>;
-PageContext _jspx_page_context = <span class="keyword">null</span>;
-</pre></td></tr></table></figure>
-
-<table>
-<thead>
-<tr>
-<th>内置对象名称</th>
-<th>对应的类型</th>
-<th>备注</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>request</td>
-<td>javax.servlet.http.HttpServletRequest</td>
-<td></td>
-</tr>
-<tr>
-<td>response</td>
-<td>javax.servlet.http.HttpServletResponse</td>
-<td></td>
-</tr>
-<tr>
-<td>session</td>
-<td>javax.servlet.http.HttpSession</td>
-<td>jsp指令 session=&quot;true&quot;</td>
-</tr>
-<tr>
-<td>application</td>
-<td>javax.servlet.ServletContext</td>
-<td></td>
-</tr>
-<tr>
-<td>config</td>
-<td>javax.servlet.ServletConfig</td>
-<td></td>
-</tr>
-<tr>
-<td>page</td>
-<td>java.lang.Object</td>
-<td>代表当前servlet对象本身</td>
-</tr>
-<tr>
-<td>exception</td>
-<td>java.lang.Throwable</td>
-<td>jsp指令 isErrorPage=&quot;true&quot;</td>
-</tr>
-<tr>
-<td>out</td>
-<td>javax.servlet.jsp.JspWriter</td>
-<td>和 reponse.getWriter()一样</td>
-</tr>
-<tr>
-<td>pageContext</td>
-<td>javax.servlet.jsp.PageContext</td>
-</tr>
-</tbody>
-</table>
-<h2 id="-out-">隐式对象 out的使用</h2>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-</pre></td><td class="code"><pre><span class="vbscript">&lt;%
-    out.write(<span class="string">"123"</span>); // JspWriter, 缓存<span class="number">8</span>kb
-    <span class="built_in">response</span>.getWriter.write(<span class="string">"456"</span>);
-%&gt;</span>
-<span class="comment">&lt;!--结果是 456123--&gt;</span>
-</pre></td></tr></table></figure>
-
-<h2 id="pagecontext-">pageContext 内置对象</h2>
-<p>作用:</p>
-<ul>
-<li><p>是一个域对象, 存的数据只能是当前页面来访问.
-还能操作其他三个域对象(ServletRequest, HttpSession, ServletContext)的数据</p>
-<p>  可以操作本身的域对象和其他的域对象</p>
-<ol>
-<li>setAttribute(String key, Object value, int scope)</li>
-<li>getAttribute(String key, int scope)</li>
-<li>removeAttribute(int scope)</li>
-<li>scope: <code>PageContext.PAGE_SCOPE</code>
-, <code>PageContext.REQUEST_SCOPE</code>
-, <code>PageContext.SESSION_SCOPE</code>
-, <code>PageContext.APPLICATION_SCOPE</code></li>
-<li>findAttribute(String key), <strong>依次从页面、请求、会话、应用范围找对应的值</strong></li>
-</ol>
-</li>
-<li><p>获得其他8个隐式对象</p>
-<ol>
-<li><code>pageContext.getRequest();</code></li>
-<li><code>pageContext.getSession();</code></li>
-<li>...</li>
-</ol>
-</li>
-<li><p>提供了转发和包含的简单方法</p>
-<ol>
-<li><code>pageContext.forward(&quot;&quot;);</code></li>
-<li><code>pageContext.include(&quot;&quot;);</code></li>
-</ol>
-</li>
-</ul>
-<h1 id="-">四大域对象</h1>
-<ul>
-<li>PageContext: 页面范围的数据, 用的很少</li>
-<li>ServletRequest: 请求范围的数据, 用的很多. 显示一次数据后就没有用了</li>
-<li>HttpSession: 会话范围内的数据, 用的很多, 每次请求和响应都需要的共享数据</li>
-<li>ServletContext: 应用范围内的数据, 用的不多, 是所有的客户端都共享的信息. 注意同步!!!</li>
-</ul>
-<p>数据能不能取到, 关键是不是从一个地方取的数据</p>
-<h1 id="javabean-">JavaBean 概念</h1>
-<ul>
-<li>什么是JavaBean(VO, Value Object; DO: Data Object; POJO: 简单Java对象)
-  遵循一定的命名规则:<ol>
-<li>必须由默认的构造方法</li>
-<li>类的声明为public类型</li>
-<li>字段都是私有的 <code>private boolean married</code>;</li>
-<li>提供公有的getter或setter方法(属性)</li>
-<li>一般实现 java.io.Serializable 接口</li>
-</ol>
-</li>
-<li><p>应用场景</p>
-<p> 封装数据, 便于传递数据</p>
-</li>
-</ul>
-<h1 id="javaweb-">JavaWeb开发模型</h1>
-<ul>
-<li><p>模型一: JavaBean + JSP,只能开发很简单的应用,不适合企业级应用</p>
-</li>
-<li><p>模型二: MVC, Model+View+Controller</p>
-<ul>
-<li>Model: JavaBean 数据</li>
-<li>View: JSP</li>
-<li><p>Controller: Servlet</p>
-<p>MVC只是三层架构模式中的前段展示层</p>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="-">三层架构模型</h2>
-<p><img src="/img/3layerstructor.png" alt="三层架构模型"></p>
-<h2 id="-jsp-javabean">在JSP中使用JavaBean</h2>
-<p>使用动作元素(内置标签)</p>
-<ul>
-<li><p>jsp:useBean: 用于从指定范围根据名称查找Javabean,
-如果没有找到, 创建该 JavaBean 的实例, 然后放到指定的范围.</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">jsp:useBean</span> <span class="attribute">id</span>=<span class="value">"p"</span> <span class="attribute">class</span>=<span class="value">"cn.itcast.Person"</span> 
-             <span class="attribute">scope</span>=<span class="value">"page|request|session|application"</span>&gt;</span><span class="tag">&lt;/<span class="title">jsp:useBean</span>&gt;</span>
-<span class="vbscript">&lt;% // 等价代码
-   cn.itcast.Person p = <span class="literal">null</span>;
-   p = (Person) pageContext.getAttribute(<span class="string">"p"</span>, pageContext.PAGE_SCOPE);
-   <span class="keyword">if</span>(p==<span class="literal">null</span>){
-       p = <span class="keyword">new</span> Person();
-       pageContext.setAttribute(<span class="string">"p"</span>, p, pageContext.PAGE_SCOPE);
-   }
-%&gt;</span>
-</pre></td></tr></table></figure>
-</li>
-<li><p>jsp:setProperty: 给指定名称的对象设置值</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-</pre></td><td class="code"><pre>&lt;<span class="symbol">jsp:</span>setProperty property=<span class="string">"name"</span> name=<span class="string">"p"</span> value=<span class="string">"xxx"</span>/&gt;
-&lt;<span class="string">%//</span> 等价代码
-p.setName(<span class="string">"xxx"</span>);
-%&gt;
-</pre></td></tr></table></figure>
-</li>
-<li><p>jsp:getProperty: 如果一个属性的值是null, 界面就会显示null</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">jsp:getProperty</span> <span class="attribute">property</span>=<span class="value">"name"</span> <span class="attribute">name</span>=<span class="value">"p"</span>/&gt;</span>
-<span class="vbscript">&lt;%=p.getName()%&gt;</span> <span class="comment">&lt;!-- 等价代码 --&gt;</span>
-</pre></td></tr></table></figure>
-
-</li>
-</ul>
-<h3 id="-javabean-">用请求参数设置 JavaBean 中的值</h3>
-<p>在模型一中用到</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">form</span> <span class="attribute">action</span>=<span class="value">"Bean.jsp"</span> <span class="attribute">method</span>=<span class="value">"post"</span>&gt;</span>
-    <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"text"</span> <span class="attribute">name</span>=<span class="value">"name"</span>/&gt;</span>
-    <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"radio"</span> <span class="attribute">name</span>=<span class="value">"gender"</span> <span class="attribute">value</span>=<span class="value">"female"</span>/&gt;</span> 先生
-    <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"radio"</span> <span class="attribute">name</span>=<span class="value">"gender"</span> <span class="attribute">value</span>=<span class="value">"male"</span>/&gt;</span> 小姐
-    <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"submit"</span>/&gt;</span>
-<span class="tag">&lt;/<span class="title">form</span>&gt;</span>
-
-<span class="comment">&lt;!-- Bean.jsp --&gt;</span>
-<span class="tag">&lt;<span class="title">jsp:setProperty</span> <span class="attribute">property</span>=<span class="value">"name"</span> <span class="attribute">name</span>=<span class="value">"p"</span> <span class="attribute">param</span>=<span class="value">"name"</span>/&gt;</span>
-<span class="tag">&lt;<span class="title">jsp:setProperty</span> <span class="attribute">property</span>=<span class="value">"name"</span> <span class="attribute">name</span>=<span class="value">"p"</span> <span class="attribute">param</span>=<span class="value">"gender"</span>/&gt;</span>
-<span class="comment">&lt;!-- 使用通配符, 简化上面调用, 前提: 表单的字段名和JavaBean的字段名一致 --&gt;</span>
-<span class="tag">&lt;<span class="title">jsp:setProperty</span> <span class="attribute">property</span>=<span class="value">"*"</span> <span class="attribute">name</span>=<span class="value">"p"</span>/&gt;</span>
-</pre></td></tr></table></figure>
-
-]]></content>
-    
-    
-      <category term="java" scheme="http://zhpooer.github.io/tags/java/"/>
-    
-      <category term="JSP" scheme="http://zhpooer.github.io/tags/JSP/"/>
-    
-      <category term="传智播客" scheme="http://zhpooer.github.io/tags/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2/"/>
-    
-      <category term="JavaBean" scheme="http://zhpooer.github.io/tags/JavaBean/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[传智播客day12-jsp]]></title>
-    <link href="http://zhpooer.github.io/2014/04/15/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day12-jsp/"/>
-    <id>http://zhpooer.github.io/2014/04/15/传智播客day12-jsp/</id>
-    <published>2014-04-15T06:40:33.000Z</published>
-    <updated>2014-04-15T08:58:36.000Z</updated>
-    <content type="html"><![CDATA[<h1 id="jsp">JSP</h1>
-<p>全称Java Server Pages, 是一种用于开发动态web资源的技术</p>
-<p>JSP=html中写java代码</p>
-<p>Servlet: 只能写java代码, 写html不是很方便</p>
-<h1 id="jsp-">JSP 的执行原理</h1>
-<p>jsp 翻译成 .Java 再 编译成 .class, 然后Tomcat加载</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-</pre></td><td class="code"><pre><span class="comment">// JSP中可以取到的变量</span>
-PageContext pageContext = <span class="keyword">null</span>;
-HttpSession session = <span class="keyword">null</span>;
-ServletContext application = <span class="keyword">null</span>;
-ServletConfig config = <span class="keyword">null</span>;
-JspWriter <span class="keyword">out</span> = <span class="keyword">null</span>;
-Object page = <span class="keyword">this</span>;
-JspWriter _jspx_out = <span class="keyword">null</span>;
-PageContext _jspx_page_context = <span class="keyword">null</span>;
-</pre></td></tr></table></figure>
-
-<h1 id="jsp-">JSP语法</h1>
-<h2 id="-">模板元素</h2>
-<p>JSP中的HTML元素, 定义了JSP的外观和框架</p>
-<h2 id="-">脚本表达式</h2>
-<p>输出变量的值到页面上</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-</pre></td><td class="code"><pre>&lt;%=new Date()<span class="preprocessor">.toLocaleString</span>()%&gt;
-//translate to <span class="keyword">out</span><span class="preprocessor">.println</span>( new Date()<span class="preprocessor">.toLocaleString</span>() )<span class="comment">;</span>
-</pre></td></tr></table></figure>
-
-<h2 id="-">脚本片段</h2>
-<p>书写Java逻辑, 原封不动的java代码</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-</pre></td><td class="code"><pre>&lt;<span class="comment">%</span>
-   语句一;
-   语句二;
-<span class="comment">%&gt;</span>
-</pre></td></tr></table></figure>
-
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">table</span> <span class="attribute">border</span>=<span class="value">"1"</span>&gt;</span>
-    <span class="tag">&lt;<span class="title">tr</span>&gt;</span>
-        <span class="tag">&lt;<span class="title">th</span>&gt;</span> <span class="tag">&lt;/<span class="title">th</span>&gt;</span>
-        <span class="tag">&lt;<span class="title">th</span>&gt;</span> <span class="tag">&lt;/<span class="title">th</span>&gt;</span>
-    <span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
-    <span class="vbscript">&lt;%
-    <span class="keyword">for</span>(<span class="built_in">int</span> i=<span class="number">1</span>;i&lt;=<span class="number">10</span>;i++){
-    %&gt;</span>
-    <span class="tag">&lt;<span class="title">tr</span>&gt;</span>
-        <span class="tag">&lt;<span class="title">td</span>&gt;</span><span class="vbscript">&lt;%=i%&gt;</span><span class="tag">&lt;/<span class="title">td</span>&gt;</span>
-        <span class="tag">&lt;<span class="title">td</span>&gt;</span><span class="vbscript">&lt;%=<span class="string">"aaa"</span> + i%&gt;</span><span class="tag">&lt;/<span class="title">td</span>&gt;</span>
-    <span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
-    <span class="vbscript">&lt;%
-    }
-    %&gt;</span>
-<span class="tag">&lt;/<span class="title">table</span>&gt;</span>
-</pre></td></tr></table></figure>
-
-<h2 id="-">声明</h2>
-<p>定义类成员(静态变量, 静态方法, 实例变量, 实例方法)</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-</pre></td><td class="code"><pre>&lt;%!
-   <span class="comment">// 实例变量</span>
-   int i = <span class="number">100</span>;
-   <span class="keyword">public</span> void <span class="function"><span class="keyword">method</span><span class="params">()</span><span class="comment">{
-       println("hello world");
-   }</span>
-%&gt;</span>
-</pre></td></tr></table></figure>
-
-<h2 id="-">注释</h2>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-</pre></td><td class="code"><pre>&lt;<span class="string">%--</span>
-   out.write(<span class="string">"helloworld"</span>)
---%&gt;
-</pre></td></tr></table></figure>
-
-<p><code>&lt;%-- --%&gt;</code>: 被注释的代码, 根本不会被翻译到Servlet中</p>
-<p><code>&lt;!--  --&gt;</code>: 浏览器注释, 代码还是会被执行</p>
-<h2 id="-">指令</h2>
-<ul>
-<li>作用 给服务器用, 指示服务器应该如何对待JSP页面</li>
-<li>基本语法: <code>&lt;%@指令名称 指令属性=值 指令属性1=值1%&gt;</code></li>
-</ul>
-<h3 id="page">page</h3>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-</pre></td><td class="code"><pre>&lt;%<span class="annotation">@page</span>
-  language=<span class="string">"java"</span>
-  <span class="keyword">import</span>=<span class="string">"java.util.Data, java.util.Random"</span>
-%&gt;
-</pre></td></tr></table></figure>
-
-<table>
-<thead>
-<tr>
-<th>属性</th>
-<th>默认值</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>language</td>
-<td>java</td>
-<td>设置编写也语言</td>
-</tr>
-<tr>
-<td>import</td>
-<td></td>
-<td>导入包, 用逗号分隔</td>
-</tr>
-<tr>
-<td>session</td>
-<td>true</td>
-<td>是否生成 HttpSession 对象</td>
-</tr>
-<tr>
-<td>buffer</td>
-<td>8kb</td>
-<td>字符输出流的缓存, none</td>
-</tr>
-<tr>
-<td>autoFlush</td>
-<td>true</td>
-<td>自动刷新缓存</td>
-</tr>
-<tr>
-<td>isThreadPage</td>
-<td>false</td>
-<td>是否线程安全</td>
-</tr>
-<tr>
-<td>errorPage</td>
-<td></td>
-<td>页面出错时, 转到的页面, 如果以<code>/</code>开头,为绝对路径</td>
-</tr>
-<tr>
-<td>isErrorPage</td>
-<td>false</td>
-<td>是否产生Exception对象, 错误后可以调用 exceptioin.getStackTrace()</td>
-</tr>
-<tr>
-<td>contentType</td>
-<td></td>
-<td>改字符流编码,通知客户端显示字符集</td>
-</tr>
-<tr>
-<td>pageEncoding</td>
-<td>iso8859-1</td>
-<td>指示服务器读取JSP时所用的编码, 同时有 contentType 的功能</td>
-</tr>
-<tr>
-<td>isELIgnored</td>
-<td>false</td>
-<td>是否忽略EL表达式</td>
-</tr>
-</tbody>
-</table>
-<h3 id="taglib">taglib</h3>
-<p>引入外部的标签用的</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-</pre></td><td class="code"><pre><span class="vbscript">&lt;%@ taglib uri=<span class="string">""</span> prefix=<span class="string">"c"</span>%&gt;</span>
-<span class="tag">&lt;<span class="title">c:if</span> <span class="attribute">test</span>=<span class="value">""</span>&gt;</span><span class="tag">&lt;/<span class="title">c:if</span>&gt;</span>
-</pre></td></tr></table></figure>
-
-<h3 id="include">include</h3>
-<p>页面包含</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-</pre></td><td class="code"><pre><span class="comment">&lt;!-- 首选, 效率高, 静态包含, 两个 jsp 翻译成一个 jsp --&gt;</span>
-<span class="vbscript">&lt;%@ include
-    file=<span class="string">"/**.jsp"</span>
-%&gt;</span>
-<span class="comment">&lt;!-- 动态包含, 两个 jsp, 合并显示--&gt;</span>
-<span class="tag">&lt;<span class="title">jsp:include</span> <span class="attribute">page</span>=<span class="value">"/**.jsp"</span>/&gt;</span>
-</pre></td></tr></table></figure>
-
-<h2 id="jsp-">JSP 常用内置标签(动作元素)</h2>
-<table>
-<thead>
-<tr>
-<th>标签</th>
-<th>作用</th>
-<th>详细说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>jsp:include</td>
-<td>动态包含</td>
-<td>page:指向被包含页面</td>
-</tr>
-<tr>
-<td>jsp:forward</td>
-<td>转发</td>
-<td>page: 指向转发路径</td>
-</tr>
-<tr>
-<td>jsp:param</td>
-<td>传递请求参数</td>
-<td>name:键 value:值</td>
-</tr>
-</tbody>
-</table>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-</pre></td><td class="code"><pre><span class="comment">// 源页面</span>
-&lt;jsp:forward page=<span class="string">""</span>&gt;
-    &lt;jsp:param <span class="keyword">value</span>=<span class="string">'key'</span> name=<span class="string">'username'</span>/&gt;
-&lt;/jsp:forward&gt;
-
-<span class="comment">// 目的页面</span>
-request.getParameter(<span class="string">"username"</span>)
-</pre></td></tr></table></figure>
-
-<h1 id="error-">Error 的全局配置</h1>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-</pre></td><td class="code"><pre><span class="comment">&lt;!-- error 全局配置 --&gt;</span>
-<span class="tag">&lt;<span class="title">error-page</span>&gt;</span>
-    <span class="comment">&lt;!-- 异常类型匹配--&gt;</span>
-    <span class="tag">&lt;<span class="title">exception-type</span>&gt;</span>java.lang.Exception <span class="tag">&lt;/<span class="title">exception-type</span>&gt;</span>
-    <span class="tag">&lt;<span class="title">location</span>&gt;</span> /error.jsp<span class="tag">&lt;/<span class="title">location</span>&gt;</span>
-<span class="tag">&lt;/<span class="title">error-page</span>&gt;</span>
-<span class="tag">&lt;<span class="title">error-page</span>&gt;</span>
-    <span class="comment">&lt;!-- 响应码匹配 --&gt;</span>
-    <span class="tag">&lt;<span class="title">error-code</span>&gt;</span>404<span class="tag">&lt;/<span class="title">error-code</span>&gt;</span>
-    <span class="tag">&lt;<span class="title">location</span>&gt;</span> /error.jsp<span class="tag">&lt;/<span class="title">location</span>&gt;</span>
-<span class="tag">&lt;/<span class="title">error-page</span>&gt;</span>
-</pre></td></tr></table></figure>
-
-]]></content>
-    
-    
-      <category term="jsp" scheme="http://zhpooer.github.io/tags/jsp/"/>
     
       <category term="传智播客" scheme="http://zhpooer.github.io/tags/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2/"/>
     
