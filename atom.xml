@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Hello World]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://zhpooer.github.io/"/>
-  <updated>2014-05-10T12:43:33.073Z</updated>
+  <updated>2014-05-12T13:11:11.164Z</updated>
   <id>http://zhpooer.github.io/</id>
   
   <author>
@@ -13,6 +13,916 @@
   </author>
   
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[传智播客day28-struts]]></title>
+    <link href="http://zhpooer.github.io/2014/05/12/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day28-struts/"/>
+    <id>http://zhpooer.github.io/2014/05/12/传智播客day28-struts/</id>
+    <published>2014-05-12T01:14:18.000Z</published>
+    <updated>2014-05-12T09:15:42.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="servlet-">Servlet 缺点</h1>
+<ol>
+<li>写一个 servelt 需要在 web.xml 中配置8行, 如果一个系统中servlet很多, 会导致
+web.xml中文件中的内容多多</li>
+<li>在项目中很多人编辑一个 web.xml 文件会出现文件冲突</li>
+<li>在一个 servlet 中方法的入口只有一个, 如果在一个 servlet 中写很多方法, 这些方法
+应该传递参数, 根据每次请求参数不一致来判断执行哪个方法</li>
+<li>servlet 中的方法都有两个参数 request,response,这两个参数具有严重的容器依赖性,
+所以在servlet不能单独测试</li>
+<li>如果在表单中的元素很多, 在servlet 中要想获取表单的数据,
+那么在servlet的方法必须调用大量的 <code>request.getParameter()</code></li>
+<li>在一个servlet属性中声明一个数据, 会存在线程安全问题</li>
+</ol>
+<p>优点: 因为是最底层的mvc, 所以效率比较高</p>
+<p>很多项目中对servlet 进行了重构, 重构目标是:</p>
+<ol>
+<li>更有利于团队协作开发</li>
+<li>把servlet的缺点一次进行修改</li>
+</ol>
+<h1 id="-servlet">重构 Servlet</h1>
+<p>在 web.xml 文件中只写一个servlet, 中控servlet</p>
+<p>model 层为action</p>
+<p>在中控 servlet 中利用java 的反射机制动态调用该action</p>
+<h2 id="-">重构效果</h2>
+<p>只写一个servlet</p>
+<p>只需要在 web.xml 配置一个 servlet</p>
+<h2 id="-">步骤</h2>
+<ul>
+<li><p>创建一个servlet</p>
+<p>  需求: 访问 <code>http://localhost:8080/userAction.action</code>, 调用 <code>UserAction.execute()</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">listener</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">listener-class</span>&gt;</span>ActionListener<span class="tag">&lt;/<span class="title">listener-class</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">listener</span>&gt;</span>
+<span class="tag">&lt;<span class="title">servlet-mapping</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">servlet-name</span>&gt;</span>...<span class="tag">&lt;/<span class="title">servlet-name</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">url-parttern</span>&gt;</span>*.actions<span class="tag">&lt;/<span class="title">url-parttern</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">servlet-mapping</span>&gt;</span>
+</pre></td></tr></table></figure>
+</li>
+<li><p>写一个监听器</p>
+<p>  写一个监听器, 在该监听器中写一个Map, map中的key存放url的action中的部分: userAction, 
+  value 存放对应类的字符串形式, 把该map放入到application域中</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ActionListener</span> <span class="keyword">implements</span> <span class="title">ServletContextListener</span> {</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">contextDestroyed</span>(ServletContextEvent e) {
+        e.getSevletContext().setAttribute(<span class="string">"actions"</span>, <span class="keyword">null</span>);
+    }
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">contextInitialized</span>(ServletContextEvent e) {
+       Map map = <span class="keyword">new</span> HashMap&lt;String, String&gt;();
+       map.put(<span class="string">"userAction"</span>, <span class="string">"cn.itcast.Action.UserAction"</span>);
+       e.getSevletContext().setAttribute(<span class="string">"actions"</span>, map);
+    }
+}
+</pre></td></tr></table></figure>
+</li>
+<li><p>中控 servlet 执行</p>
+<ol>
+<li>把url中的urserAction做一个解析</li>
+<li>提取 application 域中的map, 根据 userAction key, 找到value</li>
+<li>执行 <code>UserAction.execute(request, response)</code></li>
+</ol>
+</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ActionServlet</span> <span class="keyword">extends</span> <span class="title">HttpServlet</span> {</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doGet</span>(req, resp){
+        String fullActionName = req.getRequestURI().subString(req.getContextPath().length); <span class="comment">// userAction.action</span>
+        String actionName = fullActionName.replace(<span class="string">"^(.*)\\.action"</span>, <span class="string">"$1"</span>);
+        Map actionMap = getServletContext().getAttribute(<span class="string">"actions"</span>);
+        String actionClassName = actionMap.get(actoinName);
+        String clazz = Class.forName(actionClassName);
+        Method m = clazz.getMethod(<span class="string">"execute"</span>, HttpServletRequest.class, HttpServletResponse.class);
+        String result = method.invoke(clazz.newInstance(), req, resp); <span class="comment">// 返回要转发地址</span>
+        req.getRequestDispatcher(result).forward(req, resp);
+    }
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doPost</span>(req, resp) { doGet(req, resp); }
+}
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserAction</span> {</span>
+    <span class="keyword">public</span> string <span class="title">execute</span>(HttpServletRequest res, HttpServletResponse resp) {
+        <span class="keyword">return</span> <span class="string">"index.jsp"</span>;
+    }
+}
+</pre></td></tr></table></figure>
+
+<h1 id="servlet-">Servlet 进化史</h1>
+<ol>
+<li>03-05, mvc框架是 servlet</li>
+<li>apache 的 struts1,实现松耦合 , 没由解决容器依赖性问题</li>
+<li>webwork, 让action没有任何容器依赖性, 把文件上传, 检验工作和保存用户的工作松耦合</li>
+<li>struts 和 webwork整合成struts2</li>
+</ol>
+<h1 id="struts-helloworld">Struts HelloWorld</h1>
+<p>导入包:</p>
+<ul>
+<li>freemarker, 模板</li>
+<li>ognl, 表达式, 为了显示存储在数据, 功能类似于el表达式</li>
+<li>struts2-core, struts核心包</li>
+<li>xworks-core, web-work核心包</li>
+</ul>
+<ol>
+<li><p>编写Web.xml</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre>&lt;<span class="built_in">filter</span>&gt;
+    &lt;<span class="built_in">filter</span>-name&gt;struts2 &lt;/<span class="built_in">filter</span>-name&gt;
+    &lt;<span class="built_in">filter</span>-<span class="keyword">class</span>&gt;
+        org.apache.struts2.dispatcher.ng.<span class="built_in">filter</span>.strutsPrepareAndExecuteFilter
+    &lt;/<span class="built_in">filter</span>-<span class="keyword">class</span>&gt;
+&lt;/<span class="built_in">filter</span>&gt;
+&lt;<span class="built_in">filter</span>-mapping&gt;
+    &lt;<span class="built_in">filter</span>-name&gt;struts2 &lt;/<span class="built_in">filter</span>-name&gt;
+    &lt;url-pattern&gt;/* &lt;/url-pattern&gt;
+&lt;/<span class="built_in">filter</span>-mapping&gt;
+</pre></td></tr></table></figure>
+</li>
+<li><p>编写Action</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="keyword">class</span> HelloWorldAction {
+    <span class="keyword">public</span> String <span class="title">execute</span>(){
+        println(<span class="string">"hello"</span>)
+        <span class="keyword">return</span> <span class="string">"index"</span>;
+    }
+}
+</pre></td></tr></table></figure>
+</li>
+<li><p>写配置文件, 在src下面写一个 struts.xml</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">struts</span>&gt;</span>
+    <span class="comment">&lt;!-- package 功能是用来管理 action 的, 一般情况下package是针对模块划分的 --&gt;</span>
+    <span class="comment">&lt;!-- name 为 package 的名称, 是唯一的 --&gt;</span>
+    <span class="comment">&lt;!-- extends 实际上是把 package 中 name为 *struts-default* 包中所有的功能继承下来 --&gt;</span>
+    <span class="comment">&lt;!-- namespace 设置访问的相对路径, 和 配置 action 转向到jsp页面时的查找路径--&gt;</span>
+    <span class="tag">&lt;<span class="title">package</span> <span class="attribute">name</span>=<span class="value">"helloworld"</span> <span class="attribute">namespace</span>=<span class="value">"/"</span> <span class="attribute">extends</span>=<span class="value">"struts-default"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">action</span> <span class="attribute">name</span>=<span class="value">"helloworldAction"</span> <span class="attribute">class</span>=<span class="value">"cn.itcast.action.HelloWorldAction"</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">result</span> <span class="attribute">name</span>=<span class="value">"index"</span>&gt;</span> index.jsp <span class="tag">&lt;/<span class="title">result</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">action</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">package</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">struts</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h2 id="struts2-">struts2 好处</h2>
+<p>web.xml 中只有一个过滤器, 不用繁琐的配置</p>
+<p>action就是一个简单的javabean, 与servlet容器没有任何依赖</p>
+<p>多出了一个struts.xml, 配置Action的行为</p>
+<h1 id="-">配置文件解析</h1>
+<p>在struts过滤器初始化时, 加载了几个配置文件
+<code>struts-default.xml(在struts2核心包的根目录下)</code> <code>struts.xml(供程序员使用)</code> <code>struts-plugins.xml</code></p>
+<p>struts 先加载 <code>struts-default.xml</code>, 后加载 <code>struts.xml</code>, 如果出现相同元素, 后加载覆盖先加载</p>
+<p><code>package</code> 分模块管理action,</p>
+<ul>
+<li>属性 <code>name</code>, 包名字, 值唯一</li>
+<li><p>属性 <code>extends</code>, 用法 <code>extends=&quot;struts-default&quot;</code>,
+把 package 中 name为 <em>struts-default</em> 包中所有的功能继承下来</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- 继承了 helloworld --&gt;</span>
+<span class="tag">&lt;<span class="title">package</span> <span class="attribute">name</span>=<span class="value">"childOfHello"</span> <span class="attribute">extends</span>=<span class="value">"helloworld"</span>&gt;</span> <span class="tag">&lt;/<span class="title">package</span>&gt;</span>
+</pre></td></tr></table></figure>
+</li>
+<li><p>属性<code>namespace</code>, 与url相关,  如果 <code>namespace=&quot;/base&quot;</code>,
+则要访问 <code>${contextPath/base/helloWorldaction.action}</code>, 但是 <code>${contextPath/base/a/helloWorldAction.action}</code>也能访问</p>
+<ul>
+<li>查找规则, 先在 <code>/base/a</code> 下找, 然后在 <code>/base</code> 下找</li>
+<li>如果<code>Action.execute()</code>返回了<code>&quot;index&quot;</code>, 则struts 会找根据配置文件在<code>/base/</code>文件夹下查找<code>index.jsp</code></li>
+</ul>
+</li>
+<li>标签 <code>&lt;result name=&quot;name&quot; type=&quot;&quot;&gt;&lt;/result&gt;</code>, 结果集<ol>
+<li><code>Action.execute</code> 返回一个字符串, 返回的字符串要和struts的配置文件中的<code>result</code>标签的<code>name</code>属性值匹配</li>
+<li><code>name</code>属性, 可以省略, 默认为 <em>&quot;success&quot;</em></li>
+<li><code>type</code>属性, 结果集类型, 可省略, 默认为值为 &quot;dispatcher&quot;, 在<code>struts-default.xml</code> 定义 <code>&lt;result-type name=&quot;dispatcher&quot;/&gt;</code></li>
+</ol>
+</li>
+<li><code>include</code> 标签, 保证可以存在很多个 struts 配置文件<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">struts</span>&gt;</span> <span class="tag">&lt;<span class="title">include</span> <span class="attribute">file</span>=<span class="value">"included-struts.xml"</span>/&gt;</span> <span class="tag">&lt;/<span class="title">struts</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h1 id="struts-action-">struts Action 配置</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code"><pre><span class="comment">// 方式一</span>
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyAction</span> <span class="keyword">implements</span> <span class="title">com</span>.<span class="title">opensymphony</span>.<span class="title">xwork2</span>.<span class="title">Action</span> {</span>
+    <span class="keyword">public</span> String <span class="title">execute</span>(){
+        <span class="keyword">return</span> SUCCESS; <span class="comment">// Action 中定义的常量, 匹配配置文件 struts.xml 中的 action.name</span>
+    }
+}
+<span class="comment">// 方式二</span>
+<span class="comment">// 封装了一些常用功能, 如国际化 表单验证 等功能</span>
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyAction</span> <span class="keyword">extends</span> <span class="title">com</span>.<span class="title">opensymphony</span>.<span class="title">xwork2</span>.<span class="title">ActionSupport</span> {</span>
+    <span class="keyword">public</span> String <span class="title">execute</span>() {
+    }
+}
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- 方式三 --&gt;</span>
+<span class="tag">&lt;<span class="title">action</span> <span class="attribute">name</span>=<span class="value">"anyName"</span>&gt;</span> <span class="comment">&lt;!-- 没有写 class, 默认执行 com.opensymphony.xwork2.ActionSupport --&gt;</span>
+    <span class="tag">&lt;<span class="title">result</span>&gt;</span> indelx.jsp <span class="tag">&lt;/<span class="title">result</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">action</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<h2 id="-">通配符映射</h2>
+<p>在配置文件的 Action 标签中, 可以配置 action 被执行行为</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- 方式一 --&gt;</span>
+<span class="comment">&lt;!-- 访问 ${contextPath}/m1/userAction.action 时,默认会调用 UserAction 的 saveUser 方法 --&gt;</span>
+<span class="tag">&lt;<span class="title">package</span> <span class="attribute">name</span>=<span class="value">"method"</span> <span class="attribute">namespace</span>=<span class="value">"/m1"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">action</span> <span class="attribute">name</span>=<span class="value">"userAction"</span> <span class="attribute">method</span>=<span class="value">"saveUser"</span> <span class="attribute">class</span>=<span class="value">"**.UserAction"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">result</span>&gt;</span>index.jsp<span class="tag">&lt;/<span class="title">result</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">action</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">package</span>&gt;</span>
+
+<span class="comment">&lt;!-- 方式二 --&gt;</span>
+<span class="comment">&lt;!-- 访问 ${contextPath}/m2/userAction!deleteUser.action 时,
+     会调用 UserAction 的 deleteUser 方法 --&gt;</span>
+<span class="tag">&lt;<span class="title">package</span> <span class="attribute">name</span>=<span class="value">"method"</span> <span class="attribute">namespace</span>=<span class="value">"/m2"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">action</span> <span class="attribute">name</span>=<span class="value">"userAction"</span> <span class="attribute">class</span>=<span class="value">"**.UserAction"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">result</span>&gt;</span>index.jsp<span class="tag">&lt;/<span class="title">result</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">action</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">package</span>&gt;</span>
+
+<span class="comment">&lt;!-- 方式三 --&gt;</span>
+<span class="comment">&lt;!-- 访问 ${contextPath}/m3/a_add.action 或 ${contextPath}/m3/**_add.action 时,
+     都会调用 UserAction 的 saveUser 方法 --&gt;</span>
+<span class="tag">&lt;<span class="title">package</span> <span class="attribute">name</span>=<span class="value">"method"</span> <span class="attribute">namespace</span>=<span class="value">"/m3"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">action</span> <span class="attribute">name</span>=<span class="value">"*_add"</span> <span class="attribute">method</span>=<span class="value">"saveUser"</span> <span class="attribute">class</span>=<span class="value">"**.UserAction"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">result</span>&gt;</span>index.jsp<span class="tag">&lt;/<span class="title">result</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">action</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">package</span>&gt;</span>
+
+<span class="comment">&lt;!-- 方式四 --&gt;</span>
+<span class="comment">&lt;!-- 访问 ${contextPath}/m4/saveUser_add.action 时,
+     会调用 UserAction 的 saveUser 方法 --&gt;</span>
+<span class="tag">&lt;<span class="title">package</span> <span class="attribute">name</span>=<span class="value">"method"</span> <span class="attribute">namespace</span>=<span class="value">"/m4"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">action</span> <span class="attribute">name</span>=<span class="value">"*_add"</span> <span class="attribute">method</span>=<span class="value">"{1}"</span> <span class="attribute">class</span>=<span class="value">"**.UserAction"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">result</span>&gt;</span>index.jsp<span class="tag">&lt;/<span class="title">result</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">action</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">package</span>&gt;</span>
+
+<span class="comment">&lt;!-- 方式五 --&gt;</span>
+<span class="comment">&lt;!-- 访问 ${contextPath}/m5/UserAction_pattern.action 时,
+     会调用 UserAction 的 pattern 方法 --&gt;</span>
+<span class="comment">&lt;!-- 访问 ${contextPath}/m5/PersonAction_pattern.action 时,
+     会调用 PersonAction 的 pattern 方法 --&gt;</span>
+<span class="tag">&lt;<span class="title">package</span> <span class="attribute">name</span>=<span class="value">"method"</span> <span class="attribute">namespace</span>=<span class="value">"/m5"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">action</span> <span class="attribute">name</span>=<span class="value">"*_pattern"</span> <span class="attribute">method</span>=<span class="value">"pattern"</span> <span class="attribute">class</span>=<span class="value">"cn.itcast.{1}"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">result</span>&gt;</span>index.jsp<span class="tag">&lt;/<span class="title">result</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">action</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">package</span>&gt;</span>
+
+<span class="comment">&lt;!-- 方式六 --&gt;</span>
+<span class="comment">&lt;!-- 访问 ${contextPath}/m6/UserAction_saveUser.action 时,
+     会调用 UserAction 的 saveUser 方法, 并返回 saveUser.jsp --&gt;</span>
+<span class="tag">&lt;<span class="title">package</span> <span class="attribute">name</span>=<span class="value">"method"</span> <span class="attribute">namespace</span>=<span class="value">"/m6"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">action</span> <span class="attribute">name</span>=<span class="value">"UserAction_*"</span> <span class="attribute">method</span>=<span class="value">"{1}"</span> <span class="attribute">class</span>=<span class="value">"cn.itcast.UserAction"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">result</span>&gt;</span>{1}.jsp<span class="tag">&lt;/<span class="title">result</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">action</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">package</span>&gt;</span>
+<span class="comment">&lt;!-- 变体 --&gt;</span>
+<span class="tag">&lt;<span class="title">package</span> <span class="attribute">name</span>=<span class="value">"method"</span> <span class="attribute">namespace</span>=<span class="value">"/m6"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">action</span> <span class="attribute">name</span>=<span class="value">"*_*"</span> <span class="attribute">method</span>=<span class="value">"{2}"</span> <span class="attribute">class</span>=<span class="value">"cn.itcast.{1}"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">result</span>&gt;</span>{2}.jsp<span class="tag">&lt;/<span class="title">result</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">action</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">package</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<p><strong>通配的程度越高, 匹配的范围越大, 越容易出问题</strong></p>
+]]></content>
+    
+    
+      <category term="传智播客" scheme="http://zhpooer.github.io/tags/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[传智播客day27-estore4]]></title>
+    <link href="http://zhpooer.github.io/2014/05/11/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day27-estore4/"/>
+    <id>http://zhpooer.github.io/2014/05/11/传智播客day27-estore4/</id>
+    <published>2014-05-11T01:01:06.000Z</published>
+    <updated>2014-05-11T07:39:53.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="-">订单的删除</h1>
+<p>在订单未付款的状态下, 用户可以去取消订单
+注意在 OrderService 要加入事务控制, 参考 <a href="/2014/04/26/传智播客day20-orm简介/#-">orm简介</a></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+</pre></td><td class="code"><pre><span class="comment">// OrderCancelServlet</span>
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doGet</span>(req, resp) {
+    <span class="comment">// 获取要取消的订单</span>
+    String orderid = req.getParameter(<span class="string">"orderid"</span>);
+    orderService.cancelOrder(orderid);
+    resp.sendRedirect(<span class="string">"/orderSearch"</span>);
+}
+
+<span class="comment">// OrderService</span>
+<span class="keyword">public</span> <span class="keyword">class</span> OrderService {
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">cancelOrder</span>(String orderid){
+        orderDao.deleteOrderItem(orderid);
+        orderDao.deleteOrder(orderid);
+    }
+}
+
+<span class="comment">// OrderDao </span>
+<span class="keyword">public</span> <span class="keyword">class</span> OrderDao {
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">deleteOrder</span>(String orderid) {
+        String sql = <span class="string">"delete from orderitem where order_id=?"</span>;
+        queryRunner.update(conn, sql, orderid);
+    }
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">deleteOrderItem</span>(String orderid) {
+        String sql = <span class="string">"delete from orders where id=?"</span>;
+        queryRunner.update(conn, sql, orderid);
+    }
+}
+</pre></td></tr></table></figure>
+
+<h1 id="-">定时清理未支付订单(任务调度)</h1>
+<p>监听器 Listener</p>
+<p>定时器</p>
+<ol>
+<li><code>java.util.Timer</code> 结合 <code>java.util.TimerTask</code></li>
+<li><code>java.util.concurrent.ScheduledExcutorService</code></li>
+<li><code>Quantz</code> <strong>框架</strong></li>
+</ol>
+<p>功能需求: 用户生成订单后,  有效支付时间24小时, 如果24小时不支付,
+系统自动清理订单</p>
+<h2 id="-">启动定时任务</h2>
+<p><code>ServletContextListener</code> 中启动定时任务</p>
+<p><code>Timer</code> API</p>
+<ul>
+<li><p><code>Timer.schedule(TimerTask task, Date firstTime, long period)</code></p>
+</li>
+<li><p><code>Timer.schedule(TimerTask task, long delay, long period)</code></p>
+</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+</pre></td><td class="code"><pre><span class="comment">// cn.itcast.estore.web.Listener</span>
+<span class="comment">// 清理24小时未付款的订单</span>
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OrderCleanListener</span> <span class="keyword">implements</span> <span class="title">ServletContextListener</span>{</span>
+    Timer timer = <span class="keyword">null</span>;
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span>(){
+        Timer timer = <span class="keyword">new</span> timer();
+        timer.schedule(<span class="keyword">new</span> TimerTask(){
+            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span>(){
+                orderService.cleanUnPayOrders();
+            }
+        }, <span class="number">0</span>, <span class="number">1000</span>l*<span class="number">60</span>*<span class="number">30</span>); <span class="comment">// 每隔30分钟执行一次, 加上 L 防止越界</span>
+    }
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">destroy</span>(){
+        <span class="keyword">if</span>(timer!=<span class="keyword">null</span>) timer.cancel();
+    }
+}
+
+<span class="comment">// OrderService</span>
+<span class="keyword">public</span> <span class="keyword">void</span> OrderService {
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">cleanUnPayOrders</span>() {
+        <span class="comment">//查询所有订单</span>
+        List&lt;Order&gt; orders = orderDao.findAllOrders();
+        <span class="keyword">for</span>(Order order : orders) {
+            <span class="keyword">if</span>(order.getPayState == <span class="number">0</span> && System.currentTimeMillis()-order.getCreatetime().getTime() &gt;= <span class="number">1000</span>*<span class="number">60</span>*<span class="number">60</span>) {
+                cancelOrder(order.getId());
+            }
+        }
+    }
+}
+</pre></td></tr></table></figure>
+
+<h1 id="-">系统权限管理</h1>
+<ol>
+<li>URL 级别权限控制</li>
+<li>方法级别权限控制 (一次请求会执行多个方法, 注解+动态代理+反射)</li>
+</ol>
+<p>引入配置文件进行权限控制</p>
+<ul>
+<li>系统用户 admin, normal</li>
+<li>存在三种页面: 未登录可以访问, user 可以访问, admin 可以访问</li>
+<li><p>配置两个文件</p>
+<ul>
+<li><p><code>admin.conf</code> 需要管理员才能访问</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="code"><pre>/active
+/addCart
+/delcartProduct
+/orderAdd
+/orderCancel
+/pay
+/updateCarrtProductNum
+/cart<span class="preprocessor">.jsp</span>
+/order_add<span class="preprocessor">.jsp</span>
+</pre></td></tr></table></figure>
+</li>
+<li><p><code>user.conf</code> 用户才能访问</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre>/orderCancel
+/order<span class="preprocessor">.jsp</span>
+/product_add<span class="preprocessor">.jsp</span>
+</pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>通过过滤器来进行权限控制</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PrivilegeFilter</span> <span class="keyword">implements</span> <span class="title">Filter</span> {</span>
+    <span class="keyword">private</span> List&lt;String&gt; adminPaths = <span class="keyword">new</span> ArrayList&lt;String&gt;;
+    <span class="keyword">private</span> List&lt;String&gt; userPath = <span class="keyword">new</span> ArrayList&lt;String&gt;;
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span>(FilterConfig filterConfig) {
+        String adminFile = filterConfig.getServletContext().getRealPath(<span class="string">"/WEB-INF/classes/admin.conf"</span>);
+        String userFile = getClass().getResource(<span class="string">"/user.conf"</span>).getFile();
+        BufferedReader  r1 = <span class="keyword">new</span> BufferedReader(FileReader(adminFile));
+        BufferedReader  r2 = <span class="keyword">new</span> BufferedReader(FileReader(userFile));
+        <span class="keyword">while</span>((tmp=r1.readLine())!=<span class="keyword">null</span>) {
+            adminPaths.add(tmp);
+        }
+        r1.close();
+        <span class="keyword">while</span>((tmp=r2.readLine())!=<span class="keyword">null</span>) {
+            userPaths.add(tmp);
+        }
+        user.close();
+    }
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doFilter</span>(req, resp, chain) {
+        <span class="comment">// 字段访问资源路径是不是在admin.con或者user.con配置,</span>
+        String uri = req.getRequestURI();
+        String reqPath = uri.subString(req.getContextPath().length);
+        <span class="comment">// 如果 存在于 admin 或者 user 需要登陆, 获取当前登陆 角色,</span>
+        <span class="comment">// 判断对应访问是否包含当前资源访问路径</span>
+        <span class="keyword">if</span>(adminPaths.contains(reqPath) || userPaths.contains(reqPath)){
+            User user = req.getSession().getAttribute(<span class="string">"user"</span>);
+            <span class="keyword">if</span>(user==<span class="keyword">null</span>){
+                <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"权限不足, 请先登陆"</span>);
+            } <span class="keyword">else</span> {
+                <span class="keyword">if</span>(user.getRole().equals(<span class="string">"admin"</span>)) {
+                    <span class="keyword">if</span>(adminPaths.contains(reqPath)){
+                        chain.doFilter(req, resp);
+                    } <span class="keyword">else</span> {
+                        <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"权限不足"</span>);
+                    }
+                } <span class="keyword">else</span> <span class="keyword">if</span>(user.getRole().equals(<span class="string">"user"</span>)) {
+                    <span class="keyword">if</span>(userPath.contains(reqPath)){
+                        chain.doFilter(req, resp);
+                    } <span class="keyword">else</span> {
+                        <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"权限不足"</span>);
+                    }
+                }
+            }
+        } <span class="keyword">else</span> {
+            <span class="comment">// 如果不存在, 不需要登陆, 直接放行</span>
+            chain.doFiler(req, resp);            
+        }
+    }
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">destroy</span>(){
+    }
+}
+</pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h1 id="-">异常页面的编写</h1>
+<p>Servlet : 配置web.xml 指定的异常处理页面</p>
+<p>JSP: <code>&lt;%@page errorPage=&quot;...&quot;%&gt;</code>, 解决 500</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- web.xml 配置异常处理 --&gt;</span>
+<span class="tag">&lt;<span class="title">error-page</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">error-code</span>&gt;</span> 500 <span class="tag">&lt;/<span class="title">error-code</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">location</span>&gt;</span>/500.jsp <span class="tag">&lt;/<span class="title">location</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">error-page</span>&gt;</span>
+<span class="tag">&lt;<span class="title">error-page</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">error-code</span>&gt;</span> 404 <span class="tag">&lt;/<span class="title">error-code</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">location</span>&gt;</span>/404.jsp <span class="tag">&lt;/<span class="title">location</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">error-page</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<ul>
+<li><p>404.jsp, 自动跳转到系统主页面</p>
+<ol>
+<li><code>response.setHeader(&quot;refresh&quot;, &quot;时间(秒);url=/&quot;);</code></li>
+<li><code>&lt;meta&gt;</code> 标签<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">meta</span> <span class="attribute">http-equiv</span>=<span class="value">"refresh"</span> <span class="attribute">content</span>=<span class="value">"200;url=www.google.com"</span>&gt;</span>
+</pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+<li><p>500页面, 在错误页面, 获取 异常 信息</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>&lt;<span class="variable">%page</span> isErrorPage=<span class="string">"true"</span><span class="variable">%&gt;</span>
+
+&lt;<span class="variable">%=</span>exception.getClass().getName()<span class="variable">%&gt;</span>
+&lt;<span class="variable">%=</span>exception.getMessage()<span class="variable">%&gt;</span>
+</pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h1 id="-">日志记录</h1>
+<p>在软件开发时 或者 项目后期运维时, 用户系统信息记录到指定的文件中</p>
+<ul>
+<li>用户调试</li>
+<li>根据日志信息修复系统Bug</li>
+</ul>
+<h2 id="-">日志技术选型</h2>
+<ul>
+<li>JDK Logging, <code>java.util.logging</code></li>
+<li>Log4j 日志技术, Apache后来运维, 第三方日志框架, <code>log4j1.x</code>和<code>log2.x</code><ul>
+<li>主流: log4j1.2.x</li>
+</ul>
+</li>
+<li>commons-logging(Apache), JCL, 主要是为了统一不同的日志实现框架<ul>
+<li>commons-logging + log4j</li>
+<li>commons-logging + jdk loggin</li>
+<li>开发人员只需要学习 commongs-logging 接口, 就集成不同日志实现技术(最新的struts2, spring 使用 commons-logging)</li>
+</ul>
+</li>
+<li>slf4j (Simple Logging Facade for Java), 作用类似 commons-logging, 起到同一日志接口实现<ul>
+<li>Hibernate 使用 slf4j 日志接口</li>
+</ul>
+</li>
+</ul>
+<h2 id="-log4j">日志实现技术 log4j</h2>
+<p>区分: 日志技术和 System.out</p>
+<ul>
+<li>System.out将信息打印到控制台, 有些服务器, 将控制台所有信息记录日志文件</li>
+<li>日志技术, 向日志文件记录日志, 分等级记录, 通过控制等级, 控制不同级别日志输出</li>
+</ul>
+<h2 id="-log4j">编写Log4j</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="code"><pre><span class="annotation">@Test</span>
+<span class="keyword">public</span> <span class="keyword">void</span> test不写日志文件() {
+    <span class="comment">// 1. 需要创建日志记录器</span>
+    Logger logger = Logger.getLogger(<span class="keyword">this</span>.getClass());
+    <span class="comment">// 2. 指定记录器的输出源(日志输出到哪里去)</span>
+    BasicConfigurator.configure(); <span class="comment">//将日志输出到控制台</span>
+    <span class="comment">// 3. 记录日志(提供6个日志级别)</span>
+    <span class="comment">// 在输出日志时, 只会输出比指定日志级别更高日志级别</span>
+    logger.setLevel(Level.ERROR);
+    <span class="comment">// 默认日志级别是Debug</span>
+    <span class="comment">// fatal error warn</span>
+    <span class="comment">// info debug trace</span>
+    logger.debug(<span class="string">"调试信息"</span>);
+}
+</pre></td></tr></table></figure>
+
+<h2 id="-log4j-">编写Log4j配置文件</h2>
+<ul>
+<li>xml 格式: log4j.xml</li>
+<li>properties 格式: log4j.properties(最常见)<ul>
+<li>在src下新建 log4j.properties 配置文件</li>
+<li>配置记录器 logger (采用那个输出源, 疏忽日志级别)</li>
+<li>配置输出源 Appender (输出到哪里)<ul>
+<li>org.apache.log4j.ConsoleAppender(控制台) </li>
+<li>org.apache.log4j.FileAppender(文件) </li>
+<li>org.apache.log4j.DailyRollingFileAppender (每天产生一个日志文件) </li>
+<li>org.apache.log4j.RollingFileAppender (文件到达指定大小时产生一个新文件) </li>
+<li>org.apache.log4j.WriterAppender (将日志信息以流格式发送到任何地方) </li>
+</ul>
+</li>
+<li>配置布局 layouts (输出格式)<ul>
+<li>org.apache.log4j.HTMLLayout （以HTML表格形式布局）</li>
+<li>org.apache.log4j.PatternLayout （可以灵活地指定布局模式）<ul>
+<li>%m 输出代码中指定的消息</li>
+<li>%p 输出优先级，即DEBUG，INFO，WARN，ERROR，FATAL</li>
+<li>%r 输出自应用启动到输出该log信息耗费的毫秒数</li>
+<li>%c 输出所属的类目，通常就是所在类的全名</li>
+<li>%t 输出产生该日志事件的线程名</li>
+<li>%n 输出一个回车换行符，Windows平台为“\r\n”，Unix平台为“\n”</li>
+<li>%d 输出日志时间点的日期或时间，默认格式为ISO8601，也可以在其后指定格式，比如：%d{yyy MMM dd HH:mm:ss,SSS}，输出类似：2002年10月18日 22：10：28，921</li>
+<li>%l 输出日志事件的发生位置，包括类目名、发生的线程，以及在代码中的行数。举例：Testlog4.main(TestLog4.java:10)基本应用</li>
+</ul>
+</li>
+<li>org.apache.log4j.SimpleLayout （包含日志信息的级别和信息字符串）</li>
+<li>org.apache.log4j.TTCCLayout （包含日志产生的时间、线程、类别等信息）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="code"><pre>log4j<span class="preprocessor">.rootLogger</span>(默认记录级别) = DEBUG, A1 <span class="preprocessor"># 输出级别 + 输出源...</span>
+log4j<span class="preprocessor">.logger</span>.包名(包记录级别) = 输出级别 , 输出源<span class="number">1</span> , 输出源<span class="number">2</span>
+
+<span class="preprocessor"># appender</span>
+log4j<span class="preprocessor">.appender</span><span class="preprocessor">.A</span>1 = org<span class="preprocessor">.apache</span><span class="preprocessor">.log</span>4j<span class="preprocessor">.ConsoleAppender</span>
+
+<span class="preprocessor"># layout</span>
+<span class="preprocessor"># log4j.appender.输出源名称.layout = 布局实现类</span>
+log4j<span class="preprocessor">.appender</span><span class="preprocessor">.A</span>1<span class="preprocessor">.layout</span> = org<span class="preprocessor">.apache</span><span class="preprocessor">.log</span>4j<span class="preprocessor">.PatternLayout</span> <span class="preprocessor"># 使用</span>
+<span class="preprocessor"># 自定义输出格式</span>
+log4j<span class="preprocessor">.appender</span><span class="preprocessor">.A</span>1<span class="preprocessor">.layout</span><span class="preprocessor">.ConversionPattern</span> = %-<span class="number">4</span>r [%t] %-<span class="number">5</span>p %c %<span class="built_in">x</span> - %m%n
+
+<span class="preprocessor"># 输出到文件</span>
+log4j<span class="preprocessor">.appender</span><span class="preprocessor">.FILE</span> = org<span class="preprocessor">.apache</span><span class="preprocessor">.log</span>4j<span class="preprocessor">.FileAppender</span>
+log4j<span class="preprocessor">.appender</span><span class="preprocessor">.FILE</span><span class="preprocessor">.File</span> = /var/log
+</pre></td></tr></table></figure>
+
+<h1 id="-log4j">在项目代码中配置 Log4j</h1>
+<ol>
+<li><p>定义记录器</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger LOG = Logger.getLogger(OrderService.class);
+</pre></td></tr></table></figure>
+</li>
+<li><p>在程序中使用六个级别方法, 记录日志<br>常用级别: ERROR, WARN, INFO, DEBUG</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>LOG<span class="preprocessor">.error</span>(e<span class="preprocessor">.getMessage</span>(), e)<span class="comment">;</span>
+</pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h1 id="-todo">项目TODO</h1>
+<ul>
+<li>分页控制, 提取标签</li>
+<li>配置多个tomcat运行, 集群处理(Apache + tomcat)</li>
+<li>缓存优化, 静态缓存</li>
+<li>Tomcat配置 gzip 压缩<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">Connector</span> <span class="attribute">compress</span>=<span class="value">"on"</span> <span class="attribute">compressableMimeType</span>=<span class="value">"text/html, text/css"</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">Connector</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+</li>
+</ul>
+]]></content>
+    
+    
+      <category term="传智播客" scheme="http://zhpooer.github.io/tags/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[传智播客day26-estore3]]></title>
@@ -9506,402 +10416,6 @@ XML.loadFile("bookstore.xml")
       <category term="scala" scheme="http://zhpooer.github.io/tags/scala/"/>
     
       <category term="dom4j" scheme="http://zhpooer.github.io/tags/dom4j/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[Linux-find手记]]></title>
-    <link href="http://zhpooer.github.io/2014/04/16/linux-find%E6%89%8B%E8%AE%B0/"/>
-    <id>http://zhpooer.github.io/2014/04/16/linux-find手记/</id>
-    <published>2014-04-16T13:40:07.000Z</published>
-    <updated>2014-04-17T01:04:07.000Z</updated>
-    <content type="html"><![CDATA[<h1 id="-">常用方法</h1>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-</pre></td><td class="code"><pre>find ./ -name <span class="string">"*.log"</span> -type f  <span class="comment"># 找到文件后缀为.log的文件, 注意:一定要有引号</span>
-find . -perm <span class="number">755</span> -<span class="keyword">print</span>       <span class="comment"># 找到权限为755的文件</span>
-find ./ -user poe –<span class="keyword">print</span> <span class="comment"># 找到用户为poe的文件</span>
-find /apps -group gem –<span class="keyword">print</span>
-find / -mtime -<span class="number">5</span> –<span class="keyword">print</span> <span class="comment">#在系统根目录下查找更改时间在5日以内的文件</span>
-find /<span class="keyword">var</span>/adm -mtime +<span class="number">3</span> –<span class="keyword">print</span> <span class="comment"># 在/var/adm目录下查找更改时间在3日以前的文件</span>
-find /usr/sam -path <span class="string">"/usr/sam/dir1"</span> -prune -o –<span class="keyword">print</span> <span class="comment"># 在/usr/sam目录下查找不在dir1子目录之内的所有文件</span>
-find . -maxdepth <span class="number">1</span> -name <span class="string">"*.zip"</span> -<span class="keyword">print</span> <span class="comment"># 只在的文件</span>
-find . -perm <span class="number">755</span> -exec ls {} \; <span class="comment">##执行命令, 注意;和{}之间的空格</span>
-</pre></td></tr></table></figure>
-
-<h1 id="-type-"><code>-type</code></h1>
-<p>查找某一类型的文件，诸如：</p>
-<p>b - 块设备文件</p>
-<p>d - 目录</p>
-<p>c - 字符设备文件</p>
-<p>p - 管道文件</p>
-<p>l - 符号链接文件</p>
-<p>f - 普通文件</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-</pre></td><td class="code"><pre>find . ! -<span class="built_in">type</span> d –<span class="built_in">print</span> # 在当前目录下查找除目录以外的所有类型的文件
-</pre></td></tr></table></figure>
-
-<h1 id="-ok-"><code>-ok</code></h1>
-<p>和-exec的作用相同，只不过以一种更为安全的模式来执行该参数所给出的shell命令，在执行每一个命令之前，都会给出提示，让用户来确定是否执行。</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-</pre></td><td class="code"><pre><span class="preprocessor">#在当前目录中查找所有文件名以.LOG结尾、更改时间在5日以上的文件，并删除它们，只不过在删除之前先给出提示</span>
-find . -name <span class="string">"*.conf"</span>  -mtime +<span class="number">5</span> -ok rm {  } \;
-</pre></td></tr></table></figure>
-
-<h1 id="-">其他有用指令</h1>
-<p><code>-follow</code>：如果find命令遇到符号链接文件，就跟踪至链接所指向的文件</p>
-<p><code>-depth</code>：在查找文件时，首先查找当前目录中的文件，然后再在其子目录中查找 </p>
-<p><code>-xdev</code> 只查找当前目录下的文件 </p>
-<p><code>-nogroup</code>: 查找无有效所属组的文件，即该文件所属的组在/etc/groups中不存在</p>
-<h1 id="find-xargs">find 与 xargs</h1>
-<p>类似于 <code>-exec</code> 指令, 但是效率高</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-</pre></td><td class="code"><pre><span class="preprocessor"># 查找系统中的每一个普通文件，然后使用xargs命令来测试它们分别属于哪类文件</span>
-<span class="title">find</span> . -<span class="typedef"><span class="keyword">type</span> f -print | xargs file</span>
-<span class="title">find</span> ./ -size <span class="number">0</span> | xargs rm -f & 删除文件大小为零的文件
-</pre></td></tr></table></figure>
-
-]]></content>
-    
-    
-      <category term="linux" scheme="http://zhpooer.github.io/tags/linux/"/>
-    
-      <category term="find" scheme="http://zhpooer.github.io/tags/find/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[传智播客day13-EL表达式]]></title>
-    <link href="http://zhpooer.github.io/2014/04/16/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day13-el%E8%A1%A8%E8%BE%BE%E5%BC%8F/"/>
-    <id>http://zhpooer.github.io/2014/04/16/传智播客day13-el表达式/</id>
-    <published>2014-04-16T03:42:31.000Z</published>
-    <updated>2014-04-16T08:34:02.000Z</updated>
-    <content type="html"><![CDATA[<h1 id="el-">EL表达式</h1>
-<ul>
-<li>作用, 向界面输出内容, 只适合显示数据</li>
-<li>基本语法形式: ${EL表达式}</li>
-<li><strong>不支持字符串连接操作</strong></li>
-<li><strong>永远没有空指针</strong></li>
-</ul>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">jsp:JavaBean</span> <span class="attribute">id</span>=<span class="value">"p"</span> <span class="attribute">class</span>=<span class="value">"cn.itcast.Person"</span>&gt;</span><span class="tag">&lt;/<span class="title">jsp:JavaBean</span>&gt;</span>
-<span class="vbscript">&lt;%=p.getName()%&gt;</span> <span class="comment">&lt;!--Java表达式, 官方不建议使用--&gt;</span>
-${p.name} <span class="comment">&lt;!--EL表达式, 官方推荐--&gt;</span>
-</pre></td></tr></table></figure>
-
-<ul>
-<li><p>作用分解</p>
-<ol>
-<li>获取数据, 替换JSP中的<code>&lt;%= %&gt;</code></li>
-<li>执行简单的数学或逻辑运输</li>
-<li>EL隐式对象(难点, 容易和JSP的隐式对象混淆)</li>
-<li>调用Java中的静态方法</li>
-</ol>
-</li>
-</ul>
-<h2 id="-">获取数据</h2>
-<p>只能获取四大域对象中的数据</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-</pre></td><td class="code"><pre><span class="vbscript">&lt;%
-   pageContext.setAttribute(<span class="string">"p"</span>, p, page|<span class="built_in">request</span>|session|application);
-%&gt;</span>
-
-${p} <span class="comment">&lt;!--依次查找名字为p的对象, 没有找到页面什么都不显示你--&gt;</span>
-${p.name} <span class="comment">&lt;!-- 获取对象属性的值,显示到页面上 --&gt;</span>
-${p.addreess.province}
-
-<span class="comment">&lt;!-- 使用`[]`运算符, 获取 List 和 Map 中的数据
-   但是无法获取 Set 中的数据
---&gt;</span>
-<span class="vbscript">&lt;%
-    List&lt;Person&gt; ps = <span class="keyword">new</span> ArrayList&lt;Person&gt;
-    ps.add(<span class="keyword">new</span> Person(<span class="string">"a"</span>));
-    ps.add(<span class="keyword">new</span> Person(<span class="string">"b"</span>));
-    ps.add(<span class="keyword">new</span> Person(<span class="string">"c"</span>));
-    ps.add(<span class="keyword">new</span> Person(<span class="string">"d"</span>));
-    pageContent.setAttribute(<span class="string">"ps"</span>, ps);
-    Map&lt;<span class="built_in">String</span>, Person&gt; m = <span class="keyword">new</span> HashMap&lt;<span class="built_in">String</span>, Person&gt;;
-    m.put(<span class="string">"aa"</span>, <span class="keyword">new</span> Person(<span class="string">"a"</span>));
-%&gt;</span>
-
-${ps[2].name}  <span class="comment">&lt;!-- output: d --&gt;</span>
-${ps[2]['name']}
-
-${m.aa.name}   <span class="comment">&lt;!-- output: a --&gt;</span>
-${m['a'].name} <span class="comment">&lt;!-- output: a --&gt;</span>
-</pre></td></tr></table></figure>
-
-<h2 id="-">执行数据</h2>
-<ul>
-<li>empty 运算符: 判断一个对象是不是null,
-还能判断一个集合中是否有元素, 是否为空字符串</li>
-<li>三元判断符: <code>${empty user? &quot;true&quot;:&quot;false&quot;}</code></li>
-</ul>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-</pre></td><td class="code"><pre>${<span class="number">1</span>+<span class="number">1</span>}      <span class="number">2</span>
-${<span class="number">1</span>==<span class="number">2</span>}     <span class="literal">false</span>
-
-${empty p}  p=<span class="string">""</span><span class="function"> =&gt;</span> <span class="literal">true</span>; p=<span class="literal">null</span><span class="function"> =&gt;</span> <span class="literal">true</span>; p=List<span class="function"><span class="params">()</span> =&gt;</span> <span class="literal">true</span>; p=List<span class="function"><span class="params">(<span class="string">"dfjk"</span>)</span> =&gt;</span> <span class="literal">false</span>
-
-${empty user?<span class="string">"您还没有登陆"</span>:<span class="string">"欢迎您"</span>}
-${<span class="string">"a"</span> + <span class="string">"b"</span>} &lt;!--报错!!!!!!!!!!!!不能字符串相加--<span class="function">-&gt;</span>
-</pre></td></tr></table></figure>
-
-<h2 id="el-11-">EL中的11个隐式对象</h2>
-<table>
-<thead>
-<tr>
-<th>内置对象</th>
-<th>表示类型</th>
-<th>备注</th>
-<th>对应的JSP内置对象</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><em>pageContext</em></td>
-<td>javax.servlet.jsp.PageContext</td>
-<td>和jsp的内置对象完全一样</td>
-<td>pageContext</td>
-</tr>
-<tr>
-<td><em>requestScope</em></td>
-<td>java.util.Map</td>
-<td>代表servletRequest中的那个Map</td>
-<td>没有</td>
-</tr>
-<tr>
-<td><em>pageScope</em></td>
-<td>java.util.Map</td>
-<td>代表pageContext中的那个Map</td>
-<td>没有</td>
-</tr>
-<tr>
-<td><em>sessionScope</em></td>
-<td>java.util.Map</td>
-<td>代表session中的那个Map</td>
-<td>没有</td>
-</tr>
-<tr>
-<td><em>applicationScope</em></td>
-<td>java.util.Map</td>
-<td>代表application中的那个Map</td>
-<td>没有</td>
-</tr>
-<tr>
-<td><em>param</em></td>
-<td>Map<String,String></td>
-<td>获取单一请求参数</td>
-<td>没有</td>
-</tr>
-<tr>
-<td>paramValues</td>
-<td>Map<String,String[]></td>
-<td>获取重名请求参数</td>
-<td>没有</td>
-</tr>
-<tr>
-<td>header</td>
-<td>Map<String,String></td>
-<td>单一请求消息头</td>
-<td>没有</td>
-</tr>
-<tr>
-<td>headerValues</td>
-<td>Map<String,String[]></td>
-<td>重名请求消息头</td>
-<td>没有</td>
-</tr>
-<tr>
-<td>initParam</td>
-<td>Map<String,String></td>
-<td>代表web.xml中的全局变量</td>
-<td>没有</td>
-</tr>
-<tr>
-<td>cookie</td>
-<td>Map<String,Cookie></td>
-<td>获取Cookie对象</td>
-<td>没有</td>
-</tr>
-</tbody>
-</table>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-</pre></td><td class="code"><pre><span class="comment">&lt;!-- pageContent --&gt;</span>
-<span class="vbscript">&lt;%= <span class="built_in">request</span>.getContextPath() %&gt;</span>
-${pageContext.request.contextPath}  <span class="comment">&lt;!-- request.contextPath 非法 --&gt;</span>
-
-${param.name} <span class="comment">&lt;!-- 获取单一请求参数的值 --&gt;</span>
-${paramValues.password[0]}  <span class="comment">&lt;!-- 获取多个请求参数的值 --&gt;</span>
-
-${header['Accept-Language']}  <span class="comment">&lt;!-- 请求消息头 --&gt;</span>
-${headerValues['Accept-Language'][0]}  <span class="comment">&lt;!-- 重名的请求消息头 --&gt;</span>
-
-${cookie.JSESSIONID} <span class="comment">&lt;!-- cookie对象 --&gt;</span>
-${cookie.JSESSIONID.value} <span class="comment">&lt;!-- cookie对象的value --&gt;</span>
-${cookie.JSESSIONID.name} <span class="comment">&lt;!-- cookie对象的name --&gt;</span>
-</pre></td></tr></table></figure>
-
-<h2 id="-java-">调用Java中的静态方法</h2>
-<p>产生原因: EL表达式不支持字符串的相关功能</p>
-<p>EL 能调用普通Java类的静态方法, 但是不能调用实例的方法</p>
-<p>开发步骤:</p>
-<ol>
-<li>定义一个静态类, 提供静态方法</li>
-<li>在WEB-INF目录下建立一个扩展名为tld的xml文件</li>
-<li>在jsp中使用</li>
-</ol>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-</pre></td><td class="code"><pre>&lt;%<span class="at_rule">@ taglib uri=<span class="string">"http://www.itcast.cn/jsp/myfunction"</span> prefix=<span class="string">"myfn"</span> %&gt;
-$</span>{<span class="tag">myfn</span><span class="pseudo">:toUppercase(s)</span>}
-</pre></td></tr></table></figure>
-
-<p>WEB-INF/myfn.tld</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">taglib</span>&gt;</span>
-    <span class="tag">&lt;<span class="title">tlib-version</span>&gt;</span>1.0 <span class="tag">&lt;/<span class="title">tlib-version</span>&gt;</span>
-    <span class="tag">&lt;<span class="title">short-name</span>&gt;</span>myfn <span class="tag">&lt;/<span class="title">short-name</span>&gt;</span>
-    <span class="comment">&lt;!-- 定位符 --&gt;</span>
-    <span class="tag">&lt;<span class="title">uri</span>&gt;</span>http://www.itcast.cn/jsp/myfunction <span class="tag">&lt;/<span class="title">uri</span>&gt;</span>
-    <span class="tag">&lt;<span class="title">function</span>&gt;</span>
-        <span class="tag">&lt;<span class="title">description</span>&gt;</span>toUppercase the string<span class="tag">&lt;/<span class="title">description</span>&gt;</span>
-        <span class="tag">&lt;<span class="title">name</span>&gt;</span>toUppercase <span class="tag">&lt;/<span class="title">name</span>&gt;</span>
-        <span class="tag">&lt;<span class="title">function-class</span>&gt;</span>cn.itcast.MyFunctions <span class="tag">&lt;/<span class="title">function-class</span>&gt;</span>
-        <span class="tag">&lt;<span class="title">function-signature</span>&gt;</span>java.lang.String toUppercase(java.lang.String)<span class="tag">&lt;/<span class="title">function-signature</span>&gt;</span>
-    <span class="tag">&lt;/<span class="title">function</span>&gt;</span>
-<span class="tag">&lt;/<span class="title">taglib</span>&gt;</span>
-</pre></td></tr></table></figure>
-
-<h2 id="jstl">JSTL</h2>
-<p>sun提供了标准的EL函数</p>
-<ul>
-<li><p>JSTL标签库</p>
-<ul>
-<li>core: 核心</li>
-<li>fmt: 国际化</li>
-<li>sql: 数据库</li>
-<li>xml: 操作xml</li>
-<li>functions: EL函数</li>
-</ul>
-</li>
-<li><p>由 Apache 实现, 需要导入 jstl.jar, standard.jar</p>
-<p> 所有的java开发规范由JCP.org发布的, 代号 JSR-XXX
- JCP组织由: Oracle\Apache\Jboss 等知名开源组织构成</p>
-</li>
-<li>使用JSTL中的EL函数<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-</pre></td><td class="code"><pre><span class="vbscript">&lt;% taglib uri=<span class="string">"http://java.sun.com/jsp/jstl/functions"</span> prefix=fn %&gt;</span> <span class="comment">&lt;!--导入--&gt;</span>
-${fn:toLowerCase(s1)}
-${fn:toUpperCase(s1)}
-${fn:trim(s1)}
-${fn:length(s1)}
-${fn:escapeXml(s1)}  <span class="comment">&lt;!-- &lt;hr/&gt; 转义成 &lt;hr/&gt; --&gt;</span>
-${fn:split(s1, "-")[0]}
-${fn:join(s1, "-")[0]}  <span class="comment">&lt;!-- 联接 --&gt;</span>
-${fn:indexOf(s1, "f")} <span class="comment">&lt;!--打印字符索引--&gt;</span>
-${fn:contains(s1, "a")}  <span class="comment">&lt;!--是否包含字母--&gt;</span>
-${fn:subString(s1, 0, 2)}  <span class="comment">&lt;!-- abcdefg =&gt; abc  --&gt;</span>
-${fn:subString(s1, 5, 1000)}  <span class="comment">&lt;!-- abcdefg =&gt; fg, 数组不会越界, 只能是三个参数--&gt;</span>
-<span class="comment">&lt;!-- startWith --&gt;</span>
-<span class="comment">&lt;!-- endsWith --&gt;</span>
-<span class="comment">&lt;!-- replace --&gt;</span>
-<span class="comment">&lt;!-- subStringAfter --&gt;</span>
-<span class="comment">&lt;!-- subStringBefore --&gt;</span>
-</pre></td></tr></table></figure>
-
-</li>
-</ul>
-]]></content>
-    
-    
-      <category term="java" scheme="http://zhpooer.github.io/tags/java/"/>
-    
-      <category term="EL表达式" scheme="http://zhpooer.github.io/tags/EL%E8%A1%A8%E8%BE%BE%E5%BC%8F/"/>
-    
-      <category term="传智播客" scheme="http://zhpooer.github.io/tags/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2/"/>
     
   </entry>
   
