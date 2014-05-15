@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Hello World]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://zhpooer.github.io/"/>
-  <updated>2014-05-15T13:56:59.293Z</updated>
+  <updated>2014-05-15T13:58:48.766Z</updated>
   <id>http://zhpooer.github.io/</id>
   
   <author>
@@ -19,276 +19,214 @@
     <link href="http://zhpooer.github.io/2014/05/15/scala%E6%96%87%E6%A1%A3%E7%BF%BB%E8%AF%91-future&promise/"/>
     <id>http://zhpooer.github.io/2014/05/15/scala文档翻译-future&promise/</id>
     <published>2014-05-15T01:44:38.000Z</published>
-    <updated>2014-05-15T13:56:17.000Z</updated>
+    <updated>2014-05-15T13:58:14.000Z</updated>
     <content type="html"><![CDATA[<h1 id="-">拔</h1>
 <p>上课无聊, 刚好看scala文档, 遂翻译之, 晚上回来在网上找到已经有人做过了, 且翻译的比我好(-.-!!!),
 但已经翻译了一半, 兴致也不错, 那就当练习英语好了(真吊丝啊).</p>
-<p>不过 Scala 2.11关于 <code>Macro</code> 和 <code>Reflect</code>的内容很没有人下手, 窃喜之. 哈哈, 我的目标是星辰大海<figure class="highlight !!!"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-</pre></td><td class="code"><pre>
-[<span class="link_label">原文连接</span>](<span class="link_url">http://docs.scala-lang.org/overviews/core/futures.html</span>)
-
-[<span class="link_label">已有译文连接</span>](<span class="link_url">https://code.csdn.net/DOC_Scala/chinese_scala_offical_document/file/Futures-and-Promises-cn.md#anchor_0</span>)
-
-<span class="header"># Introduction #</span>
-Futures 为并发提供了许多非阻塞(non-blocking)和有效率的操作. 它的概念很简单, 一个 <span class="code">`Future`</span> 就是一系列的还没有发生的操作或运算(一个运算占位符).
-事实上, <span class="code">`Future`</span> 的中的运算会被并行地执行, 而运行结果可以被延迟得到. 这样就可以更快地 非阻塞地 异步地 并发地执行复合并行任务.
-
-实际上, future 和 promises 的非阻塞操作是利用回调函数替换掉经典的阻塞操作.
-为了简化回调操作和语法的理解, Scala 提供了提供了组合子, 如  <span class="code">`flatMap`</span>, <span class="code">`foreach`</span> 和 <span class="code">`filter`</span>,
-利用这些调用可以组合 future 进行非阻塞的操作. 如果必要的话, futures 也提供了阻塞操作(虽然这并不值得提倡).
-<span class="header"># Futures #</span>
-一个 <span class="code">`Future`</span> 是一个持有(holding)一个值的对象, 但是这个值在有些时候是取不到的. 这个值常常是一些运算的执行结果:
-<span class="bullet">1. </span>如果这个运算还没有完成, 这个 Future 还没有完成(is not completed)
-<span class="bullet">2. </span>如果这个运算最终得到一个值, 或在执行的过程中抛出了异常(exception), 这个 Future 执行完成(completed)
-
-执行完成(Completion)的表现为下面给两种情况中的任意一种情况:
-<span class="bullet">1. </span>当一个 Future 成功的得到一个值, 那么这个 Future 执行完成.
-<span class="bullet">2. </span>当一个 Future 在运算的时候抛出到一个异常(exception), 这个 Future 因为异常而失败了.
-
-一个 Future 只能被赋值(assigned)一次. 一旦一个 Future 对象(object)(Future内部对象?)被赋值或得到一个异常,
-那么它就是不可变的(immutable), 也就是说不能被重新赋值
-
-创建一个 future 对象(object)最简单的方法是调用 <span class="code">`future`</span> 方法, 它会启动一个异步的运算,
-然后返回一个指向这次运行的结果的 future. 一旦这个 future 执行完成, 就可以得到这次运算结果.
-
-<span class="code">`Future[T]`</span> 是一个表示 future 对象(objects)的类型(type).
-然而, <span class="code">`future`</span>是一个生成和调度异步运算的方法, 它返回一个代表<span class="emphasis">*将要得到*</span>(will)运算结果的 future 对象.
-
-这个特性将通过一个案例展示.
-
-假设我们要调用一个虚构(hypothetical)的 API 从一个社交网络得到一个给定用户的好友列表.
-我们将会打开一个新的会话(session),然后发送请求(request)去获取一个特殊用户的的好友列表:
-~~~
-</pre></td></tr></table></figure></p>
-<p>import scala.concurrent._
-import ExecutionContext.Implicits.global
-val session = socialNetwork.createSessionFor(&quot;user&quot;, credentials)
-val f: Future[List[Friend]] = future {
-    session.getFriends()
-}</p>
+<p>不过 Scala 2.11关于 <code>Macro</code> 和 <code>Reflect</code>的内容很没有人下手, 窃喜之. 哈哈, 我的目标是星辰大海!!!</p>
+<p><a href="http://docs.scala-lang.org/overviews/core/futures.html" target="_blank">原文连接</a></p>
+<p><a href="https://code.csdn.net/DOC_Scala/chinese_scala_offical_document/file/Futures-and-Promises-cn.md#anchor_0" target="_blank">已有译文连接</a></p>
+<h1 id="introduction">Introduction</h1>
+<p>Futures 为并发提供了许多非阻塞(non-blocking)和有效率的操作. 它的概念很简单, 一个 <code>Future</code> 就是一系列的还没有发生的操作或运算(一个运算占位符).
+事实上, <code>Future</code> 的中的运算会被并行地执行, 而运行结果可以被延迟得到. 这样就可以更快地 非阻塞地 异步地 并发地执行复合并行任务.</p>
+<p>实际上, future 和 promises 的非阻塞操作是利用回调函数替换掉经典的阻塞操作.
+为了简化回调操作和语法的理解, Scala 提供了提供了组合子, 如  <code>flatMap</code>, <code>foreach</code> 和 <code>filter</code>,
+利用这些调用可以组合 future 进行非阻塞的操作. 如果必要的话, futures 也提供了阻塞操作(虽然这并不值得提倡).</p>
+<h1 id="futures">Futures</h1>
+<p>一个 <code>Future</code> 是一个持有(holding)一个值的对象, 但是这个值在有些时候是取不到的. 这个值常常是一些运算的执行结果:</p>
+<ol>
+<li>如果这个运算还没有完成, 这个 Future 还没有完成(is not completed)</li>
+<li>如果这个运算最终得到一个值, 或在执行的过程中抛出了异常(exception), 这个 Future 执行完成(completed)</li>
+</ol>
+<p>执行完成(Completion)的表现为下面给两种情况中的任意一种情况:</p>
+<ol>
+<li>当一个 Future 成功的得到一个值, 那么这个 Future 执行完成.</li>
+<li>当一个 Future 在运算的时候抛出到一个异常(exception), 这个 Future 因为异常而失败了.</li>
+</ol>
+<p>一个 Future 只能被赋值(assigned)一次. 一旦一个 Future 对象(object)(Future内部对象?)被赋值或得到一个异常,
+那么它就是不可变的(immutable), 也就是说不能被重新赋值</p>
+<p>创建一个 future 对象(object)最简单的方法是调用 <code>future</code> 方法, 它会启动一个异步的运算,
+然后返回一个指向这次运行的结果的 future. 一旦这个 future 执行完成, 就可以得到这次运算结果.</p>
+<p><code>Future[T]</code> 是一个表示 future 对象(objects)的类型(type).
+然而, <code>future</code>是一个生成和调度异步运算的方法, 它返回一个代表<em>将要得到</em>(will)运算结果的 future 对象.</p>
+<p>这个特性将通过一个案例展示.</p>
+<p>假设我们要调用一个虚构(hypothetical)的 API 从一个社交网络得到一个给定用户的好友列表.
+我们将会打开一个新的会话(session),然后发送请求(request)去获取一个特殊用户的的好友列表:</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
 3
 4
 5
 6
-7
-8
-9
-10
-11
-12
-13
-14
-</pre></td><td class="code"><pre>
-上边这段代码中, 我们首先导入(import)了 <span class="escape">`s</span>cala.concurrent<span class="escape">` </span>包中的内容, 使得 <span class="escape">`F</span>uture<span class="escape">`
-</span>类型和 <span class="escape">`f</span>uture<span class="escape">`构</span>造器可见.对于第二个导入,我们将在稍后解释.
+</pre></td><td class="code"><pre>import scala<span class="preprocessor">.concurrent</span>._
+import ExecutionContext<span class="preprocessor">.Implicits</span><span class="preprocessor">.global</span>
+val session = socialNetwork<span class="preprocessor">.createSessionFor</span>(<span class="string">"user"</span>, credentials)
+val f: Future[List[Friend]] = future {
+    session<span class="preprocessor">.getFriends</span>()
+}
+</pre></td></tr></table></figure>
 
-接着, 我们用一个虚构的方法<span class="escape">`c</span>reateSessionFor<span class="escape">`初</span>始化了 session 变量, 我们将用它来给服务端发送请求.
+<p>上边这段代码中, 我们首先导入(import)了 <code>scala.concurrent</code> 包中的内容, 使得 <code>Future</code>
+类型和 <code>future</code>构造器可见.对于第二个导入,我们将在稍后解释.</p>
+<p>接着, 我们用一个虚构的方法<code>createSessionFor</code>初始化了 session 变量, 我们将用它来给服务端发送请求.
 为了得到一个用户的好友列表, 需要通过网络发送一个请求, 这需要花费很长的时间.
-这些操作被封装(illustrated)在 <span class="escape">`g</span>etFriends<span class="escape">`方</span>法, 它返回 <span class="escape">`L</span>ist[Friend]<span class="escape">`.</span>
+这些操作被封装(illustrated)在 <code>getFriends</code>方法, 它返回 <code>List[Friend]</code>.
 为了更好地利用CPU资源直到请求返回, 我们不应该阻塞接下来的程序, 所以这些操作(computation)应该被异步的执行(scheduled).
-<span class="escape">`f</span>uture<span class="escape">`方</span>法并发地执行了给定的运算代码块(computation block), 这样就可以发送请求(request)给服务端, 并且等待响应(response)
-
-一旦服务器响应, 好友列表(list of friends)可以从 future <span class="escape">`f</span><span class="escape">`中</span>得到.
-
-一次不成功的操作(attempt)将会得到一个异常(exception). 在下面的例子中, <span class="escape">`s</span>ession<span class="escape">` </span>没有正常初始化,
-所以 <span class="escape">`f</span>utrue<span class="escape">`代</span>码块在执行时, 将会抛出 <span class="escape">`N</span>ullPointerException<span class="escape">`.</span> futrue <span class="escape">`f</span><span class="escape">` </span>将会执行失败(failed).
-</pre></td></tr></table></figure>
-
-<p>val session = null
-val f: Future[List[Friend]] = future {
+<code>future</code>方法并发地执行了给定的运算代码块(computation block), 这样就可以发送请求(request)给服务端, 并且等待响应(response)</p>
+<p>一旦服务器响应, 好友列表(list of friends)可以从 future <code>f</code>中得到.</p>
+<p>一次不成功的操作(attempt)将会得到一个异常(exception). 在下面的例子中, <code>session</code> 没有正常初始化,
+所以 <code>futrue</code>代码块在执行时, 将会抛出 <code>NullPointerException</code>. futrue <code>f</code> 将会执行失败(failed).</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="keyword">val</span> session = <span class="keyword">null</span>
+<span class="keyword">val</span> f: Future[List[Friend]] = future {
   session.getFriends
-}</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-</pre></td><td class="code"><pre>
-<span class="string">`import ExecutionContext.Implicits.global`</span>,
-这行代码导入(import)了全局默认执行环境(<span class="keyword">default</span> <span class="keyword">global</span> execution context).
-执行环境(execution context)会执行被提交过来的任务, 你也可以认为执行环境是线程池(thread pools).
-它们(execution context)对 <span class="string">`future`</span> 方法非常重要, 因为它们决定了(handle)什么时候以及怎样异步的执行运算.
-你也可以定义自己的执行环境, 用来使用 <span class="string">`future`</span>, 但是对于上面的代码来说, 导入默认的执行空间就已经够用了.
-
-上面的例子是基于一个虚构的社交网络 API, 它需要通过网络发送请求和等待响应.
-你也可以尝试一些其他的关于异步运算的操作. 假设你有一个文本文件(<span class="keyword">text</span> <span class="keyword">file</span>),
-你想从中找到一个单词第一次出现的位置. 等从硬盘上读取这个文件时候, 这个操作可能会阻塞,
-所以可以和剩下的代码块并发地执行.
+}
 </pre></td></tr></table></figure>
 
-<p>val firstOccurrence: Future[Int] = future {
-  val source = scala.io.Source.fromFile(&quot;myText.txt&quot;)
-  source.toSeq.indexOfSlice(&quot;myKeyword&quot;)
-}</p>
+<p><code>import ExecutionContext.Implicits.global</code>,
+这行代码导入(import)了全局默认执行环境(default global execution context).
+执行环境(execution context)会执行被提交过来的任务, 你也可以认为执行环境是线程池(thread pools).
+它们(execution context)对 <code>future</code> 方法非常重要, 因为它们决定了(handle)什么时候以及怎样异步的执行运算.
+你也可以定义自己的执行环境, 用来使用 <code>future</code>, 但是对于上面的代码来说, 导入默认的执行空间就已经够用了.</p>
+<p>上面的例子是基于一个虚构的社交网络 API, 它需要通过网络发送请求和等待响应.
+你也可以尝试一些其他的关于异步运算的操作. 假设你有一个文本文件(text file),
+你想从中找到一个单词第一次出现的位置. 等从硬盘上读取这个文件时候, 这个操作可能会阻塞,
+所以可以和剩下的代码块并发地执行.</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
 3
 4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-</pre></td><td class="code"><pre>
+</pre></td><td class="code"><pre>val firstOccurrence: Future[Int] = future {
+  val source = scala<span class="preprocessor">.io</span><span class="preprocessor">.Source</span><span class="preprocessor">.fromFile</span>(<span class="string">"myText.txt"</span>)
+  source<span class="preprocessor">.toSeq</span><span class="preprocessor">.indexOfSlice</span>(<span class="string">"myKeyword"</span>)
+}
+</pre></td></tr></table></figure>
 
-<span class="autohotkey">## Callbacks ##
-我们现在知道了如何区启动以个异步的计算得到一个新的 future 值,
+<h2 id="callbacks">Callbacks</h2>
+<p>我们现在知道了如何区启动以个异步的计算得到一个新的 future 值,
 但是我们还不知道如何去得到这个已经就位的结果, 现在我们可以对它做一些操作了.
-我们通常只对运算的结果感兴趣, 但不包括它的副作用(side-effect).
-
-在许多 future 的实践中, 一旦 future 的使用者对其结果感兴趣, 它会阻塞
+我们通常只对运算的结果感兴趣, 但不包括它的副作用(side-effect).</p>
+<p>在许多 future 的实践中, 一旦 future 的使用者对其结果感兴趣, 它会阻塞
 它自己的运算知道 future 的值就位--以至于用future的值执行他自己的运算.
-虽然 Scala <span class="escape">`F</span>uture<span class="escape">` </span>允许这样的操作(我们接下来会讲到),
+虽然 Scala <code>Future</code> 允许这样的操作(我们接下来会讲到),
 但是从性能的角度来看, 还有一个完全非阻塞的方式, 那就是注册 future 的回调方法(callback).
 一旦future的值就绪, 这个回调方法会被异步的执行.
 如果当注册回调函数(callback)时, future的值已经就绪, 那么回调函数将会被异步地执行, 或者
-在相同的线程中同步(sequentially)地执行.
-
-最常用的注册回调方法的方式是用 <span class="escape">`o</span>nComplete<span class="escape">` </span>方法, 它的传入一个类型为 <span class="escape">`T</span>ry[T] =&gt; U<span class="escape">` </span>的回调函数.
-如果 future 执行成功, 那么回调函数会接收到一个类型为 <span class="escape">`S</span>uccess[T]<span class="escape">` </span>的值,
-否则会接收到一个类型为 <span class="escape">`F</span>ailure[T]<span class="escape">` </span>的值.
-
-<span class="escape">`T</span>ry[T]<span class="escape">` </span>类似于 <span class="escape">`O</span>ption[T]<span class="escape">` </span>或者 <span class="escape">`E</span>ither[T,S]<span class="escape">`,</span> 它是可以持有某种类型的单子(monad).
+在相同的线程中同步(sequentially)地执行.</p>
+<p>最常用的注册回调方法的方式是用 <code>onComplete</code> 方法, 它的传入一个类型为 <code>Try[T] =&gt; U</code> 的回调函数.
+如果 future 执行成功, 那么回调函数会接收到一个类型为 <code>Success[T]</code> 的值,
+否则会接收到一个类型为 <code>Failure[T]</code> 的值.</p>
+<p><code>Try[T]</code> 类似于 <code>Option[T]</code> 或者 <code>Either[T,S]</code>, 它是可以持有某种类型的单子(monad).
 而现在, 它已经被设计成持有一个值(value) 或者一个异常对象(throwable object)的类型.
-而一个 <span class="escape">`O</span>ption[T]<span class="escape">`对</span>象, 不是代表一个值(<span class="escape">`S</span>ome[T]<span class="escape">`)</span>, 就是代码没有值(<span class="escape">`N</span>one<span class="escape">`)</span>,
-<span class="escape">`T</span>ry[T]<span class="escape">`则</span>表示, 当执行成功时, 它是<span class="escape">`S</span>uccess[T]<span class="escape">`,</span> 当执行失败时抛出错误时, 它就是 <span class="escape">`F</span>ailure[T]<span class="escape">`.</span>
-<span class="escape">`F</span>ailure[T]<span class="escape">` </span>不像 <span class="escape">`N</span>one<span class="escape">`,</span> 它存储了许多关于为什么得不到最终值的信息.
-同时你也可以认为 <span class="escape">`T</span>ry[T]<span class="escape">` </span>是 <span class="escape">`E</span>ither[Throwable, T]<span class="escape">`的</span>特殊版本.
-
-回到我们刚才的社交网络的例子, 假设我们想要拉取(fetch)自己近期的一些帖子, 并显示在屏幕上.
-我们会调用 <span class="escape">`g</span>etRecentPosts<span class="escape">` </span>方法, 它会返回一个近期关于帖子的列表 <span class="escape">`L</span>ist[String]<span class="escape">`.</span></span>
-</pre></td></tr></table></figure>
-
-<p>import scala.util.{Success, Failure}</p>
-<p>val f: Future[List[String]] = future {
-  session.getRecentPosts
-}
-f onComplete {
-  case Success(posts) =&gt; for (post &lt;- posts) println(post)
-  case Failure(t) =&gt; println(&quot;An error has occured: &quot; + t.getMessage)
-}</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-</pre></td><td class="code"><pre>
-<span class="escape">`o</span>nComplete<span class="escape">` </span>方法通常都要处理成功(successfull)和失败(failed)两种运算结果.
-如果要单单处理成功的结果, <span class="escape">`o</span>nSuccess<span class="escape">` </span>就可以出马了
-</pre></td></tr></table></figure>
-
-<p>val f: Future[List[String]] = future {
-  session.getRecentPosts
-}
-f onSuccess {
-  case posts =&gt; for (post &lt;- posts) println(post)
-}</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-</pre></td><td class="code"><pre>同样可以用<span class="escape">`o</span>nFailure<span class="escape">`来</span>处理运算失败的结果
-</pre></td></tr></table></figure>
-
-<p>val f: Future[List[String]] = future {
-  session.getRecentPosts
-}
-f onFailure {
-  case t =&gt; println(&quot;An error has occured: &quot; + t.getMessage)
-}
-f onSuccess {
-  case posts =&gt; for (post &lt;- posts) println(post)
-}</p>
+而一个 <code>Option[T]</code>对象, 不是代表一个值(<code>Some[T]</code>), 就是代码没有值(<code>None</code>),
+<code>Try[T]</code>则表示, 当执行成功时, 它是<code>Success[T]</code>, 当执行失败时抛出错误时, 它就是 <code>Failure[T]</code>.
+<code>Failure[T]</code> 不像 <code>None</code>, 它存储了许多关于为什么得不到最终值的信息.
+同时你也可以认为 <code>Try[T]</code> 是 <code>Either[Throwable, T]</code>的特殊版本.</p>
+<p>回到我们刚才的社交网络的例子, 假设我们想要拉取(fetch)自己近期的一些帖子, 并显示在屏幕上.
+我们会调用 <code>getRecentPosts</code> 方法, 它会返回一个近期关于帖子的列表 <code>List[String]</code>.</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
 3
 4
 5
-</pre></td><td class="code"><pre>只有 future执行失败时, <span class="escape">`o</span>nFailure<span class="escape">` </span>回调才会被执行, 因此, 它包含了一个异常(exception).
+6
+7
+8
+9
+</pre></td><td class="code"><pre><span class="reserved">import</span> scala.util.{Success, Failure}
 
-如果回调函数只定义了要处理某个特殊的异常类型, 只有当这个异常出现时,
-<span class="escape">`o</span>nFailure<span class="escape">`方</span>法才会触发这个回调(利用偏函数(partial functions)的<span class="escape">`i</span>sDefinedAt<span class="escape">`)</span> 方法.
-<span class="label">下面例子中, 注册的`onFailure` 回调方法将永远都不会被触发:</span>
+val <span class="attribute">f</span>: Future[List[String]] = future {
+  session.getRecentPosts
+}
+f onComplete {
+  <span class="reserved">case</span> Success<span class="function"><span class="params">(posts)</span> =&gt;</span> <span class="keyword">for</span> (post &lt;- posts) println(post)
+  <span class="reserved">case</span> Failure<span class="function"><span class="params">(t)</span> =&gt;</span> println(<span class="string">"An error has occured: "</span> + t.getMessage)
+}
 </pre></td></tr></table></figure>
 
-<p>val f = future {
-  2 / 0
+<p><code>onComplete</code> 方法通常都要处理成功(successfull)和失败(failed)两种运算结果.
+如果要单单处理成功的结果, <code>onSuccess</code> 就可以出马了</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre>val f: Future[<span class="keyword">List</span>[<span class="keyword">String</span>]] = future <span class="list">{
+  session.getRecentPosts
+}</span>
+f onSuccess <span class="list">{
+  case posts =&gt; for (post &lt;- posts) println(post)
+}</span>
+</pre></td></tr></table></figure>
+
+<p>同样可以用<code>onFailure</code>来处理运算失败的结果</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="code"><pre>val f: Future[<span class="keyword">List</span>[String]] = future {
+  session.getRecentPosts
 }
 f onFailure {
-  case npe: NullPointerException =&gt;
-    println(&quot;I&#39;d be amazed if this printed out.&quot;)
-}</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-</pre></td><td class="code"><pre>回到我们之前关于查找第一个出现单词的案例, 你也许想要在屏幕输出这个单词的位置:
+  <span class="keyword">case</span> t =&gt; println(<span class="string">"An error has occured: "</span> + t.getMessage)
+}
+f onSuccess {
+  <span class="keyword">case</span> posts =&gt; <span class="keyword">for</span> (post &lt;- posts) println(post)
+}
 </pre></td></tr></table></figure>
 
-<p>val firstOccurrence: Future[Int] = future {
-  val source = scala.io.Source.fromFile(&quot;myText.txt&quot;)
-  source.toSeq.indexOfSlice(&quot;myKeyword&quot;)
+<p>只有 future执行失败时, <code>onFailure</code> 回调才会被执行, 因此, 它包含了一个异常(exception).</p>
+<p>如果回调函数只定义了要处理某个特殊的异常类型, 只有当这个异常出现时,
+<code>onFailure</code>方法才会触发这个回调(利用偏函数(partial functions)的<code>isDefinedAt</code>) 方法.
+下面例子中, 注册的<code>onFailure</code> 回调方法将永远都不会被触发:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre>val f = future {
+  <span class="number">2</span> / <span class="number">0</span>
+}
+f onFailure {
+  <span class="keyword">case</span> npe: NullPointerException =&gt;
+    println(<span class="string">"I'd be amazed if this printed out."</span>)
+}
+</pre></td></tr></table></figure>
+
+<p>回到我们之前关于查找第一个出现单词的案例, 你也许想要在屏幕输出这个单词的位置:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre>val firstOccurrence: Future[Int] = future {
+  val source = scala<span class="preprocessor">.io</span><span class="preprocessor">.Source</span><span class="preprocessor">.fromFile</span>(<span class="string">"myText.txt"</span>)
+  source<span class="preprocessor">.toSeq</span><span class="preprocessor">.indexOfSlice</span>(<span class="string">"myKeyword"</span>)
 }
 firstOccurrence onSuccess {
-  case idx =&gt; println(&quot;The keyword first appears at position: &quot; + idx)
+  case idx =&gt; println(<span class="string">"The keyword first appears at position: "</span> + idx)
 }
 firstOccurrence onFailure {
-  case t =&gt; println(&quot;Could not process file: &quot; + t.getMessage)
+  case t =&gt; println(<span class="string">"Could not process file: "</span> + t<span class="preprocessor">.getMessage</span>)
 }
-<del>~</del>~</p>
+</pre></td></tr></table></figure>
+
 <h2 id="functional-composition-and-for-comprehensions">Functional Composition and For-Comprehensions</h2>
 <h2 id="projections">Projections</h2>
 <h2 id="extending-futures">Extending Futures</h2>
