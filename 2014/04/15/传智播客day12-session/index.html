@@ -47,7 +47,7 @@ void setAttribute(String key, Object valu">
 			
 			<div id="textlogo">
 				<h1 class="site-name"><a href="/" title="Poe&#39;s World">Poe&#39;s World</a></h1>
-				<h2 class="blog-motto">Hello World</h2>
+				<h2 class="blog-motto">竹杖芒鞋轻胜马，一蓑烟雨任平生</h2>
 			</div>
 			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
 			</a></div>
@@ -56,6 +56,10 @@ void setAttribute(String key, Object valu">
 					<ul>
 					 
 						<li><a href="/">主页</a></li>
+					
+						<li><a href="/english-monthly">英语角</a></li>
+					
+						<li><a href="/about">关于</a></li>
 					
 						<li><a href="/archives">归档</a></li>
 					
@@ -87,7 +91,7 @@ void setAttribute(String key, Object valu">
     </p>
   <p class="article-time">
     <time datetime="2014-04-15T01:03:15.000Z" itemprop="datePublished">4月 15 2014</time>
-    更新日期:<time datetime="2014-04-15T06:40:47.000Z" itemprop="dateModified">4月 15 2014</time>
+    更新日期:<time datetime="2014-05-19T01:36:07.000Z" itemprop="dateModified">5月 19 2014</time>
     
   </p>
 </header>
@@ -130,8 +134,8 @@ session.setAttribute(<span class="string">"p"</span>, <span class="string">"ppp"
 <span class="comment">// 取数据</span>
 (<span class="built_in">String</span>) session.getAttribute(<span class="string">"p"</span>);
 
-session.getAttribute(<span class="literal">true</span>); <span class="comment">// 如果没有session, 就创建</span>
-session.getAttribute(<span class="literal">false</span>); <span class="comment">// 没有sessioin, 不创建, 返回null</span>
+req.getSession(<span class="literal">true</span>); <span class="comment">// 如果没有session, 就创建</span>
+req.getSession(<span class="literal">false</span>); <span class="comment">// 没有sessioin, 不创建, 返回null</span>
 </pre></td></tr></table></figure>
 
 <h1 id="session-">session访问延时</h1>
