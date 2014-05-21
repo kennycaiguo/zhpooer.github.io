@@ -4,21 +4,19 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>java泛型 | Poe&#39;s World</title>
+    <title>传智播客day34-Hibernate性能 | Poe&#39;s World</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="zhpooer">
     
-    <meta name="description" content="泛型入门
-Jdk1.5 出现安全机制.
-好处:
+    <meta name="description" content="懒加载
+懒加载主要解决一个问题: 类, 集合, many-to-one 在什么时候发出sql语句, 加载数据
+类的懒加载
 
-将运行时期的问题 ClasscastException 到了编译时期
-避免了强制类型转换的麻烦
-
-什么时候用&lt;&gt;, 当操作的引用数据类型不确定的时候.就使用&lt;&gt;.
-他表示一个用于接受具体引用数据类型的参数范围.
-泛型即使是给编">
+利用session的load可以产生代理对象
+在session.load 方法执行的时候并不发出sql语句
+在得到一般属性的时候发出sql语句
+只针对一般属性有效果, 针对标示">
     
     
     
@@ -81,15 +79,15 @@ Jdk1.5 出现安全机制.
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2014/04/11/java泛型/" title="java泛型" itemprop="url">java泛型</a>
+      <a href="/2014/05/21/传智播客day34-hibernate性能/" title="传智播客day34-Hibernate性能" itemprop="url">传智播客day34-Hibernate性能</a>
   </h1>
   <p class="article-author">By
     
       <a href="http://zhpooer.github.io" title="zhpooer">zhpooer</a>
     </p>
   <p class="article-time">
-    <time datetime="2014-04-11T12:28:59.000Z" itemprop="datePublished">4月 11 2014</time>
-    更新日期:<time datetime="2014-04-11T13:14:16.000Z" itemprop="dateModified">4月 11 2014</time>
+    <time datetime="2014-05-21T06:20:20.000Z" itemprop="datePublished">5月 21 2014</time>
+    更新日期:<time datetime="2014-05-21T08:43:46.000Z" itemprop="dateModified">5月 21 2014</time>
     
   </p>
 </header>
@@ -98,110 +96,108 @@ Jdk1.5 出现安全机制.
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">泛型入门</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">2.</span> <span class="toc-text">泛型的通配符号</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">泛型的限定</span></a></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">懒加载</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.1.</span> <span class="toc-text">类的懒加载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.2.</span> <span class="toc-text">集合的懒加载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.3.</span> <span class="toc-text">单端关联的懒加载(多对一)</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">2.</span> <span class="toc-text">抓取策略</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">缓存策略</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#hql"><span class="toc-number">4.</span> <span class="toc-text">HQL</span></a></li></ol>
 		</div>
 		
-		<h1 id="-">泛型入门</h1>
-<p>Jdk1.5 出现安全机制.</p>
-<p>好处:</p>
+		<h1 id="-">懒加载</h1>
+<p>懒加载主要解决一个问题: 类, 集合, many-to-one 在什么时候发出sql语句, 加载数据</p>
+<h2 id="-">类的懒加载</h2>
+<ul>
+<li>利用session的load可以产生代理对象</li>
+<li>在session.load 方法执行的时候并不发出sql语句</li>
+<li>在得到一般属性的时候发出sql语句</li>
+<li>只针对一般属性有效果, 针对标示符(id)没有效果<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre>// 得到一个代理对象
+Classes c = (Classes) session<span class="preprocessor">.load</span>(Classes<span class="preprocessor">.class</span>, <span class="number">1</span>L)<span class="comment">;</span>
+c<span class="preprocessor">.getCname</span>()<span class="comment">; // 发出sql语句</span>
+c<span class="preprocessor">.getCid</span>()<span class="comment">;// 标识符, 不会发出</span>
+session<span class="preprocessor">.close</span>()<span class="comment">;</span>
+c<span class="preprocessor">.getDescription</span>()<span class="comment">;  // 如果还没有初始化, 抛错 could not initialize proxy, no session</span>
+</pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2 id="-">集合的懒加载</h2>
+<p>lazy 的三个变量:</p>
+<ul>
+<li>false: 当session.get时, 集合就被加载了</li>
+<li>true: 在集合遍历时才被加载</li>
+<li>extra: 针对集合做count, min, max, sum等操作</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- 设置集合懒加载, 默认为 true,
+     extra 更进一步的懒加载中, 如 students.size(), 会执行 select count()...--&gt;</span>
+<span class="tag">&lt;<span class="title">set</span> <span class="attribute">lazy</span>=<span class="value">"false|true|extra"</span>&gt;</span><span class="tag">&lt;/<span class="title">set</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre>// 执行 sql 生成 Classes 对象
+// 如果 <span class="operator"><span class="keyword">set</span>.lazy=<span class="keyword">false</span>, 会马上加载集合对象
+Classes c = <span class="keyword">session</span>.<span class="keyword">get</span>(Classes.class, <span class="number">1</span>L);</span> 
+<span class="operator"><span class="keyword">Set</span> students = classes.getStudents();</span> 
+for(Student s:students) {  // 执行sql, 生成 真实 students 对象(集合懒加载)
+    s.getSname();
+}
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre>Classes c = session<span class="preprocessor">.load</span>(Classes<span class="preprocessor">.class</span>, <span class="number">1</span>L)<span class="comment">;</span>
+<span class="keyword">Set</span> students = classes<span class="preprocessor">.getStudents</span>()<span class="comment">; // 执行 sql 生成 Classes 对象</span>
+for(Student s:students) {  // 执行sql, 生成 真实 students 对象(集合懒加载)
+    s<span class="preprocessor">.getSname</span>()<span class="comment">;</span>
+}
+</pre></td></tr></table></figure>
+
+<h2 id="-">单端关联的懒加载(多对一)</h2>
+<p>根据多的端加载一的一端, 就一个数据, 所以无所谓</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- 默认值 no-proxy --&gt;</span>
+<span class="tag">&lt;<span class="title">many-to-one</span> <span class="attribute">lazy</span>=<span class="value">"false|no-proxy|proxy"</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">many-to-one</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<h1 id="-">抓取策略</h1>
 <ol>
-<li>将运行时期的问题 ClasscastException 到了编译时期</li>
-<li>避免了强制类型转换的麻烦</li>
+<li>主要是研究 <code>set</code> 集合如何提取数据</li>
+<li>在 Classes.hbm.xml 文件中<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- 外连接, 默认, 子查询 --&gt;</span>
+<span class="tag">&lt;<span class="title">set</span> <span class="attribute">fetch</span>=<span class="value">"join|fetch|subselect"</span>&gt;</span><span class="tag">&lt;/<span class="title">set</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+</li>
 </ol>
-<p>什么时候用&lt;&gt;, 当操作的引用数据类型不确定的时候.就使用&lt;&gt;.
-他表示一个用于接受具体引用数据类型的参数范围.</p>
-<p>泛型即使是给编译器使用的技术, 用于编译时期, 确保了编译的安全.
-运行时, 会将泛型去掉, 生成的class是不带泛型的, 称为泛型的擦除.</p>
-<p>泛型的补偿: 运行时, 通过获取元素的类型进行转换动作,
-不用进行强制转换.</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-</pre></td><td class="code"><pre><span class="comment">/** 泛型定义在类上 **/</span>
-<span class="class"><span class="keyword">class</span> <span class="title">Tool</span>&lt;<span class="title">e1</span>, <span class="title">e2</span>&gt; {</span>
-   <span class="comment">/** 泛型定义在方法上 **/</span>
-   <span class="keyword">public</span> &lt;W&gt; <span class="keyword">void</span> show(W <span class="keyword">str</span>) {}
-
-   <span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="keyword">void</span> method(T t) {}
-}
-
-<span class="class"><span class="keyword">class</span> <span class="title">Person</span> <span class="inheritance"><span class="keyword">implements</span></span> <span class="title">Comparable</span>&lt;<span class="title">Person</span>&gt;{</span>
-}
-
-<span class="comment">/**泛型接口**/</span>
-<span class="class"><span class="keyword">interface</span> <span class="title">Inter</span>&lt;<span class="title">T</span>&gt;{</span>
-   <span class="keyword">public</span> <span class="keyword">void</span> show(T t)
-}
-
-<span class="class"><span class="keyword">class</span> <span class="title">InterImpl</span>&lt;<span class="title">T</span>&gt; <span class="inheritance"><span class="keyword">implements</span></span> <span class="title">Inter</span>&lt;<span class="title">T</span>&gt; {</span>}
-</pre></td></tr></table></figure>
-
-<h1 id="-">泛型的通配符号</h1>
-<p>泛型的通配符: ?,代表未知类型</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">printCollection</span>(Collection&lt;?&gt; al){}
-</pre></td></tr></table></figure>
-
-<h1 id="-">泛型的限定</h1>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-</pre></td><td class="code"><pre><span class="javadoc">/**这里只能传Person类的对象**/</span>
-<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">printCollection</span>(Collection&lt;Person&gt; al){}
-
-<span class="javadoc">/**这里只可以传可以传Person类的子类对象  上限 **/</span>
-<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">printCollection</span>(Collection&lt;? extends Person&gt; al){}
-
-<span class="javadoc">/**这里只可以传可以传Person类的父类对象 下限 **/</span>
-<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">printCollection</span>(Collection&lt;? <span class="keyword">super</span> Person&gt; al){}
-
-class MyCollection&lt;E&gt;{
-   <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addAll</span>(MyCollection&lt;? extends E&gt; e){}
-}
-<span class="javadoc">/** 当对集合中的元素进行取出操作时, 可以用下限 **/</span>
-TreeSet(Comparator&lt;? <span class="keyword">super</span> E&gt; comparator)
-</pre></td></tr></table></figure>
-
+<h1 id="-">缓存策略</h1>
+<h1 id="hql">HQL</h1>
   
 	</div>
 		<footer class="article-footer clearfix">
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/java/">java</a><a href="/tags/泛型/">泛型</a>
-  </div>
 
 
 
 
 <div class="article-share" id="share">
 
-  <div data-url="http://zhpooer.github.io/2014/04/11/java泛型/" data-title="java泛型 | Poe&#39;s World" data-tsina="null" class="share clearfix">
+  <div data-url="http://zhpooer.github.io/2014/05/21/传智播客day34-hibernate性能/" data-title="传智播客day34-Hibernate性能 | Poe&#39;s World" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -210,19 +206,11 @@ TreeSet(Comparator&lt;? <span class="keyword">super</span> E&gt; comparator)
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2014/04/12/传智播客day10-reqeust&response/" title="传智播客day10-reqeust&amp;response">
-  <strong>PREVIOUS:</strong><br/>
-  <span>
-  传智播客day10-reqeust&amp;response</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2014/04/11/java集合框架/"  title="java集合框架">
+<a href="/2014/05/20/传智播客day33-hibernate关系传递/"  title="传智播客day33-Hibernate关系传递">
  <strong>NEXT:</strong><br/> 
- <span>java集合框架
+ <span>传智播客day33-Hibernate关系传递
 </span>
 </a>
 </div>
@@ -239,7 +227,7 @@ TreeSet(Comparator&lt;? <span class="keyword">super</span> E&gt; comparator)
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">泛型入门</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">2.</span> <span class="toc-text">泛型的通配符号</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">泛型的限定</span></a></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">懒加载</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.1.</span> <span class="toc-text">类的懒加载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.2.</span> <span class="toc-text">集合的懒加载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.3.</span> <span class="toc-text">单端关联的懒加载(多对一)</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">2.</span> <span class="toc-text">抓取策略</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">缓存策略</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#hql"><span class="toc-number">4.</span> <span class="toc-text">HQL</span></a></li></ol>
   </div>
 
 <div id="asidepart">

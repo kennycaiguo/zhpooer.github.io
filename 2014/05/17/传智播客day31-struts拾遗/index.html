@@ -92,7 +92,7 @@ OGNL不仅可以调用属性，还可以调用普通方法
     </p>
   <p class="article-time">
     <time datetime="2014-05-17T01:04:32.000Z" itemprop="datePublished">5月 17 2014</time>
-    更新日期:<time datetime="2014-05-19T14:06:05.000Z" itemprop="dateModified">5月 19 2014</time>
+    更新日期:<time datetime="2014-05-21T11:37:16.000Z" itemprop="dateModified">5月 21 2014</time>
     
   </p>
 </header>
@@ -367,7 +367,7 @@ ${name}=<span class="tag">&lt;<span class="title">s:property</span> <span class=
 <p>如何使用内置验证器：</p>
 <ol>
 <li>对所有的动作方法都进行验证：在动作类相同的包中, 添加 <code>动作类名-validation.xml</code>使用。</li>
-<li>针对某些动作进行验证：动作类名-动作别名-validation.xml（动作别名指Struts.xml中的action的name）</li>
+<li>针对某些动作进行验证：动作类名-动作别名-validation.xml(动作别名指Struts.xml中的action的name))</li>
 </ol>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
@@ -394,6 +394,7 @@ ${name}=<span class="tag">&lt;<span class="title">s:property</span> <span class=
 23
 24
 25
+26
 </pre></td><td class="code"><pre><span class="pi">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
 <span class="doctype">&lt;!DOCTYPE validators PUBLIC 
           "-//Apache Struts//XWork Validator 1.0//EN"
@@ -401,7 +402,8 @@ ${name}=<span class="tag">&lt;<span class="title">s:property</span> <span class=
 <span class="tag">&lt;<span class="title">validators</span>&gt;</span>
     <span class="comment">&lt;!-- 针对字段的验证：方式一（建议使用）.在一个字段上加上多个验证规则--&gt;</span>
     <span class="tag">&lt;<span class="title">field</span> <span class="attribute">name</span>=<span class="value">"username"</span> &gt;</span>
-        <span class="tag">&lt;<span class="title">field-validator</span> <span class="attribute">type</span>=<span class="value">"requiredstring"</span>&gt;</span>
+    <span class="comment">&lt;!-- 不能为null或者""字符串, 默认会 trim --&gt;</span>
+        <span class="tag">&lt;<span class="title">field-validator</span> <span class="attribute">type</span>=<span class="value">"requiredstring"</span>&gt;</span> 
             <span class="tag">&lt;<span class="title">message</span>&gt;</span>用户名是必须的<span class="tag">&lt;/<span class="title">message</span>&gt;</span>
         <span class="tag">&lt;/<span class="title">field-validator</span>&gt;</span>
     <span class="tag">&lt;/<span class="title">field</span>&gt;</span>
@@ -660,7 +662,7 @@ ${name}=<span class="tag">&lt;<span class="title">s:property</span> <span class=
 }
 </pre></td></tr></table></figure>
 
-<p>对自定义的校验器进行配置</p>
+<p>对自定义的校验器进行配置(validators.xml)</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
 3
@@ -677,7 +679,7 @@ ${name}=<span class="tag">&lt;<span class="title">s:property</span> <span class=
 <span class="tag">&lt;/<span class="title">validators</span>&gt;</span>
 </pre></td></tr></table></figure>
 
-<p>使用自定义的校验器(struts.xml中配置)</p>
+<p>使用自定义的校验器</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
 3
@@ -1136,6 +1138,8 @@ User=UserConverter
 		
 			<li><a href="/tags/EL表达式/" title="EL表达式">EL表达式<sup>1</sup></a></li>
 		
+			<li><a href="/tags/Hibernate/" title="Hibernate">Hibernate<sup>2</sup></a></li>
+		
 			<li><a href="/tags/HttpSession/" title="HttpSession">HttpSession<sup>1</sup></a></li>
 		
 			<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
@@ -1169,8 +1173,6 @@ User=UserConverter
 			<li><a href="/tags/find/" title="find">find<sup>1</sup></a></li>
 		
 			<li><a href="/tags/grep/" title="grep">grep<sup>1</sup></a></li>
-		
-			<li><a href="/tags/html/" title="html">html<sup>2</sup></a></li>
 		
 		</ul>
 </div>

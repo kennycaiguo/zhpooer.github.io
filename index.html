@@ -69,6 +69,92 @@
 
   <section class="post" itemscope itemprop="blogPost">
   
+    <a href="/2014/05/21/传智播客day34-hibernate性能/" title="传智播客day34-Hibernate性能" itemprop="url">
+  
+    <h1 itemprop="name">传智播客day34-Hibernate性能</h1>
+    
+     
+           <p itemprop="description" >懒加载
+懒加载主要解决一个问题: 类, 集合, many-to-one 在什么时候发出sql语句, 加载数据
+类的懒加载
+
+利用session的load可以产生代理对象
+在session.load 方法执行的时候并不发出sql语句
+在得到一般属性的时候发出sql语句
+只针对一般属</p>
+        
+    
+    <time datetime="2014-05-21T06:20:20.000Z" itemprop="datePublished">5月 21 2014</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2014/05/20/传智播客day33-hibernate关系传递/" title="传智播客day33-Hibernate关系传递" itemprop="url">
+  
+    <h1 itemprop="name">传智播客day33-Hibernate关系传递</h1>
+    
+     
+           <p itemprop="description" >Hibernate 关系传递
+一对多的单向关联
+可以通过Classes 到 Student, 但不能从 Student 到 Classes.
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+public class Classes {
+    @BeanProperty priv</p>
+        
+    
+    <time datetime="2014-05-20T07:28:47.000Z" itemprop="datePublished">5月 20 2014</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2014/05/20/传智播客day32-hibernate入门/" title="传智播客day32-Hibernate入门" itemprop="url">
+  
+    <h1 itemprop="name">传智播客day32-Hibernate入门</h1>
+    
+     
+           <p itemprop="description" >jdbc的优缺点
+缺点
+
+查询代码繁琐
+重复性代码特别多(频繁的try catch)
+没有数据缓存
+sql的移植性不好
+
+优点
+
+速度快
+把控性比较好
+
+OR mapping 优缺点
+优点
+
+简单
+数据缓存, 一级缓存 二级缓存 查询缓存
+可移植性比较好
+
+缺点
+
+因为sql语句</p>
+        
+    
+    <time datetime="2014-05-20T02:45:34.000Z" itemprop="datePublished">5月 20 2014</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
     <a href="/2014/05/17/传智播客day31-案例/" title="传智播客day31-案例" itemprop="url">
   
     <h1 itemprop="name">传智播客day31-案例</h1>
@@ -344,76 +430,6 @@ inter</p>
   </a>
 </section>
 
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2014/04/29/传智播客day22-文件操作和监听器/" title="传智播客day22-文件操作和监听器" itemprop="url">
-  
-    <h1 itemprop="name">传智播客day22-文件操作和监听器</h1>
-    
-     
-           <p itemprop="description" >文件上传
-
-必须提供&lt;input type=&quot;file&quot; name=&quot;&quot;/&gt;的文件上传输入域
-表单的提交方式必须是POST方式
-设置 &lt;form enctype=&quot;multipart/form-data&amp;quot</p>
-        
-    
-    <time datetime="2014-04-29T01:02:31.000Z" itemprop="datePublished">4月 29 2014</time>
-  </a>
-</section>
-
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2014/04/28/传智播客day21-servlet过滤器/" title="传智播客day21-servlet过滤器" itemprop="url">
-  
-    <h1 itemprop="name">传智播客day21-servlet过滤器</h1>
-    
-     
-           <p itemprop="description" >过滤器概述
-Filter, 应用中的保安. 利用过滤器来实现对请求和响应的拦截.
-编写过滤器的步骤
-
-编一个类, 实现 javax.servlet.Filter
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-public class FilterDemo1 impleme</p>
-        
-    
-    <time datetime="2014-04-28T01:02:59.000Z" itemprop="datePublished">4月 28 2014</time>
-  </a>
-</section>
-
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2014/04/26/传智播客day20-orm简介/" title="传智播客day20-ORM简介" itemprop="url">
-  
-    <h1 itemprop="name">传智播客day20-ORM简介</h1>
-    
-     
-           <p itemprop="description" >ORM简介
-ORM(Object Relation Mapping):
-
-Object : JavaBean对象
-Raltion: 关系型数据库
-Mapping: 映射(存在在着对应关系)
-
-框架: Hibernate、MyBatis(iBatis)、JPA(java持久化框架,</p>
-        
-    
-    <time datetime="2014-04-26T01:28:23.000Z" itemprop="datePublished">4月 26 2014</time>
-  </a>
-</section>
-
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" href="/page/2/">Next &raquo;</a>
@@ -436,6 +452,8 @@ Mapping: 映射(存在在着对应关系)
 			<li><a href="/tags/DOM/" title="DOM">DOM<sup>2</sup></a></li>
 		
 			<li><a href="/tags/EL表达式/" title="EL表达式">EL表达式<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Hibernate/" title="Hibernate">Hibernate<sup>2</sup></a></li>
 		
 			<li><a href="/tags/HttpSession/" title="HttpSession">HttpSession<sup>1</sup></a></li>
 		
@@ -470,8 +488,6 @@ Mapping: 映射(存在在着对应关系)
 			<li><a href="/tags/find/" title="find">find<sup>1</sup></a></li>
 		
 			<li><a href="/tags/grep/" title="grep">grep<sup>1</sup></a></li>
-		
-			<li><a href="/tags/html/" title="html">html<sup>2</sup></a></li>
 		
 		</ul>
 </div>

@@ -4,7 +4,7 @@
   <subtitle><![CDATA[竹杖芒鞋轻胜马，一蓑烟雨任平生]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://zhpooer.github.io/"/>
-  <updated>2014-05-19T14:45:55.518Z</updated>
+  <updated>2014-05-21T13:34:29.176Z</updated>
   <id>http://zhpooer.github.io/</id>
   
   <author>
@@ -13,6 +13,1020 @@
   </author>
   
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[传智播客day34-Hibernate性能]]></title>
+    <link href="http://zhpooer.github.io/2014/05/21/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day34-hibernate%E6%80%A7%E8%83%BD/"/>
+    <id>http://zhpooer.github.io/2014/05/21/传智播客day34-hibernate性能/</id>
+    <published>2014-05-21T06:20:20.000Z</published>
+    <updated>2014-05-21T08:43:46.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="-">懒加载</h1>
+<p>懒加载主要解决一个问题: 类, 集合, many-to-one 在什么时候发出sql语句, 加载数据</p>
+<h2 id="-">类的懒加载</h2>
+<ul>
+<li>利用session的load可以产生代理对象</li>
+<li>在session.load 方法执行的时候并不发出sql语句</li>
+<li>在得到一般属性的时候发出sql语句</li>
+<li>只针对一般属性有效果, 针对标示符(id)没有效果<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre>// 得到一个代理对象
+Classes c = (Classes) session<span class="preprocessor">.load</span>(Classes<span class="preprocessor">.class</span>, <span class="number">1</span>L)<span class="comment">;</span>
+c<span class="preprocessor">.getCname</span>()<span class="comment">; // 发出sql语句</span>
+c<span class="preprocessor">.getCid</span>()<span class="comment">;// 标识符, 不会发出</span>
+session<span class="preprocessor">.close</span>()<span class="comment">;</span>
+c<span class="preprocessor">.getDescription</span>()<span class="comment">;  // 如果还没有初始化, 抛错 could not initialize proxy, no session</span>
+</pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2 id="-">集合的懒加载</h2>
+<p>lazy 的三个变量:</p>
+<ul>
+<li>false: 当session.get时, 集合就被加载了</li>
+<li>true: 在集合遍历时才被加载</li>
+<li>extra: 针对集合做count, min, max, sum等操作</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- 设置集合懒加载, 默认为 true,
+     extra 更进一步的懒加载中, 如 students.size(), 会执行 select count()...--&gt;</span>
+<span class="tag">&lt;<span class="title">set</span> <span class="attribute">lazy</span>=<span class="value">"false|true|extra"</span>&gt;</span><span class="tag">&lt;/<span class="title">set</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre>// 执行 sql 生成 Classes 对象
+// 如果 <span class="operator"><span class="keyword">set</span>.lazy=<span class="keyword">false</span>, 会马上加载集合对象
+Classes c = <span class="keyword">session</span>.<span class="keyword">get</span>(Classes.class, <span class="number">1</span>L);</span> 
+<span class="operator"><span class="keyword">Set</span> students = classes.getStudents();</span> 
+for(Student s:students) {  // 执行sql, 生成 真实 students 对象(集合懒加载)
+    s.getSname();
+}
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre>Classes c = session<span class="preprocessor">.load</span>(Classes<span class="preprocessor">.class</span>, <span class="number">1</span>L)<span class="comment">;</span>
+<span class="keyword">Set</span> students = classes<span class="preprocessor">.getStudents</span>()<span class="comment">; // 执行 sql 生成 Classes 对象</span>
+for(Student s:students) {  // 执行sql, 生成 真实 students 对象(集合懒加载)
+    s<span class="preprocessor">.getSname</span>()<span class="comment">;</span>
+}
+</pre></td></tr></table></figure>
+
+<h2 id="-">单端关联的懒加载(多对一)</h2>
+<p>根据多的端加载一的一端, 就一个数据, 所以无所谓</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- 默认值 no-proxy --&gt;</span>
+<span class="tag">&lt;<span class="title">many-to-one</span> <span class="attribute">lazy</span>=<span class="value">"false|no-proxy|proxy"</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">many-to-one</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<h1 id="-">抓取策略</h1>
+<ol>
+<li>主要是研究 <code>set</code> 集合如何提取数据</li>
+<li>在 Classes.hbm.xml 文件中<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- 外连接, 默认, 子查询 --&gt;</span>
+<span class="tag">&lt;<span class="title">set</span> <span class="attribute">fetch</span>=<span class="value">"join|fetch|subselect"</span>&gt;</span><span class="tag">&lt;/<span class="title">set</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h1 id="-">缓存策略</h1>
+<h1 id="hql">HQL</h1>
+]]></content>
+    
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[传智播客day33-Hibernate关系传递]]></title>
+    <link href="http://zhpooer.github.io/2014/05/20/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day33-hibernate%E5%85%B3%E7%B3%BB%E4%BC%A0%E9%80%92/"/>
+    <id>http://zhpooer.github.io/2014/05/20/传智播客day33-hibernate关系传递/</id>
+    <published>2014-05-20T07:28:47.000Z</published>
+    <updated>2014-05-21T06:18:20.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="hibernate-">Hibernate 关系传递</h1>
+<h2 id="-">一对多的单向关联</h2>
+<p>可以通过Classes 到 Student, 但不能从 Student 到 Classes.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Classes</span> {</span>
+    <span class="annotation">@BeanProperty</span> <span class="keyword">private</span> Long cid;
+    <span class="annotation">@BeanProperty</span> <span class="keyword">private</span> String cname;
+    <span class="annotation">@BeanProperty</span> <span class="keyword">private</span> String description;
+    <span class="annotation">@BeanProperty</span> <span class="keyword">private</span> Set&lt;Student&gt; students; <span class="comment">// Set可以避免重复</span>
+}
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Student</span>{</span>
+    <span class="annotation">@BeanProperty</span> <span class="keyword">private</span> Long sid;
+    <span class="annotation">@BeanProperty</span> <span class="keyword">private</span> String sname;
+    <span class="annotation">@BeanProperty</span> <span class="keyword">private</span> String description;
+}
+</pre></td></tr></table></figure>
+
+<p>映射文件</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- Classes.hbm.xml --&gt;</span>
+<span class="tag">&lt;<span class="title">hiberante-mapping</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">class</span> <span class="attribute">name</span>=<span class="value">"Classes"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">id</span> <span class="attribute">name</span>=<span class="value">"cid"</span> <span class="attribute">length</span>=<span class="value">"5"</span> <span class="attribute">type</span>=<span class="value">"long"</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">gernerator</span> <span class="attribute">class</span>=<span class="value">"increment"</span>&gt;</span> <span class="tag">&lt;/<span class="title">gernerator</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">id</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"cname"</span> <span class="attribute">length</span>=<span class="value">"20"</span> <span class="attribute">type</span>=<span class="value">"string"</span>&gt;</span> <span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"description"</span> <span class="attribute">length</span>=<span class="value">"100"</span> <span class="attribute">type</span>=<span class="value">"java.lang.String"</span>&gt;</span> <span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+        <span class="comment">&lt;!-- set 元素对应类中的set集合
+             通过set元素使classes表和student表建立关联--&gt;</span>
+        <span class="comment">&lt;!-- key是通过外键的形式让两张表建立关联  --&gt;</span>
+        <span class="comment">&lt;!-- one-to-many 是通络类的形式让两个类建立关联 --&gt;</span>
+        <span class="tag">&lt;<span class="title">set</span> <span class="attribute">name</span>=<span class="value">"students"</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">key</span>&gt;</span> <span class="comment">&lt;!-- 用来描述外键 --&gt;</span>
+                <span class="tag">&lt;<span class="title">column</span> <span class="attribute">name</span>=<span class="value">"cid"</span>&gt;</span> <span class="tag">&lt;/<span class="title">column</span>&gt;</span>
+            <span class="tag">&lt;/<span class="title">key</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">one-to-many</span> <span class="attribute">class</span>=<span class="value">"Student"</span>/&gt;</span>
+        <span class="tag">&lt;/<span class="title">set</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">class</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">hiberante-mapping</span>&gt;</span>
+<span class="comment">&lt;!-- Student.hbm.xml --&gt;</span>
+<span class="tag">&lt;<span class="title">hibernate-mapping</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">class</span> <span class="attribute">name</span>=<span class="value">"Student"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">id</span> <span class="attribute">name</span>=<span class="value">"sid"</span> <span class="attribute">length</span>=<span class="value">"5"</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">generator</span> <span class="attribute">class</span>=<span class="value">"increment"</span>&gt;</span> <span class="tag">&lt;/<span class="title">generator</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">id</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"sname"</span> <span class="attribute">length</span>=<span class="value">"20"</span>&gt;</span> <span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"descscription"</span> <span class="attribute">length</span>=<span class="value">"100"</span>&gt;</span> <span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">class</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">hibernate-mapping</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<h3 id="-">执行操作</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="code"><pre>Session session = sessionFactory<span class="preprocessor">.openSession</span>()<span class="comment">;</span>
+Transaction transaction = session<span class="preprocessor">.beginTransaction</span>()<span class="comment">;</span>
+
+Classes classes = new Classes()<span class="comment">;</span>
+classes<span class="preprocessor">.setCname</span>(<span class="string">"第八期"</span>)<span class="comment">;</span>
+classes<span class="preprocessor">.setDescription</span>(<span class="string">"很牛"</span>)<span class="comment">;</span>
+session<span class="preprocessor">.save</span>(classes)<span class="comment">;</span>
+
+Student student = new Student()<span class="comment">;</span>
+student<span class="preprocessor">.setSname</span>(<span class="string">"班长"</span>)<span class="comment">;</span>
+student<span class="preprocessor">.setDescription</span>(<span class="string">"很牛"</span>)<span class="comment">;</span>
+// 如果学生很多, 要执行很多次, 可以用级联(Cascade)来解决
+session<span class="preprocessor">.save</span>(student)<span class="comment">;</span>
+transaction<span class="preprocessor">.commit</span>()<span class="comment">;</span>
+session<span class="preprocessor">.close</span>()<span class="comment">;</span>
+</pre></td></tr></table></figure>
+
+<h3 id="-cascade-">级联(Cascade)</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- 配置级联操作,
+     save-update: 在保存(save) 或更新(update)班级时,
+     也保存(save)和更新(update)学生, 即使学生是临时状态
+     delete: 在删除班级的时候, 也删除学生
+     all: save-update, delete
+     --&gt;</span>
+<span class="comment">&lt;!-- inverse 维护关系
+             true 不维护(classes 不维护与 student 的关系)
+             false 维护
+             default false--&gt;</span>
+<span class="tag">&lt;<span class="title">set</span> <span class="attribute">name</span>=<span class="value">"students"</span> <span class="attribute">cascade</span>=<span class="value">"save-update"</span> <span class="attribute">inverse</span>=<span class="value">"true"</span>&gt;</span>
+    <span class="comment">&lt;!-- any --&gt;</span>
+<span class="tag">&lt;/<span class="title">set</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<p>在保存 Classes 时, 同时保存 students</p>
+<ul>
+<li>cascade 通过更新班级 级联保存学生(决定插入学生, 但不决定建立外键关联)</li>
+<li>inverse 建立班级和学生之间的关系(决定是不是建立外键关联)<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+</pre></td><td class="code"><pre>Classes classes = new Classes()<span class="comment">;</span>
+classes<span class="preprocessor">.setCname</span>(<span class="string">"第八期"</span>)<span class="comment">;</span>
+classes<span class="preprocessor">.setDescription</span>(<span class="string">"很牛"</span>)<span class="comment">;</span>
+
+Student student = new Student()<span class="comment">;</span>
+student<span class="preprocessor">.setSname</span>(<span class="string">"班长"</span>)<span class="comment">;</span>
+student<span class="preprocessor">.setDescription</span>(<span class="string">"很牛"</span>)<span class="comment">;</span>
+
+<span class="keyword">Set</span> students = new HashSet&lt;Student&gt;()<span class="comment">;</span>
+students<span class="preprocessor">.add</span>(student)<span class="comment">;</span>
+// 建立 classes 和 student 之间的关联
+classes<span class="preprocessor">.setStudents</span>(students)<span class="comment">; </span>
+// student 还是临时状态对象, 在保存班级的时候同时保存学生
+// 进行了级联操作
+session<span class="preprocessor">.save</span>(classes)<span class="comment">;</span>
+
+// 删除一个学生
+session<span class="preprocessor">.delete</span>(student)<span class="comment">;</span>
+</pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>把一个学生从一个班级转到另一个班级</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre>// 可以不写, 原因如下
+// Classes c1 = session<span class="preprocessor">.get</span>(Classes<span class="preprocessor">.class</span>, <span class="number">1</span>L)<span class="comment">;</span>
+Classes c2 = session<span class="preprocessor">.get</span>(Classes<span class="preprocessor">.class</span>, <span class="number">2</span>L)<span class="comment">;</span>
+Student s = session<span class="preprocessor">.get</span>(Student<span class="preprocessor">.class</span>, <span class="number">1</span>L)<span class="comment">;</span>
+// 会执行数据库删除外键操作, 而随后一句会执行更新外键操作, 就变成 <span class="number">2</span>条 sql 语句
+// 所以 第一条可以不写
+// c1<span class="preprocessor">.getStudents</span>()<span class="preprocessor">.remove</span>(s)<span class="comment">;</span>
+c2<span class="preprocessor">.getStudents</span>()<span class="preprocessor">.add</span>(s)<span class="comment">;</span>
+// 因为都是持久化状态, 所以不用 `save` 或 `update`
+transaction<span class="preprocessor">.commit</span>()<span class="comment">;</span>
+session<span class="preprocessor">.close</span>()<span class="comment">;</span>
+</pre></td></tr></table></figure>
+
+<p>删除Classes中的所有学生</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre>Classes classes = session<span class="preprocessor">.get</span>(Classes<span class="preprocessor">.class</span>, <span class="number">1</span>L)<span class="comment">;</span>
+// 方式一: 效率不高, 因为要先查询
+<span class="keyword">Set</span> students = classes<span class="preprocessor">.getStudents</span>()<span class="comment">;</span>
+students<span class="preprocessor">.clear</span>()<span class="comment">;</span>
+// 方式二
+classes<span class="preprocessor">.setStudents</span>(null)<span class="comment">;</span>
+session<span class="preprocessor">.close</span>()<span class="comment">;</span>
+</pre></td></tr></table></figure>
+
+<p>删除一个班级</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>Classes c = session.<span class="keyword">get</span>(Classes.<span class="keyword">class</span>, <span class="number">5</span>L);
+<span class="comment">// 如果 inverse=true, classes不会维护和student的关系, 外键不会删除, 会报错</span>
+<span class="comment">// 必须 inverse=false, 或者 cascade=delete(会执行多条"delete * from Student where sid=?"语句)</span>
+session.<span class="keyword">delete</span>(c);
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre><span class="comment">// 没有在 hbm.xml 设置 cascade, 就不会执行级联,</span>
+<span class="comment">// 如果两个关联的对象中有一个的状态是 临时, 会报错,</span>
+<span class="comment">// `TransientObjectException`: object references an unsaved transient instance</span>
+Classes classes = <span class="keyword">new</span> Classes();
+classes.setCname(<span class="string">"xxx"</span>);
+Student student = <span class="keyword">new</span> Student();
+classes.getStudents().add(student);
+session.save(classes); <span class="comment">//  如果 cascade 不设置, 报错</span>
+</pre></td></tr></table></figure>
+
+<p>把 <code>session.save()/update()</code> 一个对象的操作是显示操作,
+级联一个对象是一个隐式操作</p>
+<h2 id="-">一对多的双向</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- Class Student --&gt;</span>
+<span class="comment">&lt;!-- @BeanProperty private Classes classes; --&gt;</span>
+<span class="tag">&lt;<span class="title">class</span> <span class="attribute">name</span>=<span class="value">"student"</span>&gt;</span>
+    <span class="comment">&lt;!-- any other property --&gt;</span>
+    <span class="tag">&lt;<span class="title">many-to-one</span> <span class="attribute">name</span>=<span class="value">"classes"</span> <span class="attribute">class</span>=<span class="value">"io.zhpooer.Classes"</span> <span class="attribute">column</span>=<span class="value">"cid"</span>/&gt;</span> 
+<span class="tag">&lt;/<span class="title">class</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<p>一对多涉及到关系操作, 在多的一方操作效率高, 因为多的一方不会执行<code>update</code>外键操作</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre>Student student = new Student()<span class="comment">;</span>
+Classes classes = session<span class="preprocessor">.get</span>(Classes<span class="preprocessor">.class</span>, <span class="number">3</span>L)<span class="comment">;</span>
+classes<span class="preprocessor">.getStudents</span><span class="preprocessor">.add</span>(student)<span class="comment">; // 如果 inverse 为 false 会发出 update外键 语句</span>
+student<span class="preprocessor">.setClasses</span>(classes)<span class="comment">;</span>
+session<span class="preprocessor">.save</span>(student)<span class="comment">; // 不会发出 update 外键 语句</span>
+</pre></td></tr></table></figure>
+
+<h2 id="-">删除关系的错误</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre>Classes c = session.<span class="keyword">get</span>(Classes.<span class="keyword">class</span>, <span class="number">1</span>L);
+Set students = classes.getStudents();
+<span class="keyword">for</span>(Student s:students) {
+    <span class="comment">// student.setClass(null);   不能解决下面的问题, 因为是 classes 维护着关系</span>
+    <span class="comment">// 解决问题思路: students.remove(student);, 但是不能在迭代中删除</span>
+    session.<span class="keyword">delete</span>(student); <span class="comment">// 会报错, 因为 student 还关联着 classes</span>
+}
+</pre></td></tr></table></figure>
+
+<h2 id="-">一对多总结</h2>
+<ul>
+<li>如果让一的一方维护关系，取决于的因素有<ol>
+<li>在一的一方的映射文件中，set元素的inverse属性为default/false</li>
+<li>在客户端的代码中，通过一的一方建立关系</li>
+<li><code>session.save/update</code>方法是用来操作表的，和操作关系没有关系</li>
+</ol>
+</li>
+<li>怎么样采用级联的方法通过保存一个对象从而保存关联对象<ol>
+<li>如果<code>session.save</code>操作的对象是A，这个时候应该看A.hbm.xml,看set元素中cascade是否设置有级联保存</li>
+<li>在客户端通过A建立关联</li>
+<li>在客户端执行<code>session.save(A)</code></li>
+</ol>
+</li>
+<li>一对多的情况，多的一方维护关系效率比较高<ol>
+<li>在多的一方many-to-one中没有inverse属性</li>
+<li>在客户端通过多的一方建立关联</li>
+</ol>
+</li>
+</ul>
+<h2 id="-">多对多</h2>
+<p>学生和课程的关系是多对多</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Student</span> {</span>
+    <span class="annotation">@BeanProperty</span> <span class="keyword">private</span> Long sid;
+    <span class="annotation">@BeanProperty</span> <span class="keyword">private</span> String name;
+    <span class="annotation">@BeanProperty</span> <span class="keyword">private</span> Set&lt;Course&gt; courses;
+}
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Course</span> {</span>
+    <span class="annotation">@BeanProperty</span> <span class="keyword">private</span> Set&lt;Student&gt; students;
+    <span class="annotation">@BeanProperty</span> <span class="keyword">private</span> Long cid;
+    <span class="annotation">@BeanProperty</span> <span class="keyword">private</span> name;
+}
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">class</span> <span class="attribute">name</span>=<span class="value">"Student"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">id</span> <span class="attribute">name</span>=<span class="value">"sid"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">generator</span> <span class="attribute">class</span>=<span class="value">"increment"</span>&gt;</span> <span class="tag">&lt;/<span class="title">generator</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">id</span>&gt;</span>
+    <span class="comment">&lt;!-- table 就是用来描述第三张表的 --&gt;</span>
+    <span class="tag">&lt;<span class="title">set</span> <span class="attribute">name</span>=<span class="value">"courses"</span> <span class="attribute">table</span>=<span class="value">"student_course"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">key</span>&gt;</span>
+           <span class="comment">&lt;!-- student_course 通过sid, 与student表建立关联 --&gt;</span>
+            <span class="tag">&lt;<span class="title">column</span> <span class="attribute">name</span>=<span class="value">"sid"</span>&gt;</span> <span class="tag">&lt;/<span class="title">column</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">key</span>&gt;</span>
+        <span class="comment">&lt;!-- colomn 也是描述要链接过去的外键 --&gt;</span>
+        <span class="tag">&lt;<span class="title">many-to-many</span> <span class="attribute">class</span>=<span class="value">"Cource"</span> <span class="attribute">column</span>=<span class="value">"cid"</span>&gt;</span> <span class="tag">&lt;/<span class="title">many-to-many</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">set</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">class</span>&gt;</span>
+<span class="tag">&lt;<span class="title">class</span> <span class="attribute">name</span>=<span class="value">"Course"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">id</span> <span class="attribute">name</span>=<span class="value">"cid"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">generator</span> <span class="attribute">class</span>=<span class="value">"increment"</span>&gt;</span> <span class="tag">&lt;/<span class="title">generator</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">id</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">set</span> <span class="attribute">name</span>=<span class="value">"students"</span> <span class="attribute">table</span>=<span class="value">"student_course"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">key</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">column</span> <span class="attribute">name</span>=<span class="value">"cid"</span>&gt;</span> <span class="tag">&lt;/<span class="title">column</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">key</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">many-to-many</span> <span class="attribute">class</span>=<span class="value">"Student"</span> <span class="attribute">column</span>=<span class="value">"sid"</span>&gt;</span> <span class="tag">&lt;/<span class="title">many-to-many</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">set</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">class</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<p>关系操作:</p>
+<ul>
+<li>多对多, 谁操作, 效率都一样</li>
+<li>解除关系, 把第三张表一行数据删除掉</li>
+<li>建立关系, 把第三张表数据增加一行记录</li>
+<li>变更关系, 对第三张表 执行update操作, 先删除后增加</li>
+</ul>
+<p>级联操作: 都是对象针对集合的操作</p>
+<h2 id="-">一对一</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- 方式一 --&gt;</span>
+<span class="tag">&lt;<span class="title">many-to-one</span> <span class="attribute">unique</span>=<span class="value">"true"</span>&gt;</span><span class="tag">&lt;/<span class="title">many-to-one</span>&gt;</span>
+<span class="comment">&lt;!-- 方式二: 主键关联, person 的主键是外键 --&gt;</span>
+<span class="tag">&lt;<span class="title">class</span> <span class="attribute">name</span>=<span class="value">"Person"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">id</span> <span class="attribute">name</span>=<span class="value">"pid"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">generator</span> <span class="attribute">class</span>=<span class="value">"foreign"</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">param</span> <span class="attribute">name</span>=<span class="value">"property"</span>&gt;</span> address <span class="tag">&lt;/<span class="title">param</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">generator</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">id</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">one-to-one</span> <span class="attribute">name</span>=<span class="value">"address"</span> <span class="attribute">constrained</span>=<span class="value">"true"</span> <span class="attribute">class</span>=<span class="value">"Address"</span>&gt;</span><span class="tag">&lt;/<span class="title">one-to-one</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">class</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+]]></content>
+    
+    
+      <category term="传智播客" scheme="http://zhpooer.github.io/tags/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2/"/>
+    
+      <category term="Hibernate" scheme="http://zhpooer.github.io/tags/Hibernate/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[传智播客day32-Hibernate入门]]></title>
+    <link href="http://zhpooer.github.io/2014/05/20/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day32-hibernate%E5%85%A5%E9%97%A8/"/>
+    <id>http://zhpooer.github.io/2014/05/20/传智播客day32-hibernate入门/</id>
+    <published>2014-05-20T02:45:34.000Z</published>
+    <updated>2014-05-21T02:04:48.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="jdbc-">jdbc的优缺点</h1>
+<p>缺点</p>
+<ul>
+<li>查询代码繁琐</li>
+<li>重复性代码特别多(频繁的try catch)</li>
+<li>没有数据缓存</li>
+<li>sql的移植性不好</li>
+</ul>
+<p>优点</p>
+<ul>
+<li>速度快</li>
+<li>把控性比较好</li>
+</ul>
+<h1 id="or-mapping-">OR mapping 优缺点</h1>
+<p>优点</p>
+<ul>
+<li>简单</li>
+<li>数据缓存, 一级缓存 二级缓存 查询缓存</li>
+<li>可移植性比较好</li>
+</ul>
+<p>缺点</p>
+<ul>
+<li>因为sql语句是内部生成的, 程序不可控</li>
+<li>如果数据量特别大, 程序不可控</li>
+</ul>
+<h1 id="ormapping-hibernate">ORmapping 概念 和 Hibernate</h1>
+<p>对象关系映射: 让数据库和对象发生关联</p>
+<p>通过 <code>*.hbm.xml</code>(映射文件),</p>
+<ul>
+<li>类与表的对应关系</li>
+<li>类上属性的名称和表中的字段的名称的对应关系</li>
+<li>类上属性的<em>类型</em>和表中的字段的<em>类型</em>的对应关系</li>
+<li>把一对多和多对多的关系转化成面向对象的文件</li>
+</ul>
+<p>Hibernate的配置文件: 用来连接数据库</p>
+<h1 id="hibernate-">hibernate入门案例 保存对象</h1>
+<p>Hibernate: 根据客户端代码, 参照映射文件, 生成sql语句,
+利用jdbc即使进行数据库操作</p>
+<h2 id="-">编写持久化类</h2>
+<p>POJO: 持久化类</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre><span class="comment">/*
+* 属性不能使用 数据库的关键字 如`table`
+* 对象序列化作用, 让对象在网络上传输, 以二进制形式传输
+*/</span>
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span> <span class="keyword">implements</span> <span class="title">Serializable</span> {</span>
+    <span class="annotation">@BeanProperty</span> <span class="keyword">private</span> <span class="keyword">long</span> pid;
+    <span class="annotation">@BeanProperty</span> pirvate String pname;
+    <span class="annotation">@BeanProperty</span> pirvate String psex;
+    <span class="comment">// 必须要写默认的构造函数, hibernate 查询对象时</span>
+    <span class="keyword">public</span> <span class="title">Person</span>(){}
+}
+</pre></td></tr></table></figure>
+
+<h2 id="-">准备映射文件</h2>
+<p><code>Person.hbm.xml</code> 类映射文件</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- import hibernate-mapping-3.0.dtd--&gt;</span>
+<span class="tag">&lt;<span class="title">hibernate-mapping</span>&gt;</span>
+    <span class="comment">&lt;!-- 用来描述一个持久化类  --&gt;</span>
+    <span class="comment">&lt;!-- name 类的全名 --&gt;</span>
+    <span class="comment">&lt;!-- table 可以不写, 默认值和类名一样 --&gt;</span>
+    <span class="comment">&lt;!-- catalog 数据库名称, 一般不写 --&gt;</span>
+    <span class="tag">&lt;<span class="title">class</span> <span class="attribute">name</span>=<span class="value">"cn.itcast.Person"</span>&gt;</span>
+        <span class="comment">&lt;!-- name 属性名称, 是根据字段, 而不是属性(get, set)--&gt;</span>
+        <span class="comment">&lt;!-- column 列的名称 --&gt;</span>
+        <span class="tag">&lt;<span class="title">id</span> <span class="attribute">name</span>=<span class="value">"pid"</span> <span class="attribute">length</span>=<span class="value">"5"</span> <span class="attribute">type</span>=<span class="value">"java.lang.Long"</span>&gt;</span>
+            <span class="comment">&lt;!-- 主键产生器, 告诉hibernate容器用什么样的方式产生主键 --&gt;</span>
+            <span class="tag">&lt;<span class="title">gernerator</span> <span class="attribute">class</span>=<span class="value">"increment"</span>&gt;</span> <span class="tag">&lt;/<span class="title">gernerator</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">id</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"pname"</span> <span class="attribute">column</span>=<span class="value">"pname"</span> <span class="attribute">length</span>=<span class="value">"20"</span> <span class="attribute">type</span>=<span class="value">"java.lang.String"</span>&gt;</span> <span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"psex"</span> <span class="attribute">column</span>=<span class="value">"psex"</span> <span class="attribute">length</span>=<span class="value">"10"</span> <span class="attribute">type</span>=<span class="value">"java.lang.String"</span>&gt;</span> <span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">class</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">hibernate-mapping</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<h2 id="-">准备配置文件</h2>
+<p><code>hibernate.cfg.xml</code>, 如果是默认加载, 必须放在根目录下</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">Hibernate-configuration</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">session-factory</span>&gt;</span>
+        <span class="comment">&lt;!-- 还有其他练级信息 --&gt;</span>
+        <span class="comment">&lt;!-- 根据持久化类和映射文件生成表
+            validate 只验证, 不创建表
+            create-drop 启动创建, 结束删除
+            create 每次创建
+            update 检查, 如果没有就创建
+        --&gt;</span>
+        <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"hbm2ddl.auto"</span>&gt;</span>update<span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+        <span class="comment">&lt;!-- 显示 hibernate 内部生成的sql语句, 默认false --&gt;</span>
+        <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"show_sql"</span>&gt;</span>true <span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+        <span class="comment">&lt;!-- 导入映射文件 --&gt;</span>
+        <span class="tag">&lt;<span class="title">mapping</span> <span class="attribute">resource</span>=<span class="value">"cn/itcast/hibernate/sh/domain/Person.hbm.xml"</span> /&gt;</span>
+    <span class="tag">&lt;/<span class="title">session-factory</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">Hibernate-configuration</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<h2 id="-">测试运行</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre>Configuration  conf = new Configuration()<span class="comment">;</span>
+conf<span class="preprocessor">.configure</span>()<span class="comment">;  // 加载默认配置文件 `/hibernate.cfg.xml`</span>
+SessionFactory fac = configuration<span class="preprocessor">.buildSessionFactory</span>()<span class="comment">;</span>
+Session sessioin = fac<span class="preprocessor">.openSession</span>()<span class="comment">;</span>
+Transaction trans = session<span class="preprocessor">.beginTransaction</span>()<span class="comment">;</span>
+Person p = new Person()<span class="comment">;</span>
+p<span class="preprocessor">.setPname</span>(<span class="string">"p"</span>)<span class="comment">;</span>
+p<span class="preprocessor">.setPsex</span>(<span class="string">"p"</span>)<span class="comment">;</span>
+session<span class="preprocessor">.save</span>(p)<span class="comment">;</span>
+trans<span class="preprocessor">.commit</span>()<span class="comment">;</span>
+session<span class="preprocessor">.close</span>()<span class="comment">;</span>
+</pre></td></tr></table></figure>
+
+<h1 id="hiberante-">hiberante 加载流程分析</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+</pre></td><td class="code"><pre><span class="comment">// 创建 Configuration 对象</span>
+Configuration  conf = <span class="built_in">new</span> Configuration();
+<span class="comment">// 包括 数据库连接信息 和 加载映射文件</span>
+conf.configure();  <span class="comment">// 或 conf.configure("myownconfig");</span>
+<span class="comment">// 数据库链接信息, 和映射文件信息, 持久化类信息 封装在 sessionFactory</span>
+<span class="comment">// 是一个单例模式,一般情况下 hibernate 应该只有一个数据库连接且线程安全</span>
+SessionFactory fac = configuration.buildSessionFactory();
+<span class="comment">// 打开一个数据库连接, 进行数据库操作</span>
+Session sessioin = fac.openSession();
+<span class="comment">// 如果进行查询, 不用开启事务</span>
+<span class="comment">// 如果进行cud操作, 要开启事务, 事务是由session开启的</span>
+<span class="comment">// 事务不是自动提交的, 必须由session开启, 和当前session绑定</span>
+Transaction trans = session.beginTransaction();
+Person p = <span class="built_in">new</span> Person();
+p.setPname(<span class="string">"p"</span>);
+p.setPsex(<span class="string">"p"</span>);
+<span class="comment">//  改变对象状态</span>
+<span class="comment">// 会根据映射文件, 生成sql语句</span>
+session.save(p);
+<span class="comment">// 执行sql语句, 提交事务</span>
+trans.commit();
+<span class="comment">// 关闭数据连接</span>
+session.<span class="built_in">close</span>();
+</pre></td></tr></table></figure>
+
+<p>得到一个持久化类</p>
+<ul>
+<li>加载配置文件</li>
+<li>在配置文件中加载类映射文件</li>
+<li>解析 映射文件中的class标签 name 属性, 找到对应类</li>
+</ul>
+<p>hibernate错误概览</p>
+<ul>
+<li><code>Unknown entity</code>, 在映射文件中没有配置该类</li>
+<li><code>PropertyNotFound</code>, 映射文件中类字段错误, <code>property name</code> 写错</li>
+<li><code>resource not found</code>, 映射文件名没有找到</li>
+<li><code>entity class not found</code>, 在配置文件中导入文件映射文件错误, <code>class name</code>写错</li>
+</ul>
+<h1 id="crud-">CRUD 的操作</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+</pre></td><td class="code"><pre>public void testQueryPerson(){
+    Session session = sessionFactory<span class="preprocessor">.openSession</span>()<span class="comment">;</span>
+    List personList = session<span class="preprocessor">.createQuery</span>(<span class="string">"from Person"</span>)<span class="preprocessor">.list</span>()<span class="comment">;</span>
+    session<span class="preprocessor">.close</span>()<span class="comment">;</span>
+}
+public void testQueryPersonById() {
+    Session session = sessionFactory<span class="preprocessor">.openSession</span>()<span class="comment">;</span>
+    // 按照主键的方式查询数据库表中的记录
+    // session<span class="preprocessor">.get</span>(Person<span class="preprocessor">.class</span>, <span class="number">1</span>)<span class="comment">; 会报错, 需要 long 类型</span>
+    session<span class="preprocessor">.get</span>(Person<span class="preprocessor">.class</span>, <span class="number">1</span>L)<span class="comment">;</span>
+    session<span class="preprocessor">.close</span>()<span class="comment">;</span>
+}
+public void testDeletePerson(){
+
+    Session session = sessionFactory<span class="preprocessor">.openSession</span>()<span class="comment">;</span>
+    Transaction transaction = session<span class="preprocessor">.beginTransaction</span>()<span class="comment">;</span>
+    // 方式一: 
+    Person person = session<span class="preprocessor">.get</span>(Person<span class="preprocessor">.class</span>, <span class="number">1</span>L)<span class="comment">;</span>
+    session<span class="preprocessor">.delete</span>(person)<span class="comment">;</span>
+    
+    // 方式二
+    Person person = new Person()<span class="comment">;</span>
+    // hibernate 内部会检查标示符(id), 看标示符的值在数据库响应的表中有没有对应的行
+    // 和其他属性不相关
+    person<span class="preprocessor">.setId</span>(<span class="number">1</span>L)<span class="comment">;</span>
+    session<span class="preprocessor">.delete</span>(person)<span class="comment">;</span>
+    // 如果删除一个不存在的对象, 会报错: SaleStateException, unexpect row
+    transaction<span class="preprocessor">.commit</span>()<span class="comment">;</span>
+    session<span class="preprocessor">.close</span>()<span class="comment">;</span>
+}
+public void testUpdatePerson(){
+    Session session = sessionFactory<span class="preprocessor">.openSession</span>()<span class="comment">;</span>
+    Transaction transaction = session<span class="preprocessor">.beginTransaction</span>()<span class="comment">;</span>
+    Person person = session<span class="preprocessor">.get</span>(Person<span class="preprocessor">.class</span>, <span class="number">1</span>L)<span class="comment">;</span>
+    person<span class="preprocessor">.setPsex</span>(<span class="string">"女"</span>)<span class="comment">;</span>
+    session<span class="preprocessor">.update</span>(person)<span class="comment">;</span>
+    transaction<span class="preprocessor">.commit</span>()<span class="comment">;</span>
+    session<span class="preprocessor">.close</span>()<span class="comment">;</span>
+}
+public void testIdentity(){
+    Session session = sessoinFactory<span class="preprocessor">.openSession</span>()<span class="comment">;</span>
+    Transaction trans = session<span class="preprocessor">.beginTransaction</span>()<span class="comment">;</span>
+    Person person1 = session<span class="preprocessor">.get</span>(Person<span class="preprocessor">.class</span>, <span class="number">1</span>L)<span class="comment">;</span>
+    Person person2 = new Person()<span class="comment">;</span>
+    person<span class="preprocessor">.setPid</span>(<span class="number">1</span>L)<span class="comment">;</span>
+    session<span class="preprocessor">.update</span>(person2)<span class="comment">; // 报错, 因为Hibernate不允许两个持久化对象持有同一个 标示符</span>
+    transaction<span class="preprocessor">.commit</span>()<span class="comment">;</span>
+    session<span class="preprocessor">.close</span>()<span class="comment">;</span>
+}
+</pre></td></tr></table></figure>
+
+<h1 id="-">类型匹配</h1>
+<p>在Hibernate映射文件中type属性支持两种类型, 一种是 java类型, 另一种hibernate类型,
+java类型效率更高</p>
+<table>
+<thead>
+<tr>
+<th>hibernate类型</th>
+<th>java类型-&gt;数据库类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>integer, long, short, float, double, character, byte, boolean, yes_no, true_false</td>
+<td>java 原始类型到sql的字段类型</td>
+</tr>
+<tr>
+<td>string</td>
+<td>java.lang.String 到 VARCHAR(或者 Oracle 的 VARCHAR2)</td>
+</tr>
+<tr>
+<td>date, time, timestamp</td>
+<td>java.util.Date 和其子类到 SQL 类型 DATE，TIME 和 TIMESTAMP（或等价类型）的映射</td>
+</tr>
+</tbody>
+</table>
+<h1 id="-gernerator-">产生器(Gernerator)</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">gernerator</span> <span class="attribute">class</span>=<span class="value">"increment"</span>&gt;</span> <span class="tag">&lt;/<span class="title">gernerator</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<h2 id="increment">increment</h2>
+<ul>
+<li>主键类型必须是数字</li>
+<li>主键生成是由hibernate生成的, 程序员不需要干预</li>
+<li>效率相对低</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="comment">// 没有意义, hibernate是根据主键生成器来生成主键的,</span>
+<span class="comment"><span class="xmlDocTag">///</span> 在客户端设置主键不一定起作用. </span>
+Person p = <span class="keyword">new</span> Person();
+p.setId(<span class="number">1</span>L);   
+session.save(p);
+</pre></td></tr></table></figure>
+
+<h2 id="identity">identity</h2>
+<ul>
+<li>生成的主键是由数据库完成的</li>
+<li>该表必须支持自动增长机制(auto_increment)</li>
+<li>效率高</li>
+</ul>
+<h2 id="assigned">assigned</h2>
+<ul>
+<li>由程序(手动)设置主键</li>
+</ul>
+<h2 id="uuid">uuid</h2>
+<ul>
+<li>UUID是由hibernate内部生成</li>
+<li>主键的类型必须是字符串</li>
+</ul>
+<h1 id="-">对象的状态</h1>
+<p>Hibernate中的对象共有三个状态: 临时, 持久化, 托管状态</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre><span class="comment">// 临时状态对象</span>
+Person p = <span class="built_in">new</span> Person();
+<span class="comment">// 持久化状态, 只有在持久化状态, 对象的状态变化才会被Hibernate捕捉</span>
+session.save(p);
+transaction.commit();
+<span class="comment">// 脱管状态</span>
+session.<span class="built_in">close</span>();
+</pre></td></tr></table></figure>
+
+<p>把一个临时状态对象, 变成持久化状态的方法:</p>
+<ul>
+<li><code>Session.save</code></li>
+<li><code>Session.update</code></li>
+</ul>
+<p>当<code>Session.get</code>方法得到一个对象的时候, 是不需要再执行<code>Session.update</code>语句的,
+因为已经是持久化状态.</p>
+<p>当一个对象是持久化对象时, 当进行提交时, 会根据内存中<em>快照</em>看是否需要执行update语句.</p>
+<h2 id="-">对象状态变化</h2>
+<p><img src="/img/hibernate_state.png" alt="hibernate状态转换"></p>
+<p><code>session.clear()</code>, 把所有的对象从session中清空(变成托管对象)</p>
+<p><code>session.evict(p)</code>, 把一个对象变成托管状态</p>
+<p>一个对象是否是持久化对象是针对某一个session而言的</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre>Session session = sessionFactory<span class="preprocessor">.getSession</span>()<span class="comment">;</span>
+Person person = session<span class="preprocessor">.get</span>(Person<span class="preprocessor">.class</span>, <span class="number">1</span>L)<span class="comment">;</span>
+sessoin<span class="preprocessor">.close</span>()<span class="comment">;</span>
+// person 相对于 session2 来说是临时状态, 所以不会生成sql语句
+Sessoin session2 = sessionFactory<span class="preprocessor">.getSession</span>()<span class="comment">;</span>
+person<span class="preprocessor">.setName</span>(<span class="string">""</span>)<span class="comment">;</span>
+session<span class="preprocessor">.close</span>()<span class="comment">;</span>
+</pre></td></tr></table></figure>
+
+<p>当 <code>transaction.commit()</code> 时, Hibernate 会检查session,</p>
+<ul>
+<li>如果一个对象是临时状态对象, session不会管</li>
+<li>如果是一个持久化状态对象, 那么先把该对象和快照对比, 来决定是否执行sql update操作</li>
+<li>如果是一个没有Id的持久化对象, 则执行save操作</li>
+</ul>
+]]></content>
+    
+    
+      <category term="传智播客" scheme="http://zhpooer.github.io/tags/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2/"/>
+    
+      <category term="Hibernate" scheme="http://zhpooer.github.io/tags/Hibernate/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[传智播客day31-案例]]></title>
@@ -431,7 +1445,7 @@ document.add(d);
     <link href="http://zhpooer.github.io/2014/05/17/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day31-struts%E6%8B%BE%E9%81%97/"/>
     <id>http://zhpooer.github.io/2014/05/17/传智播客day31-struts拾遗/</id>
     <published>2014-05-17T01:04:32.000Z</published>
-    <updated>2014-05-19T14:06:05.000Z</updated>
+    <updated>2014-05-21T11:37:16.000Z</updated>
     <content type="html"><![CDATA[<h1 id="ognl-">ognl 详解</h1>
 <p>OGNL：Object Graph Navigation Language</p>
 <ul>
@@ -695,7 +1709,7 @@ ${name}=<span class="tag">&lt;<span class="title">s:property</span> <span class=
 <p>如何使用内置验证器：</p>
 <ol>
 <li>对所有的动作方法都进行验证：在动作类相同的包中, 添加 <code>动作类名-validation.xml</code>使用。</li>
-<li>针对某些动作进行验证：动作类名-动作别名-validation.xml（动作别名指Struts.xml中的action的name）</li>
+<li>针对某些动作进行验证：动作类名-动作别名-validation.xml(动作别名指Struts.xml中的action的name))</li>
 </ol>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
@@ -722,6 +1736,7 @@ ${name}=<span class="tag">&lt;<span class="title">s:property</span> <span class=
 23
 24
 25
+26
 </pre></td><td class="code"><pre><span class="pi">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
 <span class="doctype">&lt;!DOCTYPE validators PUBLIC 
           "-//Apache Struts//XWork Validator 1.0//EN"
@@ -729,7 +1744,8 @@ ${name}=<span class="tag">&lt;<span class="title">s:property</span> <span class=
 <span class="tag">&lt;<span class="title">validators</span>&gt;</span>
     <span class="comment">&lt;!-- 针对字段的验证：方式一（建议使用）.在一个字段上加上多个验证规则--&gt;</span>
     <span class="tag">&lt;<span class="title">field</span> <span class="attribute">name</span>=<span class="value">"username"</span> &gt;</span>
-        <span class="tag">&lt;<span class="title">field-validator</span> <span class="attribute">type</span>=<span class="value">"requiredstring"</span>&gt;</span>
+    <span class="comment">&lt;!-- 不能为null或者""字符串, 默认会 trim --&gt;</span>
+        <span class="tag">&lt;<span class="title">field-validator</span> <span class="attribute">type</span>=<span class="value">"requiredstring"</span>&gt;</span> 
             <span class="tag">&lt;<span class="title">message</span>&gt;</span>用户名是必须的<span class="tag">&lt;/<span class="title">message</span>&gt;</span>
         <span class="tag">&lt;/<span class="title">field-validator</span>&gt;</span>
     <span class="tag">&lt;/<span class="title">field</span>&gt;</span>
@@ -988,7 +2004,7 @@ ${name}=<span class="tag">&lt;<span class="title">s:property</span> <span class=
 }
 </pre></td></tr></table></figure>
 
-<p>对自定义的校验器进行配置</p>
+<p>对自定义的校验器进行配置(validators.xml)</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
 3
@@ -1005,7 +2021,7 @@ ${name}=<span class="tag">&lt;<span class="title">s:property</span> <span class=
 <span class="tag">&lt;/<span class="title">validators</span>&gt;</span>
 </pre></td></tr></table></figure>
 
-<p>使用自定义的校验器(struts.xml中配置)</p>
+<p>使用自定义的校验器</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
 3
@@ -1847,7 +2863,7 @@ purchase onSuccess {
     <link href="http://zhpooer.github.io/2014/05/15/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day30-struts%E6%8B%A6%E6%88%AA%E5%99%A8/"/>
     <id>http://zhpooer.github.io/2014/05/15/传智播客day30-struts拦截器/</id>
     <published>2014-05-15T01:09:51.000Z</published>
-    <updated>2014-05-19T14:36:22.000Z</updated>
+    <updated>2014-05-20T02:00:20.000Z</updated>
     <content type="html"><![CDATA[<h1 id="-">拦截器</h1>
 <p>拦截器的目的: 如果一个业务逻辑方法中涉及到的逻辑相当复杂,
 可以把这些业务分离开, 如 启动日志, 权限检查, 文件上传, 保存用户,
@@ -1965,6 +2981,39 @@ purchase onSuccess {
 
 </li>
 </ol>
+<h2 id="-">拦截器执行</h2>
+<p>执行顺序: 按照拦截器的声明顺序, 从上到下执行, 执行完拦截器以后, 再执行 <code>Action</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">interceptor-stack</span> <span class="attribute">name</span>=<span class="value">"privilegeStack"</span>&gt;</span>
+<span class="comment">&lt;!-- 从上到下执行 --&gt;</span>
+    <span class="tag">&lt;<span class="title">interceptor-ref</span> <span class="attribute">name</span>=<span class="value">"defaultStack"</span>&gt;</span> <span class="tag">&lt;/<span class="title">interceptor-ref</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">interceptor-ref</span> <span class="attribute">name</span>=<span class="value">"privilege"</span>&gt;</span> <span class="tag">&lt;/<span class="title">interceptor-ref</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">interceptor-stack</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<p>一个 pacakge 中可以有</p>
+<ol>
+<li>结果集</li>
+<li>拦截器</li>
+<li>action</li>
+</ol>
+<p>可以通过继承package, 来复用 <code>interceptor</code> 配置信息</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- 声明intercept包,在内部使用公用拦截器 --&gt;</span>
+<span class="tag">&lt;<span class="title">package</span> <span class="attribute">name</span>=<span class="value">"intercept"</span> <span class="attribute">extends</span>=<span class="value">"struts-default"</span>&gt;</span> <span class="tag">&lt;/<span class="title">package</span>&gt;</span>
+<span class="comment">&lt;!-- 复用intercept拦截--&gt;</span>
+<span class="tag">&lt;<span class="title">package</span> <span class="attribute">extends</span>=<span class="value">"intercept"</span>&gt;</span> <span class="tag">&lt;/<span class="title">package</span>&gt;</span>
+<span class="tag">&lt;<span class="title">package</span> <span class="attribute">extends</span>=<span class="value">"struts-default"</span>&gt;</span> <span class="tag">&lt;/<span class="title">package</span>&gt;</span>
+</pre></td></tr></table></figure>
+
 <h2 id="-">案例: 执行效率统计拦截器</h2>
 <p>建立拦截器ElapsedTimeInterceprot实现Interceptor接口</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
@@ -2257,39 +3306,6 @@ assert(person<span class="preprocessor">.name</span> == <span class="string">"he
 }
 </pre></td></tr></table></figure>
 
-<h2 id="-">拦截器执行</h2>
-<p>执行顺序: 按照拦截器的声明顺序, 从上到下执行, 执行完拦截器以后, 再执行 <code>Action</code></p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">interceptor-stack</span> <span class="attribute">name</span>=<span class="value">"privilegeStack"</span>&gt;</span>
-<span class="comment">&lt;!-- 从上到下执行 --&gt;</span>
-    <span class="tag">&lt;<span class="title">interceptor-ref</span> <span class="attribute">name</span>=<span class="value">"defaultStack"</span>&gt;</span> <span class="tag">&lt;/<span class="title">interceptor-ref</span>&gt;</span>
-    <span class="tag">&lt;<span class="title">interceptor-ref</span> <span class="attribute">name</span>=<span class="value">"privilege"</span>&gt;</span> <span class="tag">&lt;/<span class="title">interceptor-ref</span>&gt;</span>
-<span class="tag">&lt;/<span class="title">interceptor-stack</span>&gt;</span>
-</pre></td></tr></table></figure>
-
-<p>一个 pacakge 中可以有</p>
-<ol>
-<li>结果集</li>
-<li>拦截器</li>
-<li>action</li>
-</ol>
-<p>可以通过继承package, 来复用 <code>interceptor</code> 配置信息</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-</pre></td><td class="code"><pre><span class="comment">&lt;!-- 声明intercept包,在内部使用公用拦截器 --&gt;</span>
-<span class="tag">&lt;<span class="title">package</span> <span class="attribute">name</span>=<span class="value">"intercept"</span> <span class="attribute">extends</span>=<span class="value">"struts-default"</span>&gt;</span> <span class="tag">&lt;/<span class="title">package</span>&gt;</span>
-<span class="comment">&lt;!-- 复用intercept拦截--&gt;</span>
-<span class="tag">&lt;<span class="title">package</span> <span class="attribute">extends</span>=<span class="value">"intercept"</span>&gt;</span> <span class="tag">&lt;/<span class="title">package</span>&gt;</span>
-<span class="tag">&lt;<span class="title">package</span> <span class="attribute">extends</span>=<span class="value">"struts-default"</span>&gt;</span> <span class="tag">&lt;/<span class="title">package</span>&gt;</span>
-</pre></td></tr></table></figure>
-
 ]]></content>
     
     
@@ -2304,7 +3320,7 @@ assert(person<span class="preprocessor">.name</span> == <span class="string">"he
     <link href="http://zhpooer.github.io/2014/05/14/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day29-struts2%E6%B7%B1%E5%85%A5/"/>
     <id>http://zhpooer.github.io/2014/05/14/传智播客day29-struts2深入/</id>
     <published>2014-05-14T01:01:10.000Z</published>
-    <updated>2014-05-19T13:55:47.000Z</updated>
+    <updated>2014-05-20T01:55:20.000Z</updated>
     <content type="html"><![CDATA[<h1 id="struts-">Struts的工作原理及核心过滤器</h1>
 <p>StrutsPrepareAndExecuteFilter过滤器其实是包含2部分的</p>
 <ol>
@@ -2974,25 +3990,6 @@ application、session、request、 page或action。该属性的默认值为actio
 action = new testAction(); action.setAa("test2");
 --&gt;</span>
 <span class="tag">&lt;<span class="title">s:textfield</span> <span class="attribute">name</span>=<span class="value">"aa"</span> /&gt;</span> <span class="comment">&lt;!--输出: test2--&gt;</span>
-</pre></td></tr></table></figure>
-
-<h3 id="struts-">struts 参数设置</h3>
-<p>struts 在启动时, 会自动加载 /org/apache/struts2/default.property,
-来配置 struts 的运行参数, 也可以在<code>struts.xml</code>中配置</p>
-<ul>
-<li>struts.i18n.encoding=UTF-8 struts2 默认的编码时utf8, 所以可以不用编码过滤器</li>
-<li>struts.action.extension=action  url默认扩展名</li>
-<li>struts.devMode=false  开发模式, 若为true, 则修改配置文件后, strut2会自动加载</li>
-<li>struts.ui.theme=xhtml  ui的主题, 可以设为 simple</li>
-</ul>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-</pre></td><td class="code"><pre>&lt;struts&gt;
-    &lt;<span class="type">constant</span> <span class="property">name</span>=<span class="string">"struts.devMode"</span> value=<span class="string">"true/&gt;
-    &lt;constant name="</span>struts.ui.theme<span class="string">" value="</span>simple/&gt;
-&lt;/struts&gt;
 </pre></td></tr></table></figure>
 
 ]]></content>
@@ -10065,2129 +11062,6 @@ DriverManager<span class="preprocessor">.getConnection</span>(<span class="strin
     
     
       <category term="java" scheme="http://zhpooer.github.io/tags/java/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[传智播客day18-大结果集和大数据处理]]></title>
-    <link href="http://zhpooer.github.io/2014/04/23/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day18-%E5%A4%A7%E7%BB%93%E6%9E%9C%E9%9B%86%E5%92%8C%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/"/>
-    <id>http://zhpooer.github.io/2014/04/23/传智播客day18-大结果集和大数据处理/</id>
-    <published>2014-04-23T01:26:45.000Z</published>
-    <updated>2014-04-23T08:56:38.000Z</updated>
-    <content type="html"><![CDATA[<h1 id="-">大结果集分页</h1>
-<ol>
-<li>分页靠SQL支持, 不同数据库的分页语句是不通过的</li>
-<li>MySQL 分页语句 <code>limit M,N</code><br><em>M: 开始记录的数据, 第一页的第一条索引是0</em><br><em>N: 每次取出多少条</em></li>
-</ol>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-</pre></td><td class="code"><pre><span class="comment">-- 取第一页, 每次取10条</span>
-<span class="operator"><span class="keyword">select</span> * <span class="keyword">from</span> customer limit <span class="number">0</span>, <span class="number">10</span>;</span>
-<span class="comment">-- 取第二页, 每次取10条</span>
-<span class="operator"><span class="keyword">select</span> * <span class="keyword">from</span> customer limit <span class="number">10</span>, <span class="number">10</span>;</span>
-<span class="comment">-- 取第n页, 每次取10条</span>
-<span class="operator"><span class="keyword">select</span> * <span class="keyword">from</span> customer limit (n-<span class="number">1</span>)*<span class="number">10</span>, <span class="number">10</span>;</span>
-
-<span class="comment">-- 总共的页数(每次取10条)</span>
-<span class="comment">-- = 总记录条数%N==0?总记录条数/N:((总记录条数/N)+1)</span>
-</pre></td></tr></table></figure>
-
-<h2 id="-">对客户信息进行分页</h2>
-<h3 id="-page-">新建Page类, 封装分页信息</h3>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-</pre></td><td class="code"><pre><span class="comment">// 专门封装与分页有关的数据</span>
-<span class="keyword">public</span> <span class="keyword">class</span> Page{
-    <span class="keyword">private</span> <span class="keyword">int</span> pageSize; <span class="comment">// 每页显示的记录条数</span>
-    <span class="keyword">private</span> List recorder; <span class="comment">// 每页显示的记录          DAO</span>
-    <span class="keyword">private</span> <span class="keyword">int</span> pageNum;  <span class="comment">// 当前页码              用户传</span>
-    <span class="keyword">private</span> <span class="keyword">int</span> totalPage;  <span class="comment">// 总共页码            计算</span>
-    <span class="keyword">private</span> <span class="keyword">int</span> startIndex; <span class="comment">// 每页开始记录的索引    计算</span>
-    <span class="keyword">private</span> <span class="keyword">int</span> totalRecords; <span class="comment">// 总记录的条数        Dao</span>
-
-    <span class="keyword">public</span> <span class="title">Page</span>(intPageNum, <span class="keyword">int</span> totalRecords){
-        <span class="keyword">this</span>.pageNum = pageNum;
-        <span class="keyword">this</span>.totalRecords = totalRecords;
-
-        <span class="keyword">this</span>.totalPage = totalRecords%pageSize==<span class="number">0</span>?totalRecords/pageSize:totalRecords/pageSize+<span class="number">1</span>;
-        startIndex = (pageNum-<span class="number">1</span>)*pageSize;
-    }
-}
-</pre></td></tr></table></figure>
-
-<h3 id="-dao">改造接口DAO</h3>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="keyword">interface</span> CustomerDao {
-    @Deprecated
-    List&lt;Customer&gt; findAll();
-    <span class="keyword">int</span> getTotalRecordsNum();
-    List&lt;Customer&gt; findPageCustomers(<span class="keyword">int</span> offset, <span class="keyword">int</span> size);
-}
-<span class="comment">// 还要修改实现, SQL语句用 select * form ** where ** limit offset, size</span>
-</pre></td></tr></table></figure>
-
-<h3 id="-">改造业务代码</h3>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="keyword">interface</span> BusinessService{
-    @Deprecated
-    List&lt;Customer&gt; findAll();
-    Page findPage(String pageNum)
-}
-<span class="keyword">public</span> <span class="keyword">class</span> BusinessServiceImpl{
-    <span class="keyword">public</span> Page <span class="title">findPage</span>(String num) {
-        <span class="keyword">int</span> pageNum = <span class="number">1</span>;
-        <span class="keyword">if</span>(num!=<span class="keyword">null</span>){
-            pageNum = Integer.parseInt(num);
-        }
-        <span class="keyword">int</span> totalRecords = dao.getTotalRecordsNum();
-        Page page = <span class="keyword">new</span> Page(pageNum, totalRecords);
-        List&lt;Customer&gt; records = dao.findPageCustomers(page.statedIndex, page.pageSize);
-        page.setRecords(records);
-        <span class="keyword">return</span> page;
-    }
-}
-</pre></td></tr></table></figure>
-
-<h3 id="-servlet">改造Servlet</h3>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-</pre></td><td class="code"><pre>private void showAllCustomer(){
-   String num = request<span class="preprocessor">.getParameter</span>(<span class="string">"num"</span>)<span class="comment">;</span>
-   Page page = s<span class="preprocessor">.findPage</span>(num)<span class="comment">;</span>
-   request<span class="preprocessor">.setAttribute</span>(<span class="string">"page"</span>, page)<span class="comment">;</span>
-   request<span class="preprocessor">.getRequestDispather</span>(<span class="string">"/listCustomer.jsp"</span>)<span class="preprocessor">.forward</span>(req, res)<span class="comment">;</span>
-}
-</pre></td></tr></table></figure>
-
-<h3 id="-jsp-">改造JSP显示页面</h3>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-</pre></td><td class="code"><pre>&lt;c:<span class="keyword">if</span> test=<span class="string">"<span class="variable">${!empty page}</span>"</span>&gt;
-    &lt;c:<span class="keyword">for</span>Each items=<span class="string">"page.records"</span> var=<span class="string">"c"</span> varStatus=<span class="string">"vs"</span>&gt;
-    &lt;/c:<span class="keyword">for</span>Each&gt;
-&lt;/c:<span class="keyword">if</span>&gt;
-
-第<span class="variable">${page.pageNum}</span>页&nbsp;&nbsp; 共<span class="variable">${page.totalPage}</span>页
-
-&lt;a href=<span class="string">"<span class="variable">${}</span>/servlet/Controller?op=showAllCustomers&num=<span class="variable">${pageNum-1&lt;1?1:pageNum-1}</span>"</span>&gt;
-&lt;/a&gt;
-&lt;a href=<span class="string">"<span class="variable">${}</span>/servlet/Controller?op=showAllCustomers&num=<span class="variable">${pageNum+1&gt;totalPage?totalPage:pageNum+1}</span>"</span>&gt;
-&lt;/a&gt;
-// 跳页 方式一
-&lt;select id=<span class="string">"num"</span> name=<span class="string">"num"</span> onchange=<span class="string">"jump(this)"</span>&gt;
-    &lt;c:foreach begin=<span class="string">"1"</span> end=<span class="string">"<span class="variable">${}</span>"</span> var=<span class="string">"i"</span>&gt;
-        &lt;option value=<span class="string">"<span class="variable">${n}</span>"</span>&gt;<span class="variable">${n}</span>&lt;/option&gt;
-    &lt;/c:foreach&gt;
-&lt;/select&gt;
-function jump(select){
-   window.location.href = <span class="string">"<span class="variable">${}</span>/servlet/Controller?op=showAllCustomers&num="</span> + select.value
-}
-// 跳页 方式二
-&lt;input <span class="built_in">type</span>=<span class="string">"text"</span> size=<span class="string">"3"</span> name=<span class="string">"num"</span> id=<span class="string">"num"</span> value=<span class="string">"<span class="variable">${page.Naum}</span>"</span> /&gt;&lt;a href=<span class="string">"javascript:jump()"</span>&gt;&lt;/a&gt;
-function <span class="function"><span class="title">fump</span></span>(){
-    var num = document.getElementsById(<span class="string">"num"</span>).value
-    var regObj = /^[<span class="number">1</span>-<span class="number">9</span>][<span class="number">0</span>-<span class="number">9</span>]*$/
-    <span class="keyword">if</span>(!regObj.test(num)) {
-        alert(<span class="string">"请正确输入"</span>)
-        <span class="keyword">return</span>;
-    }
-    <span class="keyword">if</span>(num&gt;<span class="variable">${page.totalPage}</span>){
-        alert(<span class="string">"页码超出范围"</span>);
-        <span class="keyword">return</span>;
-    }
-    window.location.href = <span class="string">"<span class="variable">${}</span>/servlet/Controller?op=showAllCustomers&num="</span> + num
-}
-</pre></td></tr></table></figure>
-
-<h4 id="-">提取代码</h4>
-<p><strong>可以用静态包含, 提取公共jsp代码, 来复用代码</strong></p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-</pre></td><td class="code"><pre>&lt;%@ include file=<span class="string">""</span>%&gt;
-<span class="keyword">public</span> <span class="keyword">class</span> Page {
-    <span class="keyword">private</span> String url = <span class="string">""</span>; <span class="comment">// plus</span>
-}
-<span class="keyword">public</span> <span class="keyword">class</span> Controller {
-    page.setUrl(<span class="string">""</span>);
-}
-<span class="string">"${}/servlet/Controller?op=showAllCustomers&num="</span> + num <span class="comment">// change to </span>
-<span class="string">"${}${page.url}&num="</span> + num
-</pre></td></tr></table></figure>
-
-<h1 id="jdbc-lob-">JDBC 大数据(LOB)的存取</h1>
-<h2 id="-clob-text-">大文本 CLOB(text)</h2>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-</pre></td><td class="code"><pre><span class="operator"><span class="keyword">create</span> <span class="keyword">table</span> t1(
-    id <span class="keyword">int</span> <span class="keyword">primary</span> <span class="keyword">key</span>,
-    content longtext
-)</span>
-</pre></td></tr></table></figure>
-
-<h3 id="-">存</h3>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-</pre></td><td class="code"><pre>Statement stmt = conn.PreparedStatement(<span class="string">"insert into t1(id, content) value(?,?)"</span>);
-stmt.setInt(<span class="number">1</span>, <span class="number">1</span>);
-<span class="comment">// 使用字符输入流的形式, 提高效率</span>
-File f = <span class="keyword">new</span> File(<span class="string">"test.txt"</span>);
-Reader reader = <span class="keyword">new</span> FileReader(f);
-<span class="comment">// 如果不强转, 会报错 说明一个问题MySQL驱动实现不支持  setCharacterStream(int, reader, long)</span>
-<span class="comment">// 不支持 long, 数据库本身就不支持那么大的数据(最大4G)</span>
-stmt.setCharacterStream(<span class="number">2</span>, f, (<span class="keyword">int</span>)f.length);
-</pre></td></tr></table></figure>
-
-<h3 id="-">取</h3>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-</pre></td><td class="code"><pre>stmt = conn.PreparedStatement(<span class="string">"select * from t1 where id=1"</span>);
-stmt.excuteQuery();
-<span class="keyword">if</span>(rs.next()){
-   Reader reader = re.getCharacterStream(<span class="string">"content"</span>);
-   Writer writer = new FileWriter(<span class="string">""</span>);
-   <span class="keyword">...</span>
-}
-</pre></td></tr></table></figure>
-
-<h2 id="-blob">大二进制数据 BLOB</h2>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-</pre></td><td class="code"><pre><span class="operator"><span class="keyword">create</span> <span class="keyword">table</span> t1(
-    id <span class="keyword">int</span> <span class="keyword">primary</span> <span class="keyword">key</span>,
-    content longblob
-)</span>
-</pre></td></tr></table></figure>
-
-<p>存, 取同 CBLOB, 核心方法:</p>
-<ul>
-<li><code>stmt.setBinaryStream(2, InputStream, length)</code></li>
-<li><code>stmt.getBinaryStream(2)</code></li>
-</ul>
-<h1 id="-">批处理</h1>
-<p>把sql语句缓存起来, 一起发给数据库, 减少数据库访问次数, 提高效率</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-</pre></td><td class="code"><pre><span class="operator"><span class="keyword">create</span> <span class="keyword">table</span> t3 (
-    id <span class="keyword">int</span> <span class="keyword">primary</span> <span class="keyword">key</span>,
-    name <span class="keyword">varchar</span>(<span class="number">100</span>)
-)</span>
-</pre></td></tr></table></figure>
-
-<ul>
-<li><p>Statement</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-</pre></td><td class="code"><pre>Statement s1 = conn.createStatement();
-String sql1 = "<span class="operator"><span class="keyword">insert</span> <span class="keyword">into</span> t3 <span class="keyword">values</span>(<span class="number">1</span>, <span class="string">'aaa1'</span>)<span class="string">"
-String sql2 = "</span><span class="keyword">insert</span> <span class="keyword">into</span> t3 <span class="keyword">values</span>(<span class="number">2</span>, <span class="string">'aaa2'</span>)<span class="string">";
-String sql3 = "</span><span class="keyword">delete</span> <span class="keyword">from</span> t3 <span class="keyword">where</span> id=<span class="number">1</span><span class="string">";
-stmt.addBatch(sql1);
-stmt.addBatch(sql2);
-stmt.addBatch(sql3);
-int ii[] = stmt.excuteBatch();  // 每条语句影响到的行数</span></span>
-</pre></td></tr></table></figure>
-</li>
-<li><p>PreparedStatement</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-</pre></td><td class="code"><pre>PreparedStatement stmt = conn<span class="preprocessor">.prepareStatement</span>(<span class="string">"insert into t3 values(?,?)"</span>)<span class="comment">;</span>
-for(int i=<span class="number">1</span><span class="comment">; i&lt;=1000; i++) {</span>
-   stmt<span class="preprocessor">.setInt</span>(<span class="number">1</span>, i)<span class="comment">;</span>
-   stmt<span class="preprocessor">.setString</span>(<span class="number">2</span>, <span class="string">"aaa"</span> + i)<span class="comment">;</span>
-   stmt<span class="preprocessor">.addBatch</span>()<span class="comment">;</span>
-   // 把准备好的参数加入到缓存中: 如果数据量太大, 内存可能溢出. 解决方案: 分批次执行
-   if(i%<span class="number">100</span>) {
-      stmt<span class="preprocessor">.excuteBatch</span>()<span class="comment">;</span>
-      stmt<span class="preprocessor">.clearBatch</span>()<span class="comment">;</span>
-   }
-}
-stmt<span class="preprocessor">.excuteBatch</span>()<span class="comment">;</span>
-</pre></td></tr></table></figure>
-
-</li>
-</ul>
-<h1 id="-">调用存储过程</h1>
-<h2 id="-">存储过程简介</h2>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-</pre></td><td class="code"><pre>-- 修改语句结束符号 ; =&gt; $$
-delimiter $$
--- 创建一个存储过程, 名字为 demoSp,
---- 括号里面是参数, 形式: <span class="keyword">in</span>|<span class="keyword">out</span>|inout(输入或输出) 参数名字 参数类型
-<span class="keyword">create</span> <span class="function"><span class="keyword">procedure</span> <span class="title">demoSp</span><span class="params">(<span class="keyword">In</span> inputParam varchar(255)</span>, <span class="title">inout</span> <span class="title">inOutParam</span> <span class="title">varchar</span><span class="params">(255)</span>)
-<span class="title">begin</span>
-    <span class="title">select</span> <span class="title">concat</span><span class="params">(<span class="string">'welcome to:'</span>, inputParam)</span> <span class="title">into</span> <span class="title">inOutParam</span>;</span>
-<span class="keyword">end</span>
-
-delimiter ;
-</pre></td></tr></table></figure>
-
-<h2 id="jdbc-">jdbc 调用存储过程</h2>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-</pre></td><td class="code"><pre>Connection conn = JdbcUtil<span class="preprocessor">.getConnection</span>()<span class="comment">;</span>
-// 获取执行存储过程的对象
-CallableStatement stmt = conn<span class="preprocessor">.prepareCall</span>(<span class="string">"{call demoSp(?,?)}"</span>)<span class="comment">;;</span>
-// 设置参数, 输入参数要给一个值, 输出参数注册SQL数据类型
-// 输入参数要给一个值
-stmt<span class="preprocessor">.setString</span>(<span class="number">1</span>, <span class="string">"hch"</span>)
-stmt<span class="preprocessor">.registerOutParameter</span>(s, java<span class="preprocessor">.sql</span><span class="preprocessor">.Types</span><span class="preprocessor">.VARCHAR</span>)<span class="comment">;</span>
-
-// 执行
-stmt<span class="preprocessor">.excute</span>()<span class="comment">; // 这里不能使用结果集</span>
-String result = stmt<span class="preprocessor">.getString</span>(<span class="number">2</span>)<span class="comment">; // 取位置为2的那个结果</span>
-</pre></td></tr></table></figure>
-
-<h1 id="-">事务入门 (数据安全)</h1>
-<p>TPL: 事务(Transaction)处理语言</p>
-<p>数据库有可能是自动提交事务的,(MySQL就是自动提交事务的),
-每一条语句都是一个事务</p>
-<ul>
-<li><code>start Transaction</code>: 开启事务</li>
-<li><code>rollback</code>: 回滚, 回到最开始的地方</li>
-<li><code>commit</code>: 提交, 永久存储到硬盘上</li>
-</ul>
-<h2 id="jdbc-">JDBC 操作事务</h2>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-</pre></td><td class="code"><pre>try {
-    Connection conn = JdbcUtil<span class="preprocessor">.getConnection</span>()<span class="comment">;</span>
-    conn<span class="preprocessor">.setAutoCommit</span>(false)<span class="comment">;</span>
-    PreparedStatement stmt = conn<span class="preprocessor">.prepareStatement</span>(<span class="string">""</span>)
-    stmt<span class="preprocessor">.excuteUpdate</span>()<span class="comment">;</span>
-    conn<span class="preprocessor">.commit</span>()<span class="comment">;</span>
-    conn<span class="preprocessor">.setAutoCommit</span>(true)<span class="comment">; // 恢复现场</span>
-} finally{
-   conn<span class="preprocessor">.rollback</span>()<span class="comment">;</span>
-}
-</pre></td></tr></table></figure>
-
-]]></content>
-    
-    
-      <category term="传智播客" scheme="http://zhpooer.github.io/tags/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2/"/>
-    
-      <category term="jdbc" scheme="http://zhpooer.github.io/tags/jdbc/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[传智播客day17-案例客户管理系统]]></title>
-    <link href="http://zhpooer.github.io/2014/04/22/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day17-%E6%A1%88%E4%BE%8B%E5%AE%A2%E6%88%B7%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/"/>
-    <id>http://zhpooer.github.io/2014/04/22/传智播客day17-案例客户管理系统/</id>
-    <published>2014-04-22T07:41:49.000Z</published>
-    <updated>2014-04-23T02:43:14.000Z</updated>
-    <content type="html"><![CDATA[<h1 id="-">客户信息管理系统</h1>
-<p>用之前所学完成一个对单表的CRUD JavaWeb 项目</p>
-<h2 id="-">项目需求</h2>
-<p><img src="/img/day17_demo2.png" alt="项目需求"></p>
-<h2 id="-jar-">搭建开发环境, 写配置文件, Jar包</h2>
-<h2 id="-javabean">写 Javabean</h2>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-</pre></td><td class="code"><pre>package cn.itcast.domain
-<span class="keyword">public</span> <span class="keyword">class</span> Customer {
-    <span class="keyword">private</span> String id;
-    <span class="keyword">private</span> String name;
-    <span class="keyword">private</span> String gender;  <span class="comment">// 数据库中 1男,0女</span>
-    <span class="keyword">private</span> Date birthday;
-    <span class="keyword">private</span> String email;
-    <span class="keyword">private</span> String cellphone; 
-    <span class="keyword">private</span> String hobby; <span class="comment">// 爱好: 吃饭,睡觉,学Java</span>
-    <span class="keyword">private</span> String type; <span class="comment">// 客户类型, 普通客户 vip</span>
-    <span class="keyword">private</span> String description;
-}
-</pre></td></tr></table></figure>
-
-<h2 id="-">建数据库表</h2>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-</pre></td><td class="code"><pre><span class="operator"><span class="keyword">create</span> <span class="keyword">table</span> customer (
-    id <span class="keyword">varchar</span>(<span class="number">100</span>) <span class="keyword">primary</span> <span class="keyword">key</span>,
-    name <span class="keyword">varchar</span>(<span class="number">100</span>),
-    gender <span class="keyword">varchar</span>(<span class="number">10</span>),
-    birthday <span class="keyword">date</span>,
-    cellphone <span class="keyword">varchar</span>(<span class="number">100</span>),
-    email <span class="keyword">varchar</span>(<span class="number">100</span>),
-    hobby <span class="keyword">varchar</span>(<span class="number">100</span>),
-    type <span class="keyword">varchar</span>(<span class="number">100</span>),
-    description <span class="keyword">varchar</span>(<span class="number">100</span>)
-);</span>
-</pre></td></tr></table></figure>
-
-<h2 id="-">业务接口</h2>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-</pre></td><td class="code"><pre><span class="keyword">package</span> cn.itcast.service
-<span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">BusinessService</span> {</span>
-    List&lt;Customer&gt; findAll();
-    <span class="keyword">void</span> addCustomer(Customer c);
-    <span class="keyword">void</span> delCustomer(String customerId);
-    Customer findCustomerById(String customerId);
-    <span class="comment">// 如果传入 id 为 null, 抛出此异常</span>
-    <span class="keyword">void</span> updateCustomer(Customer c) <span class="keyword">throws</span> CustomerIdConnotBeEmpty;
-}
-</pre></td></tr></table></figure>
-
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-</pre></td><td class="code"><pre><span class="keyword">package</span> cn.itcast.exception
-<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CustomerIdConnotBeEmpty</span> <span class="keyword">extends</span> <span class="title">Exception</span>{</span> }
-</pre></td></tr></table></figure>
-
-<h3 id="-">业务实现</h3>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-</pre></td><td class="code"><pre><span class="keyword">package</span> cn.itcast.service.impl;
-<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BusinessServiceImpl</span> {</span>
-    Customer dao = <span class="keyword">new</span> CustomerDaoImpl()
-    <span class="keyword">public</span> List&lt;Customer&gt; <span class="title">findAll</span>(){
-        <span class="keyword">return</span> dao.findAll();
-    }
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addCustomer</span>(Customer c){
-        c.setId(UUID.randomUUID().toString());
-        dao.save(c);
-    }
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">delCustomer</span>(String customerId){
-         dao.delete(customerId);
-    }
-    <span class="keyword">public</span> Customer <span class="title">findCustomerById</span>(String customerId){
-        dao.findById(customerId);
-    }
-    <span class="comment">// 如果传入 id 为 null, 抛出此异常</span>
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">updateCustomer</span>(Customer c) <span class="keyword">throws</span> CustomerIdConnotBeEmpty{
-         <span class="keyword">if</span>(c.getId()==<span class="keyword">null</span>) {
-             <span class="keyword">throw</span> <span class="keyword">new</span> CustomerIdConnotBeEmpty(<span class="string">"参数有误"</span>);
-         }
-         dao.update(c);
-    }
-}
-</pre></td></tr></table></figure>
-
-<h2 id="dao-">Dao接口</h2>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="keyword">interface</span> CustomerDao {
-    List&lt;Customer&gt; findAll();
-    <span class="keyword">void</span> save(Customer c);
-    <span class="keyword">void</span> findById(String customerId);
-    <span class="keyword">void</span> delete(String customerId);
-    <span class="keyword">void</span> update(Customer c);
-}
-</pre></td></tr></table></figure>
-
-<h3 id="customerdaoimpl-">CustomerDaoImpl 实现</h3>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
-51
-52
-53
-54
-55
-56
-57
-58
-59
-60
-61
-62
-63
-64
-65
-66
-67
-68
-69
-70
-71
-72
-73
-74
-75
-76
-77
-78
-79
-80
-81
-82
-83
-</pre></td><td class="code"><pre><span class="keyword">public</span> List&lt;Customer&gt; <span class="title">findAll</span>(){
-    Connection conn = <span class="keyword">null</span>;
-    PreparedStatement stmt = <span class="keyword">null</span>;
-    ResultSet rs = <span class="keyword">null</span>
-    <span class="keyword">try</span>{
-        conn = JdbcUtil.getConnection();
-        stmt = conn.PreparedStatement();
-        re = stmt.excuteQuery();
-        List&lt;Customer&gt; cs = <span class="keyword">new</span> ArrayList&lt;Customer&gt;();
-        <span class="keyword">while</span>(rs.next()){
-            Customer c = <span class="keyword">new</span> Customer();
-            c.setId(r.getString(<span class="string">"id"</span>));
-            cs.add(c);
-        }
-        <span class="keyword">return</span> cs;
-    } <span class="keyword">catch</span> (e) {
-        <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(e);
-    } <span class="keyword">finally</span> {
-        JdbcUtil.release(rs, stmt, conn);
-    }
-}
-<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">save</span>(Customer c) {
-    Connection conn = <span class="keyword">null</span>;
-    PreparedStatement stmt = <span class="keyword">null</span>;
-    <span class="keyword">try</span>{
-        conn = JdbcUtil.getConnection();
-        stmt = conn.PreparedStatement(<span class="string">""</span>);
-        stmt.setString(<span class="number">1</span>, c.getId());
-        re = stmt.excuteUpdate();
-    } <span class="keyword">catch</span> (e) {
-        <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(e);
-    } <span class="keyword">finally</span> {
-        JdbcUtil.release(rs, stmt, conn);
-    }
-}
-<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">delete</span>(String customerId) {
-    Connection conn = <span class="keyword">null</span>;
-    PreparedStatement stmt = <span class="keyword">null</span>;
-    <span class="keyword">try</span>{
-        conn = JdbcUtil.getConnection();
-        stmt = conn.PreparedStatement(<span class="string">""</span>);
-        stmt.setString(<span class="number">1</span>, c.getId());
-        re = stmt.excuteUpdate();
-    } <span class="keyword">catch</span> (e) {
-        <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(e);
-    } <span class="keyword">finally</span> {
-        JdbcUtil.release(rs, stmt, conn);
-    }
-}
-<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">findById</span>(String customerId) {
-    Connection conn = <span class="keyword">null</span>;
-    PreparedStatement stmt = <span class="keyword">null</span>;
-    ResultSet rs = <span class="keyword">null</span>
-    <span class="keyword">try</span>{
-        conn = JdbcUtil.getConnection();
-        stmt = conn.PreparedStatement(<span class="string">""</span>);
-        re = stmt.excuteQuery();
-        <span class="keyword">while</span>(rs.next()){
-            Customer c = <span class="keyword">new</span> Customer();
-            c.setId(r.getString(<span class="string">"id"</span>));
-            <span class="keyword">return</span> c;
-        }
-        <span class="keyword">return</span> <span class="keyword">null</span>;
-    } <span class="keyword">catch</span> (e) {
-        <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(e);
-    } <span class="keyword">finally</span> {
-        JdbcUtil.release(rs, stmt, conn);
-    }
-}
-<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">update</span>(Customer c) {
-    Connection conn = <span class="keyword">null</span>;
-    PreparedStatement stmt = <span class="keyword">null</span>;
-    <span class="keyword">try</span>{
-        conn = JdbcUtil.getConnection();
-        stmt = conn.PreparedStatement(<span class="string">""</span>);
-        stmt.setString(<span class="number">1</span>, c.getName());
-        re = stmt.excuteUpdate();
-    } <span class="keyword">catch</span> (e) {
-        <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(e);
-    } <span class="keyword">finally</span> {
-        JdbcUtil.release(rs, stmt, conn);
-    }
-}
-</pre></td></tr></table></figure>
-
-<h3 id="-service-">测试Service实现</h3>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BusinessServiceImplTest</span> {</span>
-    <span class="keyword">public</span> BusinessService s = <span class="keyword">new</span> BusinessServiceImpl();
-    <span class="annotation">@Test</span> <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testAddCustomer</span>() {
-        Customer c = <span class="keyword">new</span> Customer();
-        c.setId(<span class="string">"aaa"</span>);
-        c.setName(<span class="string">"xxx"</span>);
-        c.setGender(<span class="string">"1"</span>);
-        c.setBirthday(<span class="keyword">new</span> Date());
-        c.setEmail(<span class="string">"zhpo@gmai.com"</span>);
-        c.setHobby(<span class="string">"学习 吃饭"</span>);
-        c.setType(<span class="string">"vip"</span>);
-        c.setDescription(<span class="string">"xxx"</span>);
-        s.addCustomer(c);
-    }
-    <span class="annotation">@Test</span> <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testFindAll</span>() {
-        List&lt;Customer&gt; cs = s.findAll();
-        assertEquals(<span class="number">2</span>, cs.size());
-    }
-    <span class="annotation">@Test</span> <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testFindCustomerById</span>() {
-       Customer c = s.findCustomerById(<span class="string">"****"</span>);
-       assertNotNull(c);
-    }
-    <span class="annotation">@Test</span>(expected=CustomerIdConnotBeEmpty.class)
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testUpdateCustomer</span>() {
-        Customer c = <span class="keyword">new</span> Customer();
-        c.updateCustomer();
-    }
-    <span class="annotation">@Test</span> <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testUpdateCustomer1</span>() {
-        Customer c = s.findCustomerById(<span class="string">"aaa"</span>);
-        c.setName(<span class="string">"xxx"</span>);
-        c.setGender(<span class="string">"0"</span>);
-        s.updateCustomer(c);
-    }
-    <span class="annotation">@Test</span> <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testDelCustomer</span>() {
-        s.delCustomer(<span class="string">"xx"</span>);
-    }
-}
-</pre></td></tr></table></figure>
-
-<h2 id="-">表现层</h2>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Controller</span> <span class="keyword">extends</span> <span class="title">HttpServlet</span> {</span>
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doGet</span>(){
-        req.setCharactorEncoding(<span class="string">"utf-8"</span>);
-        res.setContentType(<span class="string">"text/html;charset=utf-8"</span>);
-        String op = req.getParameter(<span class="string">"op"</span>);
-        <span class="keyword">if</span>(<span class="string">"showAllCustomer"</span>.equals(op)) {
-            showAllCustomers(req, res);
-        }<span class="keyword">if</span>(<span class="string">"addCustomer"</span>.equals(op)) {
-            addCustomer(req, res);
-        }
-        
-    }
-    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title">showAllCustomers</span>(){
-         List&lt;Customer&gt; cs = s findAll();
-         req.setAttribute(<span class="string">"cs"</span>, cs);
-         req.setRequestDispather(<span class="string">"ListCustomers.jsp"</span>);
-    }
- 
-}
-</pre></td></tr></table></figure>
-
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">body</span>&gt;</span>
-    <span class="tag">&lt;<span class="title">jsp:forward</span> <span class="attribute">page</span>=<span class="value">"/servlet/Controller"</span>&gt;</span>
-        <span class="tag">&lt;<span class="title">jsp:param</span> <span class="attribute">value</span>=<span class="value">"showAllCustomer"</span> <span class="attribute">name</span>=<span class="value">"op"</span>&gt;</span> <span class="tag">&lt;/<span class="title">jsp:param</span>&gt;</span>
-    <span class="tag">&lt;/<span class="title">jsp:forward</span>&gt;</span>
-<span class="tag">&lt;/<span class="title">body</span>&gt;</span>
-</pre></td></tr></table></figure>
-
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
-51
-52
-53
-54
-55
-56
-57
-58
-</pre></td><td class="code"><pre>// ListCustomers.jsp
-<span class="tag">&lt;<span class="title">style</span> <span class="attribute">type</span>=<span class="value">"text/css"</span>&gt;</span><span class="css">
-    <span class="class">.odd</span><span class="rules">{
-        <span class="rule"><span class="attribute">background-color</span>:<span class="value"> <span class="hexcolor">#c3f3c3</span></span></span>;
-    <span class="rule">}</span></span>
-    <span class="class">.even</span><span class="rules">{
-       <span class="rule"><span class="attribute">background-color</span>:<span class="value"> <span class="hexcolor">#f3c3f3</span></span></span>;
-    <span class="rule">}</span></span>
-    <span class="tag">body</span><span class="rules">{
-       <span class="rule"><span class="attribute">text-align </span>:<span class="value"> center</span></span>;
-       <span class="rule"><span class="attribute">font-size</span>:<span class="value"> <span class="number">12</span>px
-    </span></span></span>}
-    <span class="tag">table</span> <span class="rules">{
-       <span class="rule"><span class="attribute">font-size</span>:<span class="value"> <span class="number">12</span>px
-    </span></span></span>}
-</span><span class="tag">&lt;/<span class="title">style</span>&gt;</span>
-<span class="tag">&lt;<span class="title">div</span>&gt;</span>
-    <span class="tag">&lt;<span class="title">a</span> <span class="attribute">href</span>=<span class="value">"${pageContext.request.contextPath}/addCustomer.jsp"</span>&gt;</span>添加<span class="tag">&lt;/<span class="title">a</span>&gt;</span>
-    <span class="tag">&lt;<span class="title">a</span> <span class="attribute">href</span>=<span class="value">""</span>&gt;</span>删除<span class="tag">&lt;/<span class="title">a</span>&gt;</span>
-<span class="tag">&lt;/<span class="title">div</span>&gt;</span>
-<span class="tag">&lt;<span class="title">c:if</span> <span class="attribute">test</span>=<span class="value">"${empty cs}"</span>&gt;</span>
-   没有客户信息
-<span class="tag">&lt;/<span class="title">c:if</span>&gt;</span>
-<span class="tag">&lt;<span class="title">c:if</span> <span class="attribute">test</span>=<span class="value">"${!empty cs}"</span>&gt;</span>
-   <span class="tag">&lt;<span class="title">table</span> <span class="attribute">border</span>=<span class="value">"1"</span>&gt;</span>
-       <span class="tag">&lt;<span class="title">tr</span>&gt;</span>
-           <span class="tag">&lt;<span class="title">th</span>&gt;</span> 选择 <span class="tag">&lt;/<span class="title">th</span>&gt;</span>
-           <span class="tag">&lt;<span class="title">th</span>&gt;</span> 姓名 <span class="tag">&lt;/<span class="title">th</span>&gt;</span>
-           <span class="tag">&lt;<span class="title">th</span>&gt;</span> 性别 <span class="tag">&lt;/<span class="title">th</span>&gt;</span>
-           <span class="tag">&lt;<span class="title">th</span>&gt;</span>出生日期 <span class="tag">&lt;/<span class="title">th</span>&gt;</span>
-           <span class="tag">&lt;<span class="title">th</span>&gt;</span> 电话 <span class="tag">&lt;/<span class="title">th</span>&gt;</span>
-           <span class="tag">&lt;<span class="title">th</span>&gt;</span> 邮箱 <span class="tag">&lt;/<span class="title">th</span>&gt;</span>
-           <span class="tag">&lt;<span class="title">th</span>&gt;</span> 爱好 <span class="tag">&lt;/<span class="title">th</span>&gt;</span>
-           <span class="tag">&lt;<span class="title">th</span>&gt;</span> 类型 <span class="tag">&lt;/<span class="title">th</span>&gt;</span>
-           <span class="tag">&lt;<span class="title">th</span>&gt;</span> 描述 <span class="tag">&lt;/<span class="title">th</span>&gt;</span>
-           <span class="tag">&lt;<span class="title">th</span>&gt;</span> 操作 <span class="tag">&lt;/<span class="title">th</span>&gt;</span>
-       <span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
-       <span class="tag">&lt;<span class="title">c:forEach</span> <span class="attribute">items</span>=<span class="value">"${cs}"</span> <span class="attribute">var</span>=<span class="value">"c"</span> <span class="attribute">varStatus</span>=<span class="value">"vs"</span>&gt;</span>
-           <span class="tag">&lt;<span class="title">tr</span> <span class="attribute">class</span>=<span class="value">"${vs.index%2==0?'odd':'even'}"</span>&gt;</span>
-              <span class="tag">&lt;<span class="title">td</span>&gt;</span>
-                  <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"checkbox"</span> <span class="attribute">name</span>=<span class="value">"ids"</span> <span class="attribute">value</span>=<span class="value">"${c.id}"</span>/&gt;</span>
-              <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
-              <span class="tag">&lt;<span class="title">td</span>&gt;</span> ${c.name} <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
-              <span class="tag">&lt;<span class="title">td</span>&gt;</span> ${c.gender} <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
-              <span class="tag">&lt;<span class="title">td</span>&gt;</span> ${c.birthday} <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
-              <span class="tag">&lt;<span class="title">td</span>&gt;</span> ${c.cellphone} <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
-              <span class="tag">&lt;<span class="title">td</span>&gt;</span> ${c.email} <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
-              <span class="tag">&lt;<span class="title">td</span>&gt;</span> ${c.hobby} <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
-              <span class="tag">&lt;<span class="title">td</span>&gt;</span> ${c.type} <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
-              <span class="tag">&lt;<span class="title">td</span>&gt;</span> ${c.description} <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
-              <span class="tag">&lt;<span class="title">td</span>&gt;</span>
-                  <span class="tag">&lt;<span class="title">a</span> <span class="attribute">href</span>=<span class="value">""</span>&gt;</span> 修改<span class="tag">&lt;/<span class="title">a</span>&gt;</span>
-                  <span class="tag">&lt;<span class="title">a</span> <span class="attribute">href</span>=<span class="value">""</span>&gt;</span> 添加<span class="tag">&lt;/<span class="title">a</span>&gt;</span>
-              <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
-           <span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
-       <span class="tag">&lt;/<span class="title">c:forEach</span>&gt;</span>
-   <span class="tag">&lt;/<span class="title">table</span>&gt;</span>
-<span class="tag">&lt;/<span class="title">c:if</span>&gt;</span>
-</pre></td></tr></table></figure>
-
-<h3 id="-">添加客户</h3>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
-51
-52
-53
-54
-55
-</pre></td><td class="code"><pre><span class="comment">&lt;!-- addCustomer.jsp --&gt;</span>
-<span class="comment">&lt;!-- post方式,用get方式提交都能提交, get方式就不行 --&gt;</span>
-<span class="tag">&lt;<span class="title">form</span> <span class="attribute">action</span>=<span class="value">"${pageContext.request.contextPath}/servlet/Controller?op=addCustomer"</span> <span class="attribute">metho</span>=<span class="value">"post"</span>&gt;</span>
-    <span class="tag">&lt;<span class="title">table</span> <span class="attribute">boder</span>=<span class="value">"1"</span>&gt;</span>
-        <span class="tag">&lt;<span class="title">tr</span>&gt;</span>
-            <span class="tag">&lt;<span class="title">td</span>&gt;</span> 姓名 <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
-            <span class="tag">&lt;<span class="title">td</span>&gt;</span> <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"text"</span> <span class="attribute">name</span>=<span class="value">"name"</span>/&gt;</span> <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
-        <span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
-        <span class="tag">&lt;<span class="title">tr</span>&gt;</span>
-            <span class="tag">&lt;<span class="title">td</span>&gt;</span> 性别 <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
-            <span class="tag">&lt;<span class="title">td</span>&gt;</span>
-            <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"radio"</span> <span class="attribute">name</span>=<span class="value">"gender"</span> <span class="attribute">value</span>=<span class="value">"2"</span> <span class="attribute">checked</span>/&gt;</span>
-            <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
-        <span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
-        <span class="tag">&lt;<span class="title">tr</span>&gt;</span>
-            <span class="tag">&lt;<span class="title">td</span>&gt;</span> 出生日期<span class="tag">&lt;/<span class="title">td</span>&gt;</span>
-            <span class="tag">&lt;<span class="title">td</span>&gt;</span> <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"text"</span> <span class="attribute">name</span>=<span class="value">"birthday"</span> <span class="attribute">value</span>=<span class="value">"1990-1-1"</span>/&gt;</span> <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
-        <span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
-        <span class="tag">&lt;<span class="title">tr</span>&gt;</span>
-            <span class="tag">&lt;<span class="title">td</span>&gt;</span> 电话 <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
-            <span class="tag">&lt;<span class="title">td</span>&gt;</span> <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"text"</span> <span class="attribute">name</span>=<span class="value">"cellphone"</span>/&gt;</span> <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
-        <span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
-        <span class="tag">&lt;<span class="title">tr</span>&gt;</span>
-            <span class="tag">&lt;<span class="title">td</span>&gt;</span> 邮箱 <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
-            <span class="tag">&lt;<span class="title">td</span>&gt;</span> <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"text"</span> <span class="attribute">name</span>=<span class="value">"email"</span>/&gt;</span> <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
-        <span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
-        <span class="tag">&lt;<span class="title">tr</span>&gt;</span>
-            <span class="tag">&lt;<span class="title">td</span>&gt;</span> <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
-            <span class="tag">&lt;<span class="title">td</span>&gt;</span> <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"text"</span> <span class="attribute">name</span>=<span class="value">""</span>/&gt;</span> <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
-        <span class="tag">&lt;/<span class="title">tr</span>&gt;</span> 
-        <span class="tag">&lt;<span class="title">tr</span>&gt;</span>
-            <span class="tag">&lt;<span class="title">td</span>&gt;</span> 爱好: <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
-            <span class="tag">&lt;<span class="title">td</span>&gt;</span>
-               <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"checkbox"</span> <span class="attribute">name</span>=<span class="value">"hobbies"</span> <span class="attribute">value</span>=<span class="value">""</span>/&gt;</span>
-               <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"checkbox"</span> <span class="attribute">name</span>=<span class="value">"hobbies"</span> <span class="attribute">value</span>=<span class="value">""</span>/&gt;</span>
-               <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"checkbox"</span> <span class="attribute">name</span>=<span class="value">"hobbies"</span> <span class="attribute">value</span>=<span class="value">""</span>/&gt;</span>
-               <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"checkbox"</span> <span class="attribute">name</span>=<span class="value">"hobbies"</span> <span class="attribute">value</span>=<span class="value">""</span>/&gt;</span>
-            <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
-        <span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
-        <span class="tag">&lt;<span class="title">tr</span>&gt;</span>
-            <span class="tag">&lt;<span class="title">td</span>&gt;</span> 类型<span class="tag">&lt;/<span class="title">td</span>&gt;</span>
-            <span class="tag">&lt;<span class="title">td</span>&gt;</span>
-                <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"radio"</span> <span class="attribute">name</span>=<span class="value">"type"</span> <span class="attribute">value</span>=<span class="value">"vip"</span>/&gt;</span>
-                <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"radio"</span> <span class="attribute">name</span>=<span class="value">"type"</span> <span class="attribute">value</span>=<span class="value">"normal"</span>/&gt;</span>
-            <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
-        <span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
-        <span class="tag">&lt;<span class="title">tr</span>&gt;</span>
-            <span class="tag">&lt;<span class="title">td</span>&gt;</span> 姓名 <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
-            <span class="tag">&lt;<span class="title">td</span>&gt;</span>
-                <span class="tag">&lt;<span class="title">textarea</span> <span class="attribute">rows</span>=<span class="value">"3"</span> <span class="attribute">cols</span>=<span class="value">"38"</span> <span class="attribute">name</span>=<span class="value">"description"</span>&gt;</span>
-                <span class="tag">&lt;/<span class="title">textarea</span>&gt;</span>
-            <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
-        <span class="tag">&lt;/<span class="title">tr</span>&gt;</span>        
-    <span class="tag">&lt;/<span class="title">table</span>&gt;</span>
-<span class="tag">&lt;/<span class="title">form</span>&gt;</span>
-</pre></td></tr></table></figure>
-
-<p><strong>Controller.java</strong></p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-</pre></td><td class="code"><pre>   <span class="keyword">private</span> <span class="keyword">void</span> <span class="title">addCustomer</span>(){
-        <span class="comment">// 类型封装到javabean中</span>
-        CustomerFormBean bean = WebUtil.fillBean(request, CustomerFormBean.class)
-        <span class="comment">// 验证用户信息</span>
-        <span class="keyword">if</span>(!FormBean.validate()){
-        <span class="comment">// 不正确, 数据要回显</span>
-           request.setAttribute(<span class="string">"FormBean"</span>, FormBean);
-           request.getRequestDispather(<span class="string">"/addCustomer.jsp"</span>).forward();
-           <span class="keyword">return</span>;
-        }
-        <span class="comment">// 填充模型 FormBean =&gt; Javabean</span>
-        ConvertUtils.register(<span class="keyword">new</span> DateLocaleConverter, Date.class);
-        Customer c = <span class="keyword">new</span> Customer()
-        <span class="keyword">try</span>{
-           BeanUtils.copyProperties(c, bean);
-        } <span class="keyword">catch</span>{
-            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(e);
-        }
-        <span class="comment">// 单独处理 hobbies</span>
-        String hobbies = request.getParameter(<span class="string">"hobbies"</span>);
-        <span class="keyword">if</span>(hobbies!=<span class="keyword">null</span> && hobbies.length&gt;<span class="number">0</span>){
-            StringBuffer sb = <span class="keyword">new</span> StringBuffer();
-            <span class="keyword">if</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;hobbies.length; i++){
-               <span class="keyword">if</span>(i&gt;<span class="number">0</span>){
-                   sb.append(<span class="string">","</span>);
-               }
-               sb.append(hobbies[i]);
-            }
-            c.setHobby(sb.toString());
-        }
-        s.addCustomer(c);
-        <span class="comment">// out.wirte("注册成功");</span>
-        res.sendRedirect(request.getContextPath()); <span class="comment">// 防止重复提交</span>
-    }
-</pre></td></tr></table></figure>
-
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="keyword">class</span> CustomerFormBean {
-    <span class="keyword">private</span> String id;
-    <span class="keyword">private</span> String name;
-    <span class="keyword">private</span> String gender;
-    <span class="keyword">private</span> String birthday;
-    <span class="keyword">private</span> String email;
-    <span class="keyword">private</span> String cellphone; 
-    <span class="keyword">private</span> String[] hobbies; 
-    <span class="keyword">private</span> String type; 
-    <span class="keyword">private</span> String description;
-    <span class="keyword">private</span> Map&lt;String, String&gt; errors = <span class="keyword">new</span> HashMap&lt;String, String&gt;;
-    <span class="keyword">public</span> boolean <span class="title">validate</span>() {}
-}
-</pre></td></tr></table></figure>
-
-<h3 id="-">修改</h3>
-<p><strong>Controller.java</strong></p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">editCustomerUI</span>(){
-    String customerId = req.getParameter(<span class="string">"customerId"</span>);
-    Customer c = s.findCustomerById(customerId);
-    request.setAttribute(<span class="string">"c"</span>, c);
-    req.getRequestDispather(<span class="string">"editCustomer.jsp"</span>).forward();
-}
-<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">editCustomer</span>(){
-    <span class="comment">// 参考saveCustomer</span>
-}
-</pre></td></tr></table></figure>
-
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
-51
-52
-53
-54
-55
-</pre></td><td class="code"><pre>// editCustomer.jsp
-<span class="tag">&lt;<span class="title">form</span> <span class="attribute">action</span>=<span class="value">"${pageContext.request.contextPath}/servlet/Controller?op=editCustomer"</span> <span class="attribute">metho</span>=<span class="value">"post"</span>&gt;</span>
-    <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"hidden"</span> <span class="attribute">name</span>=<span class="value">"id"</span> <span class="attribute">value</span>=<span class="value">"{c.id}"</span>/&gt;</span>
-    <span class="tag">&lt;<span class="title">table</span> <span class="attribute">boder</span>=<span class="value">"1"</span>&gt;</span>
-        <span class="tag">&lt;<span class="title">tr</span>&gt;</span>
-            <span class="tag">&lt;<span class="title">td</span>&gt;</span> 姓名 <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
-            <span class="tag">&lt;<span class="title">td</span>&gt;</span> <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"text"</span> <span class="attribute">name</span>=<span class="value">"name"</span>/&gt;</span> <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
-        <span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
-        <span class="tag">&lt;<span class="title">tr</span>&gt;</span>
-            <span class="tag">&lt;<span class="title">td</span>&gt;</span> 性别 <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
-            <span class="tag">&lt;<span class="title">td</span>&gt;</span>
-            <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"radio"</span> <span class="attribute">name</span>=<span class="value">"gender"</span> <span class="attribute">value</span>=<span class="value">"2"</span> <span class="attribute">checked</span>/&gt;</span>
-            <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
-        <span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
-        <span class="tag">&lt;<span class="title">tr</span>&gt;</span>
-            <span class="tag">&lt;<span class="title">td</span>&gt;</span> 出生日期<span class="tag">&lt;/<span class="title">td</span>&gt;</span>
-            <span class="tag">&lt;<span class="title">td</span>&gt;</span> <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"text"</span> <span class="attribute">name</span>=<span class="value">"birthday"</span> <span class="attribute">value</span>=<span class="value">"1990-1-1"</span>/&gt;</span> <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
-        <span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
-        <span class="tag">&lt;<span class="title">tr</span>&gt;</span>
-            <span class="tag">&lt;<span class="title">td</span>&gt;</span> 电话 <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
-            <span class="tag">&lt;<span class="title">td</span>&gt;</span> <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"text"</span> <span class="attribute">name</span>=<span class="value">"cellphone"</span>/&gt;</span> <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
-        <span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
-        <span class="tag">&lt;<span class="title">tr</span>&gt;</span>
-            <span class="tag">&lt;<span class="title">td</span>&gt;</span> 邮箱 <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
-            <span class="tag">&lt;<span class="title">td</span>&gt;</span> <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"text"</span> <span class="attribute">name</span>=<span class="value">"email"</span> <span class="attribute">value</span>=<span class="value">"${c.email}"</span>/&gt;</span> <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
-        <span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
-        <span class="tag">&lt;<span class="title">tr</span>&gt;</span>
-            <span class="tag">&lt;<span class="title">td</span>&gt;</span> <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
-            <span class="tag">&lt;<span class="title">td</span>&gt;</span> <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"text"</span> <span class="attribute">name</span>=<span class="value">""</span>/&gt;</span> <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
-        <span class="tag">&lt;/<span class="title">tr</span>&gt;</span> 
-        <span class="tag">&lt;<span class="title">tr</span>&gt;</span>
-            <span class="tag">&lt;<span class="title">td</span>&gt;</span> 爱好: <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
-            <span class="tag">&lt;<span class="title">td</span>&gt;</span>
-               <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"checkbox"</span> <span class="attribute">name</span>=<span class="value">"hobbies"</span> ${<span class="attribute">fn:contains</span>(<span class="attribute">c.hobby</span>, '吃饭')?'<span class="attribute">checked</span>'<span class="attribute">:</span>''}  <span class="attribute">value</span>=<span class="value">""</span>/&gt;</span>
-               <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"checkbox"</span> <span class="attribute">name</span>=<span class="value">"hobbies"</span> <span class="attribute">value</span>=<span class="value">""</span>/&gt;</span>
-               <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"checkbox"</span> <span class="attribute">name</span>=<span class="value">"hobbies"</span> <span class="attribute">value</span>=<span class="value">""</span>/&gt;</span>
-               <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"checkbox"</span> <span class="attribute">name</span>=<span class="value">"hobbies"</span> <span class="attribute">value</span>=<span class="value">""</span>/&gt;</span>
-            <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
-        <span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
-        <span class="tag">&lt;<span class="title">tr</span>&gt;</span>
-            <span class="tag">&lt;<span class="title">td</span>&gt;</span> 类型<span class="tag">&lt;/<span class="title">td</span>&gt;</span>
-            <span class="tag">&lt;<span class="title">td</span>&gt;</span>
-                <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"radio"</span> <span class="attribute">name</span>=<span class="value">"type"</span> <span class="attribute">value</span>=<span class="value">"vip"</span>/&gt;</span>
-                <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"radio"</span> <span class="attribute">name</span>=<span class="value">"type"</span> <span class="attribute">value</span>=<span class="value">"normal"</span>/&gt;</span>
-            <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
-        <span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
-        <span class="tag">&lt;<span class="title">tr</span>&gt;</span>
-            <span class="tag">&lt;<span class="title">td</span>&gt;</span> 姓名 <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
-            <span class="tag">&lt;<span class="title">td</span>&gt;</span>
-                <span class="tag">&lt;<span class="title">textarea</span> <span class="attribute">rows</span>=<span class="value">"3"</span> <span class="attribute">cols</span>=<span class="value">"38"</span> <span class="attribute">name</span>=<span class="value">"description"</span>&gt;</span>
-                <span class="tag">&lt;/<span class="title">textarea</span>&gt;</span>
-            <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
-        <span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
-    <span class="tag">&lt;/<span class="title">table</span>&gt;</span>
-<span class="tag">&lt;/<span class="title">form</span>&gt;</span>
-</pre></td></tr></table></figure>
-
-<h3 id="-">删除</h3>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-</pre></td><td class="code"><pre><span class="comment">&lt;!-- list.jsp --&gt;</span>
-<span class="tag">&lt;<span class="title">a</span> <span class="attribute">href</span>=<span class="value">"javascript:delOne('${c.id}')"</span>&gt;</span>删除<span class="tag">&lt;/<span class="title">a</span>&gt;</span>
-<span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/javascript"</span>&gt;</span><span class="javascript">
-    <span class="function"><span class="keyword">function</span> <span class="title">delOne</span><span class="params">(customerId)</span>{</span>
-        <span class="keyword">var</span> sure = window.confirm(<span class="string">"确定要删除吗"</span>)?
-        <span class="keyword">if</span>(sure) {
-            window.loacation.href=<span class="string">"${pageContext.request.contextPath}/servlet/Controller?op=delOneCustomerUI&custermerId="</span>+custmerId;
-        }
-    }
-</span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
-</pre></td></tr></table></figure>
-
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-</pre></td><td class="code"><pre><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">delOneCustomerUI</span>(){
-    String customerId = req.getParameter(<span class="string">"customerId"</span>);
-    s.delCustomer(customerId);
-    response.sendRedirect(request.getContextPath());
-}
-</pre></td></tr></table></figure>
-
-<h3 id="-">删除多个</h3>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-</pre></td><td class="code"><pre>&lt;form atcion=<span class="string">"${}/servlet/Controller?op=delMuti"</span> method=<span class="string">"post"</span>&gt;
-   ...
-&lt;/form&gt;
-
-<span class="function"><span class="keyword">function</span> <span class="title">delMulti</span><span class="params">()</span>{</span>
-    <span class="comment">// 首先判断用户哟没有选择要删除的记录</span>
-    <span class="keyword">var</span> selected = <span class="keyword">false</span>;
-    <span class="keyword">var</span> idsArray = document.getElementsByName(<span class="string">"ids"</span>);
-    <span class="keyword">for</span> (int i=<span class="number">0</span>;i&lt;idsArray.length; i++){
-        <span class="keyword">if</span>(idsArray[i].checked) {
-            selected = <span class="keyword">true</span>;
-            <span class="keyword">break</span>;
-        }
-    }
-        <span class="comment">// 选了, 二次提示, 确定要删除吗</span>
-    <span class="keyword">if</span>(selected){
-        <span class="keyword">var</span> sure = window.confirm(<span class="string">"确定吗"</span>);
-        <span class="comment">// 二次提示: 确定,让表单提交即可</span>
-        <span class="keyword">if</span>(sure) {
-           document.forms[<span class="number">0</span>].submit()
-        }
-    } <span class="keyword">else</span> {
-        <span class="comment">// 没选, 提示, 请选择要删除的记录</span>
-        alert(<span class="string">"请选择"</span>)
-    }
-}
-</pre></td></tr></table></figure>
-
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-</pre></td><td class="code"><pre><span class="keyword">private</span> void delMulti(){
-    <span class="built_in">String</span> ids[] = <span class="built_in">request</span>.getParameterValues(<span class="string">"ids"</span>);
-    <span class="keyword">if</span>(ids!=<span class="literal">null</span>&&ids.length&gt;<span class="number">0</span>){
-        <span class="keyword">for</span>(<span class="built_in">String</span> id:ids) s.delCustomer(id);
-    }
-    <span class="built_in">response</span>.sendRedirect(<span class="built_in">request</span>.getContextPath());
-}
-</pre></td></tr></table></figure>
-
-]]></content>
-    
-    
-      <category term="传智播客" scheme="http://zhpooer.github.io/tags/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[传智播客day17-jdbc]]></title>
-    <link href="http://zhpooer.github.io/2014/04/22/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day17-jdbc/"/>
-    <id>http://zhpooer.github.io/2014/04/22/传智播客day17-jdbc/</id>
-    <published>2014-04-22T01:29:44.000Z</published>
-    <updated>2014-04-22T07:40:29.000Z</updated>
-    <content type="html"><![CDATA[<h1 id="jdbc-">jdbc概述</h1>
-<p>sun 公司为了简化和统一数据库的操作, 定义了JDBC规范</p>
-<ol>
-<li>Java Data Base Connective</li>
-<li>组成包: java.sql.*, javax.sql.*, 都包含在JDK</li>
-<li>还需要数据库的驱动, 这些驱动就相当于对JDBC规范的实现</li>
-</ol>
-<h1 id="jdbc-">jdbc 编码步骤</h1>
-<p>准备数据:</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-</pre></td><td class="code"><pre><span class="operator"><span class="keyword">create</span> <span class="keyword">table</span> users(
-   id <span class="keyword">int</span> <span class="keyword">primary</span> <span class="keyword">key</span> auto_increment,
-   name <span class="keyword">varchar</span>(<span class="number">100</span>),
-   password <span class="keyword">varchar</span>(<span class="number">40</span>),
-   email <span class="keyword">varchar</span>(<span class="number">60</span>),
-   birthday <span class="keyword">date</span>
-);</span>
-<span class="operator"><span class="keyword">insert</span> <span class="keyword">into</span> users(name,password,email,birthday) <span class="keyword">values</span>(<span class="string">'ab'</span>,<span class="string">'123'</span>,<span class="string">'ab@c.com'</span>,<span class="string">'1980-02-22'</span>);</span>
-<span class="operator"><span class="keyword">insert</span> <span class="keyword">into</span> users(name,password,email,birthday) <span class="keyword">values</span>(<span class="string">'cd'</span>,<span class="string">'123'</span>,<span class="string">'cd@e.com'</span>,<span class="string">'1981-02-22'</span>);</span>
-<span class="operator"><span class="keyword">insert</span> <span class="keyword">into</span> users(name,password,email,birthday) <span class="keyword">values</span>(<span class="string">'ef'</span>,<span class="string">'123'</span>,<span class="string">'ef@g.com'</span>,<span class="string">'1982-02-22'</span>);</span>
-<span class="operator"><span class="keyword">insert</span> <span class="keyword">into</span> users(name,password,email,birthday) <span class="keyword">values</span>(<span class="string">'gh'</span>,<span class="string">'123'</span>,<span class="string">'gh@k.com'</span>,<span class="string">'1983-02-22'</span>);</span>
-</pre></td></tr></table></figure>
-
-<ol>
-<li>注册驱动</li>
-<li>获取与数据库的连接</li>
-<li>得到代表数据库的语句</li>
-<li>执行语句</li>
-<li>如果执行的是查询语句, 就会有结果集, 处理</li>
-<li>释放占用的资源</li>
-</ol>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-</pre></td><td class="code"><pre>DriverManager<span class="preprocessor">.registerDriver</span>(new <span class="keyword">com</span><span class="preprocessor">.mysql</span><span class="preprocessor">.jdbc</span><span class="preprocessor">.Driver</span>)<span class="comment">;</span>
-Connection conn = DriverManager<span class="preprocessor">.getConnection</span>(<span class="string">"jdbc:mysql://localhost:3306/test"</span>, <span class="string">"root"</span>, <span class="string">"root"</span>)<span class="comment">;</span>
-Statement stmt = conn<span class="preprocessor">.createStatement</span>()<span class="comment">;</span>
-// resultset 是一个游标, 该游标可以滚动, 默认指向第一行的前面
-ResultSet rs = stmt<span class="preprocessor">.excuteQuery</span>(<span class="string">"select * from user"</span>)<span class="comment">;</span>
-// hs<span class="preprocessor">.next</span>()<span class="comment">; 指向移动下一条游标, 并告知有没有记录</span>
-while(rs<span class="preprocessor">.next</span>()) {
-   println(rs<span class="preprocessor">.getObject</span>(<span class="string">"id"</span>))<span class="comment">;</span>
-   println(rs<span class="preprocessor">.getObject</span>(<span class="string">"name"</span>))<span class="comment">;</span>
-   println(rs<span class="preprocessor">.getObject</span>(<span class="string">"password"</span>))<span class="comment">;</span>
-   println(rs<span class="preprocessor">.getObject</span>(<span class="string">"email"</span>))<span class="comment">;</span>
-   println(rs<span class="preprocessor">.getObject</span>(<span class="string">"birthday"</span>))<span class="comment">;</span>
-}
-rs<span class="preprocessor">.close</span>()<span class="comment">;</span>
-stmt<span class="preprocessor">.close</span>()<span class="comment">;</span>
-conn<span class="preprocessor">.close</span>()<span class="comment">;</span>
-</pre></td></tr></table></figure>
-
-<h1 id="jdbc-">JDBC 主要接口或类</h1>
-<h2 id="drivermanager">DriverManager</h2>
-<p>作用:</p>
-<ul>
-<li><p>注册驱动</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-</pre></td><td class="code"><pre>// 有缺陷, 会导致驱动注册两遍
-DriverManager<span class="preprocessor">.registerDriver</span>(new <span class="keyword">com</span><span class="preprocessor">.mysql</span><span class="preprocessor">.jdbc</span><span class="preprocessor">.Driver</span>)
-// 替代方案: 避免了依赖具体的驱动类
-Class<span class="preprocessor">.fornName</span>(<span class="string">"com.mysql.jdbc.Driver"</span>)
-</pre></td></tr></table></figure>
-</li>
-<li><p>获取与数据库的连接</p>
-<ol>
-<li>方式一: 
-<code>DriverManager.getConnection(&quot;jdbc:mysql://localhost:3306/test&quot;, &quot;root&quot;, &quot;root&quot;);</code>
-sun公司和数据库厂商定义的协议, 具体参考数据库的文档</li>
-<li><p>方式二</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-</pre></td><td class="code"><pre>Properties info = new Properties()<span class="comment">;</span>
-info<span class="preprocessor">.setProperty</span>(<span class="string">"user"</span>, <span class="string">"root"</span>)<span class="comment">; // key由什么定义,查数据库文档查</span>
-info<span class="preprocessor">.setProperty</span>(<span class="string">"password"</span>, <span class="string">"root"</span>)<span class="comment">;</span>
-info<span class="preprocessor">.setProperty</span>(<span class="string">"useUnicode"</span>, <span class="string">"true"</span>)<span class="comment">;</span>
-info<span class="preprocessor">.setProperty</span>(<span class="string">"characterEncoding"</span>, <span class="string">"utf8"</span>)<span class="comment">;</span>
-DriverManager<span class="preprocessor">.getConnection</span>(<span class="string">"jdbc:mysql://localhost:3306/test"</span>, info)
-</pre></td></tr></table></figure>
-</li>
-<li><p>方式三: <code>DriverManager.getConnection(&quot;jdbc:mysql://localhost:3306/test?user=root&amp;password=root&amp;...&quot;)</code></p>
-</li>
-</ol>
-</li>
-</ul>
-<h2 id="connection">Connection</h2>
-<p>所有的与数据库的交互都是基于连接的基础之上的, 因此该对象相当重要</p>
-<p><code>Statement stmt = conn.createStatement()</code> 创建向数据库发送sql的<code>Statement</code>对象</p>
-<h2 id="statement">Statement</h2>
-<table>
-<thead>
-<tr>
-<th>方法</th>
-<th>详细信息</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>ResultSet excuteQuery(String, sql)</td>
-<td>只适合查询, 返回的是查询的结果集</td>
-</tr>
-<tr>
-<td>int excuteUpdate(String sql)</td>
-<td>适合(insert update delete), 或者没有返回结果集的DDL, 返回影响的记录数目</td>
-</tr>
-<tr>
-<td>boolean excute(String sql)</td>
-<td>适合所有语句, 返回<em>有没有结果集</em>,  <code>if(true) stmt.getResultSet()</code></td>
-</tr>
-</tbody>
-</table>
-<h2 id="resultset">ResultSet</h2>
-<p>代表着查询语句的查询结果集, 有一个游标</p>
-<h3 id="-">遍历结果集</h3>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-</pre></td><td class="code"><pre><span class="comment">// 方式一</span>
-<span class="function">while(rs.<span class="function">next()</span>)</span> {
-   <span class="function">println(rs.<span class="function">getObject(<span class="string">"id"</span>)</span>)</span>; 
-   <span class="function">println(rs.<span class="function">getObject(<span class="string">"name"</span>)</span>)</span>;
-   <span class="function">println(rs.<span class="function">getObject(<span class="string">"password"</span>)</span>)</span>;
-   <span class="function">println(rs.<span class="function">getObject(<span class="string">"email"</span>)</span>)</span>;
-   <span class="function">println(rs.<span class="function">getObject(<span class="string">"birthday"</span>)</span>)</span>;
-}
-<span class="comment">// 方式二 可以通过列的索引获取数据, 第一列索引是1,与框架有关</span>
-<span class="function">while(rs.<span class="function">next()</span>)</span> {
-   <span class="function">println(rs.<span class="function">getObject(<span class="number">1</span>)</span>)</span>;
-   <span class="function">println(rs.<span class="function">getObject(<span class="number">2</span>)</span>)</span>;
-   <span class="function">println(rs.<span class="function">getObject(<span class="number">3</span>)</span>)</span>;
-   <span class="function">println(rs.<span class="function">getObject(<span class="number">4</span>)</span>)</span>;
-   <span class="function">println(rs.<span class="function">getObject(<span class="number">5</span>)</span>)</span>;
-}
-</pre></td></tr></table></figure>
-
-<h3 id="-">常用方法</h3>
-<table>
-<thead>
-<tr>
-<th>方法</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>boolean next()</td>
-<td>向后移动游标, 返回该位置上有没有记录</td>
-</tr>
-<tr>
-<td>boolean previous()</td>
-<td>向前移动游标, 返回该位置上有没有记录</td>
-</tr>
-<tr>
-<td>boolean absolute(int)</td>
-<td>绝对定位(第一行 1), 返回该位置上有没有记录</td>
-</tr>
-<tr>
-<td>void beforeFirst()</td>
-<td>游标定位在第一行的前面</td>
-</tr>
-<tr>
-<td>void afterLast()</td>
-<td>游标定位在最后一行的后面</td>
-</tr>
-</tbody>
-</table>
-<h3 id="mysql-jdbc-">mysql&amp;jdbc 类型对应</h3>
-<table>
-<thead>
-<tr>
-<th>mysql类</th>
-<th>Jdbc对应方法</th>
-<th>返回类型</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Bit(1)</td>
-<td>getBoolean() getBytes()</td>
-<td>Boolean byte[]</td>
-</tr>
-<tr>
-<td>tinyint</td>
-<td>getByte()</td>
-<td>Byte</td>
-</tr>
-<tr>
-<td>smallint</td>
-<td>getShort()</td>
-<td>Short</td>
-</tr>
-<tr>
-<td>Int</td>
-<td>getInt()</td>
-<td>Int</td>
-</tr>
-<tr>
-<td>bigint</td>
-<td>getLong()</td>
-<td>Long</td>
-</tr>
-<tr>
-<td>char varchar</td>
-<td>getString()</td>
-<td>String</td>
-</tr>
-<tr>
-<td>Text(cblob) Blob</td>
-<td>getClob() getBlob()</td>
-<td>Clob Blob</td>
-</tr>
-<tr>
-<td>date</td>
-<td>getDate()</td>
-<td>java.sql.Date</td>
-</tr>
-<tr>
-<td>time</td>
-<td>getTime()</td>
-<td>java.sql.Time</td>
-</tr>
-<tr>
-<td>timestamp</td>
-<td>getTimestamp()</td>
-<td>java.sql.Timestamp</td>
-</tr>
-</tbody>
-</table>
-<h3 id="-javabean">封装数据到 Javabean</h3>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Users</span> <span class="keyword">implements</span> <span class="title">Serializable</span> {</span>
-    <span class="keyword">private</span> <span class="keyword">int</span> id;
-    <span class="keyword">private</span> String password;
-    <span class="keyword">private</span> String name;
-    <span class="keyword">private</span> String email;
-    <span class="keyword">private</span> String birthday;
-}
-u.setId(rs.getInt(<span class="string">"id"</span>));
-u.setName(rs.getString(<span class="string">"name"</span>));
-u.setBirthday(rs.getDate(<span class="string">"birthday"</span>));
-</pre></td></tr></table></figure>
-
-<h2 id="-">释放占用的资源</h2>
-<p>按照打开的顺序, 以相反的顺序进行释放</p>
-<p>特别是 Connection 对象, 非常稀有的资源, 用完后必须马上释放,
-<strong>必须尽量晚创建和尽量早释放</strong></p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-</pre></td><td class="code"><pre>Connection conn = <span class="keyword">null</span>;
-Statement = <span class="keyword">null</span>;
-ResultSet rs = <span class="keyword">null</span>;
-<span class="keyword">try</span> {
-} <span class="keyword">catch</span> (<span class="keyword">Exception</span> e){
-} <span class="keyword">finally</span> {
-   <span class="keyword">try</span>{<span class="keyword">if</span>(rs!=<span class="keyword">null</span>)   { rs.close(); rs = <span class="keyword">null</span>;     }} <span class="keyword">catch</span> (e){}
-   <span class="keyword">try</span>{<span class="keyword">if</span>(stmt!=<span class="keyword">null</span>) { stmt.close(); stmt = <span class="keyword">null</span>; }} <span class="keyword">catch</span> (e){}
-   <span class="keyword">try</span>{<span class="keyword">if</span>(conn!=<span class="keyword">null</span>) { conn.close(); conn = <span class="keyword">null</span>; }} <span class="keyword">catch</span> (e){}
-}
-</pre></td></tr></table></figure>
-
-<h2 id="-">模板</h2>
-<p>dbcfg.properties</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-</pre></td><td class="code"><pre><span class="setting">driverClass=<span class="value">**</span></span>
-<span class="setting">url=<span class="value">**</span></span>
-<span class="setting">usr=<span class="value">**</span></span>
-<span class="setting">password=<span class="value">**</span></span>
-</pre></td></tr></table></figure>
-
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="keyword">class</span> JdbcUtil {
-    <span class="keyword">private</span> <span class="keyword">static</span> String driveClass;
-    <span class="keyword">private</span> <span class="keyword">static</span> String url;
-    <span class="keyword">private</span> <span class="keyword">static</span> String user;
-    <span class="keyword">private</span> <span class="keyword">static</span> String password
-    <span class="keyword">static</span> {
-      InputStream <span class="keyword">in</span> = getClasLoader.getResourceAsStream(<span class="string">"dbcfg.properties"</span>);
-      Properties props = <span class="keyword">new</span> Properties();
-      props.load(<span class="keyword">in</span>)
-      String drClass = props.getProperty(<span class="string">"driveClass"</span>);
-      String url = props.getProperty(<span class="string">"url"</span>);
-      String user = props.getProperty(<span class="string">"usr"</span>);
-      String password = props.getProperty(<span class="string">"password"</span>);
-      Class.forName(drClass);
-    }
-    <span class="keyword">public</span> <span class="keyword">static</span> Connection <span class="title">getConnection</span>() throws SQLException {
-         <span class="keyword">return</span> DriverManager.getConnection(url,user,password);
-    }
-    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">release</span>(ResultSet rs, Statement stmt, Connection conn) {
-        <span class="keyword">try</span>{<span class="keyword">if</span>(rs!=<span class="keyword">null</span>)   { rs.close(); rs = <span class="keyword">null</span>;     }} <span class="keyword">catch</span> (e){}
-        <span class="keyword">try</span>{<span class="keyword">if</span>(stmt!=<span class="keyword">null</span>) { stmt.close(); stmt = <span class="keyword">null</span>; }} <span class="keyword">catch</span> (e){}
-        <span class="keyword">try</span>{<span class="keyword">if</span>(conn!=<span class="keyword">null</span>) { conn.close(); conn = <span class="keyword">null</span>; }} <span class="keyword">catch</span> (e){}
-    }
-}
-</pre></td></tr></table></figure>
-
-<h1 id="jdbc-crud">JDBC进行CRUD</h1>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-</pre></td><td class="code"><pre><span class="annotation">@Test</span>
-<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testAdd</span>(){
-    Connection conn = <span class="keyword">null</span>;
-    Statement stmt = <span class="keyword">null</span>;
-    <span class="keyword">try</span>{
-        conn = JdbcUtil.getConnection();
-        stmt = conn.createStatement();
-        String query = <span class="string">"insert into users(name, password, email, birthday) values(''...)"</span>;
-        stmt.excuteUpdate(query);
-    }<span class="keyword">catch</span>(e) {
-        JdbcUtil.release(<span class="keyword">null</span>, stmt, conn);
-    }
-}
-<span class="annotation">@Test</span>
-<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testUpdate</span>(){
-    Connection conn = <span class="keyword">null</span>;
-    Statement stmt = <span class="keyword">null</span>;
-    <span class="keyword">try</span>{
-        conn = JdbcUtil.getConnection();
-        stmt = conn.createStatement();
-        String query = <span class="string">"udpate users set password='123' where id = 4"</span>;
-        stmt.excuteUpdate(query);
-    }<span class="keyword">catch</span>(e) {
-        JdbcUtil.release(<span class="keyword">null</span>, stmt, conn);
-    }
-}
-<span class="annotation">@Test</span>
-<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testDelete</span>(){
-    Connection conn = <span class="keyword">null</span>;
-    Statement stmt = <span class="keyword">null</span>;
-    <span class="keyword">try</span>{
-        conn = JdbcUtil.getConnection();
-        stmt = conn.createStatement();
-        String query = <span class="string">"delete from users where id = 4"</span>;
-        stmt.excuteUpdate(query);
-    }<span class="keyword">catch</span>(e) {
-        JdbcUtil.release(<span class="keyword">null</span>, stmt, conn);
-    }
-}
-</pre></td></tr></table></figure>
-
-<h1 id="-jdbc-web-">利用JDBC修改web项目</h1>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-</pre></td><td class="code"><pre>ResourceBundle rb = ResourceBundle.getBundle(<span class="string">"dbcfg"</span>);
-<span class="keyword">try</span>{
-    Class.forName()
-} <span class="keyword">catch</span> (e) {
-    <span class="keyword">throw</span> <span class="keyword">new</span> ExceptionInInitializerError(<span class="string">"读取数据库配置文件失败."</span>);
-}
-</pre></td></tr></table></figure>
-
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserDaoMySQLImpl</span> <span class="keyword">implements</span> <span class="title">UserDao</span> {</span>
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">save</span>(User user) {
-        <span class="keyword">if</span>(findUserByUsername(user.getUsername) != <span class="keyword">null</span>){
-           <span class="keyword">throw</span> <span class="keyword">new</span> UserExistException();
-        }
-        Connection conn = <span class="keyword">null</span>;
-        Statement stmt = <span class="keyword">null</span>;
-        <span class="keyword">try</span>{
-            conn = JdbcUtil.getConnection();
-            stmt = conn.createStatement();
-            stmt.excuteUpdate(<span class="string">""</span>);
-        } <span class="keyword">catch</span> (Exception e) {
-            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException();
-        } <span class="keyword">finally</span> {
-            JdbcUtil.release(<span class="keyword">null</span>, stmt, conn)
-        }
-    }
-    <span class="keyword">public</span> User <span class="title">findUserByUsername</span>(String username) {
-        Connection conn = <span class="keyword">null</span>;
-        Statement stmt = <span class="keyword">null</span>;
-        ResultSet rs = <span class="keyword">null</span>;
-        <span class="keyword">try</span>{
-            conn = JdbcUtil.getConnection();
-            stmt = conn.createStatement();
-            rs = stmt.excuteQuery(<span class="string">""</span>);
-            <span class="keyword">if</span>(rs.next()) {
-                Usesr user = <span class="keyword">new</span> User();
-                user.setUsername(rs.getString(<span class="string">"username"</span>));
-                <span class="keyword">return</span> user;
-            }
-            <span class="keyword">return</span> <span class="keyword">null</span>;
-        } <span class="keyword">catch</span> (Exception e) {
-            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException();
-        } <span class="keyword">finally</span> {
-            JdbcUtil.release(<span class="keyword">null</span>, stmt, conn);
-        }
-    }
-    <span class="keyword">public</span> User <span class="title">findUser</span>(String username, String password) {
-        <span class="comment">// 同 findUserByName</span>
-    }
-    <span class="comment">// 注意单元测试</span>
-}
-</pre></td></tr></table></figure>
-
-<h1 id="preparedstatement">PreparedStatement</h1>
-<p>特点和作用</p>
-<ul>
-<li>支持SQL语句的预编译, 提高数据库的执行效率</li>
-<li>防止SQL注入, 给数据库的已经不是字符串了</li>
-<li>语句中的参数可以使用占位符(?)</li>
-</ul>
-<p><strong>能用 PreparedStatement, 都要用 PreparedStatement</strong></p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-</pre></td><td class="code"><pre>stmt = conn<span class="preprocessor">.preparedStatement</span>(<span class="string">"insert into user (username,password,email,birthday) values(?,?,?,?)"</span>)<span class="comment">;</span>
-stmt<span class="preprocessor">.setString</span>(<span class="number">1</span>, user<span class="preprocessor">.getUsername</span>())<span class="comment">; // 索引对应的语句中的?的位置, 第一个就是1</span>
-stmt<span class="preprocessor">.setDate</span>(<span class="number">4</span>, new java<span class="preprocessor">.sql</span><span class="preprocessor">.Date</span>(user<span class="preprocessor">.getBirthday</span>()<span class="preprocessor">.getTime</span>()))<span class="comment">;</span>
-stmt<span class="preprocessor">.excuteUpdate</span>()<span class="comment">; // or rs = stmt.excuteQuery();</span>
-</pre></td></tr></table></figure>
-
-<h1 id="-dao-">理解DAO解耦的好处</h1>
-<p>高类聚, 低耦合</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-</pre></td><td class="code"><pre><span class="comment">// 工厂模式 和 单例 </span>
-<span class="keyword">public</span> <span class="keyword">class</span> DaoFactory {
-    <span class="keyword">private</span> <span class="keyword">static</span> DaoFactory instance;
-    <span class="keyword">private</span> <span class="title">DaoFactory</span>(){}
-    <span class="keyword">public</span> <span class="keyword">static</span> DaoFactory <span class="title">getInstance</span>(){
-        <span class="keyword">if</span>(instance==<span class="keyword">null</span>){
-            synchronized(DaoFactory.getClass()){
-                 <span class="keyword">if</span>(instance==<span class="keyword">null</span>)
-                      instance = <span class="keyword">new</span> DaoFactory();
-                  <span class="keyword">return</span> instance;
-            }
-        }
-        <span class="keyword">return</span> instance;
-    }
-    <span class="keyword">public</span> UserDao <span class="title">getUserDao</span>(){
-        <span class="keyword">return</span> Class.forName(<span class="string">""</span>).newInstance();
-    }
-}
-</pre></td></tr></table></figure>
-
-]]></content>
-    
-    
-      <category term="传智播客" scheme="http://zhpooer.github.io/tags/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2/"/>
-    
-      <category term="jdbc" scheme="http://zhpooer.github.io/tags/jdbc/"/>
-    
-      <category term="设计模式" scheme="http://zhpooer.github.io/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
     
   </entry>
   
