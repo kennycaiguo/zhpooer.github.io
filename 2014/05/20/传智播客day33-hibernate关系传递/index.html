@@ -95,7 +95,7 @@ public class Classes {
     </p>
   <p class="article-time">
     <time datetime="2014-05-20T07:28:47.000Z" itemprop="datePublished">5月 20 2014</time>
-    更新日期:<time datetime="2014-05-21T06:18:20.000Z" itemprop="dateModified">5月 21 2014</time>
+    更新日期:<time datetime="2014-05-29T13:17:53.000Z" itemprop="dateModified">5月 29 2014</time>
     
   </p>
 </header>
@@ -261,7 +261,10 @@ session<span class="preprocessor">.close</span>()<span class="comment">;</span>
 
 <p>在保存 Classes 时, 同时保存 students</p>
 <ul>
-<li>cascade 通过更新班级 级联保存学生(决定插入学生, 但不决定建立外键关联)</li>
+<li>cascade 通过更新班级 级联保存学生(决定插入学生, 但不决定建立外键关联)<ul>
+<li>删除脱管对象, 是<strong>没有级联效果的</strong></li>
+</ul>
+</li>
 <li>inverse 建立班级和学生之间的关系(决定是不是建立外键关联)<figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
 3
@@ -639,6 +642,8 @@ Set students = classes.getStudents();
 		
 			<li><a href="/tags/ServletResponse/" title="ServletResponse">ServletResponse<sup>1</sup></a></li>
 		
+			<li><a href="/tags/Spring/" title="Spring">Spring<sup>1</sup></a></li>
+		
 			<li><a href="/tags/String/" title="String">String<sup>1</sup></a></li>
 		
 			<li><a href="/tags/StringBuffer/" title="StringBuffer">StringBuffer<sup>1</sup></a></li>
@@ -652,8 +657,6 @@ Set students = classes.getStudents();
 			<li><a href="/tags/dtd/" title="dtd">dtd<sup>1</sup></a></li>
 		
 			<li><a href="/tags/eclipse/" title="eclipse">eclipse<sup>1</sup></a></li>
-		
-			<li><a href="/tags/emacs/" title="emacs">emacs<sup>1</sup></a></li>
 		
 		</ul>
 </div>

@@ -4,17 +4,19 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>传智播客day29-struts深入 | Poe&#39;s World</title>
+    <title>传智播客day30-struts响应数据 | Poe&#39;s World</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="zhpooer">
     
-    <meta name="description" content="Struts的工作原理及核心过滤器
-StrutsPrepareAndExecuteFilter过滤器其实是包含2部分的
-
-StrutsPrepareFilter:做准备
-StrutsExecuteFilter：进入Struts2的核心处理。
-如果是Struts2的请求就会进入该过滤器，处理完后，不放">
+    <meta name="description" content="Struts2 上传下载
+企业常用文件上传技术: jspSmartUpload(JSP model时代), fileupload(apache commons), servlet3.0 集成文件上传
+文件上传
+真正干活的是 FileUploadInterceptor
+1
+2
+3
+&lt;s:form">
     
     
     
@@ -77,15 +79,15 @@ StrutsExecuteFilter：进入Struts2的核心处理。
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2014/05/14/传智播客day29-struts2深入/" title="传智播客day29-struts深入" itemprop="url">传智播客day29-struts深入</a>
+      <a href="/2014/05/15/传智播客day30-struts响应数据/" title="传智播客day30-struts响应数据" itemprop="url">传智播客day30-struts响应数据</a>
   </h1>
   <p class="article-author">By
     
       <a href="http://zhpooer.github.io" title="zhpooer">zhpooer</a>
     </p>
   <p class="article-time">
-    <time datetime="2014-05-14T01:01:10.000Z" itemprop="datePublished">5月 14 2014</time>
-    更新日期:<time datetime="2014-05-20T01:55:20.000Z" itemprop="dateModified">5月 20 2014</time>
+    <time datetime="2014-05-15T01:01:10.000Z" itemprop="datePublished">5月 15 2014</time>
+    更新日期:<time datetime="2014-05-28T02:21:33.000Z" itemprop="dateModified">5月 28 2014</time>
     
   </p>
 </header>
@@ -94,20 +96,21 @@ StrutsExecuteFilter：进入Struts2的核心处理。
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#struts-"><span class="toc-number">1.</span> <span class="toc-text">Struts的工作原理及核心过滤器</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-struts2-"><span class="toc-number">1.1.</span> <span class="toc-text">访问 struts2 静态资源</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#action-"><span class="toc-number">2.</span> <span class="toc-text">Action的模式</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.1.</span> <span class="toc-text">自动注入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-servlet-"><span class="toc-number">2.2.</span> <span class="toc-text">在动作类中获取 servlet 相关对象引用</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#struts2-"><span class="toc-number">3.</span> <span class="toc-text">struts2 数据存储和显示</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">3.1.</span> <span class="toc-text">获取域数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#valuestack"><span class="toc-number">3.2.</span> <span class="toc-text">ValueStack</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#valuestack-"><span class="toc-number">3.2.1.</span> <span class="toc-text">ValueStack 结构分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#valuestack-"><span class="toc-number">3.2.2.</span> <span class="toc-text">ValueStack中常用方法详解</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#struts2-ognl-"><span class="toc-number">3.3.</span> <span class="toc-text">struts2显示(ognl)</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">3.3.1.</span> <span class="toc-text">调试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-valuestack-"><span class="toc-number">3.3.2.</span> <span class="toc-text">访问 valuestack 中的数据</span></a></li><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#property-"><span class="toc-number">3.3.2.1.</span> <span class="toc-text">property 标签用法</span></a></li></ol><li class="toc-item toc-level-3"><a class="toc-link" href="#ognl-"><span class="toc-number">3.3.3.</span> <span class="toc-text">ognl 的方法调用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ognl-"><span class="toc-number">3.3.4.</span> <span class="toc-text">ognl 数组输出</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">3.3.5.</span> <span class="toc-text">其他容器的迭代</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">3.3.6.</span> <span class="toc-text">其他操作标签</span></a></li><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ui-"><span class="toc-number">3.3.6.1.</span> <span class="toc-text">ui标签</span></a></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#struts2-"><span class="toc-number">1.</span> <span class="toc-text">Struts2 上传下载</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.1.</span> <span class="toc-text">文件上传</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.2.</span> <span class="toc-text">文件的下载</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-struts2-"><span class="toc-number">2.</span> <span class="toc-text">访问 struts2 静态资源</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#struts2-"><span class="toc-number">3.</span> <span class="toc-text">struts2 数据存储和显示</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">3.1.</span> <span class="toc-text">方法调用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ognl-context"><span class="toc-number">3.2.</span> <span class="toc-text">OGNL Context</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#valuestack"><span class="toc-number">3.2.1.</span> <span class="toc-text">ValueStack</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#valuestack-"><span class="toc-number">3.2.2.</span> <span class="toc-text">ValueStack中常用方法详解</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">3.3.</span> <span class="toc-text">值栈在开发中应用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#el-"><span class="toc-number">3.4.</span> <span class="toc-text">EL 访问值栈的数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#struts2-ognl-"><span class="toc-number">3.5.</span> <span class="toc-text">struts2显示(ognl)</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">3.5.1.</span> <span class="toc-text">调试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-valuestack-"><span class="toc-number">3.5.2.</span> <span class="toc-text">访问 valuestack 中的数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#struts-"><span class="toc-number">3.5.3.</span> <span class="toc-text">struts标签库</span></a></li><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#property-"><span class="toc-number">3.5.3.1.</span> <span class="toc-text">property 标签用法</span></a></li></ol><li class="toc-item toc-level-3"><a class="toc-link" href="#ognl-"><span class="toc-number">3.5.4.</span> <span class="toc-text">ognl 数组输出</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">3.5.5.</span> <span class="toc-text">其他容器的迭代</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">3.5.6.</span> <span class="toc-text">其他标签</span></a></li><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ui-"><span class="toc-number">3.5.6.1.</span> <span class="toc-text">ui标签</span></a></li></ol>
 		</div>
 		
-		<h1 id="struts-">Struts的工作原理及核心过滤器</h1>
-<p>StrutsPrepareAndExecuteFilter过滤器其实是包含2部分的</p>
-<ol>
-<li>StrutsPrepareFilter:做准备</li>
-<li>StrutsExecuteFilter：进入Struts2的核心处理。
-如果是Struts2的请求就会进入该过滤器，处理完后，不放行（由结果类负责显示）。
-如果是非Struts2的请求，比如默认jsp的请求，直接放行。</li>
-</ol>
-<p>如果用不到其他过滤器，配置StrutsPrepareAndExecuteFilter即可;
-如果用到其他过滤器，还需要使用Struts2准备好的环境，
-使用<code>StrutsPrepareFilter</code>，<code>StrutsExecuteFilter</code>个过滤器，其他过滤器放在两者之间.</p>
+		<h1 id="struts2-">Struts2 上传下载</h1>
+<p>企业常用文件上传技术: jspSmartUpload(JSP model时代), fileupload(apache commons), servlet3.0 集成文件上传</p>
+<h2 id="-">文件上传</h2>
+<p>真正干活的是 <code>FileUploadInterceptor</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">s:form</span> <span class="attribute">enctype</span>=<span class="value">"multipart/form-data"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">s:file</span> <span class="attribute">name</span>=<span class="value">"resource"</span>&gt;</span> <span class="tag">&lt;/<span class="title">s:file</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">s:form</span>&gt;</span>
+</pre></td></tr></table></figure>
+
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
 3
@@ -120,23 +123,153 @@ StrutsExecuteFilter：进入Struts2的核心处理。
 10
 11
 12
-</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">filter-mapping</span>&gt;</span>
-    <span class="tag">&lt;<span class="title">filter-name</span>&gt;</span> struts-prepare <span class="tag">&lt;/<span class="title">filter-name</span>&gt;</span>
-    <span class="tag">&lt;<span class="title">url-pattern</span>&gt;</span>/* <span class="tag">&lt;/<span class="title">url-pattern</span>&gt;</span>
-<span class="tag">&lt;/<span class="title">filter-mapping</span>&gt;</span>
-<span class="tag">&lt;<span class="title">filter-mapping</span>&gt;</span>
-    <span class="tag">&lt;<span class="title">filter-name</span>&gt;</span>sitemesh <span class="tag">&lt;/<span class="title">filter-name</span>&gt;</span>
-    <span class="tag">&lt;<span class="title">url-pattern</span>&gt;</span>/* <span class="tag">&lt;/<span class="title">url-pattern</span>&gt;</span>
-<span class="tag">&lt;/<span class="title">filter-mapping</span>&gt;</span>
-<span class="tag">&lt;<span class="title">filter-mapping</span>&gt;</span>
-    <span class="tag">&lt;<span class="title">filter-name</span>&gt;</span> struts-execute <span class="tag">&lt;/<span class="title">filter-name</span>&gt;</span>
-    <span class="tag">&lt;<span class="title">url-pattern</span>&gt;</span>/* <span class="tag">&lt;/<span class="title">url-pattern</span>&gt;</span>
-<span class="tag">&lt;/<span class="title">filter-mapping</span>&gt;</span>
+13
+14
+</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UploadAction</span> {</span>
+<span class="comment">// 如果是多个文件上传, 那么就用定义数组, 如果 File[] resource;</span>
+    <span class="annotation">@BeanProperty</span> <span class="keyword">private</span> File resource;    <span class="comment">// 得到文件</span>
+    <span class="annotation">@BeanProperty</span> <span class="keyword">private</span> String resourceContentType; <span class="comment">// 得到文件类型 MIME</span>
+    <span class="annotation">@BeanProperty</span> <span class="keyword">private</span> String resourceFileName; <span class="comment">// 得到文件的名称</span>
+    <span class="keyword">public</span> String <span class="title">execution</span>(){
+        String bashPath = ServletContext.getServletContext().getRealPath(<span class="string">"WEB-INF/upload"</span>);
+        File dir = <span class="keyword">new</span> File(bashPaht+subPath);
+        dir.mkdirs();
+        String path  = dir + UUIDName();
+        FileUtils.copyFile(resource, <span class="keyword">new</span> File(dir)); <span class="comment">// common-io</span>
+        <span class="keyword">return</span> <span class="keyword">null</span>;
+    }
+}
 </pre></td></tr></table></figure>
 
-<p><img src="/img/struts_core.png" alt="struts core">
-showcase: 各种应用的案例，在struts2-showcase里面找各种案例</p>
-<h2 id="-struts2-">访问 struts2 静态资源</h2>
+<p>配置上传文件信息</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- 上传出错后, 可以配置input视图 --&gt;</span>
+<span class="comment">&lt;!-- 设置全局, 文件上传的最大值, 默认大小为2M, 超出大小后, actionError --&gt;</span>
+<span class="comment">&lt;!-- 错误信息提示 可以根据 struts-messages.properties 来设置 --&gt;</span>
+<span class="tag">&lt;<span class="title">constant</span> <span class="attribute">name</span>=<span class="value">"struts.multipart.maxSize"</span> <span class="attribute">value</span>=<span class="value">"2097152"</span>&gt;</span> <span class="tag">&lt;/<span class="title">constant</span>&gt;</span>
+<span class="comment">&lt;!-- 配置解析技术, jakara或pell  --&gt;</span>
+<span class="tag">&lt;<span class="title">constant</span> <span class="attribute">name</span>=<span class="value">"struts.multipart.parser"</span> <span class="attribute">value</span>=<span class="value">"cos"</span>&gt;</span> <span class="tag">&lt;/<span class="title">constant</span>&gt;</span>
+<span class="tag">&lt;<span class="title">action</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">interceptor-ref</span> <span class="attribute">name</span>=<span class="value">"defaultStack"</span>&gt;</span>
+        <span class="comment">&lt;!-- 设置局部  --&gt;</span>
+        <span class="tag">&lt;<span class="title">param</span> <span class="attribute">name</span>=<span class="value">"fileUpload.maximumSize"</span>&gt;</span>2097152<span class="tag">&lt;/<span class="title">param</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">param</span> <span class="attribute">name</span>=<span class="value">"fileUpload.allowedExtensions"</span>&gt;</span>txt,doc,pdf <span class="tag">&lt;/<span class="title">param</span>&gt;</span>
+        <span class="comment">&lt;!-- 可以在web.xml中查看, mime类型 --&gt;</span>
+        <span class="tag">&lt;<span class="title">param</span> <span class="attribute">name</span>=<span class="value">"fileUpload.allowedTypes"</span>&gt;</span>application/msword <span class="tag">&lt;/<span class="title">param</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">interceptor-ref</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">action</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<h2 id="-">文件的下载</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+</pre></td><td class="code"><pre>// http://contextPath/download.action&filename=xx.mp3
+/*
+<span class="tag">&lt;<span class="title">action</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">result</span> <span class="attribute">type</span>=<span class="value">"stream"</span>&gt;</span>
+        <span class="comment">&lt;!-- 指定下载的文件流  --&gt;</span>
+        <span class="tag">&lt;<span class="title">param</span> <span class="attribute">name</span>=<span class="value">"inputName"</span>&gt;</span> inputStream <span class="tag">&lt;/<span class="title">param</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">param</span> <span class="attribute">name</span>=<span class="value">"ContentType"</span>&gt;</span>${contentType}<span class="tag">&lt;/<span class="title">param</span>&gt;</span>
+        <span class="comment">&lt;!-- 解析下载文件名字  --&gt;</span>
+        <span class="tag">&lt;<span class="title">param</span> <span class="attribute">name</span>=<span class="value">"contentDisposition"</span>&gt;</span> <span class="comment">&lt;!-- 浏览器打开方式 --&gt;</span>
+            attachment;filename=%{#fileName}.txt
+        <span class="tag">&lt;/<span class="title">param</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">result</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">action</span>&gt;</span>
+*/
+public class DownloadAction {
+    @BeanProperty private InputStream InputStream;
+    public String download(){
+        String fileName = "";
+        String filePath = "";
+        String agent = ServletContext.getRequest().getHeader("user-agent");
+        String encoded = encodeDownloadFilename(filename, agent);
+        // 附件乱码问题,(IE和其他浏览器: URL编码, 火狐: Base64编码)
+        ActionContext.getContext().put("fileName", encoded);
+        inputStream = new FileInputStream(filePath + fileName);
+    }
+    // 根据下载文件动态获取 MIME 文件类型
+    public String getContentType(){
+        return ServletActionContext.getServletContext().getMimeType(filename);
+    }
+    
+    /*
+	 * 下载文件时，针对不同浏览器，进行附件名的编码
+	 * @param filename 下载文件名
+	 * @param agent 客户端浏览器
+	 * @return 编码后的下载附件名
+	 * @throws IOException
+	 */
+     public String encodeDownloadFilename(String filename, String agent) throws IOException{
+        if(agent.contains("Firefox")){ // 火狐浏览器
+            filename = "=?UTF-8?B?"+new BASE64Encoder().encode(filename.getBytes("utf-8"))+"?=";
+        }else{ // IE及其他浏览器
+            filename = URLEncoder.encode(filename,"utf-8");
+        }
+        return filename;
+    }
+}
+</pre></td></tr></table></figure>
+
+<h1 id="-struts2-">访问 struts2 静态资源</h1>
 <p>文档中介绍了，可以把静态资源放到org.apache.struts2.static或者template包中，
 可以直接访问，例如 访问template.aaa中的bbb.css，则
 <code>http://localhost:8080/day22_03_strutsStatics/struts/aaa/bbb.css</code></p>
@@ -163,24 +296,23 @@ showcase: 各种应用的案例，在struts2-showcase里面找各种案例</p>
 <span class="tag">&lt;/<span class="title">filter</span>&gt;</span>
 </pre></td></tr></table></figure>
 
-<h1 id="action-">Action的模式</h1>
+<h1 id="struts2-">struts2 数据存储和显示</h1>
+<p>OGNL是Object Graphic Navigation Language(对象图导航语言)的缩写，
+它是一个开源项目.Struts2框架使用OGNL作为默认的表达式语言。</p>
 <ul>
-<li>action 是多实例的, 每请求一次, 将会创建一个对象</li>
-<li>不存在线程安全问题</li>
+<li>xwork 提供 OGNL表达式 </li>
+<li>ognl-3.0.5.jar</li>
 </ul>
-<h2 id="-">自动注入</h2>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-</pre></td><td class="code"><pre>&lt;form&gt;
-    &lt;input <span class="class"><span class="keyword">type</span>=</span><span class="string">"text"</span> name=<span class="string">"address.city"</span>/&gt;
-    &lt;input <span class="class"><span class="keyword">type</span>=</span><span class="string">"checkbox"</span> name=<span class="string">"hobby"</span> <span class="keyword">value</span>=<span class="string">"吃饭"</span>/&gt;
-    &lt;input <span class="class"><span class="keyword">type</span>=</span><span class="string">"checkbox"</span> name=<span class="string">"hobby"</span> <span class="keyword">value</span>=<span class="string">"睡觉"</span>/&gt;
-&lt;/form&gt;
-</pre></td></tr></table></figure>
-
+<p>OGNL 是一种比EL 强大很多倍的语言 </p>
+<p>OGNL 提供五大类功能 </p>
+<ol>
+<li>支持对象方法调用，如xxx.doSomeSpecial();</li>
+<li>支持类静态的方法调用和值访问</li>
+<li>访问OGNL上下文（OGNL context）和ActionContext: (重点 操作ValueStack值栈)</li>
+<li>支持赋值操作和表达式串联</li>
+<li>操作集合对象。</li>
+</ol>
+<h2 id="-">方法调用</h2>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
 3
@@ -189,59 +321,50 @@ showcase: 各种应用的案例，在struts2-showcase里面找各种案例</p>
 6
 7
 8
-</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Action</span> <span class="keyword">extends</span> <span class="title">ActionSupport</span> {</span>
-     <span class="annotation">@BeanProperty</span> <span class="keyword">private</span> Address address;
-     <span class="annotation">@BeanProperty</span> <span class="keyword">private</span> String[] hobby;
-     <span class="annotation">@Override</span> <span class="keyword">public</span> String <span class="title">execute</span>(){
-         println(address.getCity());
-         println(hobby); <span class="comment">// struts2 会自动注入</span>
-     }
-}
+</pre></td><td class="code"><pre><span class="vbscript">&lt;%@taglib uri=<span class="string">"/struts-tags"</span> prefix=<span class="string">"s"</span> %&gt;</span>
+<span class="comment">&lt;!-- 通过 s:property 标签操作 ognl 表达式 --&gt;</span>
+<span class="comment">&lt;!-- 实例方法 --&gt;</span>
+<span class="tag">&lt;<span class="title">s:property</span> <span class="attribute">value</span>=<span class="value">"'hellof world'.length()"</span>/&gt;</span>
+<span class="comment">&lt;!-- 静态方法 --&gt;</span>
+<span class="comment">&lt;!-- @[类全名（包括包路径）]@[方法名]  --&gt;</span>
+<span class="comment">&lt;!--  使用 静态方法调用 必须 设置 struts.ognl.allowStaticMethodAccess=true --&gt;</span>
+<span class="tag">&lt;<span class="title">s:property</span> <span class="attribute">value</span>=<span class="value">"@java.lang.String@format('您好,%s','小明')"</span>/&gt;</span>
 </pre></td></tr></table></figure>
 
-<h2 id="-servlet-">在动作类中获取 servlet 相关对象引用</h2>
-<ol>
-<li><p>ServletActionContext的静态方法可以得到Servlet相关的对象</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-</pre></td><td class="code"><pre>//用Servlet相关的对象request response servletContext HttpSession
-HttpServletRequest request = ServletActionContext<span class="preprocessor">.getRequest</span>()<span class="comment">;</span>
-HttpServletResponse response = ServletActionContext<span class="preprocessor">.getResponse</span>()<span class="comment">;</span>
-ServletContext sc = ServletActionContext<span class="preprocessor">.getServletContext</span>()<span class="comment">;</span>
-HttpSession session = request<span class="preprocessor">.getSession</span>()<span class="comment">;</span>
-</pre></td></tr></table></figure>
-</li>
-<li><p>实现ServletRequestAware接口，struts2框架就会把request对象注入进来，通过拦截器servletConfig。</p>
-<p> Action实现如下接口，struts框架则会为其注入相应的Servlet API对象：
-<code>ServletRequestAware</code>, <code>ServletResponseAware</code>, <code>ServletContextAware</code>, 实现其他对象或者功能，参考拦截器servletConfig。</p>
-</li>
-</ol>
-<h1 id="struts2-">struts2 数据存储和显示</h1>
-<p>在 servlet 中, 把数据放在<em>*request, session, application</em>域中,
-在页面上利用el表达式来解决数据的存储和显示</p>
-<p>OGNL表达式就是针对一个称之为OGNL根对象和一个称为OGNL Context的Map对象进行操作的语言。</p>
-<p>OGNL表达式可以寻址Context内部的对象和直接调用根对象的属性或方法。</p>
-<h2 id="-">获取域数据</h2>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-</pre></td><td class="code"><pre>ActionContext ac = ActionContext<span class="preprocessor">.getContext</span>()<span class="comment">;</span>
-ac<span class="preprocessor">.put</span>(<span class="string">"p"</span>, <span class="string">"request Scope"</span>)<span class="comment">; // 相当于 req.setAttribute("", "")</span>
-Map applicationMap = ac<span class="preprocessor">.getApplication</span>()
-applicationMap<span class="preprocessor">.put</span>(<span class="string">"p"</span>, <span class="string">"application scope"</span>)<span class="comment">;  // servletContext.setAttribute();</span>
-Map sessionMap = ac<span class="preprocessor">.getSession</span>()<span class="comment">;</span>
-sessionMap<span class="preprocessor">.put</span>(<span class="string">"p"</span>, <span class="string">"session scope"</span>)<span class="comment">;</span>
+<h2 id="ognl-context">OGNL Context</h2>
+<p>什么是值栈(ValueStack)?</p>
+<pre><code>接口, 是struts2 提供的一个接口, 实现类是`OgnlValueStack`,
+OGNL 是从值栈中获取数据的, 每个Action实例都有一个ValueStack 对象(一次请求,一个ValueStack对象)
+在其中保存当前Action对象保存名为 &#39;struts.valueStack&#39;的请求属性中, request中
+</code></pre><p>值栈的内部结构?</p>
+<pre><code>值栈由两部分组成 
+
+ObjectStack: Struts  把动作和相关对象压入 ObjectStack(List) 中
+
+ContextMap: Struts 把各种各样的映射关系(一些 Map 类型的对象) 压入 ContextMap 中
+    Struts 会把下面这些映射压入 ContextMap 中
+    parameters: 该 Map 中包含当前请求的请求参数
+    request: 该 Map 中包含当前 request 对象中的所有属性
+    session: 该 Map 中包含当前 session 对象中的所有属性
+    application:该 Map 中包含当前 application  对象中的所有属性
+    attr: 该 Map 按如下顺序来检索某个属性: request, session, application
+</code></pre><figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>ServletActionContext<span class="preprocessor">.getRequest</span>()<span class="preprocessor">.getAttribute</span>(<span class="string">"struts.valueStack"</span>)<span class="comment">;</span>
 </pre></td></tr></table></figure>
 
-<h2 id="valuestack">ValueStack</h2>
+<p>OGNL表达式, 访问root中数据时 不需要 &#39;#&#39;,
+访问 request、 session、application、 attr、 parameters 对象数据 必须写  <code>#</code></p>
+<p>值栈对象的创建, ValueStack 和 ActionContext 是什么关系?</p>
+<pre><code>值栈对象 是请求时 创建的 
+doFilter中`prepare.createActionContext(request, response)`
+    * 创建ActionContext 对象过程中，创建 值栈对象ValueStack 
+    * ActionContext对象 对 ValueStack对象 有引用的(在程序中 通过 ActionContext 获得 值栈对象)
+Dispatcher类 serviceAction 方法中 将值栈对象保存到 request范围
+    request.setAttribute(ServletActionContext.STRUTS_VALUESTACK_KEY, proxy.getInvocation().getStack());
+</code></pre><h3 id="valuestack">ValueStack</h3>
+<p>解决 Action 向 JSP 传递数据的问题</p>
 <ul>
-<li>在struts2中所有的数据都在 ValueStack 中</li>
+<li>在struts2中所有的数据都在 ValueStack 中(核心)</li>
 <li>ValueStack里面有两个东西，一个是根,就是CompoundRoot，这是一个List集合，还有一个contextMap</li>
 <li>ValueStack 的生命周期是一次请求, 被存在 request 域<code>&quot;struts.ValueStack&quot;</code>中</li>
 <li>获得 ValueStack 有三种方式<figure class="highlight"><table><tr><td class="gutter"><pre>1
@@ -264,54 +387,8 @@ sessionMap<span class="preprocessor">.put</span>(<span class="string">"p"</span>
 
 </li>
 </ul>
-<h3 id="valuestack-">ValueStack 结构分析</h3>
-<p>OGNL是从一个称之为根栈和contextMap中取数据</p>
-<ul>
-<li><p>CompoundRoot就是根的类型。它是List。一般称之为根栈.取对象的某个属性，OGNL表达式不需要加任何东西，直接写属性即可</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-</pre></td><td class="code"><pre><span class="comment">&lt;!-- 取得valueStack 中name的值,从上往下找--&gt;</span>
-name:<span class="tag">&lt;<span class="title">s:property</span> <span class="attribute">value</span>=<span class="value">"name"</span>/&gt;</span><span class="tag">&lt;<span class="title">br</span>/&gt;</span>
-<span class="comment">&lt;!-- 打印的结果是name这个字符串 --&gt;</span>
-<span class="tag">&lt;<span class="title">s:property</span> <span class="attribute">value</span>=<span class="value">"'name'"</span>/&gt;</span>
-</pre></td></tr></table></figure>
-</li>
-<li><p>OGNL中的contextMap：key和value. 使用#开头，表示从Context里面取数据。</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-</pre></td><td class="code"><pre>&lt;s:property <span class="keyword">value</span>=<span class="string">"#session.p"</span>/&gt;
-</pre></td></tr></table></figure>
-</li>
-<li><p>ActionContext常用的方法(Map)</p>
-<ul>
-<li><code>put()</code>方法和<code>get()</code>方法就是往该Context Map对象中添加数据和取数据。</li>
-<li><code>getApplication()</code>得到application域中的所有attribute的map对象;</li>
-<li><code>getSession()</code>得到代表session域中的所有attribute的map对象；</li>
-<li><code>getParameters()</code>得到代表所有请求参数的map对象；</li>
-<li><code>getLocale()</code>()得到当前用户的Locale信息，是综合了session中保存的Locale与浏览器请求消息中的Locale的结果。</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-</pre></td><td class="code"><pre>ActionContext ac <span class="subst">=</span> ActionContext<span class="built_in">.</span>getContext();
-<span class="built_in">Map</span><span class="subst">&lt;</span><span class="built_in">String</span>,Object<span class="subst">&gt;</span> <span class="built_in">map</span> <span class="subst">=</span> ac<span class="built_in">.</span>getSession();
-out<span class="built_in">.</span>write((<span class="built_in">String</span>)<span class="built_in">map</span><span class="built_in">.</span>get(<span class="string">"p"</span>));
-ValueStack vs <span class="subst">=</span> ac<span class="built_in">.</span>getValueStack();
-<span class="built_in">String</span> s <span class="subst">=</span> (<span class="built_in">String</span>)((<span class="built_in">Map</span><span class="subst">&lt;</span><span class="built_in">String</span>,Object<span class="subst">&gt;</span>)vs<span class="built_in">.</span>getContext()<span class="built_in">.</span>get(<span class="string">"session"</span>))<span class="built_in">.</span>get(<span class="string">"p"</span>);
-ac<span class="built_in">.</span>put(<span class="string">"username"</span>, <span class="string">"cll"</span>);<span class="comment">//向contextMap中放数据</span>
-s <span class="subst">=</span> (<span class="built_in">String</span>)ac<span class="built_in">.</span>get(<span class="string">"username"</span>);<span class="comment">//取数据</span>
-</pre></td></tr></table></figure>
-
-<p>ServletActionContext类继承了ActionContext类，它额外再提供了一些方便的方法，主要是直接返回Servlet有关的API，
-例如，返回HttpServletRequest和HttpServletResponse等，它内部还是调用ActionContext内部保存的那个OGNL Context Map对象。</p>
 <h3 id="valuestack-">ValueStack中常用方法详解</h3>
+<p>对值栈的操作, 主要是对 root 的操作</p>
 <ul>
 <li><code>pop</code> 把栈顶的remove</li>
 <li><code>push</code> 放到栈顶</li>
@@ -348,8 +425,116 @@ String str = vs<span class="preprocessor">.findString</span>(<span class="string
 
 </li>
 </ul>
+<h2 id="-">值栈在开发中应用</h2>
+<p>主流应用: 值栈 解决 Action 向 JSP 传递 数据问题 </p>
+<p>Action 向JSP 传递数据处理结果 ，结果数据有两种形式 </p>
+<ul>
+<li><p>消息 String类型数据</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre><span class="comment">// 针对某一个字段错误信息(常用于表单校验)</span>
+<span class="keyword">this</span>.addFieldError(<span class="string">"msg"</span>, <span class="string">"字段错误信息"</span>);
+<span class="comment">// 普通错误信息，不针对某一个字段 登陆失败</span>
+<span class="keyword">this</span>.addActionError(<span class="string">"Action全局错误信息"</span>);
+<span class="comment">// 通用消息</span>
+<span class="keyword">this</span>.addActionMessage(<span class="string">"Action的消息信息"</span>);
+
+<span class="comment">// 在jsp中使用 struts2提供标签 显示消息信息</span>
+<span class="comment">// &lt;s:fielderror fieldName="msg"/&gt;</span>
+<span class="comment">// &lt;s:actionerror/&gt;</span>
+<span class="comment">// &lt;s:actionmessage/&gt;</span>
+</pre></td></tr></table></figure>
+</li>
+<li><p>数据(复杂类型数据), 使用值栈<code>valueStack.push(products)</code></p>
+</li>
+</ul>
+<p>哪些数据默认会放入到值栈?</p>
+<ul>
+<li>每次请求，访问Action对象 会被压入值栈, <code>DefaultActionInvocation</code> 的 init方法 <code>stack.push(action);</code></li>
+<li>Action如果想传递数据给 JSP，只有将数据保存到成员变量，并且提供get方法就可以了</li>
+<li>如果Action 实现ModelDriven接口，值栈默认栈顶对象 就是model对象<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- 在拦截器中 ，将model对象 压入了 值栈 stack.push(model); --&gt;</span>
+<span class="tag">&lt;<span class="title">interceptor</span> <span class="attribute">name</span>=<span class="value">"modelDriven"</span> <span class="attribute">class</span>=<span class="value">"com.opensymphony.xwork2.interceptor.ModelDrivenInterceptor"</span>/&gt;</span>
+</pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2 id="el-">EL 访问值栈的数据</h2>
+<p>struts对<code>Request</code>对象进行了包装, 重写request的 <code>getAttribute</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre>Object <span class="keyword">attribute</span> = super.getAttribute(s);
+<span class="comment">// 访问request范围的数据时，如果数据找不到，去值栈中找 </span>
+<span class="keyword">if</span> (<span class="keyword">attribute</span> == null) {
+    <span class="keyword">attribute</span> = stack.findValue(s);
+}
+</pre></td></tr></table></figure>
+
+<ul>
+<li>request 对象 具备访问值栈数据的能力(查找root的数据)</li>
+</ul>
 <h2 id="struts2-ognl-">struts2显示(ognl)</h2>
 <p>ognl: struts2的标签, 把 valueStack 中的数据显示到页面上</p>
+<p>常见符号 <code>#</code> <code>%</code> <code>$</code></p>
+<ul>
+<li><p><code>%</code>的使用</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- 用法一： 结合struts2 表单表单使用， 通过%通知struts，
+     %{}中内容是一个OGNL表达式，进行解析  --&gt;</span>
+<span class="tag">&lt;<span class="title">s:textfield</span> <span class="attribute">name</span>=<span class="value">"username"</span> <span class="attribute">value</span>=<span class="value">"%{#request.username}"</span>/&gt;</span>
+<span class="comment">&lt;!-- 用法二： 设置ognl表达式不解析 %{'ognl表达式'} --&gt;</span>
+<span class="tag">&lt;<span class="title">s:property</span> <span class="attribute">value</span>=<span class="value">"%{'#request.username'}"</span>/&gt;</span>
+</pre></td></tr></table></figure>
+</li>
+<li><p><code>$</code>的使用 </p>
+<ul>
+<li><p>用法一: 用于在国际化资源文件中，引用OGNL表达式 </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- 在properties文件 msg=欢迎您, ${#request.username} --&gt;</span>
+ <span class="comment">&lt;!-- 自动将值栈的username 结合国际化配置信息显示  --&gt;</span>
+<span class="tag">&lt;<span class="title">s:i18n</span> <span class="attribute">name</span>=<span class="value">"messages"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">s:text</span> <span class="attribute">name</span>=<span class="value">"msg"</span>&gt;</span><span class="tag">&lt;/<span class="title">s:text</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">s:i18n</span>&gt;</span>
+</pre></td></tr></table></figure>
+</li>
+<li><p>用法二 ：在Struts 2配置文件中，引用OGNL表达式</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- 在Action 提供 getContentType方法 --&gt;</span>
+<span class="comment">&lt;!-- 读取值栈中contentType数据,在Action提供 getContentType --&gt;</span>
+<span class="comment">&lt;!-- 因为Action对象会被压入值栈,contentType是Action属性,从值栈获得 --&gt;</span>
+<span class="tag">&lt;<span class="title">param</span> <span class="attribute">name</span>=<span class="value">"contentType"</span>&gt;</span>${contentType}<span class="tag">&lt;/<span class="title">param</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+</li>
+</ul>
+</li>
+</ul>
+<p>结论: <code>#</code>用于写ognl表达式获取数据,<code>%</code> 控制ognl表达式是否解析,
+<code>$</code> 用于配置文件获取值栈的数据 </p>
 <h3 id="-">调试</h3>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
@@ -416,13 +601,9 @@ ServletActionContext.getRequest().setAttribute("person", person) --&gt;</span>
 <span class="tag">&lt;<span class="title">s:property</span> <span class="attribute">value</span>=<span class="value">"#request.person.name"</span>/&gt;</span> <span class="comment">&lt;!-- 输出: zhang --&gt;</span>
 </pre></td></tr></table></figure>
 
+<h3 id="struts-">struts标签库</h3>
 <h4 id="property-">property 标签用法</h4>
-<p><code>&lt;s:property&gt;</code>标签用于输出某个OGNL表达式的值，并进行HTML和XML实体转换，
-可以认为其内部使用的是ValueStack对象的findString()方法。
-如果没有设置value属性，则输出ValueStack栈顶的对象，
-等效于输出“top”这个特殊的OGNL表达式，”top”表示栈顶的对象。
-如果采用不加#前缀的方式输出Context中的某个对象，
-这个对象必须是String类型，以此可以说明该标签内部调用的是ValueStack.findString()方法。</p>
+<p><code>&lt;s:property&gt;</code>标签用于输出某个OGNL表达式的值，并进行HTML和XML实体转换,<br>可以认为其内部使用的是ValueStack对象的findString()方法.<br>如果没有设置value属性，则输出ValueStack栈顶的对象,<br>等效于输出“top”这个特殊的OGNL表达式，”top”表示栈顶的对象.<br>如果采用不加#前缀的方式输出Context中的某个键值对,<br>这个对象必须是String类型，以此可以说明该标签内部调用的是ValueStack.findString()方法。</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
 3
@@ -440,12 +621,14 @@ ServletActionContext.getRequest().setAttribute("person", person) --&gt;</span>
 15
 16
 17
-</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">s:property</span> <span class="attribute">value</span>=<span class="value">"name"</span>/&gt;</span><span class="tag">&lt;<span class="title">br</span>/&gt;</span><span class="comment">&lt;!-- 相当于ValueStack.findString() --&gt;</span>
+18
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">s:property</span> <span class="attribute">value</span>=<span class="value">"[0].top"</span>/&gt;</span>   <span class="comment">&lt;!-- [0].top 第一个元素对象, [1].top第二个元素对象 --&gt;</span>
+<span class="tag">&lt;<span class="title">s:property</span> <span class="attribute">value</span>=<span class="value">"[1].name"</span>/&gt;</span><span class="tag">&lt;<span class="title">br</span>/&gt;</span><span class="comment">&lt;!-- 取栈顶第二个对象中的name值  --&gt;</span>
+<span class="tag">&lt;<span class="title">s:property</span> <span class="attribute">value</span>=<span class="value">"name"</span>/&gt;</span><span class="tag">&lt;<span class="title">br</span>/&gt;</span><span class="comment">&lt;!-- 相当于ValueStack.findString() --&gt;</span>
 <span class="tag">&lt;<span class="title">s:property</span> <span class="attribute">value</span>=<span class="value">"top.name"</span>/&gt;</span><span class="tag">&lt;<span class="title">br</span>/&gt;</span><span class="comment">&lt;!-- top代表栈顶对象,取栈顶对象中的name值  --&gt;</span>
 <span class="tag">&lt;<span class="title">s:property</span>/&gt;</span><span class="tag">&lt;<span class="title">br</span>/&gt;</span><span class="comment">&lt;!-- 取栈顶对象 --&gt;</span>
-<span class="tag">&lt;<span class="title">s:property</span> <span class="attribute">value</span>=<span class="value">"[1].name"</span>/&gt;</span><span class="tag">&lt;<span class="title">br</span>/&gt;</span><span class="comment">&lt;!-- [1]表示砍掉1个.再取第一个的name属性,后面的不管 --&gt;</span>
 <span class="tag">&lt;<span class="title">s:property</span> <span class="attribute">default</span>=<span class="value">"木有"</span> <span class="attribute">value</span>=<span class="value">"abc"</span>/&gt;</span><span class="tag">&lt;<span class="title">br</span>/&gt;</span><span class="comment">&lt;!-- 表示如果没有abc这个属性,则返回default的木有 --&gt;</span>
-<span class="tag">&lt;<span class="title">s:property</span> <span class="attribute">value</span>=<span class="value">"'&lt;hr/&gt;'"</span> <span class="attribute">escapeHtml</span>=<span class="value">"false"</span>/&gt;</span><span class="comment">&lt;!-- escapeHtml默认的是ture,表示打印&lt;hr/&gt; --&gt;</span>
+<span class="tag">&lt;<span class="title">s:property</span> <span class="attribute">value</span>=<span class="value">"'&lt;hr/&gt;'"</span> <span class="attribute">escape</span>=<span class="value">"false"</span>/&gt;</span><span class="comment">&lt;!-- escape默认的是ture,表示打印&lt;hr/&gt; --&gt;</span>
 
 <span class="comment">&lt;!--请求url:  url?a=hello  --&gt;</span>
 <span class="tag">&lt;<span class="title">s:property</span> <span class="attribute">value</span>=<span class="value">"#parameters.a[0]"</span>/&gt;</span> <span class="comment">&lt;!-- 输出: hello --&gt;</span>
@@ -457,16 +640,6 @@ ServletActionContext.getRequest().setAttribute("person", person) --&gt;</span>
 <span class="comment">&lt;!-- ServletActionContext.getServletContext().setAttribute("key", "value2") --&gt;</span>
 <span class="comment">&lt;!-- 从 request session application 域中依次查找--&gt;</span>
 <span class="tag">&lt;<span class="title">s:property</span> <span class="attribute">value</span>=<span class="value">"#attr.key"</span>/&gt;</span> <span class="comment">&lt;!-- 输出: value2 --&gt;</span>
-</pre></td></tr></table></figure>
-
-<h3 id="ognl-">ognl 的方法调用</h3>
-<p>支持方法调用, 也可以支持静态方法调用</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-</pre></td><td class="code"><pre><span class="comment">&lt;!-- person = Person{name=zhang, id=3L}
-     ServletActionContext.getRequest().setAttribute("person", person) --&gt;</span>
-<span class="tag">&lt;<span class="title">s:property</span> <span class="attribute">value</span>=<span class="value">"#request.person.getName()"</span>/&gt;</span> <span class="comment">&lt;!-- 输出: shang --&gt;</span>
 </pre></td></tr></table></figure>
 
 <h3 id="ognl-">ognl 数组输出</h3>
@@ -528,7 +701,7 @@ ServletActionContext.getRequest().setAttribute("person", person) --&gt;</span>
     --&gt;</span>
     <span class="comment">&lt;!-- 方式一, 把数据放在Map栈中 --&gt;</span>
     <span class="comment">&lt;!-- ActionContext.getContext().put("personList", personList) --&gt;</span>
-
+    <span class="comment">&lt;!-- p 在根栈, 和 map栈都放一份--&gt;</span>
     <span class="tag">&lt;<span class="title">s:iterator</span> <span class="attribute">value</span>=<span class="value">"#personList"</span> <span class="attribute">var</span>=<span class="value">"p"</span> <span class="attribute">status</span>=<span class="value">"st"</span>&gt;</span>
         <span class="tag">&lt;<span class="title">tr</span> <span class="attribute">class</span>=<span class="value">"&lt;s:property value="</span><span class="value">#st.odd?'even':'odd'"</span>/&gt;</span>"&gt;
             <span class="tag">&lt;<span class="title">td</span>&gt;</span> <span class="tag">&lt;<span class="title">s:property</span> <span class="attribute">value</span>=<span class="value">"name"</span>/&gt;</span> <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
@@ -590,7 +763,7 @@ ServletActionContext.getRequest().setAttribute("person", person) --&gt;</span>
 <span class="comment">&lt;!-- 迭代输出Map栈中的map --&gt;</span>
 <span class="comment">&lt;!-- personMap = Map("person1" -&gt; p1, "person2" -&gt; p2, "perseon3" -&gt; p3) --&gt;</span>
 <span class="comment">&lt;!-- ActionContext.getContext().put("map", personMap) --&gt;</span>
-<span class="tag">&lt;<span class="title">s:iterator</span> <span class="attribute">value</span>=<span class="value">"#map"</span>&gt;</span>
+<span class="tag">&lt;<span class="title">s:iterator</span> <span class="attribute">value</span>=<span class="value">"#request.map"</span>&gt;</span>
     <span class="tag">&lt;<span class="title">s:property</span> <span class="attribute">value</span>=<span class="value">"key"</span>/&gt;</span>
     <span class="tag">&lt;<span class="title">s:property</span> <span class="attribute">value</span>=<span class="value">"value.name"</span>/&gt;</span>
 <span class="tag">&lt;/<span class="title">s:iterator</span>&gt;</span>
@@ -598,7 +771,7 @@ ServletActionContext.getRequest().setAttribute("person", person) --&gt;</span>
 <span class="comment">&lt;!-- 迭代输出Map栈中的Set --&gt;</span>
 <span class="comment">&lt;!-- personSet = Set(p1, p2, p3) --&gt;</span>
 <span class="comment">&lt;!-- ActionContext.getContext().put("set", personSet) --&gt;</span>
-<span class="tag">&lt;<span class="title">s:iterator</span> <span class="attribute">value</span>=<span class="value">"#set"</span>&gt;</span>
+<span class="tag">&lt;<span class="title">s:iterator</span> <span class="attribute">value</span>=<span class="value">"#request.set"</span>&gt;</span>
     <span class="tag">&lt;<span class="title">s:property</span> <span class="attribute">value</span>=<span class="value">"name"</span>/&gt;</span>
     <span class="tag">&lt;<span class="title">s:property</span> <span class="attribute">value</span>=<span class="value">"pid"</span>/&gt;</span>
 <span class="tag">&lt;/<span class="title">s:iterator</span>&gt;</span>
@@ -606,7 +779,7 @@ ServletActionContext.getRequest().setAttribute("person", person) --&gt;</span>
 <span class="comment">&lt;!-- 迭代输出Map栈中的List&lt;Map&lt;String, Person&gt;&gt; --&gt;</span>
 <span class="comment">&lt;!-- listMap = List(Map("person1"-&gt;p1, "person2"-&gt;p2)) --&gt;</span>
 <span class="comment">&lt;!-- ActionContext.getContext().put("listMap", listMap) --&gt;</span>
-<span class="tag">&lt;<span class="title">s:iterator</span> <span class="attribute">value</span>=<span class="value">"#listMap"</span>&gt;</span>
+<span class="tag">&lt;<span class="title">s:iterator</span> <span class="attribute">value</span>=<span class="value">"#request.listMap"</span>&gt;</span>
     <span class="tag">&lt;<span class="title">s:iterator</span>&gt;</span>            <span class="comment">&lt;!-- map 被放入对象栈栈顶 --&gt;</span>
         <span class="tag">&lt;<span class="title">s:property</span> <span class="attribute">value</span>=<span class="value">"key"</span>/&gt;</span>
         <span class="tag">&lt;<span class="title">s:property</span> <span class="attribute">value</span>=<span class="value">"value.name"</span>/&gt;</span>
@@ -619,7 +792,7 @@ ServletActionContext.getRequest().setAttribute("person", person) --&gt;</span>
 <span class="comment">&lt;!-- 输出 List&lt;Map&lt;String, List&lt;Person&gt;&gt;&gt;, 看官亦可脑补 --&gt;</span>
 </pre></td></tr></table></figure>
 
-<h3 id="-">其他操作标签</h3>
+<h3 id="-">其他标签</h3>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
 3
@@ -643,13 +816,28 @@ ServletActionContext.getRequest().setAttribute("person", person) --&gt;</span>
 21
 22
 23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
 </pre></td><td class="code"><pre><span class="comment">&lt;!-- &lt;s:set&gt;标签用于将某个值存入指定范围域中，
 通常用于将一个复杂的ognl表达式用一个简单的变量来进行引用。 --&gt;</span>
 <span class="comment">&lt;!-- scope属性：指定变量被放置的范围，该属性可以接受
 application、session、request、 page或action。该属性的默认值为action --&gt;</span>
 <span class="comment">&lt;!-- 给 request 域中的键值对取别名 --&gt;</span>
 <span class="tag">&lt;<span class="title">s:set</span> <span class="attribute">value</span>=<span class="value">"#request.request_username"</span> <span class="attribute">var</span>=<span class="value">"newname"</span> <span class="attribute">scope</span>=<span class="value">"request"</span>/&gt;</span>
-<span class="tag">&lt;<span class="title">s:property</span> <span class="attribute">valut</span>=<span class="value">"#request.newname"</span>/&gt;</span>
+<span class="tag">&lt;<span class="title">s:set</span> <span class="attribute">value</span>=<span class="value">"%{'张三'}"</span> <span class="attribute">var</span>=<span class="value">"newname"</span> <span class="attribute">scope</span>=<span class="value">"request"</span>&gt;</span>/
+<span class="tag">&lt;<span class="title">s:property</span> <span class="attribute">value</span>=<span class="value">"#request.newname"</span>/&gt;</span>
 
 <span class="comment">&lt;!-- 将request域的元素压入对象栈, 并在用完之后, 从对象栈中删除初--&gt;</span>
 <span class="tag">&lt;<span class="title">s:push</span> <span class="attribute">value</span>=<span class="value">"#request.request_username"</span>&gt;</span> 
@@ -666,9 +854,24 @@ application、session、request、 page或action。该属性的默认值为actio
 <span class="tag">&lt;<span class="title">s:if</span> <span class="attribute">test</span>=<span class="value">"#person.pid&lt;3"</span>&gt;</span> 小于三 <span class="tag">&lt;/<span class="title">s:if</span>&gt;</span>
 <span class="tag">&lt;<span class="title">s:elseif</span> <span class="attribute">test</span>=<span class="value">"#person.pid&gt;3"</span>&gt;</span> 大于三 <span class="tag">&lt;/<span class="title">s:esleif</span>&gt;</span>
 <span class="tag">&lt;<span class="title">s:else</span> <span class="attribute">test</span>=<span class="value">"#person.pid==3"</span>&gt;</span> 等于三 <span class="tag">&lt;/<span class="title">s:esle</span>&gt;</span>
+
+<span class="comment">&lt;!-- 编码转义 --&gt;</span>
+<span class="tag">&lt;<span class="title">s:url</span> <span class="attribute">action</span>=<span class="value">""</span> <span class="attribute">namespace</span>=<span class="value">"/"</span> &gt;</span>
+    <span class="tag">&lt;<span class="title">s:param</span> <span class="attribute">name</span>=<span class="value">""</span> <span class="attribute">value</span>=<span class="value">"%{'good'}"</span>&gt;</span> <span class="tag">&lt;/<span class="title">s:param</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">s:url</span>&gt;</span>
+
+<span class="comment">&lt;!-- 是一个链接, 可以对中文进行转义 --&gt;</span>
+<span class="tag">&lt;<span class="title">s:a</span> <span class="attribute">action</span>=<span class="value">""</span> <span class="attribute">namespace</span>=<span class="value">""</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">s:param</span> <span class="attribute">name</span>=<span class="value">""</span> <span class="attribute">value</span>=<span class="value">"%{'test'}"</span>&gt;</span> <span class="tag">&lt;/<span class="title">s:param</span>&gt;</span>    
+<span class="tag">&lt;/<span class="title">s:a</span>&gt;</span>
+
+<span class="comment">&lt;!-- 为值栈中的数据进行赋值 --&gt;</span>
+<span class="tag">&lt;<span class="title">s:property</span> <span class="attribute">value</span>=<span class="value">"price=1000, name='冰箱"</span>&gt;</span><span class="tag">&lt;/<span class="title">s:property</span>&gt;</span>
 </pre></td></tr></table></figure>
 
 <h4 id="ui-">ui标签</h4>
+<p>struts2 除了支持JSP之外，支持两种模板技术 Velocity (扩展名 .vm ),
+Freemarker (扩展名 .ftl)</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
 3
@@ -686,15 +889,17 @@ application、session、request、 page或action。该属性的默认值为actio
 15
 16
 17
+18
 </pre></td><td class="code"><pre><span class="comment">&lt;!--
     action 为提交form表单时的url
     method 默认为post
 --&gt;</span>
-<span class="tag">&lt;<span class="title">s:form</span> <span class="attribute">action</span>=<span class="value">""</span> <span class="attribute">id</span>=<span class="value">""</span> <span class="attribute">name</span>=<span class="value">""</span> <span class="attribute">method</span>=<span class="value">""</span>&gt;</span>
+<span class="tag">&lt;<span class="title">s:form</span> <span class="attribute">action</span>=<span class="value">""</span> <span class="attribute">id</span>=<span class="value">""</span> <span class="attribute">name</span>=<span class="value">""</span> <span class="attribute">method</span>=<span class="value">""</span> <span class="attribute">theme</span>=<span class="value">"xhtml"</span>&gt;</span>
    <span class="comment">&lt;!-- struts 解析后, 会自动插入表格标签,
        所以插入 &lt;table&gt; &lt;tr&gt; &lt;tr&gt; 标签时, 会与其发生冲突
        可以通过设置在struts.xml中 struts.ui.theme 为simple, 来避免冲突
        --&gt;</span>
+    <span class="tag">&lt;<span class="title">s:label</span> <span class="attribute">value</span>=<span class="value">""</span> <span class="attribute">for</span>=<span class="value">"password"</span>/&gt;</span>
     <span class="tag">&lt;<span class="title">s:textfield</span> <span class="attribute">name</span>=<span class="value">"name"</span> <span class="attribute">id</span>=<span class="value">""</span> <span class="attribute">value</span>=<span class="value">""</span> <span class="attribute">label</span>=<span class="value">""</span>/&gt;</span>
     <span class="tag">&lt;<span class="title">s:password</span> <span class="attribute">id</span>=<span class="value">""</span> <span class="attribute">name</span>=<span class="value">""</span> <span class="attribute">showpassword</span>=<span class="value">""</span> <span class="attribute">lable</span>=<span class="value">""</span> <span class="attribute">value</span>=<span class="value">""</span>/&gt;</span>
     <span class="tag">&lt;<span class="title">s:hidden</span> <span class="attribute">name</span>=<span class="value">""</span> <span class="attribute">id</span>=<span class="value">""</span> <span class="attribute">value</span>=<span class="value">""</span>/&gt;</span>
@@ -748,7 +953,7 @@ application、session、request、 page或action。该属性的默认值为actio
      headerValue 表示第一个option标签中的内容
 --&gt;</span>
 <span class="tag">&lt;<span class="title">s:select</span> <span class="attribute">list</span>=<span class="value">"#personList"</span> <span class="attribute">listKey</span>=<span class="value">"pid"</span> <span class="attribute">listValue</span>=<span class="value">"name"</span> <span class="attribute">headerKey</span>=<span class="value">""</span> <span class="attribute">headerValue</span>=<span class="value">""</span>/&gt;</span>
-<span class="tag">&lt;<span class="title">checkboxlist</span> <span class="attribute">list</span>=<span class="value">"#personList"</span> <span class="attribute">listValue</span>=<span class="value">"name"</span> <span class="attribute">listKey</span>=<span class="value">"pid"</span> <span class="attribute">name</span>=<span class="value">"pid"</span>/&gt;</span>
+<span class="tag">&lt;<span class="title">s:checkboxlist</span> <span class="attribute">list</span>=<span class="value">"#personList"</span> <span class="attribute">listValue</span>=<span class="value">"name"</span> <span class="attribute">listKey</span>=<span class="value">"pid"</span> <span class="attribute">name</span>=<span class="value">"pid"</span>/&gt;</span>
 
 
 <span class="comment">&lt;!-- 在文本框中把person中的name属性进行回显 --&gt;</span>
@@ -782,7 +987,7 @@ action = new testAction(); action.setAa("test2");
 
 <div class="article-share" id="share">
 
-  <div data-url="http://zhpooer.github.io/2014/05/14/传智播客day29-struts2深入/" data-title="传智播客day29-struts深入 | Poe&#39;s World" data-tsina="null" class="share clearfix">
+  <div data-url="http://zhpooer.github.io/2014/05/15/传智播客day30-struts响应数据/" data-title="传智播客day30-struts响应数据 | Poe&#39;s World" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -792,18 +997,18 @@ action = new testAction(); action.setAa("test2");
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2014/05/15/传智播客day30-struts拦截器/" title="传智播客day30-struts拦截器">
+ <a href="/2014/05/15/scala文档翻译-future&promise/" title="scala文档翻译-Future&amp;Promise">
   <strong>PREVIOUS:</strong><br/>
   <span>
-  传智播客day30-struts拦截器</span>
+  scala文档翻译-Future&amp;Promise</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2014/05/12/传智播客day28-struts入门/"  title="传智播客day28-struts入门">
+<a href="/2014/05/14/传智播客day29-struts拦截器/"  title="传智播客day29-struts拦截器">
  <strong>NEXT:</strong><br/> 
- <span>传智播客day28-struts入门
+ <span>传智播客day29-struts拦截器
 </span>
 </a>
 </div>
@@ -820,7 +1025,7 @@ action = new testAction(); action.setAa("test2");
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#struts-"><span class="toc-number">1.</span> <span class="toc-text">Struts的工作原理及核心过滤器</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-struts2-"><span class="toc-number">1.1.</span> <span class="toc-text">访问 struts2 静态资源</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#action-"><span class="toc-number">2.</span> <span class="toc-text">Action的模式</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.1.</span> <span class="toc-text">自动注入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-servlet-"><span class="toc-number">2.2.</span> <span class="toc-text">在动作类中获取 servlet 相关对象引用</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#struts2-"><span class="toc-number">3.</span> <span class="toc-text">struts2 数据存储和显示</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">3.1.</span> <span class="toc-text">获取域数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#valuestack"><span class="toc-number">3.2.</span> <span class="toc-text">ValueStack</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#valuestack-"><span class="toc-number">3.2.1.</span> <span class="toc-text">ValueStack 结构分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#valuestack-"><span class="toc-number">3.2.2.</span> <span class="toc-text">ValueStack中常用方法详解</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#struts2-ognl-"><span class="toc-number">3.3.</span> <span class="toc-text">struts2显示(ognl)</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">3.3.1.</span> <span class="toc-text">调试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-valuestack-"><span class="toc-number">3.3.2.</span> <span class="toc-text">访问 valuestack 中的数据</span></a></li><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#property-"><span class="toc-number">3.3.2.1.</span> <span class="toc-text">property 标签用法</span></a></li></ol><li class="toc-item toc-level-3"><a class="toc-link" href="#ognl-"><span class="toc-number">3.3.3.</span> <span class="toc-text">ognl 的方法调用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ognl-"><span class="toc-number">3.3.4.</span> <span class="toc-text">ognl 数组输出</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">3.3.5.</span> <span class="toc-text">其他容器的迭代</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">3.3.6.</span> <span class="toc-text">其他操作标签</span></a></li><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ui-"><span class="toc-number">3.3.6.1.</span> <span class="toc-text">ui标签</span></a></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#struts2-"><span class="toc-number">1.</span> <span class="toc-text">Struts2 上传下载</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.1.</span> <span class="toc-text">文件上传</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.2.</span> <span class="toc-text">文件的下载</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-struts2-"><span class="toc-number">2.</span> <span class="toc-text">访问 struts2 静态资源</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#struts2-"><span class="toc-number">3.</span> <span class="toc-text">struts2 数据存储和显示</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">3.1.</span> <span class="toc-text">方法调用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ognl-context"><span class="toc-number">3.2.</span> <span class="toc-text">OGNL Context</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#valuestack"><span class="toc-number">3.2.1.</span> <span class="toc-text">ValueStack</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#valuestack-"><span class="toc-number">3.2.2.</span> <span class="toc-text">ValueStack中常用方法详解</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">3.3.</span> <span class="toc-text">值栈在开发中应用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#el-"><span class="toc-number">3.4.</span> <span class="toc-text">EL 访问值栈的数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#struts2-ognl-"><span class="toc-number">3.5.</span> <span class="toc-text">struts2显示(ognl)</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">3.5.1.</span> <span class="toc-text">调试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-valuestack-"><span class="toc-number">3.5.2.</span> <span class="toc-text">访问 valuestack 中的数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#struts-"><span class="toc-number">3.5.3.</span> <span class="toc-text">struts标签库</span></a></li><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#property-"><span class="toc-number">3.5.3.1.</span> <span class="toc-text">property 标签用法</span></a></li></ol><li class="toc-item toc-level-3"><a class="toc-link" href="#ognl-"><span class="toc-number">3.5.4.</span> <span class="toc-text">ognl 数组输出</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">3.5.5.</span> <span class="toc-text">其他容器的迭代</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">3.5.6.</span> <span class="toc-text">其他标签</span></a></li><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ui-"><span class="toc-number">3.5.6.1.</span> <span class="toc-text">ui标签</span></a></li></ol>
   </div>
 
 <div id="asidepart">
@@ -858,6 +1063,8 @@ action = new testAction(); action.setAa("test2");
 		
 			<li><a href="/tags/ServletResponse/" title="ServletResponse">ServletResponse<sup>1</sup></a></li>
 		
+			<li><a href="/tags/Spring/" title="Spring">Spring<sup>1</sup></a></li>
+		
 			<li><a href="/tags/String/" title="String">String<sup>1</sup></a></li>
 		
 			<li><a href="/tags/StringBuffer/" title="StringBuffer">StringBuffer<sup>1</sup></a></li>
@@ -871,8 +1078,6 @@ action = new testAction(); action.setAa("test2");
 			<li><a href="/tags/dtd/" title="dtd">dtd<sup>1</sup></a></li>
 		
 			<li><a href="/tags/eclipse/" title="eclipse">eclipse<sup>1</sup></a></li>
-		
-			<li><a href="/tags/emacs/" title="emacs">emacs<sup>1</sup></a></li>
 		
 		</ul>
 </div>

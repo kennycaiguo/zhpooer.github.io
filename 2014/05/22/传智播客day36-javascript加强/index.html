@@ -91,7 +91,7 @@ var">
     </p>
   <p class="article-time">
     <time datetime="2014-05-22T06:24:14.000Z" itemprop="datePublished">5月 22 2014</time>
-    更新日期:<time datetime="2014-05-24T03:10:55.000Z" itemprop="dateModified">5月 24 2014</time>
+    更新日期:<time datetime="2014-05-30T07:55:19.000Z" itemprop="dateModified">5月 30 2014</time>
     
   </p>
 </header>
@@ -100,7 +100,7 @@ var">
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#window-"><span class="toc-number">1.</span> <span class="toc-text">window对象常用方法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#form-"><span class="toc-number">2.</span> <span class="toc-text">Form 表单对象</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">定义函数</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#dom-"><span class="toc-number">4.</span> <span class="toc-text">DOM 编程</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">4.1.</span> <span class="toc-text">节点</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">4.1.1.</span> <span class="toc-text">查找操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">4.1.2.</span> <span class="toc-text">更新操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">4.1.3.</span> <span class="toc-text">案例: 列表联动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">4.1.4.</span> <span class="toc-text">弹出窗口</span></a></li></ol></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#js-"><span class="toc-number">5.</span> <span class="toc-text">js中的逻辑判断</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#json"><span class="toc-number">6.</span> <span class="toc-text">JSON</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#jsonlib-"><span class="toc-number">6.1.</span> <span class="toc-text">JSONlib 使用</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">7.</span> <span class="toc-text">使用小结</span></a></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#window-"><span class="toc-number">1.</span> <span class="toc-text">window对象常用方法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#form-"><span class="toc-number">2.</span> <span class="toc-text">Form 表单对象</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">定义函数</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#dom-"><span class="toc-number">4.</span> <span class="toc-text">DOM 编程</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">4.1.</span> <span class="toc-text">节点</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">4.1.1.</span> <span class="toc-text">查找操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">4.1.2.</span> <span class="toc-text">更新操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">4.1.3.</span> <span class="toc-text">案例: 列表联动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">4.1.4.</span> <span class="toc-text">弹出窗口</span></a></li></ol></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#js-"><span class="toc-number">5.</span> <span class="toc-text">js中的逻辑判断</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">6.</span> <span class="toc-text">使用小结</span></a></li></ol>
 		</div>
 		
 		<h1 id="window-">window对象常用方法</h1>
@@ -492,8 +492,8 @@ table.appendChild(tbodyElm);
     <span class="keyword">return</span> xmoDoc;
 }
 document.getElementById(<span class="string">"province"</span>).onchange = <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
-    <span class="comment">// TODO 要先清理 city 选择框</span>
-    
+    <span class="comment">// 要先清理 city 选择框</span>
+    document.getElementById(<span class="string">"city"</span>).innerHTML = <span class="string">""</span>;
     <span class="keyword">var</span> xmlDoc = parseXML();
     <span class="keyword">var</span> selectedProvice = <span class="keyword">this</span>.value;
 
@@ -582,83 +582,6 @@ document.getElementById(<span class="string">"province"</span>).onchange = <span
 
 <h1 id="js-">js中的逻辑判断</h1>
 <p>在运算逻辑中, 0, &quot;&quot;, false, null, undefined, NaN 均为 false</p>
-<h1 id="json">JSON</h1>
-<p>JavaScript Object Notation, 比 xml 更轻巧, 是 JavaScript 的原生格式</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doGet</span>(req, resp) {
-    resp.setContentType(<span class="string">"text/html;charset=utf-8"</span>);
-    PrintWriter <span class="keyword">out</span> = resp.getWriter();
-    String str = <span class="string">"{name:'山东'}"</span>;
-    <span class="keyword">out</span>.write(str);
-}
-</pre></td></tr></table></figure>
-
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-</pre></td><td class="code"><pre><span class="keyword">var</span> xhr = createXmlHttpRequest();
-xhr.onreadystatechange = <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
-    <span class="keyword">if</span>(xhr.status==<span class="number">200</span> || xhr.status ) {
-       <span class="comment">// 返回值是 json 的字符串形式</span>
-       <span class="keyword">var</span> data = xhr.responseText;
-       <span class="comment">// 把普通的 json 文本转换成 json 数据</span>
-       <span class="keyword">var</span> json = <span class="built_in">eval</span>(<span class="string">"("</span>+ data + <span class="string">")"</span>);
-    }
-}
-</pre></td></tr></table></figure>
-
-<h2 id="jsonlib-">JSONlib 使用</h2>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-</pre></td><td class="code"><pre><span class="comment">// 省, 邮政编码</span>
-Province p = <span class="keyword">new</span> Provice(<span class="string">"山东省"</span>, <span class="number">250000</span>);
-JSONObject jsonObj = JSONObject.fromObject(p);
-jsonObj.toString();   <span class="comment">// {"name":"山东省", "zipcode":"250000"}</span>
-
-<span class="comment">// 输出数组</span>
-Province p1 = <span class="keyword">new</span> Provice(<span class="string">"山东省"</span>, <span class="number">250000</span>);
-Province p2 = <span class="keyword">new</span> Provice(<span class="string">"浙江"</span>, <span class="number">320000</span>);
-List ps = <span class="keyword">new</span> ArrayList&lt;Province&gt;();
-ps.add(p1);
-ps.add(p2);
-JSONArray jsonArr = JSONArray.fromObject(p2);
-jsonArr.toString() <span class="comment">// [{name:**, zipcode:**},{name:**, zipcode:**}]</span>
-
-<span class="comment">// 过滤输出</span>
-JsonConfig cfg = <span class="keyword">new</span> JsonConfig();  
-cfg.setExcludes(<span class="keyword">new</span> <span class="built_in">String</span>[]{<span class="string">"zipcode"</span>}); <span class="comment">// 不包含的字段列表</span>
-JSONArray jsonArr = JSONArray.fromObject(p2, cfg);
-jsonArr.toString() <span class="comment">// [{name:**},{name:**}]</span>
-</pre></td></tr></table></figure>
-
 <h1 id="-">使用小结</h1>
 <ul>
 <li>若应用程序不需要与其他应用程序共享数据的时候,
@@ -720,7 +643,7 @@ jsonArr.toString() <span class="comment">// [{name:**},{name:**}]</span>
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#window-"><span class="toc-number">1.</span> <span class="toc-text">window对象常用方法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#form-"><span class="toc-number">2.</span> <span class="toc-text">Form 表单对象</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">定义函数</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#dom-"><span class="toc-number">4.</span> <span class="toc-text">DOM 编程</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">4.1.</span> <span class="toc-text">节点</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">4.1.1.</span> <span class="toc-text">查找操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">4.1.2.</span> <span class="toc-text">更新操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">4.1.3.</span> <span class="toc-text">案例: 列表联动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">4.1.4.</span> <span class="toc-text">弹出窗口</span></a></li></ol></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#js-"><span class="toc-number">5.</span> <span class="toc-text">js中的逻辑判断</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#json"><span class="toc-number">6.</span> <span class="toc-text">JSON</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#jsonlib-"><span class="toc-number">6.1.</span> <span class="toc-text">JSONlib 使用</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">7.</span> <span class="toc-text">使用小结</span></a></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#window-"><span class="toc-number">1.</span> <span class="toc-text">window对象常用方法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#form-"><span class="toc-number">2.</span> <span class="toc-text">Form 表单对象</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">定义函数</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#dom-"><span class="toc-number">4.</span> <span class="toc-text">DOM 编程</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">4.1.</span> <span class="toc-text">节点</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">4.1.1.</span> <span class="toc-text">查找操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">4.1.2.</span> <span class="toc-text">更新操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">4.1.3.</span> <span class="toc-text">案例: 列表联动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">4.1.4.</span> <span class="toc-text">弹出窗口</span></a></li></ol></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#js-"><span class="toc-number">5.</span> <span class="toc-text">js中的逻辑判断</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">6.</span> <span class="toc-text">使用小结</span></a></li></ol>
   </div>
 
 <div id="asidepart">
@@ -758,6 +681,8 @@ jsonArr.toString() <span class="comment">// [{name:**},{name:**}]</span>
 		
 			<li><a href="/tags/ServletResponse/" title="ServletResponse">ServletResponse<sup>1</sup></a></li>
 		
+			<li><a href="/tags/Spring/" title="Spring">Spring<sup>1</sup></a></li>
+		
 			<li><a href="/tags/String/" title="String">String<sup>1</sup></a></li>
 		
 			<li><a href="/tags/StringBuffer/" title="StringBuffer">StringBuffer<sup>1</sup></a></li>
@@ -771,8 +696,6 @@ jsonArr.toString() <span class="comment">// [{name:**},{name:**}]</span>
 			<li><a href="/tags/dtd/" title="dtd">dtd<sup>1</sup></a></li>
 		
 			<li><a href="/tags/eclipse/" title="eclipse">eclipse<sup>1</sup></a></li>
-		
-			<li><a href="/tags/emacs/" title="emacs">emacs<sup>1</sup></a></li>
 		
 		</ul>
 </div>

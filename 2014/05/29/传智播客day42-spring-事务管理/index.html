@@ -1,0 +1,1340 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>传智播客day42-Spring 事务管理 | Poe&#39;s World</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="zhpooer">
+    
+    <meta name="description" content="Spring事务管理
+在Java开发中, 事务管理代码放到业务层
+事务管理 API
+
+PlatformTransactionManager 提供事务管理方法, 核心接口
+1
+2
+3
+4
+5
+6
+// 提交事务
+void commit(TransactionStatus status);
+// 根据事">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="Poe&#39;s World" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="Poe&#39;s World" title="Poe&#39;s World"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Poe&#39;s World">Poe&#39;s World</a></h1>
+				<h2 class="blog-motto">竹杖芒鞋轻胜马，一蓑烟雨任平生</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/english-monthly">英语角</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:zhpooer.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/05/29/传智播客day42-spring-事务管理/" title="传智播客day42-Spring 事务管理" itemprop="url">传智播客day42-Spring 事务管理</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://zhpooer.github.io" title="zhpooer">zhpooer</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2014-05-29T01:01:42.000Z" itemprop="datePublished">5月 29 2014</time>
+    更新日期:<time datetime="2014-05-30T01:21:03.000Z" itemprop="dateModified">5月 30 2014</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#spring-"><span class="toc-number">1.</span> <span class="toc-text">Spring事务管理</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-api"><span class="toc-number">1.1.</span> <span class="toc-text">事务管理 API</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#platformtransactionmanager"><span class="toc-number">1.2.</span> <span class="toc-text">PlatformTransactionManager</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">2.</span> <span class="toc-text">事务的隔离级别</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">事务的传播行为</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">4.</span> <span class="toc-text">事务管理方式</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">4.1.</span> <span class="toc-text">实际案例: 转账</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">4.1.1.</span> <span class="toc-text">声明式事务管理</span></a></li><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#transactionproxyfactorybean"><span class="toc-number">4.1.1.1.</span> <span class="toc-text">TransactionProxyFactoryBean</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#tx-"><span class="toc-number">4.1.1.2.</span> <span class="toc-text">tx, 自动代理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-"><span class="toc-number">4.1.1.3.</span> <span class="toc-text">注解实现事务管理</span></a></li></ol></ol></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#ssh-"><span class="toc-number">5.</span> <span class="toc-text">SSH 框架整合</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#spring-hibernate-"><span class="toc-number">5.1.</span> <span class="toc-text">Spring 和 Hibernate 整合</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">5.1.1.</span> <span class="toc-text">零障碍整合</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-hibernate-spring"><span class="toc-number">5.1.2.</span> <span class="toc-text">将 Hibernate 参数配置到 Spring</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hibernatetemplate-"><span class="toc-number">5.1.3.</span> <span class="toc-text">HibernateTemplate 用法</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#spring-struts-"><span class="toc-number">5.2.</span> <span class="toc-text">Spring 和 Struts 整合</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#-service"><span class="toc-number">5.2.1.</span> <span class="toc-text">自动装配 Service</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#action-spring-"><span class="toc-number">5.2.2.</span> <span class="toc-text">Action由 Spring 管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">5.2.3.</span> <span class="toc-text">结论</span></a></li></ol></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">6.</span> <span class="toc-text">延迟加载问题</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">7.</span> <span class="toc-text">注解整合</span></a></li></ol>
+		</div>
+		
+		<h1 id="spring-">Spring事务管理</h1>
+<p>在Java开发中, 事务管理代码放到业务层</p>
+<h2 id="-api">事务管理 API</h2>
+<ul>
+<li><p><code>PlatformTransactionManager</code> 提供事务管理方法, 核心接口</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre><span class="comment">// 提交事务</span>
+void <span class="function">commit(TransactionStatus status)</span>;
+<span class="comment">// 根据事务定义信息，获得当前状态 </span>
+TransactionStatus <span class="function">getTransaction(TransactionDefinition definition)</span>;
+<span class="comment">// 回滚事务</span>
+void <span class="function">rollback(TransactionStatus status)</span>
+</pre></td></tr></table></figure>
+</li>
+<li><p><code>TransactionDefinition</code> 事务的定义信息(隔离级别, 传播行为, 超时时间, 只读)</p>
+<ul>
+<li>ISOLATION_xxx 事务隔离级别 </li>
+<li>PROPAGATION_xxx  事务传播行为 </li>
+<li>int getTimeout()  获得超时信息</li>
+<li>boolean isReadOnly()  判断事务是否只读</li>
+</ul>
+</li>
+<li>TransactionStatus 事务具体行为, 每一个时刻点, 事务具体状态信息</li>
+</ul>
+<p>关系: PlatformTransactionManager 根据 TransactionDefinition 进行事务管理, 
+管理过程中事务存在多种状态, 每个状态信息通过 TransactionStatus 表示</p>
+<h2 id="platformtransactionmanager">PlatformTransactionManager</h2>
+<p>Spring 为不同的持久化框架提供了不同的PlatformTransactionManager接口实现 ,
+针对不同的持久层技术, 要选用对应的事务管理器</p>
+<table>
+<thead>
+<tr>
+<th>不同平台事务管理器实现</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>org.springframework.jdbc.datasource.DataSourceTransactionManager</td>
+<td>使用Spring JDBC或iBatis 进行持久化数据时使用</td>
+</tr>
+<tr>
+<td>org.springframework.orm.hibernate3.HibernateTransactionManager</td>
+<td>使用Hibernate3.0版本进行持久化数据时使用</td>
+</tr>
+<tr>
+<td>org.springframework.orm.jpa.JpaTransactionManager</td>
+<td>使用JPA进行持久化时使用</td>
+</tr>
+<tr>
+<td>org.springframework.jdo.JdoTransactionManager</td>
+<td>当持久化机制是Jdo时使用</td>
+</tr>
+<tr>
+<td>org.springframework.transaction.jta.JtaTransactionManager</td>
+<td>使用一个JTA实现来管理事务，在一个事务跨越多个资源时必须使用</td>
+</tr>
+</tbody>
+</table>
+<h1 id="-">事务的隔离级别</h1>
+<p>四大特性: ACID, 原子性, 一致性, 隔离性, 持久性</p>
+<p>隔离性引发并发问题：脏读 不可重复读, 幻读</p>
+<ul>
+<li>脏读 一个事务读取另一个事务 未提交数据</li>
+<li>不可重复读 一个事务读取另一个事务 已经提交 update 数据</li>
+<li>虚读  一个事务读取另一个事务 已经提交 insert 数据</li>
+</ul>
+<p>事务的隔离级别: 为了解决事务隔离性引发的问题</p>
+<ul>
+<li>DEFAULT 默认级别  mysql REPEATABLE_READ 、 oracle READ_COMMITTED</li>
+<li>READ_UNCOMMITED  导致所有问题发生</li>
+<li>READ_COMMITTED 防止脏读、 发生不可重复读和虚读</li>
+<li>REPEATABLE_READ 防止脏读、不可重复读，发生虚读</li>
+<li>SERIALIZABLE 防止所有并发问题 </li>
+</ul>
+<h1 id="-">事务的传播行为</h1>
+<p>为什么要有事务的传播行为?(Why)</p>
+<pre><code>实际开发中, 业务层方法间相互调用, 如在删除客户信息时, 要先删除订单信息
+那么删除订单出错,客户要不要删除?
+</code></pre><p>什么是事务的传播行为?(what)</p>
+<pre><code>一个业务层事务调用令一个业务层事务, 事务间之间关系如何处理
+</code></pre><p>七种传播行为:</p>
+<ul>
+<li>PROPAGATION_REQUIRED 支持当前事务, 如果不存在 就新建一个</li>
+<li>PROPAGATION_SUPPORTS 支持当前事务, 如果不存在，就不使用事务</li>
+<li>PROPAGATION_MANDATORY 支持当前事务, 如果不存在，抛出异常</li>
+<li>PROPAGATION_REQUIRES_NEW 如果有事务存在, 挂起当前事务, 创建一个新的事务<ul>
+<li>生成订单, 发送通知邮件, 通知邮件会创建一个新的事务, 如果邮件失败, 不影响订单生成</li>
+</ul>
+</li>
+<li>PROPAGATION_NOT_SUPPORTED    以非事务方式运行，如果有事务存在，挂起当前事务</li>
+<li>PROPAGATION_NEVER 以非事务方式运行, 如果有事务存在, 抛出异常</li>
+<li>PROPAGATION_NESTED 如果当前事务存在, 则嵌套事务执行<ul>
+<li>依赖于 JDBC3.0 提供 SavePoint 技术 </li>
+<li>删除客户 删除订单, 在删除客户后, 设置SavePoint, 执行删除订单, 删除订单和删除客户在同一个事务,
+删除订单失败， 事务回滚 SavePoint , 由用户控制是事务提交 还是 回滚</li>
+</ul>
+</li>
+</ul>
+<h1 id="-">事务管理方式</h1>
+<p>编程式事务管理 </p>
+<ul>
+<li>在代码中通过 TransactionTemplate 手动进行事务管理, 在实际开发中很少被用到</li>
+</ul>
+<p>声明式事务管理</p>
+<ul>
+<li>在配置文件中, 对 Bean 的方法进行事务管理, 基于AOP思想, 无需写代码 </li>
+</ul>
+<h2 id="-">实际案例: 转账</h2>
+<p>如果没有进行事务管理, JdbcTemplate DAO 每一个操作, 都是一个事务</p>
+<p>数据库脚本</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre><span class="operator"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`account`</span> (
+  <span class="string">`id`</span> <span class="keyword">int</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> AUTO_INCREMENT,
+  <span class="string">`name`</span> <span class="keyword">varchar</span>(<span class="number">20</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span>,
+  <span class="string">`money`</span> <span class="keyword">double</span> <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,
+  <span class="keyword">PRIMARY</span> <span class="keyword">KEY</span> (<span class="string">`id`</span>)
+) ENGINE=InnoDB AUTO_INCREMENT=<span class="number">4</span> <span class="keyword">DEFAULT</span> CHARSET=utf8;</span>
+<span class="operator"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="string">`account`</span> <span class="keyword">VALUES</span> (<span class="string">'1'</span>, <span class="string">'aaa'</span>, <span class="string">'1000'</span>);</span>
+<span class="operator"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="string">`account`</span> <span class="keyword">VALUES</span> (<span class="string">'2'</span>, <span class="string">'bbb'</span>, <span class="string">'1000'</span>);</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- 最全的spring 模板 --&gt;</span>
+<span class="tag">&lt;<span class="title">beans</span> <span class="attribute">xmlns</span>=<span class="value">"http://www.springframework.org/schema/beans"</span>
+	<span class="attribute">xmlns:xsi</span>=<span class="value">"http://www.w3.org/2001/XMLSchema-instance"</span>
+	<span class="attribute">xmlns:context</span>=<span class="value">"http://www.springframework.org/schema/context"</span>
+	<span class="attribute">xmlns:aop</span>=<span class="value">"http://www.springframework.org/schema/aop"</span>
+	<span class="attribute">xmlns:tx</span>=<span class="value">"http://www.springframework.org/schema/tx"</span>
+	<span class="attribute">xsi:schemaLocation</span>=<span class="value">"http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop.xsd
+	http://www.springframework.org/schema/tx 
+	http://www.springframework.org/schema/tx/spring-tx.xsd"</span>&gt;</span>
+    <span class="comment">&lt;!-- 导入外部属性文件, 配置连接池 --&gt;</span>
+    <span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"accountService"</span> <span class="attribute">class</span>=<span class="value">"zhpooer.AccountServiceImpl"</span>&gt;</span>
+         <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"accountDao"</span> <span class="attribute">ref</span>=<span class="value">"accountDao"</span>&gt;</span><span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+         <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"transactionTemplate"</span> <span class="attribute">ref</span>=<span class="value">"transactionTemplate"</span>&gt;</span> <span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">bean</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"accountDao"</span> <span class="attribute">class</span>=<span class="value">"zhpooer.AccountDaoImpl"</span>&gt;</span>
+    <span class="comment">&lt;!-- 将连接池注入给DAO, JdbcTemplate会自动 创建 --&gt;</span>
+        <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"dataSource"</span> <span class="attribute">ref</span>=<span class="value">"dataSource"</span>&gt;</span><span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">bean</span>&gt;</span>
+    <span class="comment">&lt;!-- 编程式事务管理配置 --&gt;</span>
+    <span class="comment">&lt;!-- 事务管理模板 --&gt;</span>
+    <span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"transactionTemplate"</span> <span class="attribute">class</span>=<span class="value">"org.springframework.transaction.support.TransactionTemplate"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"transactionManager"</span> <span class="attribute">ref</span>=<span class="value">"tractionManager"</span>&gt;</span> <span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">bean</span>&gt;</span>
+    <span class="comment">&lt;!-- 事务管理器 --&gt;</span>
+    <span class="comment">&lt;!-- org.springframework.jdbc.datasource.DataSourceTransactionManager 用来管理jdbc事务操作 --&gt;</span>
+    <span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"transactionManager"</span> <span class="attribute">class</span>=<span class="value">"org.springframework.jdbc.datasource.DataSourceTransactionManager"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"dataSource"</span> <span class="attribute">ref</span>=<span class="value">"dataSrouce"</span>&gt;</span> <span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">bean</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">beans</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AccountServiceImpl</span> <span class="keyword">implements</span> <span class="title">AccountService</span>{</span>
+    <span class="comment">// 自动注入</span>
+    <span class="keyword">private</span> AccountDao accountDao;
+    <span class="keyword">private</span> TransactionTemplate transactionTemplate;
+    
+    <span class="comment">// 转账</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">transfer</span>(String outAccount, String inAccount, Double money) {
+            <span class="comment">// 编程式事务管理, 使用事务模板管理事务</span>
+        transactionTemplate.execute(<span class="keyword">new</span> TransactionCallbackWithoutResult(){
+            <span class="annotation">@Override</span>
+            <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doInTransactionWithoutResult</span>(){
+                accountDao.outMoney(outAccount, money);
+                accountDao.inMoney(inAccount, money);
+            }
+        });
+    }
+}
+
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AccountDaoImpl</span> <span class="keyword">extends</span> <span class="title">JdbcDaoSupport</span> <span class="keyword">implements</span> <span class="title">AccountDao</span> {</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">outMoney</span>(String outAccount, Double money) {
+        String sql = <span class="string">"update account set money = money-? where name=?"</span>;
+        getJdbcTemplate().update(sql, money, outAccount);
+    }
+
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">inMoney</span>(String inAccount, Double money) {
+        String sql = <span class="string">"update account set money = money+? where name=?"</span>;
+        getJdbcTemplate().update(sql, money, inAccount);
+    }
+}
+</pre></td></tr></table></figure>
+
+<h3 id="-">声明式事务管理</h3>
+<h4 id="transactionproxyfactorybean">TransactionProxyFactoryBean</h4>
+<p>通过 TransactionProxyFactoryBean 对业务类创建代理,
+实现声明式事务管理, 无需修改 Service 代码</p>
+<p>缺点, 需要为每个Bean 都创建单独代理对象，开发量巨大</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- 事务管理器 --&gt;</span>
+<span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"transactionManager"</span> <span class="attribute">class</span>=<span class="value">""</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">proerty</span> <span class="attribute">name</span>=<span class="value">"dataSource"</span> <span class="attribute">ref</span>=<span class="value">"dataSource"</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">proerty</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">bean</span>&gt;</span>
+<span class="comment">&lt;!-- 为目标Servicee创建代理 --&gt;</span>
+<span class="tag">&lt;<span class="title">bean</span> <span class="attribute">name</span>=<span class="value">"accountServiceProxy"</span> <span class="attribute">class</span>=<span class="value">"org.springframework.transaction.interceptor.TransactionProxyFactoryBean"</span>&gt;</span>
+    <span class="comment">&lt;!-- 目标 --&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"target"</span> <span class="attribute">ref</span>=<span class="value">"accountService"</span>&gt;</span> <span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+    <span class="comment">&lt;!-- 针对接口代理 --&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"proxyInterfaces"</span> <span class="attribute">value</span>=<span class="value">"zhpooer.AccountService"</span>&gt;</span><span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+    <span class="comment">&lt;!-- 增强 事务管理 --&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"transactionManager"</span> <span class="attribute">ref</span>=<span class="value">"transactionManager"</span>&gt;</span><span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+    <span class="comment">&lt;!-- 事务管理属性 --&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"transactionAttributes"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">props</span>&gt;</span>
+           <span class="comment">&lt;!-- key 就是方法名  --&gt;</span>
+           <span class="comment">&lt;!-- value prop格式：PROPAGATION,ISOLATION,readOnly,-Exception,+Exception --&gt;</span>
+           <span class="comment">&lt;!-- PROPAGATION 事务传播行为 --&gt;</span>
+           <span class="comment">&lt;!-- ISOLATION, 事务隔离级别 --&gt;</span>
+           <span class="comment">&lt;!-- readOnly  表示事务是只读的，不能进行修改操作  --&gt;</span>
+           <span class="comment">&lt;!-- -Exception 发生这些异常事务进行回滚(默认发生任何异常事务都会回滚) --&gt;</span>
+            <span class="comment">&lt;!-- +Exception 事务将忽略这些异常，仍然提交事务  --&gt;</span>
+            <span class="tag">&lt;<span class="title">prop</span> <span class="attribute">key</span>=<span class="value">"transfer"</span>&gt;</span> PROPAGATION_REQUIRED, readOnly, +java.lang.ArithmeticException <span class="tag">&lt;/<span class="title">prop</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">props</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">bean</span>&gt;</span>
+<span class="comment">&lt;!-- 注入代理对象: @Qualifier("accountServiceProxy") --&gt;</span>
+</pre></td></tr></table></figure>
+
+<h4 id="tx-">tx, 自动代理</h4>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- 定义事务管理增强 --&gt;</span>
+<span class="tag">&lt;<span class="title">tx:advice</span> <span class="attribute">id</span>=<span class="value">"txAdvicd"</span> <span class="attribute">transaction-manager</span>=<span class="value">"transactionManager"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">tx:attribute</span>&gt;</span>
+        <span class="comment">&lt;!--
+        name="transfer" 事务管理方法名
+        isolation="DEFAULT" 默认隔离级别
+        qpropagation="REQUIRED"  默认传播行为
+        read-only="false"  是否只读
+        no-rollback-for=""  发生异常不会滚  类似+Exception
+        rollback-for=""  发生异常回滚 类似-Exception
+        timeout="-1"  不超时
+        --&gt;</span>
+        <span class="tag">&lt;<span class="title">tx:method</span> <span class="attribute">name</span>=<span class="value">"transfer"</span> <span class="attribute">isolatioin</span>=<span class="value">"DEFAULT"</span> <span class="attribute">propagation</span>=<span class="value">"REQUIRED"</span>
+                   <span class="attribute">read-only</span>=<span class="value">"false"</span> <span class="attribute">timeout</span>=<span class="value">"-1"</span>&gt;</span><span class="tag">&lt;/<span class="title">tx:method</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">tx:attribute</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">tx:advice</span>&gt;</span>
+<span class="comment">&lt;!-- 使用Aop 进行自动代理 --&gt;</span>
+<span class="tag">&lt;<span class="title">aop:config</span>&gt;</span>
+    <span class="comment">&lt;!-- 定义切点 --&gt;</span>
+    <span class="tag">&lt;<span class="title">aop:pointcut</span> <span class="attribute">expression</span>=<span class="value">"execution(public * * (..))"</span> <span class="attribute">id</span>=<span class="value">"mypointcut"</span>&gt;</span><span class="tag">&lt;/<span class="title">aop:pointcut</span>&gt;</span>
+    <span class="comment">&lt;!-- 定义切面 --&gt;</span>
+    <span class="tag">&lt;<span class="title">aop:advisor</span> <span class="attribute">advice-ref</span>=<span class="value">"txAdvice"</span> <span class="attribute">pointcut-ref</span>=<span class="value">"mypointcut"</span>&gt;</span><span class="tag">&lt;/<span class="title">aop:advisor</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">aop:config</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<h4 id="-">注解实现事务管理</h4>
+<ol>
+<li><p>在需要管理的类或者方法添加 <code>@Trasactional</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre><span class="comment">// isolation 隔离级别</span>
+<span class="comment">// propagation 传播行为</span>
+<span class="comment">// readOnly 是否只读</span>
+<span class="comment">// noRollbackFor 发生异常不回滚</span>
+<span class="comment">// rollbackFor 发生异常回滚</span>
+<span class="comment">// timeout 超时时间 -1 不超时</span>
+
+<span class="annotation">@Transactional</span>(isolation=Isolation.DEFAULT,propagation=,
+               readyOnly=, noRollbackFor=, rollbackFor, timeout=)
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">transfer</span>(){}
+</pre></td></tr></table></figure>
+</li>
+<li><p>在 applicationContext.xml</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre><span class="subst">&lt;</span>tx:annotation<span class="attribute">-driven</span> transaction<span class="attribute">-manager</span><span class="subst">=</span><span class="string">"transactionManager"</span><span class="subst">&gt;&lt;</span>/tx:annotation<span class="attribute">-driven</span><span class="subst">&gt;</span>
+</pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h1 id="ssh-">SSH 框架整合</h1>
+<p>导入Jar包, 及配置文件</p>
+<ul>
+<li>表现层框架 struts2, <code>struts2-json-plugin.jar</code>,
+<code>struts2-spring-plugin.jar</code>, <code>struts2-conversion.jar</code>(注解), 以及 web.xml(filter), struts2.xml</li>
+<li><p>业务层 spring3</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>配置 web.xml
+<span class="tag">&lt;<span class="title">listener</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">listener-class</span>&gt;</span> ContextLoaderListner <span class="tag">&lt;/<span class="title">listener-class</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">listener</span>&gt;</span>
+</pre></td></tr></table></figure>
+</li>
+<li><p>持久层框架 hibernate3</p>
+</li>
+</ul>
+<h2 id="spring-hibernate-">Spring 和 Hibernate 整合</h2>
+<h3 id="-">零障碍整合</h3>
+<p>通过 Spring 提供 LocalSessionFactoryBean, 注解引入hibernate配置文件,
+在 Spring 容器中获得 SessionFactory对象, 将 SessionFactory, 注入到 DAO 程序</p>
+<p>图书添加</p>
+<p>移动脚本</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="operator"><span class="keyword">create</span> <span class="keyword">table</span>(
+    id <span class="keyword">int</span> <span class="keyword">not</span> <span class="keyword">null</span> AUTO_INCREMENT <span class="keyword">PRIMARY</span> <span class="keyword">key</span>,
+    bookname <span class="keyword">varchar</span>(<span class="number">20</span>) <span class="keyword">not</span> <span class="keyword">null</span>,
+    price <span class="keyword">double</span> <span class="keyword">not</span> <span class="keyword">null</span>
+);</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Book</span> {</span>
+     <span class="keyword">private</span> Integer id;
+     <span class="keyword">private</span> String bookname;
+     <span class="keyword">private</span> <span class="keyword">double</span> price;
+}
+
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BookDao</span> <span class="keyword">extends</span> <span class="title">HibernateDaoSupport</span>{</span>
+    
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">saveBook</span>(){}
+}
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- hibernate.cfg.xml --&gt;</span>
+<span class="tag">&lt;<span class="title">mapping</span> <span class="attribute">resource</span>=<span class="value">"domain.Book.hbm.xml"</span>/&gt;</span>
+
+<span class="comment">&lt;!-- Book.hbm.xml --&gt;</span>
+<span class="tag">&lt;<span class="title">hibernate-mapping</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">class</span> <span class="attribute">name</span>=<span class="value">"domain.Book"</span> <span class="attribute">table</span>=<span class="value">"book"</span> <span class="attribute">catalog</span>=<span class="value">""</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">id</span> <span class="attribute">name</span>=<span class="value">"id"</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">generator</span> <span class="attribute">class</span>=<span class="value">"identity"</span>&gt;</span> <span class="tag">&lt;/<span class="title">generator</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">id</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"bookname"</span>&gt;</span> <span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"price"</span>&gt;</span> <span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">class</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">hibernate-mapping</span>&gt;</span>
+
+<span class="comment">&lt;!-- applicationContext.xml --&gt;</span>
+<span class="comment">&lt;!-- 配置 sessionFactory --&gt;</span>
+<span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"sessionFactory"</span> <span class="attribute">class</span>=<span class="value">"org.springframework.orm.hibernate3.LocalSessionFactoryBean"</span>&gt;</span>
+    <span class="comment">&lt;!-- 加载hibernate配置文件 --&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"configLocation"</span> <span class="attribute">value</span>=<span class="value">"classpath:hibernate.cfg.xml"</span>&gt;</span>  <span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">bean</span>&gt;</span>
+<span class="comment">&lt;!-- 注入 sessionFactory --&gt;</span>
+<span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"bookDao"</span> <span class="attribute">class</span>=<span class="value">"dao.BookDao"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"sessionfactory"</span> <span class="attribute">ref</span>=<span class="value">"sessionfactory"</span>&gt;</span> <span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">bean</span>&gt;</span>
+
+<span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"bookService"</span> <span class="attribute">class</span>=<span class="value">"service.BookService"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"bookDao"</span> <span class="attribute">ref</span>=<span class="value">"bookDao"</span>&gt;</span> <span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">bean</span>&gt;</span>
+<span class="tag">&lt;<span class="title">tx:advice</span> <span class="attribute">id</span>=<span class="value">"transactionManager"</span> <span class="attribute">class</span>=<span class="value">"org.springframework.orm.hibernate3.HibernateTransactionManager"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">tx:attribute</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">tx:method</span> <span class="attribute">name</span>=<span class="value">"*"</span>&gt;</span> <span class="tag">&lt;/<span class="title">tx:method</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">tx:attribute</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">tx:advice</span>&gt;</span>
+<span class="tag">&lt;<span class="title">aop:config</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">aop:advisor</span> <span class="attribute">advice-ref</span>=<span class="value">"transactionManager"</span> <span class="attribute">pointcut</span>=<span class="value">"execution()"</span>&gt;</span> <span class="tag">&lt;/<span class="title">aop:advisor</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">aop:config</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+</pre></td><td class="code"><pre><span class="comment">// BookDao.java</span>
+<span class="comment">// HibernateTemplate 常用 api</span>
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">saveBook</span>(Book book){
+    <span class="keyword">this</span>.getHibernateTemplate().save(book);
+}
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">updateBook</span>(Book book) {
+    <span class="keyword">this</span>.getHibernateTemplate().update(book);
+}
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">deleteBook</span>(Book book) {
+    <span class="keyword">this</span>.getHibernateTemplate().delete(book);
+}
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">findById</span>(Integer id) {
+    <span class="keyword">return</span> <span class="keyword">this</span>.getHibernateTemplate().<span class="keyword">get</span>(Book.class, id);
+}p
+<span class="keyword">public</span> List&lt;Book&gt; <span class="title">findAll</span>(){
+    <span class="comment">// this.getSession().createQuery("from Book").list();</span>
+    <span class="keyword">return</span> <span class="keyword">this</span>.getHibernateTemplate().find(<span class="string">"from Book"</span>);
+}
+<span class="keyword">public</span> Book <span class="title">findByName</span>(String name){
+    <span class="comment">//  this.getSession().createQuery("from Book where name=?").setParameter(0, name).uniqueResult();</span>
+    <span class="keyword">return</span> <span class="keyword">this</span>.getHibernateTemplate().find(<span class="string">"from Book where name=?"</span>, name);
+}
+</pre></td></tr></table></figure>
+
+<p>业务层</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="keyword">class</span> BookService{
+    <span class="keyword">private</span> BookDao bookDao;
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">saveBook</span>(Book book) {
+        bookDao.saveBook(book);
+    }
+    <span class="keyword">public</span> List&lt;Book&gt; <span class="title">findAllBooks</span>(){
+        <span class="keyword">return</span> bookDao.findAll();
+    }
+}
+</pre></td></tr></table></figure>
+
+<h3 id="-hibernate-spring">将 Hibernate 参数配置到 Spring</h3>
+<p>将 hibernate框架的所有参数, 都配置到 applicationContext.xml</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- applicationContext.xml --&gt;</span>
+<span class="tag">&lt;<span class="title">context:property-placeholder</span> <span class="attribute">location</span>=<span class="value">"classpath:"</span>&gt;</span><span class="tag">&lt;/<span class="title">context:property-placeholder</span>&gt;</span>
+<span class="comment">&lt;!-- c3p0连接池 --&gt;</span>
+<span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"dataSource"</span> <span class="attribute">class</span>=<span class="value">"com.ComboPooledDataSource"</span>&gt;</span>
+    <span class="comment">&lt;!-- any other configuration  --&gt;</span>
+<span class="tag">&lt;/<span class="title">bean</span>&gt;</span>
+
+<span class="comment">&lt;!-- 配置 sessionFactory --&gt;</span>
+<span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"sessionFactory"</span> <span class="attribute">class</span>=<span class="value">"org.springframework.orm.hibernate3.LocalSessionFactoryBean"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"dataSource"</span> <span class="attribute">ref</span>=<span class="value">"dataSource"</span>&gt;</span><span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"hibernateProperties"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">props</span>&gt;</span>
+            <span class="comment">&lt;!-- 数据库方言 --&gt;</span>        
+            <span class="tag">&lt;<span class="title">prop</span> <span class="attribute">key</span>=<span class="value">"hibernate.dialect"</span>&gt;</span> org.hibernate.dialect.MySQLDialect <span class="tag">&lt;/<span class="title">prop</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">prop</span> <span class="attribute">key</span>=<span class="value">"hibernate.hbm2dll.auto"</span>&gt;</span>update <span class="tag">&lt;/<span class="title">prop</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">prop</span> <span class="attribute">key</span>=<span class="value">"hibernate.format_sql"</span>&gt;</span>true <span class="tag">&lt;/<span class="title">prop</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">prop</span> <span class="attribute">key</span>=<span class="value">"hibernate.show_sql"</span>&gt;</span>true <span class="tag">&lt;/<span class="title">prop</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">props</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+    <span class="comment">&lt;!-- 配置 hbm 文件 --&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"mappingResources | mappingLocations | mappingDirectoryLocations"</span>&gt;</span>
+        <span class="comment">&lt;!-- mappingResources --&gt;</span>
+        <span class="tag">&lt;<span class="title">list</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">value</span>&gt;</span>cn/zhpooer/Person.hbm.xml <span class="tag">&lt;/<span class="title">value</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">list</span>&gt;</span>
+        
+        <span class="comment">&lt;!-- mappingLocations --&gt;</span>
+        <span class="tag">&lt;<span class="title">list</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">value</span>&gt;</span>classpath: cn/zhpooer/Person.hbm.xml <span class="tag">&lt;/<span class="title">value</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">list</span>&gt;</span>
+        
+        <span class="comment">&lt;!-- mappingDirectoryLocations, 查找所有目录下的配置文件 --&gt;</span>
+        <span class="tag">&lt;<span class="title">list</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">value</span>&gt;</span>classpath: cn/zhpooer/domain <span class="tag">&lt;/<span class="title">value</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">list</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">bean</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<h3 id="hibernatetemplate-">HibernateTemplate 用法</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+</pre></td><td class="code"><pre>template.save(obj);
+template.update(obj);
+template.saveOrUpdate();
+template.delete(obj);
+template.get(class, id);
+template.load(class, id)
+
+// 查询
+template.find(hql, Object... args); // QBC查询, 等价于 session.createQeury(hql);
+
+template.findByCriteria(detachedCriteria) // 完全面向对象查询
+template.findByNamedQuery(queryName) // 命名查询, 查询语句写入配置文件, 方便项目管理
+
+public void testQBC {
+    HibernateTemplate template = new HibernateTemplate();
+    DetachedCriteria criteria = DetachedCriteria.forClass(Book.class); // 生成 select * from book;
+    criteria.add(Restrictions.like("bookname", "%为什么%"));
+    List<span class="tag">&lt;<span class="title">Book</span>&gt;</span> books = template.findByCriteria(criteria);
+}
+/* 配置文件
+* <span class="tag">&lt;<span class="title">hibernate-mapping</span>&gt;</span>
+*     <span class="comment">&lt;!-- 配置 hql --&gt;</span>
+*     <span class="tag">&lt;<span class="title">query</span> <span class="attribute">name</span>=<span class="value">"book.findbyname"</span>&gt;</span> from book where bookname like ?<span class="tag">&lt;/<span class="title">query</span>&gt;</span>
+*     <span class="comment">&lt;!-- 配置 sql --&gt;</span>
+*     <span class="tag">&lt;<span class="title">sql-query</span> <span class="attribute">name</span>=<span class="value">"book.findbynamesql"</span>&gt;</span>
+*         <span class="tag">&lt;<span class="title">return</span> <span class="attribute">class</span>=<span class="value">"domain.Book"</span>&gt;</span><span class="tag">&lt;/<span class="title">return</span>&gt;</span> <span class="comment">&lt;!-- 将结果集封装到book对象 --&gt;</span>
+*         select * from book where bookname like ?
+*     <span class="tag">&lt;/<span class="title">sql-query</span>&gt;</span>
+* <span class="tag">&lt;/<span class="title">hibernate-mapping</span>&gt;</span>
+*/ 
+public void testFindByNamedQuery(){
+    List<span class="tag">&lt;<span class="title">Book</span>&gt;</span> books = template.findByNamedQuery("book.findbyname", "%为什么%")
+
+    List<span class="tag">&lt;<span class="title">Book</span>&gt;</span> books = template.findByNamedQuery("book.findbynamesql", "%为什么%")
+}
+</pre></td></tr></table></figure>
+
+<h2 id="spring-struts-">Spring 和 Struts 整合</h2>
+<p>Struts2 整合 Spring 框架原理: 修改 struts2 默认对象工厂(struts -&gt; spring),
+导入 <code>struts2-spring-plugin</code></p>
+<h3 id="-service">自动装配 Service</h3>
+<p>由 struts2 自己装配Action, 再由 Spring</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BookaddAction</span> <span class="keyword">extends</span> <span class="title">ActionSupport</span>{</span>
+    <span class="keyword">private</span> Book book = <span class="keyword">new</span> Book();
+    <span class="comment">// 自动装配, 不需要提供任何配置, 只需要在Action里提供 service的 set方法</span>
+    <span class="comment">// 原理: struts配置文件中</span>
+    <span class="comment">// `struts.objectFactory.spring.autoWire = true`(根据名字自动注入), 生效 </span>
+
+    <span class="keyword">private</span> BookService bookService;
+    <span class="keyword">public</span> String <span class="title">execute</span>(){
+        pringln(<span class="string">"添加图书"</span>)
+        <span class="keyword">return</span> NONE;
+    }
+}
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">form</span> <span class="attribute">action</span>=<span class="value">"bookadd.action"</span> <span class="attribute">method</span>=<span class="value">"post"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"text"</span> <span class="attribute">name</span>=<span class="value">"bookname"</span>/&gt;</span>
+    <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"text"</span> <span class="attribute">name</span>=<span class="value">"price"</span>/&gt;</span>
+    <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"submit"</span>/&gt;</span>
+<span class="tag">&lt;/<span class="title">form</span>&gt;</span>
+
+<span class="tag">&lt;<span class="title">struts</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">package</span> <span class="attribute">name</span>=<span class="value">"default"</span> <span class="attribute">namespace</span>=<span class="value">"/"</span> <span class="attribute">extends</span>=<span class="value">"struts-default"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">action</span> <span class="attribute">name</span>=<span class="value">"bookadd"</span> <span class="attribute">class</span>=<span class="value">BookaddAction""</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">action</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">package</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">struts</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<h3 id="action-spring-">Action由 Spring 管理</h3>
+<p>将 struts2 的Action配置spring管理的Bean对象</p>
+<ol>
+<li><p>将Action配置为 Spring 中的一个Bean对象</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- applicationContext.xml 加入ActionBean --&gt;</span>
+<span class="comment">&lt;!-- 必须设置为 prototype --&gt;</span>
+<span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"bookaddAction"</span> <span class="attribute">class</span>=<span class="value">"action.BookaddAction"</span> <span class="attribute">scope</span>=<span class="value">"prototype"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"bookService"</span> <span class="attribute">ref</span>=<span class="value">"bookService"</span>&gt;</span><span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">bean</span>&gt;</span>
+</pre></td></tr></table></figure>
+</li>
+<li><p>Struts.xml 配置 Spring bean 的 id, 作为 class 的属性</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- 不是真实类名, 只是只给伪类名 --&gt;</span>
+<span class="tag">&lt;<span class="title">package</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">action</span> <span class="attribute">name</span>=<span class="value">"bookadd"</span> <span class="attribute">class</span>=<span class="value">"bookaddAction"</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">action</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">package</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h3 id="-">结论</h3>
+<p>第一种整合方式, Action 由 Struts2 自己管理, Service对象采用自动装配</p>
+<p>第二种整合方式, Action 由 spring 自己管理, 依赖注入service对象, struts2 需要配置伪类名</p>
+<p>第二种方式, 可以对 Action 进行 AOP 增强</p>
+<h1 id="-">延迟加载问题</h1>
+<p>懒加载对象, 但是对象已经脱管, 报异常 <code>no session</code></p>
+<p>解决方案</p>
+<ol>
+<li>设置为立即加载 lazy=false, 缺点, 每次查询客户, 都要查询订单</li>
+<li>在业务层, 事务关闭前手, 动初始化
+<code>Hibernate.initialize(customer.getOrders())</code>, 缺点, 需要写代码</li>
+<li>OpenSessionView, session 不随事务关闭而关闭,
+将 session 延迟到表现层, 存在性能问题, 通过配置, 无需编码<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- web.xml --&gt;</span>
+<span class="comment">&lt;!-- 在Struts2的过滤器前, 配置 OpenSessionInViewFilter --&gt;</span>
+<span class="tag">&lt;<span class="title">filter</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">filter-name</span>&gt;</span>openfilter<span class="tag">&lt;/<span class="title">filter-name</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">filter-class</span>&gt;</span>org.springframework.orm.hiberante3.support.OpenSessionInViewFilter<span class="tag">&lt;/<span class="title">filter-class</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">filter</span>&gt;</span>
+<span class="tag">&lt;<span class="title">filter-mapping</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">filter-name</span>&gt;</span>openfilter<span class="tag">&lt;/<span class="title">filter-name</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">url-pattern</span>&gt;</span>/*<span class="tag">&lt;/<span class="title">url-pattern</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">filter-mapping</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h1 id="-">注解整合</h1>
+<p>导入 <code>struts-conversion-plugin.jar</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+</pre></td><td class="code"><pre><span class="comment">// hiberante注解 是对 jpa注解的扩展</span>
+<span class="annotation">@Entity</span>
+<span class="annotation">@Table</span>(name=<span class="string">"book"</span>, catalog=<span class="string">""</span>)
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Book</span> {</span>
+    <span class="annotation">@Id</span>
+    <span class="annotation">@GeneratedValue</span>(strategy = GeneratedType.IDENTITY)
+    <span class="keyword">private</span> Integer id;
+    <span class="comment">// 如果列名和属性名不一致, 可以不写</span>
+    <span class="annotation">@Column</span>(name=<span class="string">""</span>, nullable=<span class="keyword">true</span>)
+    <span class="keyword">private</span> String bookname;
+    <span class="keyword">private</span> <span class="keyword">double</span> price;
+}
+<span class="annotation">@Repository</span>(<span class="string">"bookDao"</span>)
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BookDao</span> {</span>
+    <span class="annotation">@Resource</span>(name=<span class="string">"hiberanteTemplate"</span>)
+    <span class="keyword">private</span> HiberanteTemplate template;
+}
+<span class="annotation">@Controller</span>(<span class="string">"bookaddAction"</span>)
+<span class="annotation">@Scope</span>(<span class="string">"prototype"</span>)
+<span class="annotation">@Namespace</span>(<span class="string">"/"</span>)
+<span class="annotation">@ParentPackage</span>(<span class="string">"struts-default"</span>)
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BookaddAction</span>{</span>
+    <span class="annotation">@Action</span>(<span class="string">"bookadd"</span>)
+    <span class="keyword">public</span> String <span class="title">execute</span>(){
+    }
+}
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+</pre></td><td class="code"><pre><span class="comment">&lt;!--  AnnotationSessionFactoryBean 支持注解功能--&gt;</span>
+<span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"sessionFactory"</span> <span class="attribute">class</span>=<span class="value">"org.springframework.orm.hiberante3.annotation.AnnotationSessionFactoryBean "</span>&gt;</span>
+    <span class="comment">&lt;!-- 其他配置同上  --&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"packageToScan"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">list</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">value</span>&gt;</span>cn.zhpooer<span class="tag">&lt;/<span class="title">value</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">list</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">bean</span>&gt;</span>
+<span class="tag">&lt;<span class="title">context:component-scan</span> <span class="attribute">base-package</span>=<span class="value">"cn.itcast, io.zhpooer."</span>/&gt;</span>
+<span class="tag">&lt;<span class="title">context:annotation-config</span>/&gt;</span>
+<span class="comment">&lt;!-- 注解事务管理 --&gt;</span>
+
+<span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"transactionManager"</span> <span class="attribute">class</span>=<span class="value">"org.springframework.jdbc.datasource.DataSourceTransactionManager"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"dataSource"</span> <span class="attribute">ref</span>=<span class="value">"dataSrouce"</span>&gt;</span> <span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">bean</span>&gt;</span>
+<span class="tag">&lt;<span class="title">tx:</span> <span class="attribute">annotation-driven</span> <span class="attribute">transaction-manager</span>=<span class="value">"transactionManager"</span>/&gt;</span>
+</pre></td></tr></table></figure>
+
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/传智播客/">传智播客</a><a href="/tags/spring/">spring</a>
+  </div>
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://zhpooer.github.io/2014/05/29/传智播客day42-spring-事务管理/" data-title="传智播客day42-Spring 事务管理 | Poe&#39;s World" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2014/05/27/传智播客day41-spring-aop/"  title="传智播客day41-spring AOP">
+ <strong>NEXT:</strong><br/> 
+ <span>传智播客day41-spring AOP
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#spring-"><span class="toc-number">1.</span> <span class="toc-text">Spring事务管理</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-api"><span class="toc-number">1.1.</span> <span class="toc-text">事务管理 API</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#platformtransactionmanager"><span class="toc-number">1.2.</span> <span class="toc-text">PlatformTransactionManager</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">2.</span> <span class="toc-text">事务的隔离级别</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">事务的传播行为</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">4.</span> <span class="toc-text">事务管理方式</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">4.1.</span> <span class="toc-text">实际案例: 转账</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">4.1.1.</span> <span class="toc-text">声明式事务管理</span></a></li><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#transactionproxyfactorybean"><span class="toc-number">4.1.1.1.</span> <span class="toc-text">TransactionProxyFactoryBean</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#tx-"><span class="toc-number">4.1.1.2.</span> <span class="toc-text">tx, 自动代理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-"><span class="toc-number">4.1.1.3.</span> <span class="toc-text">注解实现事务管理</span></a></li></ol></ol></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#ssh-"><span class="toc-number">5.</span> <span class="toc-text">SSH 框架整合</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#spring-hibernate-"><span class="toc-number">5.1.</span> <span class="toc-text">Spring 和 Hibernate 整合</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">5.1.1.</span> <span class="toc-text">零障碍整合</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-hibernate-spring"><span class="toc-number">5.1.2.</span> <span class="toc-text">将 Hibernate 参数配置到 Spring</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hibernatetemplate-"><span class="toc-number">5.1.3.</span> <span class="toc-text">HibernateTemplate 用法</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#spring-struts-"><span class="toc-number">5.2.</span> <span class="toc-text">Spring 和 Struts 整合</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#-service"><span class="toc-number">5.2.1.</span> <span class="toc-text">自动装配 Service</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#action-spring-"><span class="toc-number">5.2.2.</span> <span class="toc-text">Action由 Spring 管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">5.2.3.</span> <span class="toc-text">结论</span></a></li></ol></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">6.</span> <span class="toc-text">延迟加载问题</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">7.</span> <span class="toc-text">注解整合</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/AJAX/" title="AJAX">AJAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/DOM/" title="DOM">DOM<sup>2</sup></a></li>
+		
+			<li><a href="/tags/EL表达式/" title="EL表达式">EL表达式<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Hibernate/" title="Hibernate">Hibernate<sup>2</sup></a></li>
+		
+			<li><a href="/tags/HttpSession/" title="HttpSession">HttpSession<sup>1</sup></a></li>
+		
+			<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JSP/" title="JSP">JSP<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaBean/" title="JavaBean">JavaBean<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaScript/" title="JavaScript">JavaScript<sup>1</sup></a></li>
+		
+			<li><a href="/tags/SAX/" title="SAX">SAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletRequest/" title="ServletRequest">ServletRequest<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletResponse/" title="ServletResponse">ServletResponse<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Spring/" title="Spring">Spring<sup>1</sup></a></li>
+		
+			<li><a href="/tags/String/" title="String">String<sup>1</sup></a></li>
+		
+			<li><a href="/tags/StringBuffer/" title="StringBuffer">StringBuffer<sup>1</sup></a></li>
+		
+			<li><a href="/tags/cookie/" title="cookie">cookie<sup>1</sup></a></li>
+		
+			<li><a href="/tags/css/" title="css">css<sup>1</sup></a></li>
+		
+			<li><a href="/tags/dom4j/" title="dom4j">dom4j<sup>1</sup></a></li>
+		
+			<li><a href="/tags/dtd/" title="dtd">dtd<sup>1</sup></a></li>
+		
+			<li><a href="/tags/eclipse/" title="eclipse">eclipse<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2014 
+		
+		<a href="http://zhpooer.github.io" target="_blank" title="zhpooer">zhpooer</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"zhpoooer"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>

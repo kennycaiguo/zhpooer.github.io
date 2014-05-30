@@ -1,0 +1,1175 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>传智播客day41-spring AOP | Poe&#39;s World</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="zhpooer">
+    
+    <meta name="description" content="AOP 概念
+Aspect Oriented Programing 面向切面编程, AOP是对OOP(面向对象编程) 思想的延伸,
+AOP采取横向抽取机制，取代了传统纵向继承体系重复性代码(性能监视、事务管理、安全检查、缓存)
+底层原理: 代理 
+
+传统继承, 纵向结构代码复用
+1
+2
+3
+4
+5
+">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="Poe&#39;s World" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="Poe&#39;s World" title="Poe&#39;s World"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Poe&#39;s World">Poe&#39;s World</a></h1>
+				<h2 class="blog-motto">竹杖芒鞋轻胜马，一蓑烟雨任平生</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/english-monthly">英语角</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:zhpooer.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/05/27/传智播客day41-spring-aop/" title="传智播客day41-spring AOP" itemprop="url">传智播客day41-spring AOP</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://zhpooer.github.io" title="zhpooer">zhpooer</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2014-05-27T01:19:03.000Z" itemprop="datePublished">5月 27 2014</time>
+    更新日期:<time datetime="2014-05-28T01:26:40.000Z" itemprop="dateModified">5月 28 2014</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#aop-"><span class="toc-number">1.</span> <span class="toc-text">AOP 概念</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.1.</span> <span class="toc-text">相关术语</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#aop-"><span class="toc-number">2.</span> <span class="toc-text">AOP底层原理</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#jdk-"><span class="toc-number">2.1.</span> <span class="toc-text">JDK动态代理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cglib"><span class="toc-number">2.2.</span> <span class="toc-text">CGLIb</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.3.</span> <span class="toc-text">结论</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-spring-aop"><span class="toc-number">3.</span> <span class="toc-text">传统Spring AOP</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#advisor"><span class="toc-number">3.1.</span> <span class="toc-text">Advisor</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#-advisor"><span class="toc-number">3.1.1.</span> <span class="toc-text">普通 Advisor</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pointcutadvisor"><span class="toc-number">3.1.2.</span> <span class="toc-text">PointcutAdvisor</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">3.2.</span> <span class="toc-text">自动代理</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#aspectj"><span class="toc-number">4.</span> <span class="toc-text">AspectJ</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">4.1.</span> <span class="toc-text">基于注解</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">4.1.1.</span> <span class="toc-text">切点的定义</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#-xml"><span class="toc-number">4.2.</span> <span class="toc-text">基于XML</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#jdbc-template"><span class="toc-number">5.</span> <span class="toc-text">JDBC Template</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">5.1.</span> <span class="toc-text">快速入门</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#-jdbc"><span class="toc-number">5.1.1.</span> <span class="toc-text">手动运行Jdbc</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-xml-"><span class="toc-number">5.1.2.</span> <span class="toc-text">使用 xml 配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#jdbctemplate-crud"><span class="toc-number">5.1.3.</span> <span class="toc-text">JdbcTemplate CRUD</span></a></li></ol>
+		</div>
+		
+		<h1 id="aop-">AOP 概念</h1>
+<p>Aspect Oriented Programing 面向切面编程, AOP是对OOP(面向对象编程) 思想的延伸,</p>
+<p>AOP采取横向抽取机制，取代了传统纵向继承体系重复性代码(性能监视、事务管理、安全检查、缓存)</p>
+<p>底层原理: <strong>代理</strong> </p>
+<ul>
+<li><p>传统继承, 纵向结构代码复用</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">BaseDao</span>{</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> wirteLog(){doSome()}
+}
+
+<span class="class"><span class="keyword">class</span> <span class="title">UserDao</span> <span class="inheritance"><span class="keyword">extends</span></span> <span class="title">BaseDao</span>{</span>}
+<span class="class"><span class="keyword">class</span> <span class="title">ProductDao</span> <span class="inheritance"><span class="keyword">extends</span></span> <span class="title">BaseDao</span>{</span>}
+</pre></td></tr></table></figure>
+</li>
+<li><p>AOP, 使用代理机制, 将复用的代码放入代理中</p>
+</li>
+</ul>
+<h2 id="-">相关术语</h2>
+<ul>
+<li>Joinpoint(连接点), 在代理过程中, 可以被拦截的点(指方法)</li>
+<li>Pointcut(切入), 要对哪些Jointpoint进行拦截定义, 指定拦截(个别方法)</li>
+<li>Advice(通知, 建议), 增强的代码逻辑(日志记录), 方法级别</li>
+<li>Introduction(引介), 特殊类型Advice, 对原有的类对象添加一个新的属性或者方法</li>
+<li>Target, 被代理对象</li>
+<li>Weaving(织入), 把增强应用到目标对象, 来创建对象的过程</li>
+<li>Proxy(代理), 一个类被AOP织入增强后，就产生一个结果代理类</li>
+<li>Aspect(切面), 是切入点(Joinpoint)和通知(Advice)的结合, 多个切点和多个通知组成</li>
+</ul>
+<h1 id="aop-">AOP底层原理</h1>
+<p>AOP, 使用代理机制, 将复用的代码放入代理中</p>
+<h2 id="jdk-">JDK动态代理</h2>
+<p>使用JDK动态代理, JDK1.3新特性</p>
+<p>原理： 针对内存中Class对象，使用类加载器 动态为目标对象实现接口的创建代理类</p>
+<ul>
+<li>代理类 是动态创建的， 代理类 和 被代理对象 实现相同接口 </li>
+<li>被代理对象 必须要实现 接口(JDK代理 只能针对接口 进行代理)</li>
+</ul>
+<h2 id="cglib">CGLIb</h2>
+<p>JDK动态代理, 为目标对象接口生成代理对象,
+对于不使用接口的业务类, 无法使用JDK动态代理</p>
+<p>CGLIB(Code Generation Library)是一个开源项目.
+是一个强大的,高性能,高质量的Code生成类库,
+它可以在运行期扩展Java类与实现Java接口.
+Hibernate支持CGlib 来实现PO字节码的动态生成.</p>
+<ul>
+<li>Hibernate 默认PO 字节码生成技术  javassist</li>
+</ul>
+<p>CGLIB 是一个第三方技术，使用时 ，需要下载 jar 包</p>
+<ul>
+<li>Spring3.2 版本， spring-core jar包 已经集成 cglib 开发类 </li>
+</ul>
+<p>原理: CGlib采用非常底层字节码技术, 可以为一个类创建子类,
+解决无接口代理问题</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+</pre></td><td class="code"><pre><span class="keyword">public</span> ProductDao <span class="title">createCglibProxy</span>(){
+    <span class="comment">// 创建代理的核心对象</span>
+    Enhancer enhancer = <span class="keyword">new</span> Enhancer();
+    <span class="comment">// 设置被代理类, 为类创建子类</span>
+    enhancer.setSuperclass(productDao.getClass());
+    enhancer.setCallback( <span class="keyword">new</span> MethodInterceptor(){
+        <span class="keyword">public</span> Object <span class="title">intercept</span>(Object proxy, Method method, Object[] rags, MethodProxy methodProxy){
+            <span class="comment">// 为 addProduct 计算运算时间</span>
+            <span class="keyword">if</span> (method.getName().equals(<span class="string">"addProduct"</span>)) {<span class="comment">// 当前执行方法</span>
+                <span class="keyword">long</span> start = System.currentTimeMillis();
+                Object result = methodProxy.invokeSuper(proxy, args);
+                <span class="keyword">long</span> end = System.currentTimeMillis();
+                System.<span class="keyword">out</span>.println(<span class="string">"addProduct方法运行时间 : "</span> + (end - start));
+                <span class="keyword">return</span> result;
+            } <span class="keyword">else</span> {
+                <span class="comment">// 不进行增强</span>
+                <span class="keyword">return</span> methodProxy.invokeSuper(proxy, args);
+            }
+        }
+    });
+    <span class="comment">// 返回代理</span>
+    <span class="keyword">return</span> (ProductDao) enhancer.create();
+}
+</pre></td></tr></table></figure>
+
+<h2 id="-">结论</h2>
+<p>程序中应优先对接口创建代理，便于程序解耦维护</p>
+<ul>
+<li>若目标对象实现了若干接口.spring使用JDK的java.lang.reflect.Proxy类代理</li>
+<li>若目标对象没有实现任何接口.spring使用CGLIB库生成目标对象的子类</li>
+</ul>
+<h1 id="-spring-aop">传统Spring AOP</h1>
+<p>AOP 开发规范: AOP联盟为通知Advice定义了<code>org.aopalliance.aop.Interface.Advice</code></p>
+<p>Spring AOP 实现 AOP 联盟定义的规范</p>
+<p>传统Spring AOP提供五类 Advice:
+    前置通知(代码增强) org.springframework.aop.MethodBeforeAdvice</p>
+<pre><code>* 在目标方法执行前实施增强
+后置通知 org.springframework.aop.AfterReturningAdvice
+* 在目标方法执行后实施增强
+环绕通知 org.aopalliance.intercept.MethodInterceptor
+* 在目标方法执行前后实施增强
+异常抛出通知 org.springframework.aop.ThrowsAdvice
+* 在方法抛出异常后实施增强
+引介通知 org.springframework.aop.IntroductionInterceptor （课程不讲 了解）
+* 在目标类中添加一些新的方法和属性
+</code></pre><h2 id="advisor">Advisor</h2>
+<p>Advisor 就是对 PointCut 应用 Advise, 指一个 Point 和一个 Advise</p>
+<p>类型：</p>
+<ul>
+<li>Advisor : 代表一般切面, Advice本身就是一个切面, 对目标类所有方法进行拦截(没有切点)</li>
+<li>PointcutAdvisor : 代表具有切点的切面, 可以指定拦截目标类哪些方法</li>
+<li>IntroductionAdvisor : 代表引介切面，针对引介通知而使用切面(不重要)</li>
+</ul>
+<h3 id="-advisor">普通 Advisor</h3>
+<p>使用Advice作为一个切面, 不定义切点, 拦截目标类所有方法 </p>
+<ol>
+<li>导入jar包, <code>spring-aop.jar</code>, <code>com.springsource.org.aopalliance.jar</code></li>
+<li><p>被代理接口和实现类</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">CustomerDao</span>{</span> <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">save</span>();}
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CustomerDAOImpl</span> <span class="keyword">implements</span> <span class="title">CustomerDao</span>{</span> <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">save</span>(){};}
+</pre></td></tr></table></figure>
+</li>
+<li><p>编写前置增强</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyMethodBeforeAdvice</span> <span class="keyword">implements</span> <span class="title">MethodBeforeAdvice</span> {</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">before</span>(Method method, Object[] args, Object target){
+        pring(<span class="string">"方法前"</span>)
+    }
+}
+</pre></td></tr></table></figure>
+</li>
+<li><p>为目标对象配置代理</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">beans</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"customerDao"</span> <span class="attribute">class</span>=<span class="value">"zhpooer.CusotmerDao"</span>&gt;</span> <span class="tag">&lt;/<span class="title">bean</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"mybeforeadvice"</span> <span class="attribute">class</span>=<span class="value">"zhpooer.MyMethodBeforeAdvice"</span>&gt;</span> <span class="tag">&lt;/<span class="title">bean</span>&gt;</span>
+    <span class="comment">&lt;!-- 使用代理工厂类, 创建代理 --&gt;</span>
+    <span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"customerDAOProxy"</span> <span class="attribute">class</span>=<span class="value">"org.springframework.aop.framework.ProxyFactoryBean"</span>&gt;</span>
+        <span class="comment">&lt;!--
+        target : 代理的目标对象
+        proxyInterfaces : 代理要实现的接口, 如果多个接口可以使用以下格式赋值
+        proxyTargetClass : 是否对类代理而不是接口，设置为true时，使用CGLib代理
+        interceptorNames : 需要织入目标的Advice
+        singleton : 返回代理是否为单实例，默认为单例
+        optimize : 当设置为true时，强制使用CGLib
+        --&gt;</span>
+        <span class="comment">&lt;!-- 目标 --&gt;</span>
+        <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"target"</span> <span class="attribute">ref</span>=<span class="value">"customerDAO"</span>&gt;</span><span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+        <span class="comment">&lt;!-- 针对接口代理,如果不用接口代理, 可以不写 --&gt;</span>
+        <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"proxyInterfaces"</span> <span class="attribute">value</span>=<span class="value">"cn.itcast.aop.c_advisor.CustomerDAO"</span>&gt;</span><span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+        <span class="comment">&lt;!-- 增强 
+            interceptorNames 表示可以运用多个 Advice, 必须写value
+            value 引用增强的名字
+        --&gt;</span>
+        <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"interceptorNames"</span> <span class="attribute">value</span>=<span class="value">"mybeforeadvice"</span>&gt;</span><span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">bean</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">beans</span>&gt;</span>
+</pre></td></tr></table></figure>
+</li>
+<li><p>使用代理</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre>CustomerDao dao = context<span class="preprocessor">.getBean</span>(<span class="string">"customerDAOProxy"</span>)<span class="comment">;</span>
+dao<span class="preprocessor">.save</span>()<span class="comment">;</span>
+</pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h3 id="pointcutadvisor">PointcutAdvisor</h3>
+<p>带有切点的切面, 指定被代理对象哪些方法会被增强</p>
+<ul>
+<li>JdkRegexpMethodPointcut 构造正则表达式切点</li>
+<li>使用正则表达式 切点切面 <code>org.springframework.aop.support.RegexpMethodPointcutAdvisor</code></li>
+</ul>
+<ol>
+<li>创建被代理接口和对象 <code>public class OrderDaoImpl implements OrderDAO{}</code></li>
+<li><p>环绕代码增强</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre><span class="class"><span class="keyword">class</span> <span class="title">MyMethodInterceptor</span> <span class="keyword">extends</span> <span class="title">MethodInterceptor</span>{</span>}
+</pre></td></tr></table></figure>
+</li>
+<li><p>配置</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">beans</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"OrderDao"</span> <span class="attribute">class</span>=<span class="value">"zhpooer.OrderDaoImpl"</span>&gt;</span> <span class="tag">&lt;/<span class="title">bean</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"mymethodinterceptor"</span> <span class="attribute">class</span>=<span class="value">"zhpooer.MyMethodInterceptor"</span>&gt;</span> <span class="tag">&lt;/<span class="title">bean</span>&gt;</span>
+    <span class="comment">&lt;!-- 定义切点切面 --&gt;</span>
+    <span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"myadvisor"</span> <span class="attribute">class</span>=<span class="value">"org.springframework.aop.support.RegexpMethodPointcutAdvisor"</span>&gt;</span>
+        <span class="comment">&lt;!-- 正则表达式规则 --&gt;</span>
+        <span class="comment">&lt;!-- pattern: zhooer\.OrderDao\.add.* --&gt;</span>
+        <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"pattern"</span> <span class="attribute">value</span>=<span class="value">".*"</span>&gt;</span><span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+        <span class="comment">&lt;!-- 多个规则 --&gt;</span>
+        <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"patterns"</span> <span class="attribute">value</span>=<span class="value">"*add, *delete"</span>&gt;</span><span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"advice"</span> <span class="attribute">ref</span>=<span class="value">"mymethodinterceptor"</span>&gt;</span><span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">bean</span>&gt;</span>
+    <span class="comment">&lt;!-- 创建代理 --&gt;</span>
+    <span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"orderDAOProxy"</span> <span class="attribute">class</span>=<span class="value">"org.springframework.aop.framework.ProxyFactoryBean"</span> &gt;</span>
+        <span class="comment">&lt;!-- 目标 --&gt;</span>
+        <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"target"</span> <span class="attribute">ref</span>=<span class="value">"orderDAO"</span>&gt;</span><span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+        <span class="comment">&lt;!-- 针对类代理 --&gt;</span>
+        <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"proxyTargetClass"</span> <span class="attribute">value</span>=<span class="value">"true"</span>&gt;</span><span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+        <span class="comment">&lt;!-- 增强 --&gt;</span>
+        <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"interceptorNames"</span> <span class="attribute">value</span>=<span class="value">"myadvisor"</span>&gt;</span><span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+	<span class="tag">&lt;/<span class="title">bean</span>&gt;</span>
+<span class="tag">&lt;<span class="title">beans</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h2 id="-">自动代理</h2>
+<p>使用ProxyFactoryBean 创建代理，需要为每个Bean 都配置一次, 非常麻烦</p>
+<p>自动代理和ProxyFactoryBean本质区别:
+    ProxyFactoryBean, 先有被代理对象, 传递ProxyFactoryBean, 创建代理 
+    自动代理, Bean构造过程中, 使用后处理Bean 创建代理, 返回构造完成对象就是代理对象 </p>
+<p>自动代理原理： 根据xml中配置advisor的规则，得
+知切面对哪个类的哪个方法进行代理 (切面中本身就包含 被代理对象信息) ,
+就不需要ProxyFactoryBean ，使用BeanPostProcessor 完成自动代理 </p>
+<ul>
+<li>BeanNameAutoProxyCreator 根据Bean名称创建代理 </li>
+<li>DefaultAdvisorAutoProxyCreator 根据Advisor本身包含信息创建代理</li>
+<li>AnnotationAwareAspectJAutoProxyCreator 基于Bean中的AspectJ 注解进行自动代理</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- 被代理对象 --&gt;</span>
+<span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"OrderDao"</span> <span class="attribute">class</span>=<span class="value">"zhpooer.OrderDaoImpl"</span>&gt;</span> <span class="tag">&lt;/<span class="title">bean</span>&gt;</span>
+<span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"customerDao"</span> <span class="attribute">class</span>=<span class="value">"zhpooer.CusotmerDao"</span>&gt;</span> <span class="tag">&lt;/<span class="title">bean</span>&gt;</span>
+<span class="comment">&lt;!-- 增强 --&gt;</span>
+<span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"mymethodinterceptor"</span> <span class="attribute">class</span>=<span class="value">"zhpooer.MyMethodInterceptor"</span>&gt;</span> <span class="tag">&lt;/<span class="title">bean</span>&gt;</span>
+<span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"mybeforeadvice"</span> <span class="attribute">class</span>=<span class="value">"zhpooer.MyMethodBeforeAdvice"</span>&gt;</span> <span class="tag">&lt;/<span class="title">bean</span>&gt;</span>
+
+<span class="comment">&lt;!-- 第一种BeanName自动代理  --&gt;</span>
+<span class="comment">&lt;!-- 后处理, 不需要配置id --&gt;</span>
+<span class="tag">&lt;<span class="title">bean</span> <span class="attribute">class</span>=<span class="value">"org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator"</span>&gt;</span>
+    <span class="comment">&lt;!-- 对所有DAO结尾Bean 进行代理 --&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"beanNames"</span> <span class="attribute">value</span>=<span class="value">"*DAO"</span>&gt;</span><span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+    <span class="comment">&lt;!-- 增强 --&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"interceptorNames"</span> <span class="attribute">value</span>=<span class="value">"mymethodinterceptor"</span>&gt;</span><span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">bean</span>&gt;</span>
+
+<span class="comment">&lt;!-- 第二种,基于切面信息自动代理 --&gt;</span>
+<span class="comment">&lt;!-- 切面 --&gt;</span>
+<span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"myadvisor"</span> <span class="attribute">class</span>=<span class="value">"org.springframework.aop.support.RegexpMethodPointcutAdvisor"</span>&gt;</span>
+    <span class="comment">&lt;!-- 切点拦截信息 --&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"patterns"</span> <span class="attribute">value</span>=<span class="value">"zhpooer\.OrderDAO\.save.*"</span>&gt;</span><span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+    <span class="comment">&lt;!-- 增强 --&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"advice"</span> <span class="attribute">ref</span>=<span class="value">"mybeforeadvice"</span>&gt;</span><span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">bean</span>&gt;</span>
+<span class="comment">&lt;!-- 后处理会自动读取切面信息   --&gt;</span>
+<span class="tag">&lt;<span class="title">bean</span> <span class="attribute">class</span>=<span class="value">"org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"</span>&gt;</span><span class="tag">&lt;/<span class="title">bean</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<h1 id="aspectj">AspectJ</h1>
+<p>Spring 2.0 之后,</p>
+<p>AspectJ是一个面向切面的框架,它扩展了Java语言.
+AspectJ定义了AOP语法所以它有一个专门的编译器用来生成遵守Java字节编码规范的Class文件.</p>
+<p>Spring2.0之后 为了简化 AOP编程,  整合了 AspectJ, 支持AspectJ 技术 
+@AspectJ 是AspectJ1.5新增功能, 通过JDK5注解技术，允许直接在Bean类中定义切面</p>
+<p>新版本Spring框架, 建议使用AspectJ方式来开发AOP, 而不需要使用传统 Spring AOP 编程</p>
+<h2 id="-">基于注解</h2>
+<ol>
+<li>导入jar包, <code>aspectj.weaver.jar</code>, <code>spring-aspects.jar</code></li>
+<li>spring配置文件, 需要 aop 名称空间, <figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- 配置自动代理 --&gt;</span>
+<span class="comment">&lt;!-- &lt;bean class="... AnnotationAwareAspectJAutoProxyCreator" /&gt; --&gt;</span>
+<span class="tag">&lt;<span class="title">aop:aspectj-autoproxy</span>/&gt;</span>
+</pre></td></tr></table></figure>
+
+</li>
+</ol>
+<p>常用注解</p>
+<pre><code>@Aspect 定义切面 
+通知类型 
+@Before 前置通知，相当于BeforeAdvice
+@AfterReturning 后置通知，相当于AfterReturningAdvice
+@Around 环绕通知，相当于MethodInterceptor
+@AfterThrowing抛出通知，相当于ThrowAdvice
+@After 最终final通知，不管是否异常，该通知都会执行
+@DeclareParents 引介通知，相当于IntroductionInterceptor (不要求掌握)
+</code></pre><p>切点使用指定哪些连接点 会被增强, 通过execution函数，可以定义切点的方法切入</p>
+<pre><code>语法： execution(&lt;访问修饰符&gt;?&lt;返回类型&gt;&lt;方法名&gt;(&lt;参数&gt;)&lt;异常&gt;)
+execution(public * *(..)) 匹配所有public修饰符 任何方法 
+execution(* cn.itcast.service.HelloService.*(..))  匹配HelloService类中所有方法 
+execution(int cn.itcast.service.UserService.regist(..))  匹配UserService中int返回类型 regist方法 
+execution(* cn.itcast.dao..*(..))  匹配cn.itcast.dao包下 （包含子包） 所有类 所有方法
+execution(* cn.itcast.dao.*(..)) 不包含子包  
+execution(* cn.itcast.dao.GenericDAO+.*(..))  匹配GenericDAO 所有子类 或者 实现类 所有方法
+</code></pre><figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserDao</span>{</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">save</span>(){}
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">delete</span>(){}
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">search</span>(){}
+}
+
+<span class="comment">// 自定义切面类</span>
+<span class="annotation">@Aspect</span>
+<span class="comment">// 声明一个切面类</span>
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyAspect</span> {</span>
+
+    <span class="comment">//方式一 前置通知</span>
+    <span class="annotation">@Before</span>(<span class="string">"execution(public * *(..))"</span>)
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">before</span>(){
+        <span class="comment">// 前置通知不能拦截目标方法执行</span>
+    }
+    <span class="annotation">@Before</span>(<span class="string">"execution(public * *(..)"</span>))
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">before</span>(aspactj.Joinpoint joinpoint){
+        joinpoint.toString(); <span class="comment">// 获得拦截点的信息</span>
+    }
+    
+    <span class="comment">// 方式二 后置通知</span>
+    <span class="annotation">@AfterReturning</span>(<span class="string">"execution(public * *(..))"</span>, returning=<span class="string">"returnValue"</span>)
+    <span class="comment">// returnValue 是代理方法参数名, 前后两个参数名必须一致</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">afterReturning</span>(Object returnValue){
+        <span class="comment">// 获得方法的返回值</span>
+    }
+
+    <span class="comment">// 方式三 环绕通知</span>
+    <span class="annotation">@Around</span>(<span class="string">"execution()"</span>, )
+    <span class="keyword">public</span> Object <span class="title">around</span> (ProceedingJoinPoint pjp){
+        <span class="comment">// 可以阻止 search 方法执行</span>
+        Object result = pjp.proceed();
+        <span class="keyword">return</span> result;
+    }
+
+    <span class="comment">//方式四 抛出通知 , 出现异常后, 方法得到执行</span>
+    <span class="annotation">@AfterThrowing</span>(<span class="string">"execution()"</span>, throwing=<span class="string">"e"</span>)
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">afterThrowing</span>(Throwable e){
+    }
+
+    <span class="comment">//方式五 最终通知, 不管代码是不是抛出代码都执行, 可以用来释放资源</span>
+    <span class="annotation">@After</span>(<span class="string">"execution()"</span>)
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">after</span>(){
+    }
+}
+<span class="comment">// &lt;bean id="userDao" class="zhpooer.UserDao"&gt;&lt;/bean&gt;</span>
+<span class="comment">// &lt;bean id="myAspect" class="zhpooer.MyAspect"&gt;&lt;/bean&gt;</span>
+</pre></td></tr></table></figure>
+
+<h3 id="-">切点的定义</h3>
+<p>直接在通知上定义切点表达式, 会造成切点的重复, 工作量大, 不易维护</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre><span class="comment">// 切点定义</span>
+<span class="annotation">@Pointcut</span>(<span class="string">"execution()"</span>)
+<span class="comment">// 方法名,就是切点名字</span>
+<span class="keyword">private</span> <span class="keyword">void</span> <span class="title">mypointcut</span>(){}
+
+<span class="comment">// 应用切点</span>
+<span class="annotation">@After</span>(<span class="string">"MyAspect.mypointcut()"</span>)
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">after</span>(){}
+</pre></td></tr></table></figure>
+
+<p>advisor 和 aspect 区别 ？</p>
+<pre><code>advisor 是 spring 中 aop定义切面，通常由一个切点和一个通知组成
+aspect 是规范中切面 ， 允许由多个切点和 多个通知组成     
+</code></pre><h2 id="-xml">基于XML</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+</pre></td><td class="code"><pre><span class="comment">// 被代理对象</span>
+<span class="keyword">public</span> <span class="keyword">class</span> ProductDao {
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sell</span>();
+}
+
+<span class="keyword">public</span> <span class="keyword">class</span> MyAspect {
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">before</span>(){
+        <span class="comment">// 前置增强</span>
+    }
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">afterReturning</span>(Ojbect returnValue){
+        <span class="comment">// 后置增强</span>
+    }
+    <span class="keyword">public</span> Objct <span class="title">around</span>(ProceedingJoinPoint pjp){
+        <span class="comment">// 环绕增强</span>
+    }
+}
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- 定义被代理对象 --&gt;</span>
+<span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"productDao"</span> <span class="attribute">class</span>=<span class="value">"ProductDao"</span>&gt;</span><span class="tag">&lt;/<span class="title">bean</span>&gt;</span>
+<span class="comment">&lt;!-- 定义切面 --&gt;</span>
+<span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"myAspect"</span> <span class="attribute">class</span>=<span class="value">"MyAspect"</span>&gt;</span><span class="tag">&lt;/<span class="title">bean</span>&gt;</span>
+<span class="comment">&lt;!-- 进行AOP配置 --&gt;</span>
+<span class="tag">&lt;<span class="title">aop:config</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">aop:aspect</span> <span class="attribute">ref</span>=<span class="value">"myAspect"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">aop:pointcut</span> <span class="attribute">expression</span>=<span class="value">"exection"</span> <span class="attribute">id</span>=<span class="value">"mypointcut"</span>&gt;</span><span class="tag">&lt;/<span class="title">aop:pointcut</span>&gt;</span>
+        <span class="comment">&lt;!-- 配置前置  --&gt;</span>
+        <span class="tag">&lt;<span class="title">aop:before</span> <span class="attribute">method</span>=<span class="value">"before"</span> <span class="attribute">pointcut-ref</span>=<span class="value">"mypointcut"</span>&gt;</span><span class="tag">&lt;/<span class="title">aop:before</span>&gt;</span>
+        <span class="comment">&lt;!-- 后置增强 --&gt;</span>
+        <span class="tag">&lt;<span class="title">aop:after-returning</span> <span class="attribute">method</span>=<span class="value">"afterReturning"</span> <span class="attribute">pointcut-ref</span>=<span class="value">"mypointcut"</span>
+             <span class="attribute">returning</span>=<span class="value">"returnValue"</span>/&gt;</span>
+        <span class="comment">&lt;!-- 环绕增强  --&gt;</span>
+        <span class="tag">&lt;<span class="title">aop:around</span> <span class="attribute">method</span>=<span class="value">"around"</span> <span class="attribute">pointcut-ref</span>=<span class="value">"mypointcut"</span>&gt;</span><span class="tag">&lt;/<span class="title">aop:around</span>&gt;</span>
+        <span class="comment">&lt;!-- 抛出通知  --&gt;</span>
+        <span class="tag">&lt;<span class="title">aop:after-throwing</span> <span class="attribute">method</span>=<span class="value">"afterThrowing"</span> <span class="attribute">throwing</span>=<span class="value">"ex"</span>&gt;</span> <span class="tag">&lt;/<span class="title">aop:after-throwing</span>&gt;</span>
+        <span class="comment">&lt;!-- 最终通知 --&gt;</span>
+        <span class="tag">&lt;<span class="title">aop:after</span> <span class="attribute">method</span>=<span class="value">"after"</span> <span class="attribute">pointcut-ref</span>=<span class="value">"mypointcut"</span>&gt;</span><span class="tag">&lt;/<span class="title">aop:after</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">aop:aspect</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">aop:config</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<h1 id="jdbc-template">JDBC Template</h1>
+<p>Spring 为各种支持的持久化技术, 都提供了简单的模板工具类和回调</p>
+<table>
+<thead>
+<tr>
+<th>不同持久化技术</th>
+<th>模板工具</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>JDBC</td>
+<td>org.springframework.jdbc.core.JdbcTemplate</td>
+</tr>
+<tr>
+<td>Hibernate</td>
+<td>org.springframework.orm.hiberante3.HibernateTemplate</td>
+</tr>
+<tr>
+<td>IBatis</td>
+<td>org.springframework.orm.ibatis.SqlMapClientTemplate</td>
+</tr>
+<tr>
+<td>JPA</td>
+<td>org.springframework.orm.jpa.JpaTemplate</td>
+</tr>
+</tbody>
+</table>
+<p>JdbcTemplate 是用来简化JDBC操作的, 类似 DbUtils 框架.</p>
+<h2 id="-">快速入门</h2>
+<p>导入jar包, <code>spring-jdbc.jar</code>, <code>spring-tx.jar</code></p>
+<h3 id="-jdbc">手动运行Jdbc</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">demo1</span>(){
+   <span class="comment">// 数据库连接池</span>
+   DirverManagerDataSource ds = <span class="keyword">new</span> DirverManagerDataSource();
+   ds.setDriverClassName(<span class="string">"com.mysql.jdbc.Driver"</span>);
+   ds.setUrl(<span class="string">"jdbc:mysql:///"</span>);
+   ds.setUsername();
+   ds.setPassword();
+   JdbcTemplate jt = <span class="keyword">new</span> JdbcTemplate(ds);
+   jt.execute(<span class="string">""</span>);
+}
+</pre></td></tr></table></figure>
+
+<h3 id="-xml-">使用 xml 配置</h3>
+<p>常用数据源</p>
+<ul>
+<li><p>Spring 数据源实现类 <code>DriverManagerDataSource</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="code"><pre>&lt;bean <span class="property">id</span>=<span class="string">"dataSource"</span> <span class="type">class</span>=<span class="string">"org.springframework.jdbc.datasource.DriverManagerDataSource"</span>&gt;
+    &lt;<span class="keyword">property</span> <span class="property">name</span>=<span class="string">"driverClassName"</span> value=<span class="string">"com.mysql.jdbc.Driver"</span>&gt;&lt;/<span class="keyword">property</span>&gt;
+	&lt;<span class="keyword">property</span> <span class="property">name</span>=<span class="string">"url"</span> value=<span class="string">"jdbc:mysql:///spring3day2"</span>&gt;&lt;/<span class="keyword">property</span>&gt;
+	&lt;<span class="keyword">property</span> <span class="property">name</span>=<span class="string">"username"</span> value=<span class="string">"root"</span>&gt;&lt;/<span class="keyword">property</span>&gt;
+	&lt;<span class="keyword">property</span> <span class="property">name</span>=<span class="string">"password"</span> value=<span class="string">"abc"</span>&gt;&lt;/<span class="keyword">property</span>&gt;
+&lt;/bean&gt;
+&lt;bean <span class="property">id</span>=<span class="string">"JdbcTemplate"</span> <span class="type">class</span>=<span class="string">"org.springframework.jdbc.core.JdbcTemplate"</span>&gt;
+    &lt;<span class="keyword">property</span> <span class="property">name</span>=<span class="string">"dataSource"</span> <span class="keyword">ref</span>=<span class="string">"dataSource"</span>&gt; &lt;/<span class="keyword">property</span>&gt;
+&lt;/bean&gt;
+</pre></td></tr></table></figure>
+</li>
+<li><p>DBCP 数据源 BasicDataSource </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre>&lt;bean <span class="property">id</span>=<span class="string">"dataSource"</span> <span class="type">class</span>=<span class="string">"org.apache.commons.dbcp.BasicDataSource"</span>&gt;
+    &lt;<span class="keyword">property</span> <span class="property">name</span>=<span class="string">"driverClassName"</span> value=<span class="string">"com.mysql.jdbc.Driver"</span>&gt;&lt;/<span class="keyword">property</span>&gt;
+	&lt;<span class="keyword">property</span> <span class="property">name</span>=<span class="string">"url"</span> value=<span class="string">"jdbc:mysql:///spring3day2"</span>&gt;&lt;/<span class="keyword">property</span>&gt;
+	&lt;<span class="keyword">property</span> <span class="property">name</span>=<span class="string">"username"</span> value=<span class="string">"root"</span>&gt;&lt;/<span class="keyword">property</span>&gt;
+	&lt;<span class="keyword">property</span> <span class="property">name</span>=<span class="string">"password"</span> value=<span class="string">"abc"</span>&gt;&lt;/<span class="keyword">property</span>&gt;
+&lt;/bean&gt;
+</pre></td></tr></table></figure>
+</li>
+<li><p>C3P0 数据源 ComboPooledDataSource</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre>&lt;bean <span class="property">id</span>=<span class="string">"dataSource"</span> <span class="type">class</span>=<span class="string">"com.mchange.v2.c3p0.ComboPooledDataSource"</span>&gt;
+    &lt;<span class="keyword">property</span> <span class="property">name</span>=<span class="string">"driverClass"</span> value=<span class="string">"com.mysql.jdbc.Driver"</span>&gt;&lt;/<span class="keyword">property</span>&gt;
+	&lt;<span class="keyword">property</span> <span class="property">name</span>=<span class="string">"jdbcUrl"</span> value=<span class="string">"jdbc:mysql:///spring3day2"</span>&gt;&lt;/<span class="keyword">property</span>&gt;
+	&lt;<span class="keyword">property</span> <span class="property">name</span>=<span class="string">"user"</span> value=<span class="string">"root"</span>&gt;&lt;/<span class="keyword">property</span>&gt;
+	&lt;<span class="keyword">property</span> <span class="property">name</span>=<span class="string">"password"</span> value=<span class="string">"abc"</span>&gt;&lt;/<span class="keyword">property</span>&gt;
+&lt;/bean&gt;
+</pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>外部属性文件引入, 在Spring 直接修改常用属性，不方便，
+可以将属性抽取出来 建立单独 properties 文件，在Spring 中引入properties</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- 方式一  --&gt;</span>
+<span class="tag">&lt;<span class="title">bean</span> <span class="attribute">class</span>=<span class="value">"org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"location"</span> <span class="attribute">value</span>=<span class="value">"classpath:jdbc.properties"</span>&gt;</span><span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">bean</span>&gt;</span>
+<span class="comment">&lt;!-- 方式二 --&gt;</span>
+<span class="tag">&lt;<span class="title">context:property-placeholder</span> <span class="attribute">location</span>=<span class="value">"classpath:jdbc.properties"</span>&gt;</span>
+
+<span class="comment">&lt;!-- 将连接池配置参数，使用 ${属性key} --&gt;</span>
+<span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"dataSource"</span> <span class="attribute">class</span>=<span class="value">"com.mchange.v2.c3p0.ComboPooledDataSource"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"driverClass"</span> <span class="attribute">value</span>=<span class="value">"${jdbc.driver}"</span>&gt;</span><span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+	<span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"jdbcUrl"</span> <span class="attribute">value</span>=<span class="value">"${jdbc.url}"</span>&gt;</span><span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+	<span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"user"</span> <span class="attribute">value</span>=<span class="value">"${jdbc.user}"</span>&gt;</span><span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+	<span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"password"</span> <span class="attribute">value</span>=<span class="value">"${jdbc.password}"</span>&gt;</span><span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">bean</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<h3 id="jdbctemplate-crud">JdbcTemplate CRUD</h3>
+<p>UserDAO 实现数据库操作, 必须要使用 JdbcTemplate, Spring 将jdbcTemplate 注入 UserDAO  </p>
+<p>Spring 为每种持久化技术 提供一个支持类, 支持类作用，在DAO 中注入 模板工具类</p>
+<pre><code>JDBC: org.springframework.jdbc.core.support.JdbcDaoSupport
+Hibernate 3.0: org.springframework.orm.hibernate3.support.HibernateDaoSupport
+iBatis: org.springframework.orm.ibatis.support.SqlMapClientDaoSupport
+</code></pre><p>用户自己编写DAO 只需要继承 JdbcDaoSupport, 就可以注入 JdbcTemplate</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserDao</span> <span class="keyword">extends</span> <span class="title">JdbcDaoSupport</span> {</span>
+    <span class="comment">// 修改</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">save</span>(User user){
+        String sql = <span class="string">"insert into user value(?, ?)"</span>;
+        getJdbcTemplate().update(sql, user.getId(), user.getName());
+    }
+    <span class="comment">// 简单查询查询, 返回原始类型, string类型</span>
+    <span class="keyword">public</span> <span class="keyword">int</span> <span class="title">count</span>(){
+        String sql = <span class="string">"select count(*) from user"</span>;
+        <span class="keyword">return</span> getJdbcTemplate().queryForInt(sql);
+    }
+    <span class="keyword">public</span> String <span class="title">findNameById</span>(<span class="keyword">int</span> id){
+        String sql = <span class="string">"select name from where id=?"</span>;
+        <span class="keyword">return</span> getJdbcTemplate().queryForObject(sql, String.class, id);
+    }
+    <span class="comment">// 复杂查询, 手动完成对象封装</span>
+    <span class="keyword">public</span> User <span class="title">findById</span>(<span class="keyword">int</span> id) {
+        <span class="keyword">return</span> <span class="keyword">this</span>.getJdbcTemplate().queryForObject(sql, <span class="keyword">new</span> UserRowMapper(),id);
+    }
+    <span class="keyword">public</span> List&lt;User&gt; <span class="title">findAll</span>(){
+        <span class="keyword">return</span> <span class="keyword">this</span>.getJdbcTemplate().query(sql, <span class="keyword">new</span> UserRowMapper());
+    }
+
+    class UserRowMapper implements RowMapper&lt;User&gt; {
+        <span class="annotation">@Override</span>
+        <span class="keyword">public</span> User <span class="title">mapRow</span>(ResultSet rs, <span class="keyword">int</span> rowNum) <span class="keyword">throws</span> SQLException {
+        <span class="comment">// rs 已经指向每一条数据，不需要自己调用 next，将rs指向数据 转换 User对象</span>
+            User user = <span class="keyword">new</span> User();
+            user.setId(rs.getInt(<span class="string">"id"</span>));
+            user.setName(rs.getString(<span class="string">"name"</span>));
+            <span class="keyword">return</span> user;
+        }
+    }
+}
+</pre></td></tr></table></figure>
+
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/传智播客/">传智播客</a><a href="/tags/spring/">spring</a>
+  </div>
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://zhpooer.github.io/2014/05/27/传智播客day41-spring-aop/" data-title="传智播客day41-spring AOP | Poe&#39;s World" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2014/05/29/传智播客day42-spring-事务管理/" title="传智播客day42-Spring 事务管理">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  传智播客day42-Spring 事务管理</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2014/05/26/传智播客day40-spring/"  title="传智播客day40-Spring">
+ <strong>NEXT:</strong><br/> 
+ <span>传智播客day40-Spring
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#aop-"><span class="toc-number">1.</span> <span class="toc-text">AOP 概念</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.1.</span> <span class="toc-text">相关术语</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#aop-"><span class="toc-number">2.</span> <span class="toc-text">AOP底层原理</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#jdk-"><span class="toc-number">2.1.</span> <span class="toc-text">JDK动态代理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cglib"><span class="toc-number">2.2.</span> <span class="toc-text">CGLIb</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.3.</span> <span class="toc-text">结论</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-spring-aop"><span class="toc-number">3.</span> <span class="toc-text">传统Spring AOP</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#advisor"><span class="toc-number">3.1.</span> <span class="toc-text">Advisor</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#-advisor"><span class="toc-number">3.1.1.</span> <span class="toc-text">普通 Advisor</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pointcutadvisor"><span class="toc-number">3.1.2.</span> <span class="toc-text">PointcutAdvisor</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">3.2.</span> <span class="toc-text">自动代理</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#aspectj"><span class="toc-number">4.</span> <span class="toc-text">AspectJ</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">4.1.</span> <span class="toc-text">基于注解</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">4.1.1.</span> <span class="toc-text">切点的定义</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#-xml"><span class="toc-number">4.2.</span> <span class="toc-text">基于XML</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#jdbc-template"><span class="toc-number">5.</span> <span class="toc-text">JDBC Template</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">5.1.</span> <span class="toc-text">快速入门</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#-jdbc"><span class="toc-number">5.1.1.</span> <span class="toc-text">手动运行Jdbc</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-xml-"><span class="toc-number">5.1.2.</span> <span class="toc-text">使用 xml 配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#jdbctemplate-crud"><span class="toc-number">5.1.3.</span> <span class="toc-text">JdbcTemplate CRUD</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/AJAX/" title="AJAX">AJAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/DOM/" title="DOM">DOM<sup>2</sup></a></li>
+		
+			<li><a href="/tags/EL表达式/" title="EL表达式">EL表达式<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Hibernate/" title="Hibernate">Hibernate<sup>2</sup></a></li>
+		
+			<li><a href="/tags/HttpSession/" title="HttpSession">HttpSession<sup>1</sup></a></li>
+		
+			<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JSP/" title="JSP">JSP<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaBean/" title="JavaBean">JavaBean<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaScript/" title="JavaScript">JavaScript<sup>1</sup></a></li>
+		
+			<li><a href="/tags/SAX/" title="SAX">SAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletRequest/" title="ServletRequest">ServletRequest<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletResponse/" title="ServletResponse">ServletResponse<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Spring/" title="Spring">Spring<sup>1</sup></a></li>
+		
+			<li><a href="/tags/String/" title="String">String<sup>1</sup></a></li>
+		
+			<li><a href="/tags/StringBuffer/" title="StringBuffer">StringBuffer<sup>1</sup></a></li>
+		
+			<li><a href="/tags/cookie/" title="cookie">cookie<sup>1</sup></a></li>
+		
+			<li><a href="/tags/css/" title="css">css<sup>1</sup></a></li>
+		
+			<li><a href="/tags/dom4j/" title="dom4j">dom4j<sup>1</sup></a></li>
+		
+			<li><a href="/tags/dtd/" title="dtd">dtd<sup>1</sup></a></li>
+		
+			<li><a href="/tags/eclipse/" title="eclipse">eclipse<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2014 
+		
+		<a href="http://zhpooer.github.io" target="_blank" title="zhpooer">zhpooer</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"zhpoooer"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>

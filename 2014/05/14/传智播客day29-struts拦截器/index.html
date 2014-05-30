@@ -4,23 +4,17 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>传智播客day30-struts拦截器 | Poe&#39;s World</title>
+    <title>传智播客day29-struts拦截器 | Poe&#39;s World</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="zhpooer">
     
-    <meta name="description" content="拦截器
-拦截器的目的: 如果一个业务逻辑方法中涉及到的逻辑相当复杂,
-可以把这些业务分离开, 如 启动日志, 权限检查, 文件上传, 保存用户,
-把这四方面全面分开, 实现松耦合
-意义: 把一些和业务逻辑没有关联的代码放入拦截器, 以实现业务逻辑和其他代码的松耦合
-拦截器初探
-1
-2
-3
-4
-5
-6">
+    <meta name="description" content="Struts的工作原理及核心过滤器
+StrutsPrepareAndExecuteFilter过滤器其实是包含2部分的
+
+StrutsPrepareFilter:做准备
+StrutsExecuteFilter：进入Struts2的核心处理。
+如果是Struts2的请求就会进入该过滤器，处理完后，不放">
     
     
     
@@ -83,15 +77,15 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2014/05/15/传智播客day30-struts拦截器/" title="传智播客day30-struts拦截器" itemprop="url">传智播客day30-struts拦截器</a>
+      <a href="/2014/05/14/传智播客day29-struts拦截器/" title="传智播客day29-struts拦截器" itemprop="url">传智播客day29-struts拦截器</a>
   </h1>
   <p class="article-author">By
     
       <a href="http://zhpooer.github.io" title="zhpooer">zhpooer</a>
     </p>
   <p class="article-time">
-    <time datetime="2014-05-15T01:09:51.000Z" itemprop="datePublished">5月 15 2014</time>
-    更新日期:<time datetime="2014-05-20T02:00:20.000Z" itemprop="dateModified">5月 20 2014</time>
+    <time datetime="2014-05-14T03:09:51.000Z" itemprop="datePublished">5月 14 2014</time>
+    更新日期:<time datetime="2014-05-28T07:15:50.000Z" itemprop="dateModified">5月 28 2014</time>
     
   </p>
 </header>
@@ -100,15 +94,88 @@
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">拦截器</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.1.</span> <span class="toc-text">拦截器初探</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.2.</span> <span class="toc-text">概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.3.</span> <span class="toc-text">拦截器执行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.4.</span> <span class="toc-text">案例: 执行效率统计拦截器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.5.</span> <span class="toc-text">案例: 用户登陆拦截器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.6.</span> <span class="toc-text">属性驱动</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#tip"><span class="toc-number">1.6.1.</span> <span class="toc-text">Tip</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.7.</span> <span class="toc-text">模型驱动</span></a></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#struts-"><span class="toc-number">1.</span> <span class="toc-text">Struts的工作原理及核心过滤器</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">2.</span> <span class="toc-text">拦截器</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.1.</span> <span class="toc-text">拦截器初探</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.2.</span> <span class="toc-text">概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.3.</span> <span class="toc-text">拦截器执行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.4.</span> <span class="toc-text">案例: 执行效率统计拦截器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.5.</span> <span class="toc-text">案例: 用户登陆拦截器</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">过滤器 和 拦截器</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#tip"><span class="toc-number">4.</span> <span class="toc-text">Tip</span></a></li></ol>
 		</div>
 		
-		<h1 id="-">拦截器</h1>
+		<h1 id="struts-">Struts的工作原理及核心过滤器</h1>
+<p>StrutsPrepareAndExecuteFilter过滤器其实是包含2部分的</p>
+<ol>
+<li>StrutsPrepareFilter:做准备</li>
+<li>StrutsExecuteFilter：进入Struts2的核心处理。
+如果是Struts2的请求就会进入该过滤器，处理完后，不放行（由结果类负责显示）。
+如果是非Struts2的请求，比如默认jsp的请求，直接放行。</li>
+</ol>
+<p>如果用不到其他过滤器，配置StrutsPrepareAndExecuteFilter即可;
+如果用到其他过滤器，还需要使用Struts2准备好的环境，
+使用<code>StrutsPrepareFilter</code>，<code>StrutsExecuteFilter</code>个过滤器，其他过滤器放在两者之间.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">filter-mapping</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">filter-name</span>&gt;</span> struts-prepare <span class="tag">&lt;/<span class="title">filter-name</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">url-pattern</span>&gt;</span>/* <span class="tag">&lt;/<span class="title">url-pattern</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">filter-mapping</span>&gt;</span>
+<span class="tag">&lt;<span class="title">filter-mapping</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">filter-name</span>&gt;</span>sitemesh <span class="tag">&lt;/<span class="title">filter-name</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">url-pattern</span>&gt;</span>/* <span class="tag">&lt;/<span class="title">url-pattern</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">filter-mapping</span>&gt;</span>
+<span class="tag">&lt;<span class="title">filter-mapping</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">filter-name</span>&gt;</span> struts-execute <span class="tag">&lt;/<span class="title">filter-name</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">url-pattern</span>&gt;</span>/* <span class="tag">&lt;/<span class="title">url-pattern</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">filter-mapping</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<p><img src="/img/struts_core.png" alt="struts core">
+showcase: 各种应用的案例，在struts2-showcase里面找各种案例</p>
+<h1 id="-">拦截器</h1>
+<p>拦截器的使用 ，源自Spring AOP(面向切面编程)思想, 采用 责任链 模式</p>
+<ul>
+<li>在责任链模式里,很多对象由每一个对象对其下家的引用而连接起来形成一条链。</li>
+<li>责任链每一个节点，都可以继续调用下一个节点，也可以阻止流程继续执行</li>
+</ul>
 <p>拦截器的目的: 如果一个业务逻辑方法中涉及到的逻辑相当复杂,
 可以把这些业务分离开, 如 启动日志, 权限检查, 文件上传, 保存用户,
 把这四方面全面分开, 实现松耦合</p>
+<p>常用struts2 拦截器</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- 模型驱动 --&gt;</span>
+<span class="tag">&lt;<span class="title">interceptor-ref</span> <span class="attribute">name</span>=<span class="value">"modelDriven"</span>/&gt;</span>
+<span class="comment">&lt;!-- 文件上传 --&gt;</span>
+<span class="tag">&lt;<span class="title">interceptor-ref</span> <span class="attribute">name</span>=<span class="value">"fileUpload"</span>/&gt;</span>
+<span class="comment">&lt;!-- 参数解析封装 --&gt;</span>
+<span class="tag">&lt;<span class="title">interceptor-ref</span> <span class="attribute">name</span>=<span class="value">"params"</span>&gt;</span>
+<span class="comment">&lt;!-- 类型转换错误 --&gt;</span>
+<span class="tag">&lt;<span class="title">interceptor-ref</span> <span class="attribute">name</span>=<span class="value">"conversionError"</span>/&gt;</span>
+<span class="comment">&lt;!-- 请求参数校验 --&gt;</span>
+<span class="tag">&lt;<span class="title">interceptor-ref</span> <span class="attribute">name</span>=<span class="value">"validation"</span>&gt;</span>
+<span class="comment">&lt;!-- 拦截跳转 input 视图 --&gt;</span>
+<span class="tag">&lt;<span class="title">interceptor-ref</span> <span class="attribute">name</span>=<span class="value">"workflow"</span>&gt;</span>
+</pre></td></tr></table></figure>
+
 <p>意义: 把一些和业务逻辑没有关联的代码放入拦截器, 以实现业务逻辑和其他代码的松耦合</p>
 <h2 id="-">拦截器初探</h2>
+<p>所有实际开发中，自定义拦截器 只需要 继承 AbstractInterceptor类，
+提供 intercept 方法实现</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
 3
@@ -268,11 +335,17 @@
 11
 12
 13
+14
+15
+16
 </pre></td><td class="code"><pre><span class="comment">//动作方法及结果处理耗时统计拦截器</span>
 <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ElapsedTimeInterceprot</span> <span class="keyword">implements</span> <span class="title">Interceptor</span> {</span>
     <span class="keyword">public</span> String <span class="title">intercept</span>(ActionInvocation invocation) <span class="keyword">throws</span> Exception {
         <span class="keyword">long</span> beginTime = System.nanoTime();<span class="comment">//纳秒：1毫秒=1000000纳秒</span>
         String result = invocation.invoke();<span class="comment">//放行：拦截前要做的事放在invocation.invoke()之前，拦截后放在之后</span>
+        <span class="comment">// 可以获得Action对象</span>
+        ActionSupport as =  actioninvocation.getAction();
+        as.addFieldError(<span class="string">"some wrong"</span>);
         <span class="comment">//结果处理完毕后执行</span>
         <span class="keyword">long</span> endTime = System.nanoTime();
         System.out.println(invocation.getInvocationContext().getName()+<span class="string">"动作执行耗时："</span>+(endTime-beginTime)+<span class="string">"纳秒"</span>);
@@ -365,7 +438,7 @@
         <span class="tag">&lt;<span class="title">interceptor</span> <span class="attribute">name</span>=<span class="value">"elapsedTime"</span> <span class="attribute">class</span>=<span class="value">"com.itheima.interceptors.ElapsedTimeInterceprot"</span>&gt;</span><span class="tag">&lt;/<span class="title">interceptor</span>&gt;</span>
         <span class="tag">&lt;<span class="title">interceptor</span> <span class="attribute">name</span>=<span class="value">"sessionCheck"</span> <span class="attribute">class</span>=<span class="value">"com.itheima.interceptors.SessionCheckInterceptors"</span>&gt;</span>
             <span class="comment">&lt;!-- 说明test2动作方法不需要拦截 --&gt;</span>
-            <span class="tag">&lt;<span class="title">param</span> <span class="attribute">name</span>=<span class="value">"excludeMethods"</span>&gt;</span>test2<span class="tag">&lt;/<span class="title">param</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">param</span> <span class="attribute">name</span>=<span class="value">"excludeMethods"</span>&gt;</span>user<span class="tag">&lt;/<span class="title">param</span>&gt;</span>
         <span class="tag">&lt;/<span class="title">interceptor</span>&gt;</span>
         <span class="tag">&lt;<span class="title">interceptor-stack</span> <span class="attribute">name</span>=<span class="value">"myDefaultStack"</span>&gt;</span>
             <span class="tag">&lt;<span class="title">interceptor-ref</span> <span class="attribute">name</span>=<span class="value">"defaultStack"</span>&gt;</span><span class="tag">&lt;/<span class="title">interceptor-ref</span>&gt;</span>
@@ -414,135 +487,14 @@
 </pre></td><td class="code"><pre>&lt;<span class="constant">result</span> <span class="property">name</span>=<span class="string">"login"</span>&gt;/login.jsp&lt;/<span class="constant">result</span>&gt;
 </pre></td></tr></table></figure>
 
-<h2 id="-">属性驱动</h2>
-<p>在Action中声明一些属性, 这些属性能够获取表单中的值</p>
-<p>在浏览器提交一个url请求时, 先创建一个action, 并且把action放入对象栈中,
-这个时候action的属性会出现在对象栈中,
-然后经过一个拦截器ParametersInterceptor拦截器,</p>
-<ol>
-<li>获取页面上的表单中的name和value值</li>
-<li>把上述name和value的值封装成一个map</li>
-<li>根据 valueStack.setValue(name, value); 把页面上的值放到页面栈中</li>
-</ol>
+<h1 id="-">过滤器 和 拦截器</h1>
+<p>使用Filter 进行权限控制, 过滤所有web请求(所有web资源访问)</p>
+<p>使用拦截器 进行权限控制 ---- 主要拦截对Action访问(不能拦截JSP)</p>
+<h1 id="tip">Tip</h1>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-</pre></td><td class="code"><pre><span class="comment">&lt;!-- form.jsp --&gt;</span>
-<span class="comment">&lt;!-- 提交表单后, action重新返回form.jsp, username会被设为 "aaa"
-     也可以回显表单元素如 property.username 和 property.password
---&gt;</span>
-<span class="tag">&lt;<span class="title">form</span> <span class="attribute">action</span>=<span class="value">"{contextPath}/PropertyDriveAction_actionMethod"</span>&gt;</span>
-    <span class="tag">&lt;<span class="title">s:textfield</span> <span class="attribute">name</span>=<span class="value">"username"</span>&gt;</span> <span class="tag">&lt;/<span class="title">s:textfield</span>&gt;</span>
-    <span class="tag">&lt;<span class="title">s:password</span> <span class="attribute">name</span>=<span class="value">"password"</span>&gt;</span> <span class="tag">&lt;/<span class="title">s:password</span>&gt;</span>
-    <span class="tag">&lt;<span class="title">s:textfield</span> <span class="attribute">name</span>=<span class="value">"phone"</span>&gt;</span> <span class="tag">&lt;/<span class="title">s:textfield</span>&gt;</span>
-    
-    <span class="tag">&lt;<span class="title">s:property</span> <span class="attribute">name</span>=<span class="value">"username"</span>&gt;</span> <span class="tag">&lt;/<span class="title">s:property</span>&gt;</span>
-    <span class="tag">&lt;<span class="title">s:property</span> <span class="attribute">name</span>=<span class="value">"password"</span>&gt;</span> <span class="tag">&lt;/<span class="title">s:property</span>&gt;</span>
-    <span class="tag">&lt;<span class="title">s:property</span> <span class="attribute">name</span>=<span class="value">"phone"</span>&gt;</span> <span class="tag">&lt;/<span class="title">s:property</span>&gt;</span>
-<span class="tag">&lt;/<span class="title">form</span>&gt;</span>
-</pre></td></tr></table></figure>
-
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PropertyDiveActionAction</span> {</span>
-    <span class="annotation">@BeanProperty</span> <span class="keyword">private</span> String useranme;
-    <span class="annotation">@BeanProperty</span> <span class="keyword">private</span> String password;
-    <span class="annotation">@BeanProperty</span> <span class="keyword">private</span> String phone;
-    <span class="keyword">public</span> String <span class="title">actionMethod</span>(){
-       println(username); <span class="comment">// 可以得到 表单元素</span>
-       println(password);
-       println(phone);
-       ActontionContext().getContext().getValueStack().setParameter(<span class="string">"username"</span>, <span class="string">"aaa"</span>);
-       <span class="keyword">return</span> <span class="string">"form.jsp"</span>;
-    }
-}
-</pre></td></tr></table></figure>
-
-<h3 id="tip">Tip</h3>
-<p>属性驱动了利用了对象栈, 可以利用 <code>valueStack.setValue/setParameter</code>
-方法给对象中的属性赋值</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-</pre></td><td class="code"><pre>person = Person{name=hello}<span class="comment">;</span>
-valueStack<span class="preprocessor">.push</span>(person)<span class="comment">;</span>
-valueStack<span class="preprocessor">.setValue</span>(<span class="string">"name"</span>, <span class="string">"hello2"</span>)<span class="comment">;</span>
-assert(person<span class="preprocessor">.name</span> == <span class="string">"hello2"</span>)
-</pre></td></tr></table></figure>
-
-<h2 id="-">模型驱动</h2>
-<ol>
-<li>创建一个javabean, javabean中的属性和页面中表单的name属性的内容保持一致</li>
-<li>在Action中声明一个接口 ModelDriven<Person></li>
-<li>在action中声明一个属性 <code>model = new Person</code></li>
-<li>在action中重写 <code>getModel(){return model;}</code>, 返回 model 对象</li>
-</ol>
-<p>原理, 经历两个拦截器</p>
-<ol>
-<li>ModelDrivenIntercetper<ol>
-<li>得到action</li>
-<li>由action强制转化成ModelDriver</li>
-<li>由<code>ModelDriver.getModel()</code> 获取模型对象</li>
-<li>把模型对象放入栈顶</li>
-</ol>
-</li>
-<li>ParameterInterceptor, 把form表单的数据封装到相应的对象栈中的属性</li>
-</ol>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="keyword">class</span> Person {
-    <span class="keyword">private</span> String name;
-    <span class="keyword">private</span> String password;
-    <span class="keyword">private</span> String phone;
-}
-<span class="keyword">public</span> ModelDriverAction extends ActionSuppoet implements ModelDriven&lt;Person&gt; {
-    <span class="keyword">private</span> Person model = <span class="keyword">new</span> Person();
-    <span class="keyword">public</span> Person <span class="title">getModel</span>() {
-       <span class="keyword">return</span> <span class="keyword">this</span>.model;
-    }
-    <span class="keyword">public</span> String <span class="title">testModel</span>(){
-        println(model.getName()); <span class="comment">// 可以打印出</span>
-        println(model.getPassword());
-        println(model.getPhone());
-        <span class="keyword">return</span> <span class="string">""</span>;
-    }
-}
+</pre></td><td class="code"><pre><span class="keyword">this</span>.addActionError(<span class="string">""</span>);  <span class="comment">// 业务逻辑错误</span>
+<span class="keyword">this</span>.addFieldError(<span class="string">""</span>);   <span class="comment">// 验证错误</span>
 </pre></td></tr></table></figure>
 
   
@@ -559,7 +511,7 @@ assert(person<span class="preprocessor">.name</span> == <span class="string">"he
 
 <div class="article-share" id="share">
 
-  <div data-url="http://zhpooer.github.io/2014/05/15/传智播客day30-struts拦截器/" data-title="传智播客day30-struts拦截器 | Poe&#39;s World" data-tsina="null" class="share clearfix">
+  <div data-url="http://zhpooer.github.io/2014/05/14/传智播客day29-struts拦截器/" data-title="传智播客day29-struts拦截器 | Poe&#39;s World" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -569,18 +521,18 @@ assert(person<span class="preprocessor">.name</span> == <span class="string">"he
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2014/05/15/scala文档翻译-future&promise/" title="scala文档翻译-Future&amp;Promise">
+ <a href="/2014/05/15/传智播客day30-struts响应数据/" title="传智播客day30-struts响应数据">
   <strong>PREVIOUS:</strong><br/>
   <span>
-  scala文档翻译-Future&amp;Promise</span>
+  传智播客day30-struts响应数据</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2014/05/14/传智播客day29-struts2深入/"  title="传智播客day29-struts深入">
+<a href="/2014/05/14/传智播客day29-struts请求数据处理/"  title="传智播客day29-struts请求数据处理">
  <strong>NEXT:</strong><br/> 
- <span>传智播客day29-struts深入
+ <span>传智播客day29-struts请求数据处理
 </span>
 </a>
 </div>
@@ -597,7 +549,7 @@ assert(person<span class="preprocessor">.name</span> == <span class="string">"he
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">拦截器</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.1.</span> <span class="toc-text">拦截器初探</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.2.</span> <span class="toc-text">概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.3.</span> <span class="toc-text">拦截器执行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.4.</span> <span class="toc-text">案例: 执行效率统计拦截器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.5.</span> <span class="toc-text">案例: 用户登陆拦截器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.6.</span> <span class="toc-text">属性驱动</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#tip"><span class="toc-number">1.6.1.</span> <span class="toc-text">Tip</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.7.</span> <span class="toc-text">模型驱动</span></a></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#struts-"><span class="toc-number">1.</span> <span class="toc-text">Struts的工作原理及核心过滤器</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">2.</span> <span class="toc-text">拦截器</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.1.</span> <span class="toc-text">拦截器初探</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.2.</span> <span class="toc-text">概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.3.</span> <span class="toc-text">拦截器执行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.4.</span> <span class="toc-text">案例: 执行效率统计拦截器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.5.</span> <span class="toc-text">案例: 用户登陆拦截器</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">过滤器 和 拦截器</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#tip"><span class="toc-number">4.</span> <span class="toc-text">Tip</span></a></li></ol>
   </div>
 
 <div id="asidepart">
@@ -635,6 +587,8 @@ assert(person<span class="preprocessor">.name</span> == <span class="string">"he
 		
 			<li><a href="/tags/ServletResponse/" title="ServletResponse">ServletResponse<sup>1</sup></a></li>
 		
+			<li><a href="/tags/Spring/" title="Spring">Spring<sup>1</sup></a></li>
+		
 			<li><a href="/tags/String/" title="String">String<sup>1</sup></a></li>
 		
 			<li><a href="/tags/StringBuffer/" title="StringBuffer">StringBuffer<sup>1</sup></a></li>
@@ -648,8 +602,6 @@ assert(person<span class="preprocessor">.name</span> == <span class="string">"he
 			<li><a href="/tags/dtd/" title="dtd">dtd<sup>1</sup></a></li>
 		
 			<li><a href="/tags/eclipse/" title="eclipse">eclipse<sup>1</sup></a></li>
-		
-			<li><a href="/tags/emacs/" title="emacs">emacs<sup>1</sup></a></li>
 		
 		</ul>
 </div>
