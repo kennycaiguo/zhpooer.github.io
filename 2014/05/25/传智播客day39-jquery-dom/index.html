@@ -85,7 +85,7 @@ prependTo(content) : ">
     </p>
   <p class="article-time">
     <time datetime="2014-05-25T08:26:53.000Z" itemprop="datePublished">5月 25 2014</time>
-    更新日期:<time datetime="2014-05-30T09:10:06.000Z" itemprop="dateModified">5月 30 2014</time>
+    更新日期:<time datetime="2014-06-01T09:28:53.000Z" itemprop="dateModified">6月 1 2014</time>
     
   </p>
 </header>
@@ -94,7 +94,7 @@ prependTo(content) : ">
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">内部插入节点</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">2.</span> <span class="toc-text">外部插入节点</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">查找节点</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">4.</span> <span class="toc-text">创建元素</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">5.</span> <span class="toc-text">删除节点</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">6.</span> <span class="toc-text">复制节点</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">7.</span> <span class="toc-text">替换节点</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">8.</span> <span class="toc-text">属性操作</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">9.</span> <span class="toc-text">样式操作</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#css-dom"><span class="toc-number">10.</span> <span class="toc-text">CSS DOM</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#jquery-"><span class="toc-number">11.</span> <span class="toc-text">Jquery 验证框架</span></a></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">内部插入节点</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">2.</span> <span class="toc-text">外部插入节点</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">查找节点</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">4.</span> <span class="toc-text">创建元素</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">5.</span> <span class="toc-text">删除节点</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">6.</span> <span class="toc-text">复制节点</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">7.</span> <span class="toc-text">替换节点</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">8.</span> <span class="toc-text">属性操作</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">9.</span> <span class="toc-text">样式操作</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#css-dom"><span class="toc-number">10.</span> <span class="toc-text">CSS DOM</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">11.</span> <span class="toc-text">查找操作</span></a></li></ol>
 		</div>
 		
 		<h1 id="-">内部插入节点</h1>
@@ -160,6 +160,7 @@ prependTo(content) : ">
 当某个节点用 remove() 方法删除后,
 该节点所包含的所有后代节点将被同时删除.
 这个方法的返回值是一个指向已被删除的节点的引用.</li>
+<li><code>detach</code>: 删除元素, 但是会保留事件</li>
 <li><code>empty()</code>: 清空节点 – 清空元素中的所有后代节点(不包含属性节点).</li>
 </ul>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
@@ -170,8 +171,14 @@ prependTo(content) : ">
 6
 7
 8
-</pre></td><td class="code"><pre>$(<span class="string">"#bj"</span>).remove();
+9
+10
+11
+</pre></td><td class="code"><pre><span class="keyword">var</span> $bj = $(<span class="string">"#bj"</span>).remove();
+
 $(<span class="string">"#city"</span>).empty();
+
+
 
 $(<span class="string">"&lt;td&gt;&lt;/td&gt;"</span>).append($(<span class="string">"&lt;a&gt;&lt;/a&gt;"</span>).text(<span class="string">"删除"</span>));
 
@@ -242,11 +249,13 @@ jQuery 中有很多方法都是一个函数实现获取和设置.
 4
 5
 6
-</pre></td><td class="code"><pre><span class="char">$(</span><span class="comment">"#single"</span>).val(<span class="comment">"Single2"</span>);
-<span class="char">$(</span><span class="comment">"#multiple"</span>).val([<span class="comment">"Multiple2"</span>, <span class="comment">"Multiple3"</span>]);
-<span class="char">$(</span><span class="comment">"input"</span>).val([<span class="comment">"check2"</span>, <span class="comment">"radio1"</span>]);
+7
+</pre></td><td class="code"><pre><span class="comment">// 可以通过val(), 获取下拉框和单选框的值</span>
+$(<span class="string">"#single"</span>).<span class="keyword">val</span>(<span class="string">"Single2"</span>);
+$(<span class="string">"#multiple"</span>).<span class="keyword">val</span>([<span class="string">"Multiple2"</span>, <span class="string">"Multiple3"</span>]);
+$(<span class="string">"input"</span>).<span class="keyword">val</span>([<span class="string">"check2"</span>, <span class="string">"radio1"</span>]);
 
-<span class="char">$(</span>“div”).html(“&lt;p&gt;奥运接受了&lt;/p&gt;<span class="comment">");
+$(“div”).html(“&lt;p&gt;奥运接受了&lt;/p&gt;<span class="string">");
 $(“div”).html();</span>
 </pre></td></tr></table></figure>
 
@@ -288,13 +297,83 @@ $(<span class="string">"h1"</span>).each(<span class="function"><span class="key
 其返回对象包含了两个属性: top, left. 该方法只对可见元素有效</li>
 </ul>
 <p>em是相对长度单位。相对于当前对象内文本的字体尺寸 </p>
-<h1 id="jquery-">Jquery 验证框架</h1>
+<h1 id="-">查找操作</h1>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-</pre></td><td class="code"><pre>&lt;script <span class="keyword">type</span>=<span class="string">"text/javascript"</span> src=<span class="string">"jquery.js"</span>/&gt;
-&lt;script <span class="keyword">type</span>=<span class="string">"text/javascript"</span> src=<span class="string">"jquery-validate.js"</span>/&gt;
+</pre></td><td class="code"><pre><span class="variable">$(</span><span class="string">"#id"</span>).children(<span class="string">"a"</span>);
 </pre></td></tr></table></figure>
 
+<p><!-- # Jquery 验证框架 # -->
+&lt;!--<figure class="highlight -->"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- &lt;script type="text/javascript" src="jquery.js"/&gt; --&gt;</span>
+<span class="comment">&lt;!-- &lt;script type="text/javascript" src="jquery-validate.js"/&gt; --&gt;</span>
+<span class="comment">&lt;!-- ~~~~~~ --&gt;</span>
+
+
+# 事件机制 #
+jQuery提供的事件与传统的JS相同, 但是传统js只能对一个事件,
+绑定一个函数, jQuery 则不同
+</pre></td></tr></table></figure></p>
+<p>// 方式一:
+$(&quot;#mydiv&quot;).click(function(){alert(&quot;&quot;)});
+// 方式二:
+$(&quot;#mydiv&quot;).bind(&quot;click&quot;, function(){alert(&quot;&quot;)});
+// 解除所有绑定
+$(&quot;#mydiv&quot;).unbind(&quot;click&quot;);</p>
+<p>// 事件委派, 可以为还没有生成的dom对象, 绑定事件
+$(&quot;div&quot;).live(&quot;click&quot;,function(){});
+// 通过die 来取消事件委派
+$(&quot;div&quot;).die(&quot;click&quot;);</p>
+<p>// 一次性事件 只绑定一次
+$(&quot;div&quot;).one(&quot;click&quot;, function(){});
+// 触发性事件, 触发 div2 上的click事件
+$(&quot;#div2&quot;).trigger(&quot;click&quot;);</p>
+<p>// 鼠标悬浮事件
+$(&quot;#id&quot;).hover(function1, function1);
+// 鼠标连续点击事件
+$(&quot;#id&quot;).toggle(function1, function1);</p>
+<p>// 事件的默认阻止和冒泡阻止
+// <a href="delete" id="delete"></a>
+$(&quot;delete&quot;).click(function(e){
+    event.preventDefault(); // 阻止默认事件
+});
+//阻止事件的传递
+$(&quot;p&quot;).click(function(e){
+    e.stopPropagation();
+});</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre>
+<span class="comment"># jQuery Ajax 编程 #</span>
+`<span class="javascript">$.ajax(url, [setting])</span>`封装了所有ajax操作, 最底层的AJAX函数
+</pre></td></tr></table></figure>
+
+<p>// Load
+// 把远程的数据直接加载到被选中的元素中
+// 把远程的数据直接加载到被选中的元素中
+// 如果有参数, 就用 post, 没有就用get
+// $(&quot;div&quot;).load(url, [data], [callback]);
+$(&quot;div&quot;).load(&quot;demo1&quot;, {condition: 1});</p>
+<p>// Get
+// $.get(url, [data], [callback], [type])
+// type: xml,htm,json,jsonp
+$.get(&quot;demo1&quot;, {condition:2}, function(data){
+    // data就是xmlHttp.responseText 处理后的结果
+});</p>
+<p>// Post 也是一样的
+$.post(&quot;demo2&quot;, {condition:2}, function(data){
+    // data 是xml, 转换成 jquery
+    $(data).find(&quot;province&quot;).each(function(){ 
+    });
+});
+<del>~</del>~</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -347,7 +426,7 @@ $(<span class="string">"h1"</span>).each(<span class="function"><span class="key
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">内部插入节点</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">2.</span> <span class="toc-text">外部插入节点</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">查找节点</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">4.</span> <span class="toc-text">创建元素</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">5.</span> <span class="toc-text">删除节点</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">6.</span> <span class="toc-text">复制节点</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">7.</span> <span class="toc-text">替换节点</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">8.</span> <span class="toc-text">属性操作</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">9.</span> <span class="toc-text">样式操作</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#css-dom"><span class="toc-number">10.</span> <span class="toc-text">CSS DOM</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#jquery-"><span class="toc-number">11.</span> <span class="toc-text">Jquery 验证框架</span></a></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">内部插入节点</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">2.</span> <span class="toc-text">外部插入节点</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">查找节点</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">4.</span> <span class="toc-text">创建元素</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">5.</span> <span class="toc-text">删除节点</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">6.</span> <span class="toc-text">复制节点</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">7.</span> <span class="toc-text">替换节点</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">8.</span> <span class="toc-text">属性操作</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">9.</span> <span class="toc-text">样式操作</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#css-dom"><span class="toc-number">10.</span> <span class="toc-text">CSS DOM</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">11.</span> <span class="toc-text">查找操作</span></a></li></ol>
   </div>
 
 <div id="asidepart">

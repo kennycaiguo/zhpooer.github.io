@@ -9,14 +9,18 @@
     
     <meta name="author" content="zhpooer">
     
-    <meta name="description" content="懒加载
-懒加载主要解决一个问题: 类, 集合, many-to-one 在什么时候发出sql语句, 加载数据
-类的懒加载
+    <meta name="description" content="检索策略
+类级别检索
+通过session直接检索 某一个类 对应数据表数据
+1
+2
+session.load(Customer.class , 1) ;
+session.createQuery(&quot;from Order&quot;);
 
-利用session的load可以产生代理对象
-在session.load 方法执行的时候并不发出sql语句
-在得到一般属性的时候发出sql语句
-只针对一般属性有效果, 针对标示">
+
+关联级别检索
+程序内部已经获得持久对象，通过对象引用关系，进行数据检索
+">
     
     
     
@@ -87,7 +91,7 @@
     </p>
   <p class="article-time">
     <time datetime="2014-05-21T06:20:20.000Z" itemprop="datePublished">5月 21 2014</time>
-    更新日期:<time datetime="2014-05-22T06:23:36.000Z" itemprop="dateModified">5月 22 2014</time>
+    更新日期:<time datetime="2014-06-06T12:24:12.000Z" itemprop="dateModified">6月 6 2014</time>
     
   </p>
 </header>
@@ -96,98 +100,94 @@
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">懒加载</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.1.</span> <span class="toc-text">类的懒加载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.2.</span> <span class="toc-text">集合的懒加载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.3.</span> <span class="toc-text">单端关联的懒加载(多对一)</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">2.</span> <span class="toc-text">抓取策略</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">懒加载和抓取策略的结合</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#session"><span class="toc-number">4.</span> <span class="toc-text">session</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#session-"><span class="toc-number">4.1.</span> <span class="toc-text">session 的产生</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-getcurrentsession-"><span class="toc-number">4.2.</span> <span class="toc-text">使用 getCurrentSession()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#session-"><span class="toc-number">4.3.</span> <span class="toc-text">session 的缓存</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">4.3.1.</span> <span class="toc-text">一级缓存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">4.3.2.</span> <span class="toc-text">数据库和缓存的交互</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">4.4.</span> <span class="toc-text">二级缓存</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#-querycache-"><span class="toc-number">4.4.1.</span> <span class="toc-text">查询缓存(QueryCache)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ehcache-"><span class="toc-number">4.4.2.</span> <span class="toc-text">ehcache 配置</span></a></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">检索策略</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.1.</span> <span class="toc-text">类级别检索</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.2.</span> <span class="toc-text">关联级别检索</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">2.</span> <span class="toc-text">类的检索策略</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">关联级别的检索策略</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">3.1.</span> <span class="toc-text">多对多和一对多</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">3.2.</span> <span class="toc-text">多对一和一对一</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">4.</span> <span class="toc-text">批量检索</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#session"><span class="toc-number">5.</span> <span class="toc-text">session</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#session-"><span class="toc-number">5.1.</span> <span class="toc-text">session 的产生</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-getcurrentsession-"><span class="toc-number">5.2.</span> <span class="toc-text">使用 getCurrentSession()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#session-"><span class="toc-number">5.3.</span> <span class="toc-text">session 的缓存</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">5.3.1.</span> <span class="toc-text">一级缓存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">5.3.2.</span> <span class="toc-text">数据库和缓存的交互</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">5.4.</span> <span class="toc-text">二级缓存</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">5.4.1.</span> <span class="toc-text">二级缓存配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">5.4.2.</span> <span class="toc-text">类缓存区域</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">5.4.3.</span> <span class="toc-text">集合缓存区</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">5.4.4.</span> <span class="toc-text">更新时间戳区域</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#qeury-iterate-"><span class="toc-number">5.4.5.</span> <span class="toc-text">Qeury的iterate()方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-querycache-"><span class="toc-number">5.4.6.</span> <span class="toc-text">查询缓存(QueryCache)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">5.4.7.</span> <span class="toc-text">二级缓存的性能监控</span></a></li></ol></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">6.</span> <span class="toc-text">事务并发处理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">7.</span> <span class="toc-text">解决丢失更新</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">7.1.</span> <span class="toc-text">悲观锁</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">7.2.</span> <span class="toc-text">乐观锁</span></a></li></ol>
 		</div>
 		
-		<h1 id="-">懒加载</h1>
-<p>懒加载主要解决一个问题: 类, 集合, many-to-one 在什么时候发出sql语句, 加载数据</p>
-<h2 id="-">类的懒加载</h2>
-<ul>
-<li>利用session的load可以产生代理对象</li>
-<li>在session.load 方法执行的时候并不发出sql语句</li>
-<li>在得到一般属性的时候发出sql语句</li>
-<li>只针对一般属性有效果, 针对标示符(id)没有效果<figure class="highlight"><table><tr><td class="gutter"><pre>1
+		<h1 id="-">检索策略</h1>
+<h2 id="-">类级别检索</h2>
+<p>通过session直接检索 某一个类 对应数据表数据</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
-3
-4
-5
-6
-</pre></td><td class="code"><pre>// 得到一个代理对象
-Classes c = (Classes) session<span class="preprocessor">.load</span>(Classes<span class="preprocessor">.class</span>, <span class="number">1</span>L)<span class="comment">;</span>
-c<span class="preprocessor">.getCname</span>()<span class="comment">; // 发出sql语句</span>
-c<span class="preprocessor">.getCid</span>()<span class="comment">;// 标识符, 不会发出</span>
-session<span class="preprocessor">.close</span>()<span class="comment">;</span>
-c<span class="preprocessor">.getDescription</span>()<span class="comment">;  // 如果还没有初始化, 抛错 could not initialize proxy, no session</span>
+</pre></td><td class="code"><pre>session<span class="preprocessor">.load</span>(Customer<span class="preprocessor">.class</span> , <span class="number">1</span>) <span class="comment">;</span>
+session<span class="preprocessor">.createQuery</span>(<span class="string">"from Order"</span>)<span class="comment">;</span>
 </pre></td></tr></table></figure>
 
+<h2 id="-">关联级别检索</h2>
+<p>程序内部已经获得持久对象，通过对象引用关系，进行数据检索</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre>Customer c = session<span class="preprocessor">.load</span>(Customer<span class="preprocessor">.class</span> , <span class="number">1</span>) <span class="comment">; // 类级别</span>
+c<span class="preprocessor">.getOrders</span>()<span class="preprocessor">.size</span>() <span class="comment">;  // 关联级别检索 </span>
+order<span class="preprocessor">.getCustomer</span>()<span class="preprocessor">.getName</span>() <span class="comment">; // 关联级别检索</span>
+</pre></td></tr></table></figure>
+
+<h1 id="-">类的检索策略</h1>
+<ul>
+<li>类级别可选的检索策略包括立即检索和延迟检索, 默认为延迟检索  （针对load方法 ）</li>
+<li>类级别的检索策略可以通过 <code>&lt;class&gt;</code> 元素的 lazy 属性进行设置</li>
+</ul>
+<p>类级别检索 get 、Query 默认使用立即检索策略</p>
+<p>load 默认使用延迟检索， 在hbm文件 <code>&lt;class&gt;</code> 配置 lazy=false 使类级别检索变为立即检索</p>
+<ul>
+<li>lazy=false 后 load方法效果 和 get方法相同，使用 立即检索 </li>
+</ul>
+<h1 id="-">关联级别的检索策略</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre>c<span class="preprocessor">.getOrders</span>()<span class="preprocessor">.size</span>() <span class="comment">;</span>
+order<span class="preprocessor">.getCustomer</span>()<span class="preprocessor">.getName</span>()<span class="comment">;  // 属于关联级别的检索</span>
+</pre></td></tr></table></figure>
+
+<h2 id="-">多对多和一对多</h2>
+<p><code>&lt;set&gt;</code> 元素提供 fetch 和 lazy 两个属性 决定检索策略 </p>
+<ul>
+<li>fetch 属性 （select、subselect、join） ，主要决定SQL语句生成格式 </li>
+<li>lazy 属性 （false、true、extra）主要决定集合被初始化的时机</li>
+</ul>
+<p>fetch 和 lazy 共有9种组合 </p>
+<ul>
+<li>fetch 属性为 join， lazy属性会被忽略， 生成SQL将采用迫切左外连接查询 (left outer join fetch )<ul>
+<li>SQL语句 左外连接，采用 立即检索</li>
+<li>使用Query对象查询数据时，需要自己编写hql语句，(<code>session.get</code>是Hibernate生成sql)
+fetch=join 无效果，关联集合将根据lazy 设置进行 加载 </li>
+</ul>
 </li>
+<li>fetch 属性为 select ，将生成多条简单SQL查询 <pre><code>  lazy = false 立即检索
+  lazy = true  延迟检索
+  lazy = extra 加强延迟检索 （及其懒惰，比延迟更加延迟）
+</code></pre></li>
+<li>fetch 属性为 subselect ，将生成子查询的SQL语句<pre><code>  lazy = false 立即检索
+  lazy = true  延迟检索
+  lazy = extra 加强延迟检索 （及其懒惰，比延迟更加延迟）
+</code></pre></li>
+<li>lazy=false 立即检索，检索类级别数据时，关联级别数据也进行检索 </li>
+<li>lazy=true 延迟检索，检索类级别数据时，不会检索关联级别的数据，用到了再进行检索 </li>
+<li>lazy=&quot;extra&quot; 及其懒惰，当程序第一次访问 order 属性的 size(), contains() 和 isEmpty() 方法时, Hibernate 不会初始化 orders 集合类的实例 ，例如 查询size时，生成select count(*)  </li>
 </ul>
-<h2 id="-">集合的懒加载</h2>
-<p>lazy 的三个变量:</p>
+<p>结论: <code>session.load/session.get</code> ， fetch=join 生成迫切左外连接， lazy被忽略,
+<code>session.createQuery(hql).list()</code>  将忽略 fetch=join， lazy 将重新产生效果      </p>
+<h2 id="-">多对一和一对一</h2>
+<p><code>&lt;many-to-one&gt;</code> 元素也有一个 lazy 属性和 fetch 属性,
+fetch 决定SQL语句格式， lazy决定数据加载时间</p>
 <ul>
-<li>false: 当session.get时, 集合就被加载了</li>
-<li>true: 在集合遍历时才被加载</li>
-<li>extra: 针对集合做count, min, max, sum等操作</li>
+<li>fetch取值 join、 select</li>
+<li>lazy取值 false、 proxy、no-proxy(不讲解)</li>
 </ul>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-</pre></td><td class="code"><pre><span class="comment">&lt;!-- 设置集合懒加载, 默认为 true,
-     extra 更进一步的懒加载中, 如 students.size(), 会执行 select count()...--&gt;</span>
-<span class="tag">&lt;<span class="title">set</span> <span class="attribute">lazy</span>=<span class="value">"false|true|extra"</span>&gt;</span><span class="tag">&lt;/<span class="title">set</span>&gt;</span>
-</pre></td></tr></table></figure>
-
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-</pre></td><td class="code"><pre>// 执行 sql 生成 Classes 对象
-// 如果 <span class="operator"><span class="keyword">set</span>.lazy=<span class="keyword">false</span>, 会马上加载集合对象
-Classes c = <span class="keyword">session</span>.<span class="keyword">get</span>(Classes.class, <span class="number">1</span>L);</span> 
-<span class="operator"><span class="keyword">Set</span> students = classes.getStudents();</span> 
-for(Student s:students) {  // 执行sql, 生成 真实 students 对象(集合懒加载)
-    s.getSname();
-}
-</pre></td></tr></table></figure>
-
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-</pre></td><td class="code"><pre>Classes c = session<span class="preprocessor">.load</span>(Classes<span class="preprocessor">.class</span>, <span class="number">1</span>L)<span class="comment">;</span>
-<span class="keyword">Set</span> students = classes<span class="preprocessor">.getStudents</span>()<span class="comment">; // 执行 sql 生成 Classes 对象</span>
-for(Student s:students) {  // 执行sql, 生成 真实 students 对象(集合懒加载)
-    s<span class="preprocessor">.getSname</span>()<span class="comment">;</span>
-}
-</pre></td></tr></table></figure>
-
-<h2 id="-">单端关联的懒加载(多对一)</h2>
-<p>根据多的端加载一的一端, 就一个数据, 所以无所谓</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-</pre></td><td class="code"><pre><span class="comment">&lt;!-- 默认值 no-proxy --&gt;</span>
-<span class="tag">&lt;<span class="title">many-to-one</span> <span class="attribute">lazy</span>=<span class="value">"false|no-proxy|proxy"</span>&gt;</span>
-<span class="tag">&lt;/<span class="title">many-to-one</span>&gt;</span>
-</pre></td></tr></table></figure>
-
-<h1 id="-">抓取策略</h1>
-<p>抓取策略, 由一个对象如何抓取集合的策略(主要是Set集合如何提取数据)</p>
+<p>fetch 和 lazy 共有4种组合 </p>
+<ul>
+<li>fetch 属性为 join, lazy属性会被忽略,
+生成SQL将采用迫切左外连接查询(left outer join fetch )</li>
+<li>fetch 属性为 select， 产生多条SQL <pre><code>  lazy=false  立即检索
+  lazy=proxy  有关联对象类级别检索策略决定立即检索 或者 延迟检索 
+</code></pre></li>
+</ul>
+<p>Query的list 会忽略 fetch=&quot;join&quot;, lazy重新起作用</p>
+<p>结论： 开发中能延迟都延迟，必须立即的 才立即的 </p>
+<h1 id="-">批量检索</h1>
+<p>解决n+1查询检索问题</p>
 <ol>
-<li>主要是研究 <code>set</code> 集合如何提取数据</li>
-<li>在 Classes.hbm.xml 文件中<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-</pre></td><td class="code"><pre><span class="comment">&lt;!-- 外连接, 默认, 子查询 --&gt;</span>
-<span class="tag">&lt;<span class="title">set</span> <span class="attribute">fetch</span>=<span class="value">"join|fetch|subselect"</span>&gt;</span><span class="tag">&lt;/<span class="title">set</span>&gt;</span>
-</pre></td></tr></table></figure>
-
-</li>
-</ol>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
+<li>Customer 一方设置检索, <code>&lt;set batch-size=&quot;&quot;/&gt;</code> 设置批量检索<figure class="highlight java:"><table><tr><td class="gutter"><pre>1
 2
 3
 4
@@ -203,90 +203,26 @@ for(Student s:students) {  // 执行sql, 生成 真实 students 对象(集合懒
 14
 15
 16
-17
-18
-19
-20
-21
-22
-23
-24
-</pre></td><td class="code"><pre>// 默认 <span class="operator"><span class="keyword">select</span>, 如果学生有N个,要查询 N+<span class="number">1</span> 次, N+<span class="number">1</span> 查询
-/* 如果 <span class="keyword">fetch</span>=suselect, 会翻译成
-*        <span class="keyword">select</span> student.* <span class="keyword">from</span> student <span class="keyword">where</span> id <span class="keyword">in</span> (<span class="keyword">select</span> cid <span class="keyword">from</span> classes)
-*  先查询 Classes, 在查询 students, 两条语句 
-*/
-
-List cList = <span class="keyword">session</span>.createQuery(<span class="string">"from classes"</span>).list();</span>
-for(Classes classes:cList) {
-    <span class="operator"><span class="keyword">Set</span> students = classes.getStudents();</span>
-    for(Student s: students) {
-        println(s.getSname());
-    }
+</pre></td><td class="code"><pre><span class="comment">// 查询每个客户的订单数</span>
+<span class="keyword">List</span>&lt;Customer&gt; customers = session.createQuery(<span class="string">"from Customers"</span>).<span class="keyword">list</span>();
+<span class="comment">// 查询每个客户订单数, 一次查询所有客户,</span>
+<span class="comment">// 每个客户订单数产生单独SQL查询, 如果有N个客户</span>
+<span class="comment">// `&lt;set batch-size="3"/&gt;` 每次查三个</span>
+<span class="keyword">for</span>(Customer c:customers){ <span class="comment">// n+1</span>
+    customer.getOrders().size();
 }
 
-
-<span class="comment">/* 如果 fetch=join
-* 发出语句变成一句, class left join student
-* 如果把需求分析翻译成sql语句, 存在子查询, 用该策略不起作用(如上面的例子)
-*/</span>
-Classes classes = session.get(Classes.class, 1L);
-jSet students = classes.getStudents();
-for(Student s: students) {
-    println(s.getSname());
+<span class="comment">// 用订单查客户</span>
+<span class="keyword">List</span>&lt;Order&gt; orders = session.createQuery(<span class="string">"from Order"</span>).<span class="keyword">list</span>();
+<span class="comment">// 产生 n+1 条缓存, n 为客户数</span>
+<span class="comment">// 配置批量检索, Customer.hbm.xml, `&lt;class batch-size=3&gt;`</span>
+<span class="keyword">for</span>(o &lt;- orders) {
+    o.getCustomer();
 }
 </pre></td></tr></table></figure>
 
-<h1 id="-">懒加载和抓取策略的结合</h1>
-<table>
-<thead>
-<tr>
-<th>fetch</th>
-<th>lazy</th>
-<th>sql</th>
-<th>sql的执行时机</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>join</td>
-<td>false</td>
-<td>存在子查询</td>
-<td>当查询classes时, classes和student全部查询</td>
-<td>join 没有用</td>
-</tr>
-<tr>
-<td>join</td>
-<td>true</td>
-<td>存在子查询</td>
-<td>当遍历student时查询 student</td>
-<td>join 没有用</td>
-</tr>
-<tr>
-<td>join</td>
-<td>true</td>
-<td>不是子查询</td>
-<td>在session.get(classes)时, 全部查询</td>
-<td>lazy 没有用</td>
-</tr>
-<tr>
-<td>subselect</td>
-<td>true/false</td>
-<td>存在子查询</td>
-<td>发出两条语句</td>
-<td>如果lazy为false, 在一开始就发出</td>
-</tr>
-<tr>
-<td>select</td>
-<td>true/false</td>
-<td></td>
-<td>发出 n+1 条语句</td>
-<td>同上</td>
-</tr>
-</tbody>
-</table>
-<p>主要先看是不是子查询, 再看如果需要一下子全部加载, 就用<code>join</code></p>
+</li>
+</ol>
 <h1 id="session">session</h1>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
@@ -305,6 +241,19 @@ for(Student s: students) {
 <ul>
 <li><code>sessionFactory.openSession()</code>, 每次都打开新的会话(session)</li>
 <li><code>sessionFactory.getCurrentSession()</code>, 线程绑定一个session</li>
+</ul>
+<p>hibernate 提供三种管理Session的方式 </p>
+<ul>
+<li>Session 对象的生命周期与本地线程绑定 (与ThreadLocal绑定)<ul>
+<li>在hibernate配置文件中 配置 <code>hibernate.current_session_context_class=thread</code> </li>
+</ul>
+</li>
+<li>Session 对象的生命周期与 JTA 事务绑定 (分布式事务管理)<ul>
+<li>session面向多个数据库程序</li>
+</ul>
+</li>
+<li>Hibernate 委托程序管理 Session 对象的生命周期,
+在程序中获得Session对象，使用Session， 需要手动session.close() </li>
 </ul>
 <h2 id="-getcurrentsession-">使用 getCurrentSession()</h2>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
@@ -408,16 +357,23 @@ session.flush(); <span class="comment">// 检查缓存内部, 对比快照, 执�
 </pre></td></tr></table></figure>
 
 <h2 id="-">二级缓存</h2>
-<p>二级缓存, 存放共有数据</p>
-<p>适用场合: 数据不能频繁更新, 数据能公开, 私密性不是很强</p>
+<p>适用场合: 很少被修改，不是很重要，允许偶尔的并发问题，
+放入二级缓存 考虑因素(二级缓存 监控，是否采用二级缓存主要参考指标)</p>
 <p>hibernate 本身并没有提供二级缓存的解决方案, 依赖第三方供应商完成</p>
 <ul>
-<li>ehcache</li>
+<li>ehcache: 主要学习，支持本地缓存，支持分布式缓存</li>
 <li>oschace</li>
 <li>jbosscache</li>
 <li>swamcache</li>
 </ul>
-<p>二级缓存操作:</p>
+<p>二级缓存并发策略: </p>
+<ul>
+<li>transactional: 提供Repeatable Read事务隔离级别, 缓存支持事务, 发生异常的时候,缓存也能够回滚</li>
+<li>read-write: 提供Read Committed事务隔离级别， 更新缓存的时候会锁定缓存中的数据</li>
+<li>nonstrict-read-write ： 导致脏读， 很少使用 </li>
+<li>read-only： 数据不允许修改 ，只能查询 </li>
+</ul>
+<h3 id="-">二级缓存配置</h3>
 <ul>
 <li>二级缓存存在 sessionFaction 中</li>
 <li>生命周期和 sessionFaction 保持一致</li>
@@ -444,46 +400,22 @@ session.flush(); <span class="comment">// 检查缓存内部, 对比快照, 执�
 3
 4
 5
-</pre></td><td class="code"><pre><span class="comment">&lt;!-- 方式一 在配置文件中 --&gt;</span>
-<span class="tag">&lt;<span class="title">class-cache</span> <span class="attribute">usage</span>=<span class="value">"read-only"</span> <span class="attribute">class</span>=<span class="value">"Classes"</span>&gt;</span> <span class="tag">&lt;/<span class="title">class-cache</span>&gt;</span>
-<span class="comment">&lt;!-- 方式二 在映射文件(*.hbm.xml)中 --&gt;</span>
-<span class="comment">&lt;!-- 缓存策略 --&gt;</span>
-<span class="tag">&lt;<span class="title">cache</span> <span class="attribute">usage</span>=<span class="value">"read-only|read-write|transaction|nonstrict-read-write"</span>&gt;</span> <span class="tag">&lt;/<span class="title">cache</span>&gt;</span>
-</pre></td></tr></table></figure>
-
-</li>
-</ol>
-</li>
-</ul>
-<p>把数据存到一级缓存和二级缓存: <code>get</code> <code>load</code>,但是 <code>save</code> <code>update</code> 不一定</p>
-<h3 id="-querycache-">查询缓存(QueryCache)</h3>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
 6
 7
 8
 9
-10
-11
-12
-</pre></td><td class="code"><pre>Query q = session.createQuery(<span class="string">"from Classes"</span>);
-query.setCacheable(<span class="keyword">true</span>); <span class="comment">// classes里的所有数据要往查询缓存中存放</span>
-query.<span class="keyword">list</span>(); <span class="comment">// 查询, 并放入二级缓存</span>
-session.close();
-
-Query q = session.createQuery(<span class="string">"from Classes"</span>);
-query.setCacheable(<span class="keyword">true</span>); <span class="comment">// classes在二级缓存中查询, 不加会查询数据库</span>
-query.<span class="keyword">list</span>(); <span class="comment">// 查询</span>
-
-Query q = session.createQuery(<span class="string">"from Classes where id=?"</span>);
-query.setCacheable(<span class="keyword">true</span>); 
-query.<span class="keyword">list</span>(); <span class="comment">// 查询, 但是会从数据库查, 因为语句变了</span>
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- 方式一 在配置文件中 --&gt;</span>
+<span class="tag">&lt;<span class="title">class-cache</span> <span class="attribute">usage</span>=<span class="value">"read-only"</span> <span class="attribute">class</span>=<span class="value">"Classes"</span>&gt;</span> <span class="tag">&lt;/<span class="title">class-cache</span>&gt;</span>
+<span class="tag">&lt;<span class="title">collection-cache</span> <span class="attribute">usage</span>=<span class="value">"read-write"</span> <span class="attribute">class</span>=<span class="value">"cn.Order"</span>/&gt;</span>
+<span class="comment">&lt;!-- 客户关联的订单 --&gt;</span>
+<span class="tag">&lt;<span class="title">collection-cache</span> <span class="attribute">usage</span>=<span class="value">"read-write"</span> <span class="attribute">class</span>=<span class="value">"Customer.Order"</span>/&gt;</span>
+<span class="comment">&lt;!-- 方式二 在映射文件(*.hbm.xml)中 --&gt;</span>
+<span class="comment">&lt;!-- 缓存策略 --&gt;</span>
+<span class="comment">&lt;!-- 在类下面配置, 或在集合下面配置 --&gt;</span>
+<span class="tag">&lt;<span class="title">cache</span> <span class="attribute">usage</span>=<span class="value">"read-only|read-write|transaction|nonstrict-read-write"</span>&gt;</span> <span class="tag">&lt;/<span class="title">cache</span>&gt;</span>
 </pre></td></tr></table></figure>
-
-<h3 id="ehcache-">ehcache 配置</h3>
+</li>
+<li><p>ehcache配置</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
 3
@@ -497,13 +429,19 @@ query.<span class="keyword">list</span>(); <span class="comment">// 查询, 但�
 11
 12
 13
+14
+15
+16
 </pre></td><td class="code"><pre><span class="xml"><span class="tag">&lt;<span class="title">ehcache</span>&gt;</span>
     <span class="tag">&lt;<span class="title">diskStore</span> <span class="attribute">path</span>=<span class="value">""</span>&gt;</span><span class="tag">&lt;/<span class="title">diskStore</span>&gt;</span> <span class="comment">&lt;!-- 缓存在磁盘的目录 --&gt;</span>
-    <span class="tag">&lt;<span class="title">defaultCache</span> <span class="attribute">maxElementsInMemory</span>=<span class="value">""</span>
-                  <span class="attribute">overflowToDisk</span>=<span class="value">""</span> &lt;!<span class="attribute">--</span> 是否保存在硬盘 <span class="attribute">--</span>&gt;</span>
-                  maxElementsOnDisk=""&gt;
+    <span class="comment">&lt;!-- 缓存属性配置, 全局default 对所有缓存都有效 --&gt;</span>
+    <span class="tag">&lt;<span class="title">defaultCache</span> <span class="attribute">maxElementsInMemory</span>=<span class="value">""</span> &lt;!<span class="attribute">--</span> 内存中最大数量,超过数量, 内存 <span class="attribute">--</span>&gt;</span>
+                  overflowToDisk="" <span class="comment">&lt;!-- 是否保存在硬盘 --&gt;</span>
+                  external="false"  <span class="comment">&lt;!-- 缓存是否永久 --&gt;</span>
+                  maxElementsOnDisk="" <span class="comment">&lt;!-- 硬盘缓存最大对象数量 --&gt;</span>
+                  &gt;
     <span class="tag">&lt;/<span class="title">defaultCache</span>&gt;</span>
-     <span class="comment">&lt;!-- 设置二级缓存的硬盘保存策略--&gt;</span>
+    <span class="comment">&lt;!-- 设置二级缓存的硬盘保存策略 , 自定义设置, 针对 ClassName 有效--&gt;</span>
     <span class="tag">&lt;<span class="title">Cache</span> <span class="attribute">name</span>=<span class="value">"ClassName"</span>
         <span class="attribute">maxElementsInMemory</span>=<span class="value">""</span>
         <span class="attribute">overflowToDisk</span>=<span class="value">"true"</span>
@@ -512,6 +450,202 @@ query.<span class="keyword">list</span>(); <span class="comment">// 查询, 但�
 <span class="tag">&lt;/<span class="title">ehcache</span>&gt;</span></span>
 </pre></td></tr></table></figure>
 
+</li>
+</ol>
+</li>
+</ul>
+<h3 id="-">类缓存区域</h3>
+<p>从二级缓存区返回数据地址都是不同的(散装数据), 
+每次查询二级缓存，都是将散装数据 构造为一个新的对象</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre>session<span class="preprocessor">.get</span>(Customer<span class="preprocessor">.class</span>, <span class="number">1</span>)<span class="comment">; </span>
+transaction<span class="preprocessor">.commit</span>()<span class="comment">;</span>
+session<span class="preprocessor">.get</span>(Customer<span class="preprocessor">.class</span>, <span class="number">1</span>)<span class="comment">;// 地址与上一次不同</span>
+transaction<span class="preprocessor">.commit</span>()<span class="comment">;</span>
+
+// 不能读取二级缓存数据, 但是会写入二级缓存数据
+session<span class="preprocessor">.createQuery</span>(<span class="string">"from Customer"</span>)<span class="preprocessor">.list</span>()<span class="comment">;</span>
+transaction<span class="preprocessor">.commit</span>()<span class="comment">;</span>
+session<span class="preprocessor">.createQuery</span>(<span class="string">"from Customer"</span>)<span class="preprocessor">.list</span>()<span class="comment">; // 会直接查数据库</span>
+transaction<span class="preprocessor">.commit</span>()<span class="comment">;</span>
+</pre></td></tr></table></figure>
+
+<p>get/load 方法都可以 读取二级缓存的数据, 
+Query的list方法只能存，不能取</p>
+<h3 id="-">集合缓存区</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre>Customer customer = session<span class="preprocessor">.get</span>(Customer<span class="preprocessor">.class</span>, <span class="number">1</span>)<span class="comment">;</span>
+customer<span class="preprocessor">.getOrders</span>()<span class="preprocessor">.size</span>()<span class="comment">;</span>
+transaction<span class="preprocessor">.commit</span>()<span class="comment">;</span>
+// collection-cache 要设置
+// 如果去掉 class-cache usage=<span class="string">"read-write"</span> class=<span class="string">"cn.itcast.domain.Order"</span> 将会继续从数据库查询
+// 因为 集合缓存区, 缓存的是集合的id, 然后才会从类缓存区查找
+Customer customer = session<span class="preprocessor">.get</span>(Customer<span class="preprocessor">.class</span>, <span class="number">1</span>)<span class="comment">;</span>
+customer<span class="preprocessor">.getOrders</span>()<span class="preprocessor">.size</span>()<span class="comment">;</span>
+</pre></td></tr></table></figure>
+
+<blockquote>
+<p>一级缓存操作会同步到二级缓存</p>
+</blockquote>
+<h3 id="-">更新时间戳区域</h3>
+<p>作用：记录数据最后更新时间，确保缓存数据是有效的</p>
+<p>更新时间戳其余，记录数据最后更新时间，在使用二级缓存时，比较缓存时间t1 与 更新时间 t2 ，
+如果 t2 &gt; t1 丢弃原来缓存数据，重新查询缓存</p>
+<h3 id="qeury-iterate-">Qeury的iterate()方法</h3>
+<p>Query的<code>iterate</code> 方法返回 只有OID 代理对象</p>
+<ul>
+<li>产生查询id的SQL 语句 <code>select id from orders;</code></li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre><span class="comment">// 访问每个 具体数据时，再生成SQL查询 N+1</span>
+<span class="comment">// batch-size 无法优化，</span>
+<span class="comment">// 可以使用 二级缓存优化, 先执行 session.query().list(), 把数据放入二级缓存</span>
+Query q <span class="subst">=</span> session<span class="built_in">.</span>createQuery(<span class="string">"from Customer"</span>);
+Iterator i <span class="subst">=</span> q<span class="built_in">.</span><span class="keyword">iterate</span>();
+<span class="comment">// 每次迭代都从数据库或者二级缓存拿</span>
+<span class="keyword">while</span>(i<span class="built_in">.</span>hasnext()){
+}
+</pre></td></tr></table></figure>
+
+<h3 id="-querycache-">查询缓存(QueryCache)</h3>
+<p>可以说是三级缓存</p>
+<p>二级缓存缓存的数据都是类对象数据, 数据都缓存在<em>类缓冲区</em>,
+二级缓存缓存PO类对象，条件(key)是id</p>
+<p>如果查询条件不是id查询, 缓存数据不是PO类完整对象, 不适合使用二级缓存</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- 先配置二级缓存 --&gt;</span>
+<span class="comment">&lt;!-- 启用查询缓存  --&gt;</span>
+<span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"hibernate.cache.use_query_cache"</span>&gt;</span>true<span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="code"><pre><span class="comment">// key 是 sql 语句</span>
+Query q = session.createQuery(<span class="string">"from Classes"</span>);
+query.setCacheable(<span class="keyword">true</span>); <span class="comment">// classes里的所有数据要往查询缓存中存放</span>
+query.<span class="keyword">list</span>(); <span class="comment">// 查询, 并放入二级缓存</span>
+session.close();
+
+Query q = session.createQuery(<span class="string">"from Classes"</span>);
+query.setCacheable(<span class="keyword">true</span>); <span class="comment">// classes在二级缓存中查询, 不加会查询数据库</span>
+query.<span class="keyword">list</span>(); <span class="comment">// 查询</span>
+
+Query q = session.createQuery(<span class="string">"from Classes where id=?"</span>);
+query.setCacheable(<span class="keyword">true</span>); 
+query.<span class="keyword">list</span>(); <span class="comment">// 查询, 但是会从数据库查, 因为语句变了</span>
+</pre></td></tr></table></figure>
+
+<h3 id="-">二级缓存的性能监控</h3>
+<p><strong>没有检测性能的优化是毫无意义的</strong> </p>
+<p>SessionFactory 提供二级缓存监控方法，用来获得二级缓存命中次数 </p>
+<ul>
+<li><code>Statistics getStatistics()</code>  返回  Statistics 对象</li>
+</ul>
+<p>Statistics 对象提供</p>
+<ul>
+<li><code>long getQueryCacheHitCount()</code> 获取查询缓存命中次数</li>
+<li><code>long getQueryCacheMissCount()</code>  获取查询缓存丢失次数</li>
+<li><code>long getSecondLevelCacheHitCount()</code> 获取二级缓存命中次数</li>
+<li><code>long getSecondLevelCacheMissCount()</code> 获取二级缓存丢失次数 </li>
+</ul>
+<p>二级缓存监控 设置hibernate属性 </p>
+<ul>
+<li>在配置期间，将 <code>hibernate.generate_statistics</code> 设置为 true或 false</li>
+</ul>
+<p>命中率:<code>hitCount/(hitCount + missCount)</code> =</p>
+<h1 id="-">事务并发处理</h1>
+<p>事务四个特性 ACID: 原子性、一致性、隔离性、持久性 </p>
+<p>1、隔离性引发问题： 脏读、不可重复读、虚读 、丢失更新(lost update)</p>
+<ul>
+<li>脏读: 一个事务 读取 另一个事务 未提交的数据 </li>
+<li>不可重复读: 一个事务中 连续读取 两次， 第二次读取另一个事务 已经提交 update修改数据(数据改变)</li>
+<li>虚读: 一个事务 读取 另一个事务 已经提交 插入数据(记录条数改变)</li>
+<li>丢失更新: 两个事务同时修改数据，后提交事务覆盖了先提交事务的结果 </li>
+</ul>
+<p>2、数据库为了解决事务的隔离性问题，提供四种隔离级别（不是所有数据库都支持这四种级别）</p>
+<ul>
+<li>READ_UNCOMMITED : 读取未提交，引发所有隔离问题</li>
+<li>READ_COMMITTED : 读已提交，阻止脏读，发生不可重复读和虚读</li>
+<li>REPEATABLE_READ : 重复读 ，阻止脏读、不可重复读，发生虚读</li>
+<li>SERIALIZABLE : 串行处理，不允许两个事务 同时操作一个目标数据，根本不存在并发，不存在并发问题  （效率低下）</li>
+</ul>
+<p>企业开发中主要 READ_COMMITTED （Oracle默认级别）、REPEATABLE_READ （MySQL默认级别）</p>
+<p>设置hibernate事务隔离级别<code>hibernate.connection.isolation = 4</code></p>
+<ul>
+<li>1—Read uncommitted isolation</li>
+<li>2—Read committed isolation</li>
+<li>4—Repeatable read isolation</li>
+<li>8—Serializable isolation</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>&lt;<span class="keyword">property</span> <span class="property">name</span>=<span class="string">"hibernate.connection.isolation"</span>&gt;<span class="number">2</span>&lt;/<span class="keyword">property</span>&gt;
+</pre></td></tr></table></figure>
+
+<h1 id="-">解决丢失更新</h1>
+<h2 id="-">悲观锁</h2>
+<p>悲观锁： 采用数据库内部锁机制，在一个事务操作数据时，
+为数据加锁，另一个事务无法操作 </p>
+<ul>
+<li>排它锁 （写锁），数据库中每张表只能添加一个排它锁，
+排它锁与其他锁互斥 </li>
+<li>在修改数据时，自动添加排它锁 </li>
+<li>在查询数据时 添加排它锁
+<code>select * from customers for update;</code></li>
+</ul>
+<p>hibernate中使用悲观锁</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre>Customer customer = (Customer) session<span class="preprocessor">.load</span>(Customer<span class="preprocessor">.class</span>, <span class="number">1</span>,LockMode<span class="preprocessor">.UPGRADE</span>)<span class="comment">;</span>
+Customer customer = (Customer) session<span class="preprocessor">.load</span>(Customer<span class="preprocessor">.class</span>, <span class="number">1</span>,LockMode<span class="preprocessor">.UPGRADE</span>)<span class="comment">;</span>
+</pre></td></tr></table></figure>
+
+<ul>
+<li>悲观锁解决丢失更新，效率问题 ， 数据不能同时修改 </li>
+</ul>
+<h2 id="-">乐观锁</h2>
+<p>与数据库锁无关，在数据表中为数据添加 版本字段，每次数据修改都会导致版本号+1 </p>
+<p>hibernate 为Customer表 添加版本字段 </p>
+<ul>
+<li>在customer类 添加 <code>private Integer version;</code> 版本字段</li>
+<li>在Customer.hbm.xml 定义版本字段
+<code>&lt;version name=&quot;version&quot;&gt;&lt;/version&gt;</code></li>
+</ul>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -531,10 +665,10 @@ query.<span class="keyword">list</span>(); <span class="comment">// 查询, 但�
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2014/05/22/传智播客day35-hql/" title="传智播客day35-HQL">
+ <a href="/2014/05/22/传智播客day35-数据检索/" title="传智播客day35-数据检索">
   <strong>PREVIOUS:</strong><br/>
   <span>
-  传智播客day35-HQL</span>
+  传智播客day35-数据检索</span>
 </a>
 </div>
 
@@ -559,7 +693,7 @@ query.<span class="keyword">list</span>(); <span class="comment">// 查询, 但�
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">懒加载</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.1.</span> <span class="toc-text">类的懒加载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.2.</span> <span class="toc-text">集合的懒加载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.3.</span> <span class="toc-text">单端关联的懒加载(多对一)</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">2.</span> <span class="toc-text">抓取策略</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">懒加载和抓取策略的结合</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#session"><span class="toc-number">4.</span> <span class="toc-text">session</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#session-"><span class="toc-number">4.1.</span> <span class="toc-text">session 的产生</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-getcurrentsession-"><span class="toc-number">4.2.</span> <span class="toc-text">使用 getCurrentSession()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#session-"><span class="toc-number">4.3.</span> <span class="toc-text">session 的缓存</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">4.3.1.</span> <span class="toc-text">一级缓存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">4.3.2.</span> <span class="toc-text">数据库和缓存的交互</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">4.4.</span> <span class="toc-text">二级缓存</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#-querycache-"><span class="toc-number">4.4.1.</span> <span class="toc-text">查询缓存(QueryCache)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ehcache-"><span class="toc-number">4.4.2.</span> <span class="toc-text">ehcache 配置</span></a></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">检索策略</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.1.</span> <span class="toc-text">类级别检索</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.2.</span> <span class="toc-text">关联级别检索</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">2.</span> <span class="toc-text">类的检索策略</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">关联级别的检索策略</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">3.1.</span> <span class="toc-text">多对多和一对多</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">3.2.</span> <span class="toc-text">多对一和一对一</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">4.</span> <span class="toc-text">批量检索</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#session"><span class="toc-number">5.</span> <span class="toc-text">session</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#session-"><span class="toc-number">5.1.</span> <span class="toc-text">session 的产生</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-getcurrentsession-"><span class="toc-number">5.2.</span> <span class="toc-text">使用 getCurrentSession()</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#session-"><span class="toc-number">5.3.</span> <span class="toc-text">session 的缓存</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">5.3.1.</span> <span class="toc-text">一级缓存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">5.3.2.</span> <span class="toc-text">数据库和缓存的交互</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">5.4.</span> <span class="toc-text">二级缓存</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">5.4.1.</span> <span class="toc-text">二级缓存配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">5.4.2.</span> <span class="toc-text">类缓存区域</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">5.4.3.</span> <span class="toc-text">集合缓存区</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">5.4.4.</span> <span class="toc-text">更新时间戳区域</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#qeury-iterate-"><span class="toc-number">5.4.5.</span> <span class="toc-text">Qeury的iterate()方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-querycache-"><span class="toc-number">5.4.6.</span> <span class="toc-text">查询缓存(QueryCache)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">5.4.7.</span> <span class="toc-text">二级缓存的性能监控</span></a></li></ol></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">6.</span> <span class="toc-text">事务并发处理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">7.</span> <span class="toc-text">解决丢失更新</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">7.1.</span> <span class="toc-text">悲观锁</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">7.2.</span> <span class="toc-text">乐观锁</span></a></li></ol>
   </div>
 
 <div id="asidepart">

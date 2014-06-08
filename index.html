@@ -69,6 +69,49 @@
 
   <section class="post" itemscope itemprop="blogPost">
   
+    <a href="/2014/06/08/scala-thoughtworks培训/" title="scala thoughtworks培训" itemprop="url">
+  
+    <h1 itemprop="name">scala thoughtworks培训</h1>
+    
+     
+           <p itemprop="description" >基于scala的框架
+play: web框架, 仿制rails
+spark: 大数据分析
+动态类型和静态类型
+动态: 运行时, 进行类型检查
+静态: 编译时, 进行类型检查
+简单地说，在声明了一个变量之后，不能改变它的类型的语言，是静态语言；能够随时改变它的类型的语言，是动态语言</p>
+        
+    
+    <time datetime="2014-06-08T05:06:47.000Z" itemprop="datePublished">6月 8 2014</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2014/06/03/传智播客day43-ssh综合练习/" title="传智播客day43-ssh综合练习 仓库管理系统" itemprop="url">
+  
+    <h1 itemprop="name">传智播客day43-ssh综合练习 仓库管理系统</h1>
+    
+     
+           <p itemprop="description" >仓库管理系统的分析
+项目开发两种:
+
+前端人员制作页面(CSS+DIV/Frame)
+Java工程师开发前端页面(UI框架 ExtJS, JqueryEasyUI, flex),
+同时开发服务器端
+
+导入页面新项目:
+
+新建项目, 将代码复制(不建议 import), 不同开发工</p>
+        
+    
+    <time datetime="2014-06-03T01:05:17.000Z" itemprop="datePublished">6月 3 2014</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
     <a href="/2014/05/29/传智播客day42-spring-事务管理/" title="传智播客day42-Spring 事务管理" itemprop="url">
   
     <h1 itemprop="name">传智播客day42-Spring 事务管理</h1>
@@ -264,34 +307,22 @@ alert(String mes</p>
 
   <section class="post" itemscope itemprop="blogPost">
   
-    <a href="/2014/05/22/传智播客day35-hql/" title="传智播客day35-HQL" itemprop="url">
+    <a href="/2014/05/22/传智播客day35-数据检索/" title="传智播客day35-数据检索" itemprop="url">
   
-    <h1 itemprop="name">传智播客day35-HQL</h1>
+    <h1 itemprop="name">传智播客day35-数据检索</h1>
     
      
-           <p itemprop="description" >单表查询
+           <p itemprop="description" >Hibernate 检索
+五种检索数据方式:
+
+导航对象图检索方式, 更具已经加载的对象导航的其他对象
 1
 2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-// 返回的是 Classes 对象
-List&lt;Classes&gt; cs = session.createQuery(&quot;from Classes&quot;).list</p>
+Customer c = session.get(Customer.class, 1);
+c.getOrders().size();
+
+
+OID检索方式, sessio</p>
         
     
     <time datetime="2014-05-22T06:17:00.000Z" itemprop="datePublished">5月 22 2014</time>
@@ -305,14 +336,17 @@ List&lt;Classes&gt; cs = session.createQuery(&quot;from Classes&quot;).list</p>
     <h1 itemprop="name">传智播客day34-Hibernate性能</h1>
     
      
-           <p itemprop="description" >懒加载
-懒加载主要解决一个问题: 类, 集合, many-to-one 在什么时候发出sql语句, 加载数据
-类的懒加载
+           <p itemprop="description" >检索策略
+类级别检索
+通过session直接检索 某一个类 对应数据表数据
+1
+2
+session.load(Customer.class , 1) ;
+session.createQuery(&quot;from Order&quot;);
 
-利用session的load可以产生代理对象
-在session.load 方法执行的时候并不发出sql语句
-在得到一般属性的时候发出sql语句
-只针对一般属</p>
+
+关联级别检索
+程序内部已经获得持久对象，通过对象引用</p>
         
     
     <time datetime="2014-05-21T06:20:20.000Z" itemprop="datePublished">5月 21 2014</time>
@@ -412,48 +446,6 @@ struts.xml, struts-login.</p>
         
     
     <time datetime="2014-05-17T06:05:42.000Z" itemprop="datePublished">5月 17 2014</time>
-  </a>
-</section>
-
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2014/05/17/传智播客day31-struts拾遗/" title="传智播客day31-struts拾遗" itemprop="url">
-  
-    <h1 itemprop="name">传智播客day31-struts拾遗</h1>
-    
-     
-           <p itemprop="description" >ognl 详解
-OGNL：Object Graph Navigation Language
-
-OGNL不仅可以调用属性，还可以调用普通方法
-1
-2
-3
-4
-5
-6
-7
-&lt;!-- 表达式可以调get和set,可以调方法,可以按索引取数组内容 （打印a）--&gt;
-&lt;s</p>
-        
-    
-    <time datetime="2014-05-17T01:04:32.000Z" itemprop="datePublished">5月 17 2014</time>
-  </a>
-</section>
-
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2014/05/16/函数式编程手记/" title="函数式编程手记" itemprop="url">
-  
-    <h1 itemprop="name">函数式编程手记</h1>
-    
-     
-           <p itemprop="description" >历数我学习计算机语言的经历, 也算是略通八国语言的&#39;牛&#39;人啊, 什么汇编、c语言、java,
-命令语言、函数式语言、面向对象编程, 统统都学习接触过.
-用&quot;物竞天择, 用进废退&quot;这句话来形容现在的我, 真是最合适不过了, 这会儿回想起我最熟悉,</p>
-        
-    
-    <time datetime="2014-05-16T07:28:50.000Z" itemprop="datePublished">5月 16 2014</time>
   </a>
 </section>
 

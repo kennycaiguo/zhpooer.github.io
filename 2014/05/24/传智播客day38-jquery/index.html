@@ -96,7 +96,7 @@ v">
     </p>
   <p class="article-time">
     <time datetime="2014-05-24T03:17:29.000Z" itemprop="datePublished">5月 24 2014</time>
-    更新日期:<time datetime="2014-05-30T10:44:22.000Z" itemprop="dateModified">5月 30 2014</time>
+    更新日期:<time datetime="2014-06-01T03:43:10.000Z" itemprop="dateModified">6月 1 2014</time>
     
   </p>
 </header>
@@ -366,8 +366,10 @@ $(<span class="string">"#two"</span>).siblings(<span class="string">".div"</span
 </table>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
+3
 </pre></td><td class="code"><pre><span class="variable">$(</span><span class="string">"div:first"</span>).css(<span class="string">"background-color"</span>, <span class="string">"red"</span>); <span class="regexp">//</span> == <span class="variable">$(</span><span class="string">"div"</span>).first()
 <span class="variable">$(</span><span class="string">"div:not(.one)"</span>).css(<span class="string">"background-color"</span>, <span class="string">"red"</span>);
+<span class="variable">$(</span><span class="string">"table tr:gt(0)"</span>).css(<span class="string">"color"</span>, <span class="string">"blue"</span>);
 </pre></td></tr></table></figure>
 
 <h2 id="-">内容过滤选择器</h2>
@@ -439,7 +441,9 @@ $(<span class="string">"#two"</span>).siblings(<span class="string">".div"</span
 5
 6
 7
+8
 </pre></td><td class="code"><pre><span class="comment">/*
+css 设置不可见, display:none|block|inline, visibility:hidden|visible
 index: 当前遍历的索引
 domElm: 当前遍历的DOM对象
 */</span>
@@ -518,6 +522,10 @@ $(<span class="string">"table:eq(0) tr:odd"</span>).css(<span class="string">"ba
 </tr>
 </tbody>
 </table>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre><span class="variable">$(</span><span class="string">"[class *=value]"</span>).css(<span class="string">"background"</span>, <span class="string">"yellow"</span>);
+</pre></td></tr></table></figure>
+
 <h2 id="-">子元素过滤选择器</h2>
 <table>
 <thead>

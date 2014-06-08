@@ -119,7 +119,7 @@ echo &#39;php&#39;;
 3
 4
 5
-</pre></td><td class="code"><pre><span class="php"><span class="class">&lt;?<span class="title">php</span>  `<span class="title">content</span>` ?&gt;</span></span>
+</pre></td><td class="code"><pre><span class="php"><span class="preprocessor">&lt;?php</span>  `content` <span class="preprocessor">?&gt;</span></span>
 
 <span class="tag">&lt;<span class="title">script</span> <span class="attribute">language</span>=<span class="value">“php"</span>&gt;</span><span class="javascript">
 echo <span class="string">'php'</span>;
@@ -128,7 +128,7 @@ echo <span class="string">'php'</span>;
 </li>
 <li><p>兼容标记<br>短标记,修改php配置,<code>open_short_tags=on</code></p>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
-</pre></td><td class="code"><pre><span class="preprocessor">&lt;?</span> <span class="keyword">echo</span> <span class="string">'h'</span>; <span class="preprocessor">?&gt;</span>
+</pre></td><td class="code"><pre><span class="php"><span class="preprocessor">&lt;?</span> <span class="keyword">echo</span> <span class="string">'h'</span>; <span class="preprocessor">?&gt;</span></span>
 </pre></td></tr></table></figure>
 </li>
 <li><p>asp标签风格, 修改配置 <code>aps_tags=on</code></p>
@@ -140,7 +140,7 @@ echo <span class="string">'php'</span>;
 </ul>
 <h2 id="html-php-">html模式和php模式</h2>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
-</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">html</span>&gt;</span><span class="php"><span class="class">&lt;? ?&gt;</span></span><span class="tag">&lt;/<span class="title">html</span>&gt;</span>
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">html</span>&gt;</span><span class="php"><span class="preprocessor">&lt;?</span> <span class="preprocessor">?&gt;</span></span><span class="tag">&lt;/<span class="title">html</span>&gt;</span>
 </pre></td></tr></table></figure>
 
 <h2 id="-">语句结束符</h2>
@@ -166,12 +166,12 @@ echo <span class="string">'php'</span>;
 4
 5
 6
-</pre></td><td class="code"><pre><span class="xml"><span class="php"><span class="preprocessor">&lt;?php</span>
+</pre></td><td class="code"><pre><span class="php"><span class="preprocessor">&lt;?php</span>
 <span class="variable">$name</span> = <span class="string">'itcast'</span>;
 <span class="keyword">echo</span> <span class="variable">$name</span>;
 functioni name(){
 }
-<span class="preprocessor">?&gt;</span></span></span>
+<span class="preprocessor">?&gt;</span></span>
 </pre></td></tr></table></figure>
 
 <h3 id="-">变量名</h3>

@@ -85,7 +85,7 @@ StrutsExecuteFilter：进入Struts2的核心处理。
     </p>
   <p class="article-time">
     <time datetime="2014-05-14T03:09:51.000Z" itemprop="datePublished">5月 14 2014</time>
-    更新日期:<time datetime="2014-05-28T07:15:50.000Z" itemprop="dateModified">5月 28 2014</time>
+    更新日期:<time datetime="2014-06-04T01:48:32.000Z" itemprop="dateModified">6月 4 2014</time>
     
   </p>
 </header>
@@ -437,7 +437,7 @@ showcase: 各种应用的案例，在struts2-showcase里面找各种案例</p>
     <span class="tag">&lt;<span class="title">interceptors</span>&gt;</span>
         <span class="tag">&lt;<span class="title">interceptor</span> <span class="attribute">name</span>=<span class="value">"elapsedTime"</span> <span class="attribute">class</span>=<span class="value">"com.itheima.interceptors.ElapsedTimeInterceprot"</span>&gt;</span><span class="tag">&lt;/<span class="title">interceptor</span>&gt;</span>
         <span class="tag">&lt;<span class="title">interceptor</span> <span class="attribute">name</span>=<span class="value">"sessionCheck"</span> <span class="attribute">class</span>=<span class="value">"com.itheima.interceptors.SessionCheckInterceptors"</span>&gt;</span>
-            <span class="comment">&lt;!-- 说明test2动作方法不需要拦截 --&gt;</span>
+            <span class="comment">&lt;!-- 说明test2动作方法不需要拦截, SessioncheckInterceptor 需要继承 MethodFilterIntercetpor --&gt;</span>
             <span class="tag">&lt;<span class="title">param</span> <span class="attribute">name</span>=<span class="value">"excludeMethods"</span>&gt;</span>user<span class="tag">&lt;/<span class="title">param</span>&gt;</span>
         <span class="tag">&lt;/<span class="title">interceptor</span>&gt;</span>
         <span class="tag">&lt;<span class="title">interceptor-stack</span> <span class="attribute">name</span>=<span class="value">"myDefaultStack"</span>&gt;</span>
