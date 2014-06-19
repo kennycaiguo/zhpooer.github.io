@@ -1,0 +1,587 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>传智播客day45 SVN | Poe&#39;s World</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="zhpooer">
+    
+    <meta name="description" content="SVN简介
+Maven: 项目管理工具, 完成项目构建
+SVN (Subversion)版本管理工具, 属于 SCM 部分软件配置管理
+项目中为什么要版本控制?
+
+在多人团队同时进行项目开发, 每个人写好代码,
+需要同步给其它人, 使用U盘工具, 容易出现版本更新不及时的问题
+里程碑: 项目节点管理">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="Poe&#39;s World" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="Poe&#39;s World" title="Poe&#39;s World"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Poe&#39;s World">Poe&#39;s World</a></h1>
+				<h2 class="blog-motto">竹杖芒鞋轻胜马，一蓑烟雨任平生</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/english-monthly">英语角</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:zhpooer.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/06/10/传智播客day45-svn/" title="传智播客day45 SVN" itemprop="url">传智播客day45 SVN</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://zhpooer.github.io" title="zhpooer">zhpooer</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2014-06-10T13:18:45.000Z" itemprop="datePublished">6月 10 2014</time>
+    更新日期:<time datetime="2014-06-11T11:54:51.000Z" itemprop="dateModified">6月 11 2014</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#svn-"><span class="toc-number">1.</span> <span class="toc-text">SVN简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#subversion-"><span class="toc-number">2.</span> <span class="toc-text">Subversion服务器</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.1.</span> <span class="toc-text">安装服务器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.2.</span> <span class="toc-text">权限配置</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#tortoisesvn"><span class="toc-number">3.</span> <span class="toc-text">TortoiseSVN</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">4.</span> <span class="toc-text">冲突解决</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#eclipse-svn-"><span class="toc-number">5.</span> <span class="toc-text">eclipse svn 插件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#svn-apache-"><span class="toc-number">6.</span> <span class="toc-text">svn+apache整合配置</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">6.1.</span> <span class="toc-text">快速整合</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">7.</span> <span class="toc-text">分支, 标签, 切换, 合并使用</span></a></li></ol>
+		</div>
+		
+		<h1 id="svn-">SVN简介</h1>
+<p>Maven: 项目管理工具, 完成项目构建</p>
+<p>SVN (Subversion)版本管理工具, 属于 SCM 部分软件配置管理</p>
+<p>项目中为什么要版本控制?</p>
+<ul>
+<li>在多人团队同时进行项目开发, 每个人写好代码,
+需要同步给其它人, 使用U盘工具, 容易出现版本更新不及时的问题</li>
+<li>里程碑: 项目节点管理, 通过标签tag进行记录, 即时项目备份、恢复,
+在项目升级 出现问题，很容易恢复</li>
+<li>分支概念, 搭建基础架构, 对项目进行分支, 每个分支独立开发, 支持合并</li>
+</ul>
+<h1 id="subversion-">Subversion服务器</h1>
+<p>工作方式</p>
+<ol>
+<li>单独安装Subversion服务器程序,
+直接使用客户端连接SVN Server(没有对用户名和密码加密，不安全)</li>
+<li>Subversion服务器和Apache服务器整合, Apache负责密码加密(更加安全)</li>
+</ol>
+<p>数据存储方式</p>
+<ul>
+<li>BDB (Berkeley DB), 数据库方式</li>
+<li>FSFS, 采用文件系统来存储(推荐)</li>
+</ul>
+<p>SVN 管理版本文件, 就是硬盘上文件夹, 里面存放不同版本的文件</p>
+<ul>
+<li>复制, 修改, 合并方案 (Subversion 服务器默认方式):
+这种方案，允许多个人，对服务器副本文件，进行同时修改，在修改后，再合并 </li>
+<li>锁定, 修改, 解锁方案: 只允许一个人修改文件</li>
+</ul>
+<h2 id="-">安装服务器</h2>
+<ol>
+<li><p>下载安装 Subversion</p>
+<pre><code> svnadmin : 管理员创建仓库管理命令
+ mod_dav_svn : 和Apache整合
+ svnserve : 启动svn服务器
+ svn : 执行svn客户端命令
+</code></pre></li>
+<li>建立仓库, <code>svnadmin create itcast</code>, 会生成目录结构: <ul>
+<li>conf下存放配置文件, authz授权文件、passwd 用户密码文件、svnserve.conf 核心配置</li>
+<li>db 存放版本管理一些文件</li>
+<li>hooks 钩子事件</li>
+<li>locks 锁文件</li>
+</ul>
+</li>
+<li><p>配置Subversion服务</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre><span class="comment">// 方式一</span>
+<span class="subst">&gt;</span> svnserve <span class="attribute">-d</span> –r 文档仓库路径
+<span class="comment">// 方式二 制作windows服务</span>
+<span class="subst">&gt;</span> sc create SVN<span class="attribute">-Service</span> binpath<span class="subst">=</span><span class="string">"\bin\svnserve.exe --service -r C:\Repositories\svn"</span> displayname<span class="subst">=</span> <span class="string">"SVN-Service"</span> start<span class="subst">=</span> auto depend<span class="subst">=</span>Tcpip
+<span class="subst">&gt;</span> net start SVN<span class="attribute">-Service</span> <span class="comment">// 启动服务</span>
+<span class="subst">&gt;</span> net delete SVN<span class="attribute">-Service</span> <span class="comment">// 停止服务</span>
+</pre></td></tr></table></figure>
+</li>
+<li><p>客户端操作</p>
+<pre><code> svn checkout -从版本库取出一个工作拷贝 
+ svn commit -将改动的文件提交到版本库
+ svn update -更新你的工作拷贝 
+ svn add -向版本库中添加新文件
+ svn delete -从版本库中删除文件
+ svn revert -取消所有的本地编辑
+ svn info -显示本地或远程条目的信息 
+ svn list -列出版本库目录的条目 
+ svn status -查看当前工作区状态
+ svn help -获取帮助信息
+</code></pre></li>
+</ol>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="blockquote">&gt; svn checkout svn://localhost/itcast</span>
+<span class="blockquote">&gt; svn add index.jsp  ;; 在工作副本加入新的文件, 并通知服务器</span>
+<span class="blockquote">&gt; svn commit index.jsp -m "first commit" ;; 提交到中心服务器, 每一次提交版本加一</span>
+<span class="blockquote">&gt; svn update ;; 将本地的文件更新到最新文件</span>
+<span class="blockquote">&gt; svn revert ;; 取消本地副本的编辑</span>
+</pre></td></tr></table></figure>
+
+<h2 id="-">权限配置</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="code"><pre><span class="comment">;;; senserve.conf</span>
+<span class="comment">;; 匿名用户不能进行读写, 认证用户可以写入</span>
+<span class="setting">anon-access = <span class="value">none</span></span>
+<span class="setting">auth-access = <span class="value">write</span></span>
+
+<span class="comment">;; 密码文件生效</span>
+<span class="setting">password-db=<span class="value">passwd</span></span>
+
+<span class="comment">;; 授权文件生效</span>
+<span class="setting">authz-db = <span class="value">authz</span></span>
+
+<span class="comment">;; 修改 passwd, 创建用户和密码</span>
+<span class="comment">;; 修改 authz, 配置用户权限</span>
+</pre></td></tr></table></figure>
+
+<h1 id="tortoisesvn">TortoiseSVN</h1>
+<h1 id="-">冲突解决</h1>
+<p>多个人, 同时对一份代码进行修改, 再同时去提交产生问题
+后提交用户, 出现文件过时错误, 服务器文件发生变化</p>
+<p>解决方法: 修改时对文件上锁, 或: </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre>// 在tortoise上操作
+svn <span class="operator"><span class="keyword">update</span>
+edit confilict
+mark resolved
+<span class="keyword">commit</span></span>
+</pre></td></tr></table></figure>
+
+<h1 id="eclipse-svn-">eclipse svn 插件</h1>
+<h1 id="svn-apache-">svn+apache整合配置</h1>
+<p>为什么 Subversion 整合 Apache</p>
+<ul>
+<li>使用HTTP协议访问SVN服务</li>
+<li>Apache提供密码加密功能</li>
+</ul>
+<ol>
+<li>下载与svn相对应的apache安装程序, 安装之</li>
+<li><p>修改 httpd.conf, 复制 <code>mod_dav_svn.so</code> <code>mod_authz_zvn</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre><span class="comment">;; 将下列2行前方的#移除</span>
+LoadModule dav_module modules/mod_dav<span class="preprocessor">.so</span>
+LoadModule dav_fs_module modules/mod_dav_fs<span class="preprocessor">.so</span>
+<span class="comment">;; 并同时在上面两行下面增加以下两行</span>
+LoadModule dav_svn_module modules/mod_dav_svn<span class="preprocessor">.so</span>
+LoadModule authz_svn_module modules/mod_authz_svn<span class="preprocessor">.so</span>
+</pre></td></tr></table></figure>
+</li>
+<li><p>创建密码</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre>;; 复制产生的文件到 svn/conf
+htpasswd <span class="attribute">-cb</span> <span class="preprocessor">[</span>filename<span class="preprocessor">]</span><span class="markup"> </span><span class="preprocessor">[</span>username<span class="preprocessor">]</span><span class="markup"> </span><span class="preprocessor">[</span>password<span class="preprocessor">]</span><span class="markup"></span>
+</pre></td></tr></table></figure>
+</li>
+<li><p>修改httpd.conf, 将svn的服务映射为 http 服务</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+</pre></td><td class="code"><pre><span class="comment">#配置虚拟目录#</span>
+&lt;location /svn/itcast&gt;
+<span class="comment">#引用远程访问模块</span>
+<span class="constant">DAV</span> svn
+<span class="comment">#项目版本库路径#</span>
+<span class="constant">SVNPath</span> <span class="constant">F</span><span class="symbol">:/software/repository/svn/itcast</span>
+<span class="comment">#授权文件#</span>
+<span class="constant">AuthzSVNAccessFile</span> <span class="constant">F</span><span class="symbol">:/software/repository/svn/itcast/conf/authz</span>
+<span class="comment">#所有用户都需要身份验证#</span>
+<span class="constant">Satisfy</span> <span class="constant">Any</span>
+<span class="constant">Require</span> valid-user
+<span class="comment">#验证方式#</span>
+<span class="constant">AuthType</span> <span class="constant">Basic</span>
+<span class="comment">#项目的名称#</span>
+<span class="constant">AuthName</span> <span class="string">"itcast"</span>
+<span class="comment">#用户文件#</span>
+<span class="constant">AuthUserFile</span> <span class="constant">F</span><span class="symbol">:/software/repository/svn/itcast/conf/passwd</span>.apache
+&lt;<span class="regexp">/location&gt;</span>
+</pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h2 id="-">快速整合</h2>
+<p>可以下载集合包</p>
+<h1 id="-">分支, 标签, 切换, 合并使用</h1>
+<p>在实际企业开发中，SVN仓库中应该存在三个顶级目录</p>
+<ul>
+<li><code>/trunk</code> 存放开发的“主线”</li>
+<li><code>/branches</code> 存放支线副本</li>
+<li><code>/tags</code> 存放标签副本</li>
+</ul>
+<p>trunk: 存放主项目(项目主线)</p>
+<p>tag: 在项目开发遇到里程碑(某些模块已经开发完后，记录当前时间 项目版本),
+在企业开发中对于tag ，只读 不写</p>
+<ul>
+<li>新建tag, 新建tag, 文件推送到 <code>TAGS</code>目录, 命名为 <code>***_v1.0</code></li>
+<li>如果发现之前版本存在bug, 切换到tag, 不在tag上开发，创建分支 <code>branch/***_v1.0</code></li>
+<li>切换到分支, 修改bug, 再打标签 v1.1 </li>
+<li>切换到主线, 对分支进行合并 </li>
+</ul>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/创智播客/">创智播客</a>
+  </div>
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://zhpooer.github.io/2014/06/10/传智播客day45-svn/" data-title="传智播客day45 SVN | Poe&#39;s World" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2014/06/11/photoshop入门-海尔案例/" title="photoshop入门-海尔案例">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  photoshop入门-海尔案例</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2014/06/09/photoshope入门-选区/"  title="photoshope入门 选区">
+ <strong>NEXT:</strong><br/> 
+ <span>photoshope入门 选区
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#svn-"><span class="toc-number">1.</span> <span class="toc-text">SVN简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#subversion-"><span class="toc-number">2.</span> <span class="toc-text">Subversion服务器</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.1.</span> <span class="toc-text">安装服务器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.2.</span> <span class="toc-text">权限配置</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#tortoisesvn"><span class="toc-number">3.</span> <span class="toc-text">TortoiseSVN</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">4.</span> <span class="toc-text">冲突解决</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#eclipse-svn-"><span class="toc-number">5.</span> <span class="toc-text">eclipse svn 插件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#svn-apache-"><span class="toc-number">6.</span> <span class="toc-text">svn+apache整合配置</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">6.1.</span> <span class="toc-text">快速整合</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">7.</span> <span class="toc-text">分支, 标签, 切换, 合并使用</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/AJAX/" title="AJAX">AJAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/DOM/" title="DOM">DOM<sup>2</sup></a></li>
+		
+			<li><a href="/tags/EL表达式/" title="EL表达式">EL表达式<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Hibernate/" title="Hibernate">Hibernate<sup>2</sup></a></li>
+		
+			<li><a href="/tags/HttpSession/" title="HttpSession">HttpSession<sup>1</sup></a></li>
+		
+			<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JSP/" title="JSP">JSP<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaBean/" title="JavaBean">JavaBean<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaScript/" title="JavaScript">JavaScript<sup>1</sup></a></li>
+		
+			<li><a href="/tags/SAX/" title="SAX">SAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletRequest/" title="ServletRequest">ServletRequest<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletResponse/" title="ServletResponse">ServletResponse<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Spring/" title="Spring">Spring<sup>1</sup></a></li>
+		
+			<li><a href="/tags/String/" title="String">String<sup>1</sup></a></li>
+		
+			<li><a href="/tags/StringBuffer/" title="StringBuffer">StringBuffer<sup>1</sup></a></li>
+		
+			<li><a href="/tags/cookie/" title="cookie">cookie<sup>1</sup></a></li>
+		
+			<li><a href="/tags/css/" title="css">css<sup>1</sup></a></li>
+		
+			<li><a href="/tags/dom4j/" title="dom4j">dom4j<sup>1</sup></a></li>
+		
+			<li><a href="/tags/dtd/" title="dtd">dtd<sup>1</sup></a></li>
+		
+			<li><a href="/tags/eclipse/" title="eclipse">eclipse<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2014 
+		
+		<a href="http://zhpooer.github.io" target="_blank" title="zhpooer">zhpooer</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"zhpoooer"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>

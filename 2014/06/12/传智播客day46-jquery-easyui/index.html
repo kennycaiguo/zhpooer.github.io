@@ -1,0 +1,1016 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>传智播客day46-JQuery EasyUI | Poe&#39;s World</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="zhpooer">
+    
+    <meta name="description" content="简介
+j2ee企业开发, 服务端界面没有门户网站界面要求那么复杂,
+没有要求那么美观
+
+种类一: 门户网站, 大量用户使用, 页面内信息非常多, 没有很高界面设计要求
+种类二, 企业内网应用系统, 用户很少,页面内信息量不多, 页面设计要求不高
+
+针对内网系统, 界面开发工作由java工程师来完成.">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="Poe&#39;s World" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="Poe&#39;s World" title="Poe&#39;s World"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Poe&#39;s World">Poe&#39;s World</a></h1>
+				<h2 class="blog-motto">竹杖芒鞋轻胜马，一蓑烟雨任平生</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/english-monthly">英语角</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:zhpooer.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/06/12/传智播客day46-jquery-easyui/" title="传智播客day46-JQuery EasyUI" itemprop="url">传智播客day46-JQuery EasyUI</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://zhpooer.github.io" title="zhpooer">zhpooer</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2014-06-12T01:03:59.000Z" itemprop="datePublished">6月 12 2014</time>
+    更新日期:<time datetime="2014-06-12T13:20:20.000Z" itemprop="dateModified">6月 12 2014</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">2.</span> <span class="toc-text">目录结构</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-maven-maveneasyui"><span class="toc-number">3.</span> <span class="toc-text">使用maven构建 maveneasyui</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">4.</span> <span class="toc-text">案例: 系统主界面设计</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#layout-"><span class="toc-number">4.1.</span> <span class="toc-text">layout插件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-accordion-"><span class="toc-number">4.2.</span> <span class="toc-text">折叠面板(accordion)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-tabs-"><span class="toc-number">4.3.</span> <span class="toc-text">选项卡插件(tabs)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ztree-"><span class="toc-number">4.4.</span> <span class="toc-text">ztree 树形菜单的制作</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#-ztree"><span class="toc-number">4.4.1.</span> <span class="toc-text">导入ztree</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">4.4.2.</span> <span class="toc-text">制作基本菜单</span></a></li></ol></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#maven-ssh-"><span class="toc-number">5.</span> <span class="toc-text">Maven完成ssh框架整合(注解方式)</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">5.1.</span> <span class="toc-text">配置文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">5.2.</span> <span class="toc-text">实体类</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">6.</span> <span class="toc-text">表现层</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">7.</span> <span class="toc-text">业务层和数据层</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#message-"><span class="toc-number">8.</span> <span class="toc-text">message 消息框</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">9.</span> <span class="toc-text">用户退出功能</span></a></li></ol>
+		</div>
+		
+		<h1 id="-">简介</h1>
+<p>j2ee企业开发, 服务端界面没有门户网站界面要求那么复杂,
+没有要求那么美观</p>
+<ul>
+<li>种类一: 门户网站, 大量用户使用, 页面内信息非常多, 没有很高界面设计要求</li>
+<li>种类二, 企业内网应用系统, 用户很少,页面内信息量不多, 页面设计要求不高</li>
+</ul>
+<p>针对内网系统, 界面开发工作由java工程师来完成. java工程师设计这些系统,
+基于页面设计框架技术完成(Flex技术, ExtJS, EasyUI), 这些框架不需要
+关注页面的显示部分</p>
+<h1 id="-">目录结构</h1>
+<ul>
+<li>Locale: 存放国际化js文件, 如果不知道 locale, 默认提示信息是英文, 导入
+<code>easyui-lang-zh_CN.js</code>, 将提示信息变为中文.</li>
+<li>plugins: 插件目录</li>
+<li>themes: 内置了五种主题, 每种主题内部的文件结构是相同的,
+每种主题都提供了<code>easyui.css</code>,<ul>
+<li>icon.css + icons 文件夹, 用于图标显示(与主题无关)</li>
+</ul>
+</li>
+<li>jquery.min.js, jquery框架js文件</li>
+<li>easyloader.js, 用于提供 easyui 框架核心加载器, 想使用 plugin,
+可以用加载器去加载插件</li>
+<li>easyui.min.js, easyloader.js + 36个plugin</li>
+</ul>
+<h1 id="-maven-maveneasyui">使用maven构建 maveneasyui</h1>
+<p>新建JSP, 导入 <code>jquery.js</code>, <code>easyui.min.js</code>,
+<code>easyui-lang-zh_CN.js</code>, <code>icon.css</code>, <code>easyui.css</code></p>
+<h1 id="-">案例: 系统主界面设计</h1>
+<p>JavaEE主界面特点:后台应用系统, 填满屏幕: 顶部logo, 底部copyrights,中部 menu+content</p>
+<p>门户网站: 高度是屏幕的两到三倍</p>
+<h2 id="layout-">layout插件</h2>
+<p>layout插件, 完成页面布局</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- 可以对div和body使用 --&gt;</span>
+<span class="comment">&lt;!-- 添加 class="easyui-layout" --&gt;</span>
+<span class="tag">&lt;<span class="title">body</span> <span class="attribute">class</span>=<span class="value">"easyui-layout"</span>&gt;</span>
+<span class="comment">&lt;!-- 在layout中, 由东西南北中五个区域 --&gt;</span>
+<span class="comment">&lt;!-- 过region属性，指定div属于哪个区域 ，region属性属于easyui对象属性 --&gt;</span>
+<span class="comment">&lt;!-- 可以对东西南北四个区域 设置高、宽 --&gt;</span>
+<span class="comment">&lt;!-- 剩下的就是center(center区域是必须的，其它区域可以省略) --&gt;</span>
+<span class="tag">&lt;<span class="title">div</span> <span class="attribute">region</span>=<span class="value">"north"</span> &gt;</span>北部区域<span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+<span class="comment">&lt;!-- 可以通过title指定标题 --&gt;</span>
+<span class="tag">&lt;<span class="title">div</span> <span class="attribute">data-option</span>=<span class="value">"region:south'"</span> <span class="attribute">style</span>=<span class="value">"height: 100px;"</span>&gt;</span>南区域<span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+<span class="tag">&lt;<span class="title">div</span> <span class="attribute">data-option</span>=<span class="value">"region:'west', title:'员工管理系统'"</span>&gt;</span>西部区域<span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+<span class="tag">&lt;<span class="title">div</span> <span class="attribute">data-option</span>=<span class="value">"region:east'"</span>&gt;</span>东部区域<span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+<span class="tag">&lt;<span class="title">div</span> <span class="attribute">data-option</span>=<span class="value">"region:center'"</span>&gt;</span>中部区域<span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">body</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<h2 id="-accordion-">折叠面板(accordion)</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- fit:true , 占满父容器窗口  --&gt;</span>
+<span class="tag">&lt;<span class="title">div</span> <span class="attribute">class</span>=<span class="value">"easyui-accordion"</span> <span class="attribute">data-options</span>=<span class="value">"fit:true"</span>&gt;</span>
+    <span class="comment">&lt;!-- 对每个折叠面板，设置title属性 ，用于面部标题  --&gt;</span>
+    <span class="tag">&lt;<span class="title">div</span> <span class="attribute">data-options</span>=<span class="value">"title:'基本菜单'"</span>&gt;</span> 基本面板 <span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+    <span class="comment">&lt;!-- 可以对任何一个面部，添加iconCls属性，指定面板标题的图标, 自动寻找iconCss --&gt;</span>
+    <span class="tag">&lt;<span class="title">div</span> <span class="attribute">data-options</span>=<span class="value">"title:'系统菜单', iconCls:'icon-search'"</span>&gt;</span> 系统面板 <span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<h2 id="-tabs-">选项卡插件(tabs)</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- 选项卡面板 --&gt;</span>
+<span class="tag">&lt;<span class="title">div</span> <span class="attribute">id</span>=<span class="value">"mytabs"</span> <span class="attribute">calss</span>=<span class="value">"easyui-tabs"</span> <span class="attribute">data-options</span>=<span class="value">"fit:true"</span>&gt;</span>
+    <span class="comment">&lt;!-- 内部提供多个面板 --&gt;</span>
+    <span class="comment">&lt;!-- closeable: true, 设置是否可以被关闭 --&gt;</span>
+    <span class="tag">&lt;<span class="title">div</span> <span class="attribute">data-options</span>=<span class="value">"title:'百度', closable: true"</span>&gt;</span>面板1<span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">div</span> <span class="attribute">data-options</span>=<span class="value">"title:'新浪'"</span>&gt;</span>面板2<span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre>$(<span class="string">"baduClick"</span>).click(<span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+    <span class="comment">// 调用选项卡面板 add 方法</span>
+    $(<span class="string">"#mytabs"</span>).tabs(<span class="string">'add'</span>,{
+        title:<span class="string">'百度'</span>,
+        content:<span class="string">''</span>,
+        closable: <span class="literal">true</span>
+    });
+});<span class="string">'</span>
+</pre></td></tr></table></figure>
+
+<h2 id="ztree-">ztree 树形菜单的制作</h2>
+<p>jquery 树形结构第三方插件<code>ztree</code></p>
+<p>ztree功能介绍</p>
+<ul>
+<li>Core 核心功能，负责树显示</li>
+<li>Excheck 扩展勾选功能</li>
+<li>Exedit 扩展可编辑</li>
+<li>Exhide 扩展隐藏</li>
+</ul>
+<p><code>All = core + check + edit + hide</code> 只需要在项目导入 all.js 使用ztree所有功能</p>
+<h3 id="-ztree">导入ztree</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- ztree --&gt;</span>
+<span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/javascript"</span> <span class="attribute">src</span>=<span class="value">"jquery.ztree.all-3.5.js"</span>&gt;</span><span class="javascript"></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
+<span class="tag">&lt;<span class="title">link</span> <span class="attribute">href</span>=<span class="value">"zTreeStyle.css"</span> <span class="attribute">type</span>=<span class="value">"text/css"</span> <span class="attribute">rel</span>=<span class="value">"stylesheet"</span>/&gt;</span>
+</pre></td></tr></table></figure>
+
+<h3 id="-">制作基本菜单</h3>
+<p>基于标准数据菜单: </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">ui</span> <span class="attribute">class</span>=<span class="value">"ztree"</span> <span class="attribute">id</span>=<span class="value">"standardtree"</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">ui</span>&gt;</span>
+<span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/javascript"</span>&gt;</span><span class="javascript">
+<span class="comment">// 标准数据</span>
+<span class="comment">// 页面加载后, 进行ztree配置</span>
+<span class="keyword">var</span> standardsettings = {}; <span class="comment">// 标准数据树, 不进行任何配置</span>
+<span class="comment">// 准备节点数据</span>
+<span class="keyword">var</span> standardnodes = [
+   {name: <span class="string">"节点一"</span>},{name:<span class="string">"节点二"</span>, children:[ {name:<span class="string">"节点二一"</span>} ]}
+]
+<span class="comment">// 初始化ztree</span>
+$.fn.zTree.init($(<span class="string">"#standardTree"</span>), standardsettings, standardnodes);
+</span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<p>Ztree 标签数据树缺点：和easyui ztree一样, 通过children指定子节点,
+如果子节点层次过多, 不利于编写和维护.</p>
+<p>基于简单数据树</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">ui</span> <span class="attribute">class</span>=<span class="value">"ztree"</span> <span class="attribute">id</span>=<span class="value">"simpleTree"</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">ui</span>&gt;</span>
+<span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/javascript"</span>&gt;</span><span class="javascript">
+<span class="comment">// 标准数据</span>
+<span class="comment">// 页面加载后, 激活简单ztree配置</span>
+<span class="keyword">var</span> simplesettings = {
+    data:{
+        simpleData{
+            enable:<span class="literal">true</span>
+        },
+        <span class="comment">// 对所有节点增加单击时间</span>
+        callback:{
+           onClick:<span class="function"><span class="keyword">function</span><span class="params">(event, treeId, treeNode, clickFlag)</span>{</span>
+               <span class="comment">// treeNode 就是当前点击的节点 treeNode.curl</span>
+               <span class="keyword">if</span>($(<span class="string">"mytabls"</span>).tabs(<span class="string">'exist'</span>, treeNode.name)){
+                   <span class="comment">// 如果存在, 切换到</span>
+                   $(<span class="string">'#mytabs'</span>).tabs(<span class="string">'select'</span>, treeNode.name);
+                   
+               } <span class="keyword">else</span> {
+                   <span class="comment">// 如果不存在, 新增</span>
+                   $(<span class="string">'#mytabs'</span>).tabs(<span class="string">'add'</span>, {
+                       title: treeNode.name,
+                       content: treeNode.curl
+                       <span class="string">'&lt;div&gt;
+                           &lt;iframe src="treeNode.curl"&gt;
+                           &lt;/iframe&gt;
+                       &lt;/div&gt;'</span>
+                   });
+               }
+           }
+        }
+    }
+};
+<span class="comment">// 准备节点数据</span>
+<span class="keyword">var</span> simplenodes = [
+   <span class="comment">// id是当前节点编号, pid是父节点编号</span>
+   {name: <span class="string">"节点一"</span>, id:<span class="number">1</span>, pId:<span class="number">0</span>},
+   <span class="comment">// icon: 设置图标呢, url: 打开新窗口</span>
+   {name:<span class="string">"节点二"</span>, id: <span class="number">2</span>, pId:<span class="number">0</span>,
+    icon: <span class="string">"*.png"</span>,
+    url:<span class="string">"http://www.baidu.com"</span>},
+    <span class="comment">// 自定义属性curl</span>
+   {name:<span class="string">"节点二一"</span>, id: <span class="number">3</span>, pId:<span class="number">2</span>
+    curl:<span class="string">"http://www.baidu.com"</span>}
+]
+<span class="comment">// 初始化ztree</span>
+$.fn.zTree.init($(<span class="string">"#simpleTree"</span>), simplesettings, simplenodes);
+</span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<h1 id="maven-ssh-">Maven完成ssh框架整合(注解方式)</h1>
+<p>非注解 + jpa + struts2 convention 插件</p>
+<pre><code>导入 servlet, jsp(provided范围)
+导入 junit4(test范围)
+导入 Spring
+    context, aspects, orm, web, test
+导入 hibernate
+    hibernate-core, jpa
+导入struts2
+    Struts2-core, struts2-spring, struts2-json, struts2-convention
+导入 slf4j-log4j
+导入 c3p0, mysql驱动
+</code></pre><h2 id="-">配置文件</h2>
+<p>web.xml配置, spring核心监听器,
+struts2 核心过滤器, OpenSessionInViewFilter 延迟加载问题,
+log4j.properties</p>
+<p><!-- applicationContext.xml --></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+</pre></td><td class="code"><pre><span class="pi">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="tag">&lt;<span class="title">beans</span> <span class="attribute">xmlns</span>=<span class="value">"http://www.springframework.org/schema/beans"</span>
+	<span class="attribute">xmlns:xsi</span>=<span class="value">"http://www.w3.org/2001/XMLSchema-instance"</span>
+	<span class="attribute">xmlns:context</span>=<span class="value">"http://www.springframework.org/schema/context"</span>
+	<span class="attribute">xmlns:aop</span>=<span class="value">"http://www.springframework.org/schema/aop"</span>
+	<span class="attribute">xmlns:tx</span>=<span class="value">"http://www.springframework.org/schema/tx"</span>
+	<span class="attribute">xmlns:cache</span>=<span class="value">"http://www.springframework.org/schema/cache"</span>
+	<span class="attribute">xsi:schemaLocation</span>=<span class="value">"http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop.xsd
+	http://www.springframework.org/schema/tx 
+	http://www.springframework.org/schema/tx/spring-tx.xsd
+	http://www.springframework.org/schema/cache 
+	http://www.springframework.org/schema/cache/spring-cache.xsd"</span>&gt;</span>
+	<span class="comment">&lt;!-- 引入外部 properties 文件 --&gt;</span>
+	<span class="tag">&lt;<span class="title">context:property-placeholder</span> <span class="attribute">location</span>=<span class="value">"classpath:jdbc.properties"</span>/&gt;</span>
+	<span class="comment">&lt;!-- 数据库连接池  --&gt;</span>
+	<span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"dataSource"</span> <span class="attribute">class</span>=<span class="value">"com.mchange.v2.c3p0.ComboPooledDataSource"</span>&gt;</span>
+		<span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"driverClass"</span> <span class="attribute">value</span>=<span class="value">"${jdbc.driver}"</span>&gt;</span><span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+		<span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"jdbcUrl"</span> <span class="attribute">value</span>=<span class="value">"${jdbc.url}"</span>&gt;</span><span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+		<span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"user"</span> <span class="attribute">value</span>=<span class="value">"${jdbc.username}"</span>&gt;</span><span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+		<span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"password"</span> <span class="attribute">value</span>=<span class="value">"${jdbc.password}"</span>&gt;</span><span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+	<span class="tag">&lt;/<span class="title">bean</span>&gt;</span>
+	<span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"sessionFactory"</span> 
+		<span class="attribute">class</span>=<span class="value">"org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean"</span>&gt;</span>
+		<span class="comment">&lt;!-- 引用数据库连接池 --&gt;</span>
+		<span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"dataSource"</span> <span class="attribute">ref</span>=<span class="value">"dataSource"</span>&gt;</span><span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+		<span class="comment">&lt;!-- 配置hibernate其它属性 --&gt;</span>
+		<span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"hibernateProperties"</span>&gt;</span>
+			<span class="tag">&lt;<span class="title">props</span>&gt;</span>
+				<span class="tag">&lt;<span class="title">prop</span> <span class="attribute">key</span>=<span class="value">"hibernate.dialect"</span>&gt;</span>org.hibernate.dialect.MySQLDialect<span class="tag">&lt;/<span class="title">prop</span>&gt;</span>
+				<span class="tag">&lt;<span class="title">prop</span> <span class="attribute">key</span>=<span class="value">"hibernate.show_sql"</span>&gt;</span>true<span class="tag">&lt;/<span class="title">prop</span>&gt;</span>
+				<span class="tag">&lt;<span class="title">prop</span> <span class="attribute">key</span>=<span class="value">"hibernate.format_sql"</span>&gt;</span>true<span class="tag">&lt;/<span class="title">prop</span>&gt;</span>
+				<span class="tag">&lt;<span class="title">prop</span> <span class="attribute">key</span>=<span class="value">"hibernate.hbm2ddl.auto"</span>&gt;</span>update<span class="tag">&lt;/<span class="title">prop</span>&gt;</span>
+			<span class="tag">&lt;/<span class="title">props</span>&gt;</span>
+		<span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+		<span class="comment">&lt;!-- 自动扫描注解类 --&gt;</span>
+		<span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"packagesToScan"</span>&gt;</span>
+			<span class="tag">&lt;<span class="title">list</span>&gt;</span>
+				<span class="tag">&lt;<span class="title">value</span>&gt;</span>cn.itcast.domain<span class="tag">&lt;/<span class="title">value</span>&gt;</span>
+			<span class="tag">&lt;/<span class="title">list</span>&gt;</span>
+		<span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+	<span class="tag">&lt;/<span class="title">bean</span>&gt;</span>
+	<span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"hibernateTemplate"</span> <span class="attribute">class</span>=<span class="value">"org.springframework.orm.hibernate3.HibernateTemplate"</span>&gt;</span>
+		<span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"sessionFactory"</span> <span class="attribute">ref</span>=<span class="value">"sessionFactory"</span> /&gt;</span>
+	<span class="tag">&lt;/<span class="title">bean</span>&gt;</span>
+	<span class="comment">&lt;!-- 事务管理 --&gt;</span>
+	<span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"transactionManager"</span> <span class="attribute">class</span>=<span class="value">"org.springframework.orm.hibernate3.HibernateTransactionManager"</span>&gt;</span>
+		<span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"sessionFactory"</span> <span class="attribute">ref</span>=<span class="value">"sessionFactory"</span> /&gt;</span>
+	<span class="tag">&lt;/<span class="title">bean</span>&gt;</span>
+	<span class="comment">&lt;!-- 注解管理事务 --&gt;</span>
+	<span class="tag">&lt;<span class="title">tx:annotation-driven</span> <span class="attribute">transaction-manager</span>=<span class="value">"transactionManager"</span>/&gt;</span>
+	<span class="comment">&lt;!-- 扫描组件 --&gt;</span>
+	<span class="tag">&lt;<span class="title">context:component-scan</span> <span class="attribute">base-package</span>=<span class="value">"cn.itcast.web, cn.itcast.service, cn.itcast.dao"</span> /&gt;</span>
+<span class="tag">&lt;<span class="title">beans</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<h2 id="-">实体类</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+</pre></td><td class="code"><pre><span class="annotation">@Entity</span>
+<span class="annotation">@Table</span>(name=<span class="string">"department"</span>, catalog=<span class="string">"easyui"</span>)
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Department</span> {</span>
+    <span class="annotation">@Id</span>
+    <span class="annotation">@GeneratedValue</span>(strategy=Generation.IDENTITY)
+    <span class="keyword">private</span> Integer id;
+    <span class="keyword">private</span> String name;
+    <span class="annotation">@OneToMany</span>(mappedBy=<span class="string">"department"</span>, targetEntity=Employee.class)
+    <span class="keyword">private</span> Set&lt;Employee&gt; emloyeees = <span class="keyword">new</span> HashSet&lt;Employee&gt;();
+}
+<span class="annotation">@Entity</span>
+<span class="annotation">@Table</span>(name=<span class="string">"employee"</span>, catalog=<span class="string">"easyui"</span>)
+<span class="annotation">@NamedQueries</span>(value={<span class="annotation">@NamedQquery</span>(name=<span class="string">"Employee.login"</span>,
+              query=<span class="string">"from Employee where name=? and password=?"</span>)})
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Empoyee</span>{</span>
+    <span class="annotation">@Id</span>
+    <span class="annotation">@GeneratedValue</span>(strategy=GenerationType.IDENTITY)
+    <span class="keyword">private</span> Integer id;
+    <span class="keyword">private</span> String name;
+    <span class="keyword">private</span> String password;
+    <span class="keyword">private</span> Integer age;
+    <span class="keyword">private</span> Date birthday;
+    <span class="annotation">@ManyToOne</span>(targetEntity=Department.class)
+    privat Department department;
+}
+</pre></td></tr></table></figure>
+
+<h1 id="-">表现层</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre>&lt;s:actionerros/&gt;
+&lt;form action=<span class="string">"${contextPath}/login.action"</span> <span class="keyword">method</span>=<span class="string">"post"</span>&gt;
+    用户名
+    &lt;input <span class="class"><span class="keyword">type</span>=</span><span class="string">"text"</span> name=<span class="string">"name"</span>/&gt;
+    &lt;input <span class="class"><span class="keyword">type</span>=</span><span class="string">"password"</span> name=<span class="string">"password"</span>/&gt;
+    &lt;input <span class="class"><span class="keyword">type</span>=</span><span class="string">"submit"</span>/&gt;
+&lt;/form&gt;
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+</pre></td><td class="code"><pre>@ParentPackage(<span class="string">"struts-default"</span>)
+@Namespace(<span class="string">"/"</span>)
+@Controller
+@Scope(<span class="string">"prototype"</span>)
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LoginAction</span> <span class="inheritance"><span class="keyword">extends</span></span> <span class="title">ActionSupport</span> <span class="inheritance"><span class="keyword">implements</span></span> <span class="title">ModelDriver</span>&lt;<span class="title">Employee</span>&gt;{</span>
+    @Resource
+    <span class="keyword">private</span> EmployeeService employeeService;
+    
+    <span class="keyword">private</span> Employee employee = <span class="keyword">new</span> Emplyee();
+    @Action(value=<span class="string">"login"</span>, results={@Result(name=<span class="string">"success"</span>, location=<span class="string">"/index.jsp"</span>)
+    @Result(name=<span class="string">"input"</span>, location=<span class="string">"/login.jsp"</span>)})
+    <span class="keyword">public</span> String login(){
+        log(<span class="string">"用户登陆"</span>);
+        Employee loginUser = employeeService.login(employee);
+        <span class="keyword">if</span>(loginUse = <span class="keyword">null</span>) {
+            <span class="keyword">this</span>.addActionError(<span class="string">"用户名或密码错误"</span>);
+            <span class="keyword">return</span> INPUT;
+        } <span class="keyword">else</span> {
+           session.setAttribute(<span class="string">"user"</span>, loginUser);
+           <span class="keyword">return</span> SUCCESS;
+        }
+    }
+}
+</pre></td></tr></table></figure>
+
+<h1 id="-">业务层和数据层</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+</pre></td><td class="code"><pre><span class="annotation">@Repository</span>(<span class="string">"employeeDao"</span>)
+<span class="keyword">public</span> classs EmployeeDao{
+    <span class="annotation">@Resource</span>(name=<span class="string">"hibernateTemplate"</span>)
+    <span class="keyword">private</span> HibernateTemplate template;
+    <span class="keyword">private</span> Employee <span class="title">login</span>(Employee employee) {
+       List employees = template.findByNamedQuery(<span class="string">"Employee.login"</span>,
+             employee.getName, employee.getPassword());
+       retirn employee.isEmpty()?:;
+    }
+}
+
+<span class="annotation">@Service</span>(<span class="string">"emplyeeService"</span>)
+<span class="annotation">@Transactional</span>
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EmployeeService</span>{</span>
+   <span class="annotation">@Resource</span>(name=<span class="string">"employeeDao"</span>)
+   <span class="keyword">private</span> EmployeeDao employDao;
+   <span class="keyword">public</span> Employee <span class="title">login</span>(Employee user) {
+      empoyeeDao.login(user);
+   }
+}
+</pre></td></tr></table></figure>
+
+<h1 id="message-">message 消息框</h1>
+<p>easyUI提供了5种消息框</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="code"><pre><span class="comment">// 警告框</span>
+$.messager.alert(<span class="string">"标题"</span>, <span class="string">"内容"</span>, <span class="string">"warning|error|info|questiong(图标)"</span>)
+<span class="comment">// 确认框</span>
+$.messager.confirm(<span class="string">"标题"</span>, <span class="string">"内容"</span>, <span class="function"><span class="keyword">function</span><span class="params">(r)</span>{</span> <span class="keyword">if</span>(r){} <span class="keyword">else</span> {} });
+<span class="comment">// 输入框</span>
+$.messager.prompt(<span class="string">"标题"</span>, <span class="string">"内容"</span>, <span class="function"><span class="keyword">function</span><span class="params">(input)</span>{</span> log(input)});
+<span class="comment">// 进度条</span>
+$.messager.progress({interval: <span class="number">1000</span>});
+window.setTimeout(<span class="string">'$.messager.progerss("close");'</span>, <span class="number">5000</span>);
+<span class="comment">// 右下角提示框</span>
+$.messager.show({
+    title:<span class="string">""</span>,
+    msg:<span class="string">""</span>,
+    timeout: <span class="number">5000</span>,
+});
+</pre></td></tr></table></figure>
+
+<h1 id="-">用户退出功能</h1>
+<p>通过 menubutton 制作下拉菜单</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- 下拉菜单 --&gt;</span>
+<span class="comment">&lt;!-- 提供menu属性, 指向下拉菜单项的div的id --&gt;</span>
+<span class="tag">&lt;<span class="title">a</span> <span class="attribute">href</span>=<span class="value">"javascript:void(0)"</span> <span class="attribute">class</span>=<span class="value">"easyui-menubutton"</span> <span class="attribute">data-options</span>=<span class="value">"menu:'#menu'"</span>&gt;</span>控制面板<span class="tag">&lt;/<span class="title">a</span>&gt;</span>
+<span class="tag">&lt;<span class="title">div</span> <span class="attribute">id</span>=<span class="value">"menu"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">div</span> <span class="attribute">data-options</span>=<span class="value">"iconCls:'icon-edit'"</span>&gt;</span>修改密码 <span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+    <span class="comment">&lt;!--分割线 --&gt;</span>
+    <span class="tag">&lt;<span class="title">div</span> <span class="attribute">class</span>=<span class="value">"menu-sep"</span>&gt;</span><span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">div</span> <span class="attribute">onclick</span>=<span class="value">"logout();"</span>&gt;</span>用户退出<span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+<span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/javascript"</span>&gt;</span><span class="javascript">
+<span class="function"><span class="keyword">function</span> <span class="title">logout</span><span class="params">()</span>{</span>
+    $messager.confirm(<span class="string">"确认窗口"</span>, <span class="string">"确认退出吗"</span>, <span class="function"><span class="keyword">function</span><span class="params">(isConfirm)</span>{</span>
+        <span class="keyword">if</span>(isConfirm) {
+            <span class="comment">// 用户选择跳转</span>
+            location.href = <span class="string">"${contextPath}/logout.action"</span>
+        }
+    })
+}
+</span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="annotation">@Action</span>(value=<span class="string">"logout"</span>, result={<span class="annotation">@Result</span>(name=<span class="string">"success"</span>, location=<span class="string">"/index.jsp"</span>)})
+<span class="keyword">public</span> String <span class="title">logout</span>(){
+    getSession().invalidate()
+    <span class="keyword">return</span> SUCESS;
+}
+</pre></td></tr></table></figure>
+
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/传智播客/">传智播客</a>
+  </div>
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://zhpooer.github.io/2014/06/12/传智播客day46-jquery-easyui/" data-title="传智播客day46-JQuery EasyUI | Poe&#39;s World" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2014/06/12/photoshop入门-画笔类工具/" title="photoshop入门 画笔类工具">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  photoshop入门 画笔类工具</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2014/06/11/photoshop入门-海尔案例/"  title="photoshop入门-海尔案例">
+ <strong>NEXT:</strong><br/> 
+ <span>photoshop入门-海尔案例
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">2.</span> <span class="toc-text">目录结构</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-maven-maveneasyui"><span class="toc-number">3.</span> <span class="toc-text">使用maven构建 maveneasyui</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">4.</span> <span class="toc-text">案例: 系统主界面设计</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#layout-"><span class="toc-number">4.1.</span> <span class="toc-text">layout插件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-accordion-"><span class="toc-number">4.2.</span> <span class="toc-text">折叠面板(accordion)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-tabs-"><span class="toc-number">4.3.</span> <span class="toc-text">选项卡插件(tabs)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ztree-"><span class="toc-number">4.4.</span> <span class="toc-text">ztree 树形菜单的制作</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#-ztree"><span class="toc-number">4.4.1.</span> <span class="toc-text">导入ztree</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">4.4.2.</span> <span class="toc-text">制作基本菜单</span></a></li></ol></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#maven-ssh-"><span class="toc-number">5.</span> <span class="toc-text">Maven完成ssh框架整合(注解方式)</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">5.1.</span> <span class="toc-text">配置文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">5.2.</span> <span class="toc-text">实体类</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">6.</span> <span class="toc-text">表现层</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">7.</span> <span class="toc-text">业务层和数据层</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#message-"><span class="toc-number">8.</span> <span class="toc-text">message 消息框</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">9.</span> <span class="toc-text">用户退出功能</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/AJAX/" title="AJAX">AJAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/DOM/" title="DOM">DOM<sup>2</sup></a></li>
+		
+			<li><a href="/tags/EL表达式/" title="EL表达式">EL表达式<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Hibernate/" title="Hibernate">Hibernate<sup>2</sup></a></li>
+		
+			<li><a href="/tags/HttpSession/" title="HttpSession">HttpSession<sup>1</sup></a></li>
+		
+			<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JSP/" title="JSP">JSP<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaBean/" title="JavaBean">JavaBean<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaScript/" title="JavaScript">JavaScript<sup>1</sup></a></li>
+		
+			<li><a href="/tags/SAX/" title="SAX">SAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletRequest/" title="ServletRequest">ServletRequest<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletResponse/" title="ServletResponse">ServletResponse<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Spring/" title="Spring">Spring<sup>1</sup></a></li>
+		
+			<li><a href="/tags/String/" title="String">String<sup>1</sup></a></li>
+		
+			<li><a href="/tags/StringBuffer/" title="StringBuffer">StringBuffer<sup>1</sup></a></li>
+		
+			<li><a href="/tags/cookie/" title="cookie">cookie<sup>1</sup></a></li>
+		
+			<li><a href="/tags/css/" title="css">css<sup>1</sup></a></li>
+		
+			<li><a href="/tags/dom4j/" title="dom4j">dom4j<sup>1</sup></a></li>
+		
+			<li><a href="/tags/dtd/" title="dtd">dtd<sup>1</sup></a></li>
+		
+			<li><a href="/tags/eclipse/" title="eclipse">eclipse<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2014 
+		
+		<a href="http://zhpooer.github.io" target="_blank" title="zhpooer">zhpooer</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"zhpoooer"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>

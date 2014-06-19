@@ -4,19 +4,28 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>scala thoughtworks培训 | Poe&#39;s World</title>
+    <title>photoshop钢笔工具 | Poe&#39;s World</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="zhpooer">
     
-    <meta name="description" content="基于scala的框架
-play: web框架, 仿制rails
-spark: 大数据分析
-动态类型和静态类型
-动态: 运行时, 进行类型检查
-静态: 编译时, 进行类型检查
-简单地说，在声明了一个变量之后，不能改变它的类型的语言，是静态语言；能够随时改变它的类型的语言，是动态语言. 
-为什么要静态类">
+    <meta name="description" content="画出虚线
+
+矩形选框工具, 填充黑色, 不取消选框
+编辑, 预设画笔
+画笔控制栏, 调整间距, 形状动态, 控制选方向
+
+钢笔工具(P)
+实现复杂图像的抠图
+贝塞尔曲线 转化为 选区: ctrl + 回车
+贝塞尔曲线组成:
+
+锚点
+连接锚点之间的曲线, 路径
+
+删除锚点
+
+方式一: 选择点, 安装 ">
     
     
     
@@ -79,15 +88,15 @@ spark: 大数据分析
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2014/06/08/scala-thoughtworks培训/" title="scala thoughtworks培训" itemprop="url">scala thoughtworks培训</a>
+      <a href="/2014/06/18/photoshop钢笔工具/" title="photoshop钢笔工具" itemprop="url">photoshop钢笔工具</a>
   </h1>
   <p class="article-author">By
     
       <a href="http://zhpooer.github.io" title="zhpooer">zhpooer</a>
     </p>
   <p class="article-time">
-    <time datetime="2014-06-08T05:06:47.000Z" itemprop="datePublished">6月 8 2014</time>
-    更新日期:<time datetime="2014-06-08T13:23:57.000Z" itemprop="dateModified">6月 8 2014</time>
+    <time datetime="2014-06-18T06:17:51.000Z" itemprop="datePublished">6月 18 2014</time>
+    更新日期:<time datetime="2014-06-18T08:20:49.000Z" itemprop="dateModified">6月 18 2014</time>
     
   </p>
 </header>
@@ -96,98 +105,57 @@ spark: 大数据分析
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-scala-"><span class="toc-number">1.</span> <span class="toc-text">基于scala的框架</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">2.</span> <span class="toc-text">动态类型和静态类型</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.1.</span> <span class="toc-text">为什么要静态类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.2.</span> <span class="toc-text">为什么要动态特性</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">为什么要面向对象</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">4.</span> <span class="toc-text">为什么要函数式编程</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">4.1.</span> <span class="toc-text">为什么函数式编程没有流行起来?</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#scala-"><span class="toc-number">5.</span> <span class="toc-text">scala特性</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">6.</span> <span class="toc-text">学习资源</span></a></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">画出虚线</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-p-"><span class="toc-number">2.</span> <span class="toc-text">钢笔工具(P)</span></a></li></ol>
 		</div>
 		
-		<h1 id="-scala-">基于scala的框架</h1>
-<p>play: web框架, 仿制rails</p>
-<p>spark: 大数据分析</p>
-<h1 id="-">动态类型和静态类型</h1>
-<p>动态: 运行时, 进行类型检查</p>
-<p>静态: 编译时, 进行类型检查</p>
-<p>简单地说，在声明了一个变量之后，不能改变它的类型的语言，是静态语言；能够随时改变它的类型的语言，是动态语言. </p>
-<h2 id="-">为什么要静态类型</h2>
+		<h1 id="-">画出虚线</h1>
 <ul>
-<li>编译检查, 安全类型</li>
-<li>工具提示</li>
-<li>性能好</li>
-<li>Java/C#</li>
+<li>矩形选框工具, 填充黑色, 不取消选框</li>
+<li>编辑, 预设画笔</li>
+<li>画笔控制栏, 调整间距, 形状动态, 控制选方向</li>
 </ul>
-<h2 id="-">为什么要动态特性</h2>
+<h1 id="-p-">钢笔工具(P)</h1>
+<p>实现复杂图像的抠图</p>
+<p>贝塞尔曲线 转化为 选区: <code>ctrl + 回车</code></p>
+<p>贝塞尔曲线组成:</p>
+<ol>
+<li>锚点</li>
+<li>连接锚点之间的曲线, 路径</li>
+</ol>
+<p>删除锚点</p>
 <ul>
-<li>轻量和灵活, 可根据框架自动生成代码</li>
-<li>运行时改变程序的行为</li>
-<li>Python/Ruby, JavaScript</li>
+<li>方式一: 选择点, 安装 <code>del</code>, 删除之后要在最新锚点上单机(续上)</li>
+<li>方式二: 历史回退</li>
 </ul>
-<p>什么是码农? 人肉编译器, 把业务场景编译成代码</p>
-<h1 id="-">为什么要面向对象</h1>
-<p>解决问题更方便, 快捷?</p>
-<p>面向对象更好地描述业务逻辑, 与人认知世界的方式相似(总结)</p>
-<p>三大特征, 解决三个问题</p>
+<p>移动锚点</p>
 <ul>
-<li>封装, 规范, 可维护</li>
-<li>继承, 可重用</li>
-<li>多态, 可扩展(<a href="http://www.zhihu.com/question/20177988" target="_blank">javascript如何实现?</a>)</li>
+<li>使用路径选择工具(A)(黑), 针对整体进行调节</li>
+<li>使用路径选择工具(A)(白), 针对细节, 路径进行调节</li>
 </ul>
-<p>Java数据和行为分开(Dao和Model), 不太面向对象. ruby on rails把数据和行为一同封装(面向对象).</p>
-<p>TODO: 丧钟为谁而鸣?</p>
-<h1 id="-">为什么要函数式编程</h1>
-<p><a href="http://zh.wikipedia.org/wiki/%E5%87%BD%E6%95%B0%E5%89%AF%E4%BD%9C%E7%94%A8#.E5.BC.95.E7.94.A8.E9.80.8F.E6.98.8E" target="_blank">什么是纯函数</a></p>
-<p>函数可以当做参数传递, 表述清晰</p>
-<p>函数式编程特性, 如何解决 可维护性, 可重用性, 可扩展性?</p>
+<p>杠杆, 调节路径的造型, 拖拽描点</p>
 <ul>
-<li>无副作用</li>
-<li><a href="http://www.jdon.com/42422" target="_blank">引用透明</a></li>
-<li><a href="http://zh.wikipedia.org/zh/%E9%AB%98%E9%98%B6%E5%87%BD%E6%95%B0" target="_blank">高阶函数</a></li>
+<li>杠杆的长度, 弧度的大小</li>
+<li>杠杆的方向, 弧度的方向</li>
 </ul>
-<p>面向对象, 对象在做事情; 函数式, 函数在做</p>
-<table>
-<thead>
-<tr>
-<th>解决问题</th>
-<th>面向对象</th>
-<th>函数式</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>重用单位</td>
-<td>类</td>
-<td>方法</td>
-</tr>
-<tr>
-<td>可维护性</td>
-<td>信息封装</td>
-<td>信息不变化</td>
-</tr>
-<tr>
-<td>可扩展性</td>
-<td>类组合</td>
-<td>方法组合</td>
-</tr>
-</tbody>
-</table>
-<p><a href="/2014/05/16/函数式编程手记">深入函数式,请猛击</a></p>
-<h2 id="-">为什么函数式编程没有流行起来?</h2>
-<p>图灵完备: 可计算的都可计算. (递归, 需要无限的计算资源)</p>
-<p>物理限制, 计算资源有限, 内存有限</p>
-<p>现今内存和 cpu 运算速度指数增长, 以及对并行运算的需求</p>
-<h1 id="scala-">scala特性</h1>
-<p>动态性: REPL, 运行时编译</p>
-<p>tuple: 可以存储不同类型的集合</p>
-<!-- **tessdemo** -->
-
-<h1 id="-">学习资源</h1>
-<p><a href="http://twitter.github.io/scala_school/zh_cn/" target="_blank">twitter scala 指南</a></p>
-<p><a href="https://typesafe.com/platform/getstarted" target="_blank">typesafe scala 交互学习</a></p>
-<p><a href="https://code.csdn.net/DOC_Scala/chinese_scala_offical_document" target="_blank">scala官方文档中文</a></p>
+<p>alt : 暂时切换到转换点工具</p>
+<ul>
+<li>移动到转换点, 可调节转换点</li>
+</ul>
+<p>用尽量少的锚点, 绘制尽量准确的曲线</p>
+<p>吸管工具(I)</p>
+<p>三种点的类型:(相互转换按住<code>alt</code>)</p>
+<ol>
+<li>尖角点, 没有杠杆</li>
+<li>平滑点, 两条杠杆保持在同一条直线上</li>
+<li>贝塞尔点, 两条杠杆, 不在同一条直线上</li>
+</ol>
   
 	</div>
 		<footer class="article-footer clearfix">
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/scala/">scala</a>
+  <span></span> <a href="/tags/photoshop/">photoshop</a>
   </div>
 
 
@@ -195,7 +163,7 @@ spark: 大数据分析
 
 <div class="article-share" id="share">
 
-  <div data-url="http://zhpooer.github.io/2014/06/08/scala-thoughtworks培训/" data-title="scala thoughtworks培训 | Poe&#39;s World" data-tsina="null" class="share clearfix">
+  <div data-url="http://zhpooer.github.io/2014/06/18/photoshop钢笔工具/" data-title="photoshop钢笔工具 | Poe&#39;s World" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -204,19 +172,11 @@ spark: 大数据分析
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2014/06/09/传智播客day44-maven/" title="传智播客day44-maven">
-  <strong>PREVIOUS:</strong><br/>
-  <span>
-  传智播客day44-maven</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2014/06/03/传智播客day43-ssh综合练习/"  title="传智播客day43-ssh综合练习 仓库管理系统">
+<a href="/2014/06/17/传智播客day48-javascript-面向对象/"  title="传智播客day48-Javascript 面向对象">
  <strong>NEXT:</strong><br/> 
- <span>传智播客day43-ssh综合练习 仓库管理系统
+ <span>传智播客day48-Javascript 面向对象
 </span>
 </a>
 </div>
@@ -233,7 +193,7 @@ spark: 大数据分析
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-scala-"><span class="toc-number">1.</span> <span class="toc-text">基于scala的框架</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">2.</span> <span class="toc-text">动态类型和静态类型</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.1.</span> <span class="toc-text">为什么要静态类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.2.</span> <span class="toc-text">为什么要动态特性</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">为什么要面向对象</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">4.</span> <span class="toc-text">为什么要函数式编程</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">4.1.</span> <span class="toc-text">为什么函数式编程没有流行起来?</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#scala-"><span class="toc-number">5.</span> <span class="toc-text">scala特性</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">6.</span> <span class="toc-text">学习资源</span></a></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">画出虚线</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-p-"><span class="toc-number">2.</span> <span class="toc-text">钢笔工具(P)</span></a></li></ol>
   </div>
 
 <div id="asidepart">

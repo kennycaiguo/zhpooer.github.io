@@ -1,0 +1,1224 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>传智播客day47-Jquery EasyUI2 | Poe&#39;s World</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="zhpooer">
+    
+    <meta name="description" content="完善系统菜单
+1
+2
+3
+4
+5
+6
+7
+var simplenodes = [
+   // id是当前节点编号, pid是父节点编号
+   {name: &quot;系统功能&quot;, id:1, pId:0},
+   {name:&quot;部门管理&quot;, id: 2, pId:1, url:&quot;department.jsp">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="Poe&#39;s World" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="Poe&#39;s World" title="Poe&#39;s World"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Poe&#39;s World">Poe&#39;s World</a></h1>
+				<h2 class="blog-motto">竹杖芒鞋轻胜马，一蓑烟雨任平生</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/english-monthly">英语角</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:zhpooer.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/06/13/传智播客day47-jquery-easyui2/" title="传智播客day47-Jquery EasyUI2" itemprop="url">传智播客day47-Jquery EasyUI2</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://zhpooer.github.io" title="zhpooer">zhpooer</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2014-06-13T01:09:05.000Z" itemprop="datePublished">6月 13 2014</time>
+    更新日期:<time datetime="2014-06-13T09:01:39.000Z" itemprop="dateModified">6月 13 2014</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">完善系统菜单</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">2.</span> <span class="toc-text">数据表格</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.1.</span> <span class="toc-text">数据表格的分页</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">员工管理页面</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">3.1.</span> <span class="toc-text">添加功能</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">3.2.</span> <span class="toc-text">修改功能</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">3.3.</span> <span class="toc-text">员工批量删除</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#datagrid-"><span class="toc-number">3.4.</span> <span class="toc-text">datagrid 快速编辑</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#datagrid-"><span class="toc-number">3.5.</span> <span class="toc-text">datagrid 表格右键自定义菜单</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#searchbox-"><span class="toc-number">3.6.</span> <span class="toc-text">searchbox 搜索框</span></a></li></ol>
+		</div>
+		
+		<h1 id="-">完善系统菜单</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre><span class="keyword">var</span> simplenodes = [
+   <span class="comment">// id是当前节点编号, pid是父节点编号</span>
+   {name: <span class="string">"系统功能"</span>, id:<span class="number">1</span>, pId:<span class="number">0</span>},
+   {name:<span class="string">"部门管理"</span>, id: <span class="number">2</span>, pId:<span class="number">1</span>, url:<span class="string">"department.jsp"</span>},
+   {name:<span class="string">"员工管理"</span>, id: <span class="number">3</span>, pId:<span class="number">1</span>, url:<span class="string">"employee.jsp"</span>}
+]
+$.fn.zTree.init($(<span class="string">"#simpleTree"</span>), simplesettings, simplenodes);
+</pre></td></tr></table></figure>
+
+<h1 id="-">数据表格</h1>
+<p>数据表格, 生成table组件, 具有编辑, 显示, 排序的基本功能</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- 完全针对html本地table数据 --&gt;</span>
+<span class="tag">&lt;<span class="title">table</span> <span class="attribute">class</span>=<span class="value">"easyui-datagrid"</span>&gt;</span>
+    <span class="comment">&lt;!-- 表头 --&gt;</span>
+    <span class="tag">&lt;<span class="title">thead</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">tr</span>&gt;</span>
+        <span class="comment">&lt;!-- field主要用于远程json数据的匹配--&gt;</span>
+        <span class="tag">&lt;<span class="title">th</span> <span class="attribute">data-options</span>=<span class="value">"field:'id', width:200"</span>&gt;</span>编号<span class="tag">&lt;/<span class="title">th</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">th</span> <span class="attribute">data-options</span>=<span class="value">"field:'name'"</span>&gt;</span> 名称<span class="tag">&lt;/<span class="title">th</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">th</span> <span class="attribute">data-options</span>=<span class="value">"field:'price'"</span>&gt;</span> 价格<span class="tag">&lt;/<span class="title">th</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">thead</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">tbody</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">tr</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">td</span>&gt;</span>100 <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">td</span>&gt;</span>手机 <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">td</span>&gt;</span>1999 <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">tbody</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">table</span>&gt;</span>
+
+<span class="comment">&lt;!-- 远程json数据, 本地html定义 --&gt;</span>
+<span class="comment">&lt;!-- pagination: true 设置分页条--&gt;</span>
+<span class="tag">&lt;<span class="title">table</span> <span class="attribute">class</span>=<span class="value">"easyui-datagrid"</span> <span class="attribute">data-options</span>=<span class="value">"url:data.json, pagination:true"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">thead</span>&gt;</span>
+       <span class="tag">&lt;<span class="title">tr</span>&gt;</span>
+         <span class="comment">&lt;!-- field主要用于远程json数据的匹配--&gt;</span>
+         <span class="tag">&lt;<span class="title">th</span> <span class="attribute">data-options</span>=<span class="value">"field:'id', width:200"</span>&gt;</span>编号<span class="tag">&lt;/<span class="title">th</span>&gt;</span>
+         <span class="tag">&lt;<span class="title">th</span> <span class="attribute">data-options</span>=<span class="value">"field:'name'"</span>&gt;</span> 名称<span class="tag">&lt;/<span class="title">th</span>&gt;</span>
+         <span class="tag">&lt;<span class="title">th</span> <span class="attribute">data-options</span>=<span class="value">"field:'price'"</span>&gt;</span> 价格<span class="tag">&lt;/<span class="title">th</span>&gt;</span>
+       <span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">thead</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">table</span>&gt;</span>
+
+<span class="comment">&lt;!-- 远程json数据, js定义datagrid --&gt;</span>
+<span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/javascript"</span>&gt;</span><span class="javascript">
+    $(<span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+       <span class="comment">// js定义表格</span>
+       $(<span class="string">'#grid'</span>).datagrid({
+           columns: [[
+           <span class="comment">// field 用于匹配远程json属性, width宽度, align居中</span>
+           {
+               field: <span class="string">"id"</span>,
+               title: <span class="string">"编号"</span>, 
+               width: <span class="number">100</span>,
+               align: center,
+               <span class="comment">// 复选效果, 不设置singleSelect</span>
+               checkbox: <span class="literal">true</span>
+           },
+           {
+               field: <span class="string">"price"</span>,
+               title: <span class="string">"价格"</span>
+               width: <span class="number">100</span>,
+               align: center
+           }
+           ]],
+           url: <span class="string">"data.json"</span>,
+           <span class="comment">// 只允许单选a</span>
+           singleSelect: <span class="literal">true</span>,
+           <span class="comment">// 显示行号</span>
+           rownumbers: <span class="literal">true</span>,
+           <span class="comment">// 工具栏, 表格上方工具按钮</span>
+           toolbar: [
+               { id: <span class="string">'save'</span>, text:<span class="string">'保存'</span>,
+                 iconCls:<span class="string">'icon-save'</span>,
+                 handler:<span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>log(<span class="string">"save"</span>)}
+               }, <span class="comment">//每一个对象就是一个按钮</span>
+           ]
+       })
+    });
+</span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
+<span class="tag">&lt;<span class="title">table</span> <span class="attribute">id</span>=<span class="value">"grid"</span>&gt;</span><span class="tag">&lt;/<span class="title">table</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code"><pre><span class="comment">// data.json</span>
+{
+    <span class="string">"total"</span>: <span class="string">"28"</span>,
+    <span class="string">"rows"</span>:[
+        {<span class="string">"id"</span>: <span class="number">1</span>, <span class="string">"name"</span>: <span class="string">"name"</span>, <span class="string">"price"</span>: <span class="string">"100"</span>}
+    ]
+}
+<span class="comment">// 简单格式, 设置pagination: flase时使用</span>
+{
+    {<span class="string">"id"</span>: <span class="number">1</span>, <span class="string">"name"</span>: <span class="string">"name"</span>, <span class="string">"price"</span>: <span class="string">"100"</span>},
+    {<span class="string">"id"</span>: <span class="number">1</span>, <span class="string">"name"</span>: <span class="string">"name"</span>, <span class="string">"price"</span>: <span class="string">"100"</span>}
+}
+</pre></td></tr></table></figure>
+
+<h2 id="-">数据表格的分页</h2>
+<p>采用 Ajax 分页方式, 页面table不动,
+所有查询条件都缓存在datagrid数据表格中.
+每次查询都是以ajax方式将条件发送到服务器,
+服务器返回json</p>
+<p>页面第一次加载时, 自动向服务器发送参数,
+page当前页码, 当前页数,
+服务器只需要返回完整数据格式<code>{total:&quot;&quot;, rows: [{}]}</code></p>
+<p>每次页面条件改变, 都会发送请求<code>?page=..&amp;&amp;rows=</code>, 更新效果</p>
+<h1 id="-">员工管理页面</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- employee.jsp --&gt;</span>
+<span class="tag">&lt;<span class="title">body</span> <span class="attribute">class</span>=<span class="value">"easyui-layout"</span>&gt;</span>
+    <span class="comment">&lt;!-- 页面布局, 中间区域显示数据 --&gt;</span>
+    <span class="tag">&lt;<span class="title">div</span> <span class="attribute">data-options</span>=<span class="value">"region:'center'"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">table</span> <span class="attribute">id</span>=<span class="value">"grid"</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">table</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">body</span>&gt;</span>
+
+<span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/javascript"</span>&gt;</span><span class="javascript">
+$(<span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+    $(<span class="string">"#grid"</span>).datagrid({
+        columns:[[
+            { field:<span class="string">"id"</span>, checkbox: <span class="literal">true</span> },
+            { field:<span class="string">"name"</span>, title:<span class="string">"姓名"</span>, width:<span class="number">200</span> },
+            { field:<span class="string">"age"</span>, title:<span class="string">"年龄"</span>, width:<span class="number">100</span> },
+            { field:<span class="string">"birthday"</span>, title:<span class="string">"生日"</span>, width:<span class="number">200</span> },
+            { field:<span class="string">"department"</span>, title:<span class="string">"部门"</span>, width:<span class="number">200</span>,
+                formatter: <span class="function"><span class="keyword">function</span><span class="params">(value, row, index)</span>{</span>
+                    <span class="comment">// 格式化输出</span>
+                    <span class="comment">// value 是页面中显示的值</span>
+                    <span class="comment">// row 整行对应的 json 数据</span>
+                    <span class="keyword">return</span> rowData.department.name;
+                }
+            },
+        ]],
+        <span class="comment">// 数据来源</span>
+        url: <span class="string">"${contextPath}/empPageQuery.action"</span>,
+        pagination: <span class="literal">true</span>,
+        rownumbers: <span class="literal">true</span>,
+        <span class="comment">// 填满区域</span>
+        fit: <span class="literal">true</span>,
+        toolbar:[
+            {
+                id: <span class="string">"save"</span>,
+                text: <span class="string">"保存员工"</span>,
+                iconCls: funciton(){
+                    log(执行保存);
+                }
+            }
+        ]
+    })
+})
+</span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="keyword">class</span> Pagnination {
+    <span class="comment">// 请求参数</span>
+    <span class="keyword">private</span> <span class="keyword">int</span> pageno; <span class="comment">// 页码</span>
+    <span class="keyword">private</span> <span class="keyword">int</span> numberPerPage; <span class="comment">// 每页记录数</span>
+    <span class="comment">// 查询结果</span>
+    <span class="keyword">private</span> DetachedCriteria criteria; <span class="comment">// 存储任意的查询条件</span>
+    <span class="comment">// 结果数据</span>
+    <span class="keyword">private</span> <span class="keyword">long</span> total;
+    <span class="keyword">private</span> List rows;
+}
+
+<span class="comment">// EmployeeAction</span>
+<span class="comment">// 接收分页参数</span>
+<span class="keyword">private</span> <span class="keyword">int</span> page;
+<span class="keyword">private</span> <span class="keyword">int</span> rows;
+
+<span class="comment">// TODO</span>
+@Action(<span class="keyword">value</span>=<span class="string">"empPageQuery"</span>, result={@Result})
+<span class="keyword">public</span> String <span class="title">empPageQuery</span>(){
+     Pagination pagination = <span class="keyword">new</span> Pagination();
+     pagination.setPageno(page);
+     pagination.setNumberPerPage(rows);
+
+     DetachedCriteria detachedCriteria = DetachedCriteria.forClass(Employee.class);
+     pagination.setDetachedCriteria(detachedCriteria);
+     
+     employeeService.findPageData(pagination);
+     context.push(pagination); <span class="comment">// return json</span>
+}
+
+<span class="keyword">public</span> <span class="title">findPageData</span>(Pagination pagination) {
+    DetachedCriteria criteria = pagination.getDetachedCriteria();
+    criteria.setProjection(Projections.rowCount());
+    <span class="keyword">long</span> total = dao.findTaotal
+
+    criteria.setProjection(<span class="keyword">null</span>);
+    criteria.setResultTransformer(Criteria.ROOT_ENTITY);
+    
+    <span class="keyword">int</span> firstResult;
+    <span class="keyword">int</span> maxResult;
+    dao.findRowData(criteria);
+}
+</pre></td></tr></table></figure>
+
+<h2 id="-">添加功能</h2>
+<p>可以通过 jquery easyui 进行客户端校验</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">div</span> <span class="attribute">data-options</span>=<span class="value">"region:'east'"</span> <span class="attribute">style</span>=<span class="value">"width:250px;"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">h3</span>&gt;</span>添加员工<span class="tag">&lt;/<span class="title">h3</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">table</span> <span class="attribute">id</span>=<span class="value">"saveEmployeeForm"</span> <span class="attribute">aciton</span>=<span class="value">"saveEmployee.action"</span>&gt;</span>
+        <span class="comment">&lt;!-- 非空校验  --&gt;</span>
+        <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"text"</span> <span class="attribute">name</span>=<span class="value">"name"</span> <span class="attribute">class</span>=<span class="value">"easyui-validatebox"</span> <span class="attribute">data-options</span>=<span class="value">"required: true"</span> /&gt;</span>
+        <span class="comment">&lt;!-- 长度校验 --&gt;</span>
+        <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"password"</span> <span class="attribute">name</span>=<span class="value">"password"</span>
+               <span class="attribute">class</span>=<span class="value">"easyui-validatebox"</span> <span class="attribute">data-options</span>=<span class="value">"required: true, validType:'length[3,12]'"</span>/&gt;</span>
+        <span class="comment">&lt;!-- 数字校验  --&gt;</span>
+        <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"text"</span> <span class="attribute">name</span>=<span class="value">"age"</span>
+               <span class="attribute">class</span>=<span class="value">"easyui-numberbox"</span> <span class="attribute">data-options</span>=<span class="value">"required: true, min:18"</span>/&gt;</span>
+        <span class="comment">&lt;!-- 日期选择框  --&gt;</span>
+        <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"text"</span> <span class="attribute">name</span>=<span class="value">"birthday"</span>
+               <span class="attribute">class</span>=<span class="value">"easyui-datebox"</span> <span class="attribute">data-options</span>=<span class="value">"required: true, editable: false"</span>/&gt;</span>
+        <span class="comment">&lt;!--  mode: remote, 在输入过程中会自动向服务器发送请求, 可以完成自动提示 --&gt;</span>
+        <span class="tag">&lt;<span class="title">input</span> <span class="attribute">name</span>=<span class="value">"department.id"</span>
+               <span class="attribute">class</span>=<span class="value">"easyui-combobox"</span> <span class="attribute">data-options</span>=<span class="value">"valueField:'', textField: '', url:'listDepartment.json'"</span>/&gt;</span>
+        <span class="tag">&lt;<span class="title">a</span> <span class="attribute">id</span>=<span class="value">"savebtn"</span> <span class="attribute">href</span>=<span class="value">"javascript:void(0)"</span> <span class="attribute">class</span>=<span class="value">"easyui-linkbutton"</span>
+            <span class="attribute">data-optionis</span>=<span class="value">"plain:true"</span>&gt;</span><span class="tag">&lt;/<span class="title">a</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">table</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+<span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/javascript"</span>&gt;</span><span class="javascript">
+$(<span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+    <span class="comment">// 会先执行表单的 validate, 然后再提交</span>
+    $(<span class="string">"saveBtn"</span>).click(<span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+        <span class="comment">// $("saveEmployeeForm").submit(); 同步提交方式</span>
+        <span class="comment">// 异步方式, 不是通过ajax,而是通过 iframe来模拟ajax</span>
+        $(<span class="string">"saveEmpolyeeForm"</span>).form(<span class="string">'submit'</span>,{
+            <span class="comment">// 可以指定url, 如果不指定, 使用form默认的action</span>
+            success: <span class="function"><span class="keyword">function</span><span class="params">(data)</span>{</span>
+                <span class="comment">// data是服务器返回的内容, 没有经过处理</span>
+                <span class="comment">// 处理成功后的函数</span>
+                <span class="keyword">if</span>(data==<span class="string">"Success"</span>) {
+                    $.messager.alert(<span class="string">"信息"</span>, <span class="string">"保存员工信息成"</span>, <span class="string">"info"</span>);
+                    <span class="comment">// 重置form</span>
+                    $(<span class="string">"#saveEmployeeForm"</span>).get(<span class="number">0</span>).reset(); <span class="comment">//或 $("#saveEmployeeForm").form("reset");</span>
+                    <span class="comment">// 刷新datagrid</span>
+                    $(<span class="string">"grid"</span>).datagrid(<span class="string">"reload"</span>);
+                } <span class="keyword">else</span> {
+                    $.messager.alert(<span class="string">"信息"</span>, <span class="string">"保存失败"</span>, <span class="string">"error"</span>)
+                }
+            }
+        })
+    })
+
+})
+</span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+</pre></td><td class="code"><pre>@ParentPackaget(<span class="string">"json-default"</span>)
+@Namespace(<span class="string">"/"</span>)
+@Controller
+@Scope(<span class="string">"prototype"</span>)
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DepartmentAction</span> <span class="inheritance"><span class="keyword">extends</span></span> <span class="title">ActionSupport</span> <span class="inheritance"><span class="keyword">implements</span></span> <span class="title">ModelDriver</span>&lt;&gt;{</span>
+    <span class="keyword">private</span> Department department = <span class="keyword">new</span> Department();
+    <span class="keyword">private</span> DepartmentService departmentService;
+
+    @Action(value=<span class="string">"listDepartments"</span> results = {@Results(name=<span class="string">""</span>, type=<span class="string">""</span>)})
+    <span class="keyword">public</span> String listDepartment() {
+        service.findAllDepartments();
+    }
+}
+
+
+@Service(<span class="string">"departmentService"</span>)
+@Transactional
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DepartmentService</span> {</span>
+    @Resources
+    <span class="keyword">private</span> DepartmentDao dao;
+    <span class="comment">// 脑补</span>
+}
+
+@Repository(<span class="string">"departmentdao"</span>)
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DepartmentDao</span>{</span>
+    <span class="comment">// 脑补</span>
+}
+
+<span class="comment">// 保存逻辑, EmployeeAction</span>
+@Action(value=<span class="string">"saveEmployee"</span>)
+<span class="keyword">public</span> String saveEmployee(){
+    response.setContentType(<span class="string">"text/html;charset=utf-8"</span>)
+    <span class="comment">// 调用业务层完成</span>
+    <span class="keyword">try</span> {
+        employeeService.saveEmployee(employee);
+        <span class="comment">// easyUI 处理的是原始的字符, 所以直接写字符</span>
+        response.getWriter().print(<span class="string">"Success"</span>);
+    } <span class="keyword">catch</span> (Exception e){
+        response.getWriter().print(<span class="string">"Failed"</span>);
+    }
+    <span class="keyword">return</span> NONE;
+}
+</pre></td></tr></table></figure>
+
+<h2 id="-">修改功能</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+</pre></td><td class="code"><pre>toolbar:[
+    {
+        id: <span class="string">"edit"</span>,
+        text: <span class="string">"修改员工"</span>,
+        handler: <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+            <span class="comment">// 获取到表格中用户选中</span>
+            <span class="keyword">var</span> <span class="keyword">array</span> = $(<span class="string">"#grid"</span>).datagrid(<span class="string">'getSelections'</span>);
+            <span class="keyword">if</span>(<span class="keyword">array</span>.length==<span class="number">0</span>) {
+                <span class="comment">// 用户一条也没有选</span>
+                <span class="variable">$message</span>.alert(<span class="string">"警告"</span>, <span class="string">"修改数据前必须选中一条数据"</span>, <span class="string">"warning"</span>);
+            }
+            <span class="keyword">if</span>(<span class="keyword">array</span>.length&gt;<span class="number">1</span>){
+                $.messager.alert(<span class="string">"警告"</span>, <span class="string">"只能选中一条数据"</span>, <span class="string">"warning"</span>);
+            }
+            <span class="keyword">var</span> row = <span class="keyword">array</span>[<span class="number">0</span>];
+            <span class="comment">// 回显, 有一些不足, 可以手动修改</span>
+            $(<span class="string">"#saveEmployeeForm"</span>).form(<span class="string">'load'</span>, row);
+            <span class="comment">// 在页面中给一个隐藏域, id, 默认值为0,</span>
+            <span class="comment">// 在保存时, 服务器根据id的值, 判断新添加还是更新</span>
+            <span class="comment">// 页面添加表单重置按钮, 清空表单值,</span>
+            <span class="comment">// 注意: $("input[name='id']") 需要手动清空</span>
+        }
+    }
+]
+</pre></td></tr></table></figure>
+
+<h2 id="-">员工批量删除</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+</pre></td><td class="code"><pre>toolbar: [{
+    id: <span class="string">"delete"</span>,
+    title: <span class="string">"删除员工"</span>,
+    handler: <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+        <span class="keyword">var</span> array = $(<span class="string">"#grid"</span>).datagrid(<span class="string">'getSelections'</span>);
+        <span class="keyword">if</span>(array.length==<span class="number">0</span>) {
+            $.messager.alert(<span class="string">"警告"</span>, <span class="string">"必须选中一条数据"</span>, <span class="string">"warning"</span>);
+            <span class="keyword">return</span>;
+        }
+        vara idArray = [];
+        <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>; i&lt;array.length;i++) {
+            idArray.push(array[i].id);
+        }
+        <span class="keyword">var</span> ids = idArray.join(<span class="string">", "</span>);
+        $.post(<span class="string">"${contextPath}/delteEmployees.action"</span>, {<span class="string">"ids"</span>: ids}, <span class="function"><span class="keyword">function</span><span class="params">(data)</span>{</span>
+            <span class="keyword">if</span>(data.result==<span class="string">"success"</span>) {
+            } <span class="keyword">else</span> {
+            }
+            <span class="comment">// 刷新表格</span>
+            $(<span class="string">"#grid"</span>).datagrid(<span class="string">'reload'</span>);
+        });
+    }
+}
+]
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre><span class="comment">// EmployeeAction</span>
+<span class="keyword">private</span> String ids;
+<span class="annotation">@Action</span>(value=<span class="string">"deleteEmployees"</span>, results={<span class="annotation">@Result</span>(name=<span class="string">""</span>, type=<span class="string">"json"</span>)})
+<span class="keyword">public</span> String <span class="title">deleteEmployees</span>(){
+    <span class="comment">// 获取删除员工的id</span>
+    String idArray = ids.split(<span class="string">", "</span>);
+    
+    <span class="comment">// 调用业务层完成删除</span>
+    service.deleteEmployees(idArray);
+    <span class="comment">//返回 Map("result" -&gt; "success|failure")</span>
+}
+</pre></td></tr></table></figure>
+
+<h2 id="datagrid-">datagrid 快速编辑</h2>
+<p>快速编辑, 在表格内编辑</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+</pre></td><td class="code"><pre>columns: [[
+    {
+        field: <span class="string">"id"</span>,
+        <span class="comment">// 具有别编辑的能力</span>
+        editor: {
+            type: `validatebox`,
+            options: {
+                reqiure: <span class="literal">true</span>
+            }
+        }
+    }
+]],
+onAfterEdit: <span class="function"><span class="keyword">function</span><span class="params">(rowIndex, rowData, changes)</span>{</span>
+    <span class="comment">// 如果不加, 会将仓库修改为空</span>
+    rowData[`department.id`] = rowData.department.id;
+    <span class="comment">// rowData当前编辑后数据</span>
+    $.post(<span class="string">"${contextPath}/saveEmployee.action"</span>, rowData, <span class="function"><span class="keyword">function</span><span class="params">(data)</span>{</span>
+        $.messager.alert(<span class="string">"信息"</span>, <span class="string">"编辑成功"</span>, <span class="string">"info"</span>);
+    })
+}
+<span class="comment">// 开启编辑状态</span>
+<span class="keyword">var</span> index = <span class="literal">undefined</span>;
+toolbar: [{
+    id: <span class="string">'lineedit'</span>,
+    text: <span class="string">'行内编辑'</span>,
+    handler: <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+        <span class="keyword">var</span> array = $(<span class="string">'#grid'</span>).datagrid(<span class="string">'getSelections'</span>);
+        <span class="comment">// 只能在一行中开启</span>
+        <span class="keyword">if</span>(array.length == <span class="number">1</span>) {
+            <span class="comment">// 获取选中行</span>
+            <span class="keyword">var</span> row = array[<span class="number">0</span>];
+            index = $(<span class="string">"grid"</span>).datagrid(<span class="string">'getRowIndex'</span>, row);
+            $(<span class="string">"#grid"</span>).datagrid(<span class="string">'beginEditor'</span>, index)
+        }
+    }
+},
+{
+    id: <span class="string">"endedit"</span>,
+    text: <span class="string">"结束编辑"</span>,
+    handler: <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+        $(<span class="string">"#grid"</span>).datagrid(<span class="string">'endEditor'</span>, index)
+    }
+}]
+</pre></td></tr></table></figure>
+
+<h2 id="datagrid-">datagrid 表格右键自定义菜单</h2>
+<p>通过 easyui 的 menu 完成自定义菜单, 鼠标右键点击事件 <code>oncontextmenu</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- onRowcontetxMenu: function(e, rowIndex, rowData){
+    e.preventDefault(); // 屏蔽原事件
+    $("#rightMenu").menu("show", {
+        left: e.pageX,
+        right: e.pageY
+    })
+}
+--&gt;</span>
+<span class="tag">&lt;<span class="title">div</span> <span class="attribute">id</span>=<span class="value">"rightMenu"</span> <span class="attribute">class</span>=<span class="value">"easyui-menu"</span> <span class="attribute">style</span>=<span class="value">"width:120px"</span>&gt;</span>
+<span class="tag">&lt;<span class="title">div</span>&gt;</span> New <span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+<span class="tag">&lt;<span class="title">div</span>&gt;</span> 修改 <span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+<span class="comment">&lt;!-- 分割线 --&gt;</span>
+<span class="tag">&lt;<span class="title">div</span> <span class="attribute">class</span>=<span class="value">"menu-sep"</span>&gt;</span><span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+<span class="tag">&lt;<span class="title">div</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">span</span>&gt;</span>员工管理<span class="tag">&lt;/<span class="title">span</span>&gt;</span>
+    <span class="comment">&lt;!-- 子菜单 --&gt;</span>
+    <span class="tag">&lt;<span class="title">div</span> <span class="attribute">style</span>=<span class="value">"width='120px'"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">div</span>&gt;</span> 删除员工 <span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<h2 id="searchbox-">searchbox 搜索框</h2>
+<p>只支持单条件查询</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">script</span>&gt;</span><span class="javascript">
+<span class="function"><span class="keyword">function</span> <span class="title">doSearch</span><span class="params">(value, name)</span> {</span>
+    log(<span class="string">"在name中搜索value"</span>);
+}
+</span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
+<span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"text"</span> <span class="attribute">class</span>=<span class="value">"easyui-searchbox"</span>
+       <span class="attribute">data-options</span>=<span class="value">"menu:#mm, prompt: '请输入您的搜索内容',
+       search: doSearch"</span>/&gt;</span>
+
+<span class="comment">&lt;!-- 搜索项div --&gt;</span>
+<span class="tag">&lt;<span class="title">div</span> <span class="attribute">id</span>=<span class="value">"mm"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">div</span> <span class="attribute">data-options</span>=<span class="value">"name:'city'"</span>&gt;</span>按照城市搜索<span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">div</span> <span class="attribute">data-options</span>=<span class="value">"name:'name'"</span>&gt;</span>按照姓名搜索<span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/传智播客/">传智播客</a>
+  </div>
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://zhpooer.github.io/2014/06/13/传智播客day47-jquery-easyui2/" data-title="传智播客day47-Jquery EasyUI2 | Poe&#39;s World" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2014/06/15/scala培训2/" title="scala培训2">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  scala培训2</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2014/06/12/photoshop入门-画笔类工具/"  title="photoshop入门 画笔类工具">
+ <strong>NEXT:</strong><br/> 
+ <span>photoshop入门 画笔类工具
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">完善系统菜单</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">2.</span> <span class="toc-text">数据表格</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.1.</span> <span class="toc-text">数据表格的分页</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">员工管理页面</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">3.1.</span> <span class="toc-text">添加功能</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">3.2.</span> <span class="toc-text">修改功能</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">3.3.</span> <span class="toc-text">员工批量删除</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#datagrid-"><span class="toc-number">3.4.</span> <span class="toc-text">datagrid 快速编辑</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#datagrid-"><span class="toc-number">3.5.</span> <span class="toc-text">datagrid 表格右键自定义菜单</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#searchbox-"><span class="toc-number">3.6.</span> <span class="toc-text">searchbox 搜索框</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/AJAX/" title="AJAX">AJAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/DOM/" title="DOM">DOM<sup>2</sup></a></li>
+		
+			<li><a href="/tags/EL表达式/" title="EL表达式">EL表达式<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Hibernate/" title="Hibernate">Hibernate<sup>2</sup></a></li>
+		
+			<li><a href="/tags/HttpSession/" title="HttpSession">HttpSession<sup>1</sup></a></li>
+		
+			<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JSP/" title="JSP">JSP<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaBean/" title="JavaBean">JavaBean<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaScript/" title="JavaScript">JavaScript<sup>1</sup></a></li>
+		
+			<li><a href="/tags/SAX/" title="SAX">SAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletRequest/" title="ServletRequest">ServletRequest<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletResponse/" title="ServletResponse">ServletResponse<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Spring/" title="Spring">Spring<sup>1</sup></a></li>
+		
+			<li><a href="/tags/String/" title="String">String<sup>1</sup></a></li>
+		
+			<li><a href="/tags/StringBuffer/" title="StringBuffer">StringBuffer<sup>1</sup></a></li>
+		
+			<li><a href="/tags/cookie/" title="cookie">cookie<sup>1</sup></a></li>
+		
+			<li><a href="/tags/css/" title="css">css<sup>1</sup></a></li>
+		
+			<li><a href="/tags/dom4j/" title="dom4j">dom4j<sup>1</sup></a></li>
+		
+			<li><a href="/tags/dtd/" title="dtd">dtd<sup>1</sup></a></li>
+		
+			<li><a href="/tags/eclipse/" title="eclipse">eclipse<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2014 
+		
+		<a href="http://zhpooer.github.io" target="_blank" title="zhpooer">zhpooer</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"zhpoooer"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>

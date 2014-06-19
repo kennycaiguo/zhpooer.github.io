@@ -4,19 +4,29 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>scala thoughtworks培训 | Poe&#39;s World</title>
+    <title>photoshop入门 画笔类工具 | Poe&#39;s World</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="zhpooer">
     
-    <meta name="description" content="基于scala的框架
-play: web框架, 仿制rails
-spark: 大数据分析
-动态类型和静态类型
-动态: 运行时, 进行类型检查
-静态: 编译时, 进行类型检查
-简单地说，在声明了一个变量之后，不能改变它的类型的语言，是静态语言；能够随时改变它的类型的语言，是动态语言. 
-为什么要静态类">
+    <meta name="description" content="制作彩虹
+
+选框工具, 矩形, 羽化5
+线性, 填充
+变成曲线
+方式一: 变形,
+方式二: 水平方向变成竖直方向, 滤镜/扭曲/切变
+
+
+设置透明度
+
+画笔工具(B)
+切换笔尖粗细 [, ], 按住 shift可画直线
+F5, 调出画笔面板
+
+间距, 线条由无数个圆形组成
+形状动态
+大小抖动, 画出">
     
     
     
@@ -79,15 +89,15 @@ spark: 大数据分析
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2014/06/08/scala-thoughtworks培训/" title="scala thoughtworks培训" itemprop="url">scala thoughtworks培训</a>
+      <a href="/2014/06/12/photoshop入门-画笔类工具/" title="photoshop入门 画笔类工具" itemprop="url">photoshop入门 画笔类工具</a>
   </h1>
   <p class="article-author">By
     
       <a href="http://zhpooer.github.io" title="zhpooer">zhpooer</a>
     </p>
   <p class="article-time">
-    <time datetime="2014-06-08T05:06:47.000Z" itemprop="datePublished">6月 8 2014</time>
-    更新日期:<time datetime="2014-06-08T13:23:57.000Z" itemprop="dateModified">6月 8 2014</time>
+    <time datetime="2014-06-12T08:08:31.000Z" itemprop="datePublished">6月 12 2014</time>
+    更新日期:<time datetime="2014-06-18T03:22:02.000Z" itemprop="dateModified">6月 18 2014</time>
     
   </p>
 </header>
@@ -96,98 +106,85 @@ spark: 大数据分析
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-scala-"><span class="toc-number">1.</span> <span class="toc-text">基于scala的框架</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">2.</span> <span class="toc-text">动态类型和静态类型</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.1.</span> <span class="toc-text">为什么要静态类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.2.</span> <span class="toc-text">为什么要动态特性</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">为什么要面向对象</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">4.</span> <span class="toc-text">为什么要函数式编程</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">4.1.</span> <span class="toc-text">为什么函数式编程没有流行起来?</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#scala-"><span class="toc-number">5.</span> <span class="toc-text">scala特性</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">6.</span> <span class="toc-text">学习资源</span></a></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">制作彩虹</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-b-"><span class="toc-number">2.</span> <span class="toc-text">画笔工具(B)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-y-"><span class="toc-number">3.</span> <span class="toc-text">历史记录工具(Y)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-e-"><span class="toc-number">4.</span> <span class="toc-text">橡皮差工具(E)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">5.</span> <span class="toc-text">模糊工具和锐化工具</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-g-"><span class="toc-number">6.</span> <span class="toc-text">渐变工具(G)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">7.</span> <span class="toc-text">制作彩虹光盘</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">8.</span> <span class="toc-text">制作球体</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">9.</span> <span class="toc-text">制作蜡烛</span></a></li></ol>
 		</div>
 		
-		<h1 id="-scala-">基于scala的框架</h1>
-<p>play: web框架, 仿制rails</p>
-<p>spark: 大数据分析</p>
-<h1 id="-">动态类型和静态类型</h1>
-<p>动态: 运行时, 进行类型检查</p>
-<p>静态: 编译时, 进行类型检查</p>
-<p>简单地说，在声明了一个变量之后，不能改变它的类型的语言，是静态语言；能够随时改变它的类型的语言，是动态语言. </p>
-<h2 id="-">为什么要静态类型</h2>
-<ul>
-<li>编译检查, 安全类型</li>
-<li>工具提示</li>
-<li>性能好</li>
-<li>Java/C#</li>
+		<h1 id="-">制作彩虹</h1>
+<ol>
+<li>选框工具, 矩形, 羽化5</li>
+<li>线性, 填充</li>
+<li>变成曲线<ul>
+<li>方式一: 变形,</li>
+<li>方式二: 水平方向变成竖直方向, 滤镜/扭曲/切变</li>
 </ul>
-<h2 id="-">为什么要动态特性</h2>
+</li>
+<li>设置透明度</li>
+</ol>
+<h1 id="-b-">画笔工具(B)</h1>
+<p>切换笔尖粗细 <code>[</code>, <code>]</code>, 按住 <code>shift</code>可画直线</p>
+<p><code>F5</code>, 调出画笔面板</p>
 <ul>
-<li>轻量和灵活, 可根据框架自动生成代码</li>
-<li>运行时改变程序的行为</li>
-<li>Python/Ruby, JavaScript</li>
+<li>间距, 线条由无数个圆形组成</li>
+<li>形状动态<ul>
+<li>大小抖动, 画出有大有小</li>
+<li>最小直径, 大小抖动的最小值</li>
+<li>角度抖动</li>
+<li>圆度抖动, z轴上抖动</li>
 </ul>
-<p>什么是码农? 人肉编译器, 把业务场景编译成代码</p>
-<h1 id="-">为什么要面向对象</h1>
-<p>解决问题更方便, 快捷?</p>
-<p>面向对象更好地描述业务逻辑, 与人认知世界的方式相似(总结)</p>
-<p>三大特征, 解决三个问题</p>
+</li>
+<li>散布, 发散开, 配合钢笔工具(描边), 可画出星光闪闪效果(可以调整背景)</li>
+</ul>
+<h1 id="-y-">历史记录工具(Y)</h1>
+<p>涂抹后, 可恢复历史历史记录中的局部样式</p>
+<h1 id="-e-">橡皮差工具(E)</h1>
+<h1 id="-">模糊工具和锐化工具</h1>
+<p>作用相反, 通常用滤镜下的工具 <code>usm锐化</code>, <code>高斯模糊</code></p>
+<h1 id="-g-">渐变工具(G)</h1>
+<p>实现多种颜色的柔和过度</p>
+<p>渐变编辑器:</p>
 <ul>
-<li>封装, 规范, 可维护</li>
-<li>继承, 可重用</li>
-<li>多态, 可扩展(<a href="http://www.zhihu.com/question/20177988" target="_blank">javascript如何实现?</a>)</li>
+<li>前景到背景的渐变(两种颜色)</li>
+<li>渐变编辑条, 色标(下), 不透明度色标(上), 点击添加色标, 拖拽删除</li>
+<li>菱形, 颜色中心点</li>
+<li>复制色标, 选中要复制的色标, 在其他地方单击添加</li>
 </ul>
-<p>Java数据和行为分开(Dao和Model), 不太面向对象. ruby on rails把数据和行为一同封装(面向对象).</p>
-<p>TODO: 丧钟为谁而鸣?</p>
-<h1 id="-">为什么要函数式编程</h1>
-<p><a href="http://zh.wikipedia.org/wiki/%E5%87%BD%E6%95%B0%E5%89%AF%E4%BD%9C%E7%94%A8#.E5.BC.95.E7.94.A8.E9.80.8F.E6.98.8E" target="_blank">什么是纯函数</a></p>
-<p>函数可以当做参数传递, 表述清晰</p>
-<p>函数式编程特性, 如何解决 可维护性, 可重用性, 可扩展性?</p>
+<p>渐变样式, 决定以什么样的形式填充</p>
 <ul>
-<li>无副作用</li>
-<li><a href="http://www.jdon.com/42422" target="_blank">引用透明</a></li>
-<li><a href="http://zh.wikipedia.org/zh/%E9%AB%98%E9%98%B6%E5%87%BD%E6%95%B0" target="_blank">高阶函数</a></li>
+<li>线性渐变, 通过鼠标的落点和起点, 来填充,
+鼠标没有填充的地方, 以最接近的颜色填充</li>
+<li>径向渐变, 从中间拖拽而出</li>
+<li>角度渐变</li>
+<li>对称渐变</li>
+<li>菱形渐变</li>
 </ul>
-<p>面向对象, 对象在做事情; 函数式, 函数在做</p>
-<table>
-<thead>
-<tr>
-<th>解决问题</th>
-<th>面向对象</th>
-<th>函数式</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>重用单位</td>
-<td>类</td>
-<td>方法</td>
-</tr>
-<tr>
-<td>可维护性</td>
-<td>信息封装</td>
-<td>信息不变化</td>
-</tr>
-<tr>
-<td>可扩展性</td>
-<td>类组合</td>
-<td>方法组合</td>
-</tr>
-</tbody>
-</table>
-<p><a href="/2014/05/16/函数式编程手记">深入函数式,请猛击</a></p>
-<h2 id="-">为什么函数式编程没有流行起来?</h2>
-<p>图灵完备: 可计算的都可计算. (递归, 需要无限的计算资源)</p>
-<p>物理限制, 计算资源有限, 内存有限</p>
-<p>现今内存和 cpu 运算速度指数增长, 以及对并行运算的需求</p>
-<h1 id="scala-">scala特性</h1>
-<p>动态性: REPL, 运行时编译</p>
-<p>tuple: 可以存储不同类型的集合</p>
-<!-- **tessdemo** -->
-
-<h1 id="-">学习资源</h1>
-<p><a href="http://twitter.github.io/scala_school/zh_cn/" target="_blank">twitter scala 指南</a></p>
-<p><a href="https://typesafe.com/platform/getstarted" target="_blank">typesafe scala 交互学习</a></p>
-<p><a href="https://code.csdn.net/DOC_Scala/chinese_scala_offical_document" target="_blank">scala官方文档中文</a></p>
+<h1 id="-">制作彩虹光盘</h1>
+<ul>
+<li>新建画布200*200, 72pi/inc</li>
+<li>标识出中心点</li>
+<li>椭圆选框画出大圆, 填充灰色</li>
+<li>变形选框(alt + s + t), 不断填充颜色</li>
+<li>图层样式, 增加投影</li>
+</ul>
+<h1 id="-">制作球体</h1>
+<ul>
+<li>圆形选框工具</li>
+<li>渐变填充(亮 黑 灰)</li>
+<li>新建图层, 变形工具, 制作投影</li>
+<li>投影填充黑色, 图层四把锁一针对有像素的地方填充黑色</li>
+<li>对投影图层高斯模糊, 并修改透明度</li>
+</ul>
+<h1 id="-">制作蜡烛</h1>
+<ul>
+<li>矩形选框工具, 渐变填充(暗红, 红, 深红)</li>
+<li>制作火焰, 新建图层, 画出三个圆(红, 黄, 白), 涂抹工具, 涂抹火焰形状</li>
+</ul>
   
 	</div>
 		<footer class="article-footer clearfix">
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/scala/">scala</a>
+  <span></span> <a href="/tags/photoshop/">photoshop</a>
   </div>
 
 
@@ -195,7 +192,7 @@ spark: 大数据分析
 
 <div class="article-share" id="share">
 
-  <div data-url="http://zhpooer.github.io/2014/06/08/scala-thoughtworks培训/" data-title="scala thoughtworks培训 | Poe&#39;s World" data-tsina="null" class="share clearfix">
+  <div data-url="http://zhpooer.github.io/2014/06/12/photoshop入门-画笔类工具/" data-title="photoshop入门 画笔类工具 | Poe&#39;s World" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -205,18 +202,18 @@ spark: 大数据分析
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2014/06/09/传智播客day44-maven/" title="传智播客day44-maven">
+ <a href="/2014/06/13/传智播客day47-jquery-easyui2/" title="传智播客day47-Jquery EasyUI2">
   <strong>PREVIOUS:</strong><br/>
   <span>
-  传智播客day44-maven</span>
+  传智播客day47-Jquery EasyUI2</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2014/06/03/传智播客day43-ssh综合练习/"  title="传智播客day43-ssh综合练习 仓库管理系统">
+<a href="/2014/06/12/传智播客day46-jquery-easyui/"  title="传智播客day46-JQuery EasyUI">
  <strong>NEXT:</strong><br/> 
- <span>传智播客day43-ssh综合练习 仓库管理系统
+ <span>传智播客day46-JQuery EasyUI
 </span>
 </a>
 </div>
@@ -233,7 +230,7 @@ spark: 大数据分析
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-scala-"><span class="toc-number">1.</span> <span class="toc-text">基于scala的框架</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">2.</span> <span class="toc-text">动态类型和静态类型</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.1.</span> <span class="toc-text">为什么要静态类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.2.</span> <span class="toc-text">为什么要动态特性</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">为什么要面向对象</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">4.</span> <span class="toc-text">为什么要函数式编程</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">4.1.</span> <span class="toc-text">为什么函数式编程没有流行起来?</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#scala-"><span class="toc-number">5.</span> <span class="toc-text">scala特性</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">6.</span> <span class="toc-text">学习资源</span></a></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">制作彩虹</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-b-"><span class="toc-number">2.</span> <span class="toc-text">画笔工具(B)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-y-"><span class="toc-number">3.</span> <span class="toc-text">历史记录工具(Y)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-e-"><span class="toc-number">4.</span> <span class="toc-text">橡皮差工具(E)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">5.</span> <span class="toc-text">模糊工具和锐化工具</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-g-"><span class="toc-number">6.</span> <span class="toc-text">渐变工具(G)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">7.</span> <span class="toc-text">制作彩虹光盘</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">8.</span> <span class="toc-text">制作球体</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">9.</span> <span class="toc-text">制作蜡烛</span></a></li></ol>
   </div>
 
 <div id="asidepart">
