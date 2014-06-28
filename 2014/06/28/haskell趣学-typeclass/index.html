@@ -9,6 +9,24 @@
     
     <meta name="author" content="zhpooer">
     
+    <meta name="description" content="Type
+Haskell 支持类型推导
+1
+2
+3
+4
+5
+6
+ghci&gt; :t &#39;a&#39;   
+&#39;a&#39; :: Char   
+ghci&gt; :t True   
+True :: Bool   
+ghci&gt; :t &quot;HELLO!&quot;   
+&quot;HELLO!&quot; :: [Char]
+
+
+函数也">
+    
     
     
     
@@ -78,7 +96,7 @@
     </p>
   <p class="article-time">
     <time datetime="2014-06-28T02:15:03.000Z" itemprop="datePublished">6月 28 2014</time>
-    更新日期:<time datetime="2014-06-28T02:15:24.000Z" itemprop="dateModified">6月 28 2014</time>
+    更新日期:<time datetime="2014-06-28T12:09:40.000Z" itemprop="dateModified">6月 28 2014</time>
     
   </p>
 </header>
@@ -87,10 +105,206 @@
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#type"><span class="toc-number">1.</span> <span class="toc-text">Type</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#type-variables-"><span class="toc-number">2.</span> <span class="toc-text">Type variables(类型变量?泛型?)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#typeclasses"><span class="toc-number">3.</span> <span class="toc-text">Typeclasses</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-typeclass"><span class="toc-number">3.1.</span> <span class="toc-text">常用的 TypeClass</span></a></li></ol>
 		</div>
 		
-		  
+		<h1 id="type">Type</h1>
+<p>Haskell 支持类型推导</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre>ghci&gt; <span class="symbol">:t</span> <span class="string">'a'</span>   
+<span class="string">'a'</span> <span class="symbol">:</span><span class="symbol">:</span> <span class="constant">Char</span>   
+ghci&gt; <span class="symbol">:t</span> <span class="constant">True</span>   
+<span class="constant">True</span> <span class="symbol">:</span><span class="symbol">:</span> <span class="constant">Bool</span>   
+ghci&gt; <span class="symbol">:t</span> <span class="string">"HELLO!"</span>   
+<span class="string">"HELLO!"</span> <span class="symbol">:</span><span class="symbol">:</span> [<span class="constant">Char</span>]
+</pre></td></tr></table></figure>
+
+<p>函数也有类型</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+</pre></td><td class="code"><pre><span class="bullet">removeNonUppercase :: </span>[Char] -&gt; [Char]
+removeNonUppercase st = [ c | c &lt;- st, c <span class="smartquote">`elem` ['</span>A'..<span class="emphasis">'Z'</span>]]
+
+<span class="bullet">-- </span>Integer 也是整数，但它是无界的, Int 是有界的
+<span class="bullet">factorial :: </span>Integer -&gt; Integer   
+factorial n = product [1..n]
+
+<span class="bullet">circumference :: </span>Float -&gt; Float   
+circumference r = 2 * pi * r
+
+<span class="bullet">circumference' :: </span>Double -&gt; Double   
+circumference' r = 2 * pi * r
+
+<span class="bullet">-- </span>Bool 表示布林值，它只有两种值：True 和 False
+<span class="bullet">-- </span>Char 表示一个字符。一个字符由单引号括起，一组字符的 List 即为字串。
+<span class="bullet">-- </span>Tuple 的类型取决于它的长度及其中项的类型。注意，空 Tuple 同样也是个类型，它只有一种值：()
+</pre></td></tr></table></figure>
+
+<h1 id="type-variables-">Type variables(类型变量?泛型?)</h1>
+<p>类型变量, <code>head :: [a] -&gt; a</code>, 意味着 a 可以是任意的类型,
+使用到类型变量的函数被称作&quot;多态函数 &quot;，
+<code>head</code> 函数的类型声明里标明了它可以取任意类型的
+<code>List</code> 并回传其中的第一个元素</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre>-- <span class="literal">a</span> 和 b 是不同的类型变量
+<span class="label">fst ::</span> (<span class="literal">a</span>, b) -&gt; <span class="literal">a</span>
+</pre></td></tr></table></figure>
+
+<h1 id="typeclasses">Typeclasses</h1>
+<p>类型定义行为的接口，如果一个类型属于某 Typeclass，
+那它必实现了该 Typeclass 所描述的行为, 可以看做是 java 的 interface</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre><span class="comment">-- +-*/之类的运算符也是同样。在缺省条件下，它们多为中缀函数。</span>
+<span class="comment">-- 若要检查它的类型，就必须得用括号括起使之作为另一个函数，或者说以首码函数的形式调用它。</span>
+<span class="comment">-- =&gt; 符号, 它左边的部分叫做类型约束</span>
+<span class="comment">-- "相等函数取两个相同类型的值作为参数并回传一个布林值，</span>
+<span class="comment">-- 而这两个参数的类型同在 Eq 类之中(即类型约束)"</span>
+ghci&gt; :t (==)
+(==) :: (Eq <span class="operator">a</span>) =&gt; <span class="operator">a</span> -&gt; <span class="operator">a</span> -&gt; Bool
+
+<span class="comment">-- Num 相当于泛型?</span>
+addVectors :: (Num <span class="operator">a</span>) =&gt; (<span class="operator">a</span>, <span class="operator">a</span>) -&gt; (<span class="operator">a</span>, <span class="operator">a</span>) -&gt; (<span class="operator">a</span>, <span class="operator">a</span>)   
+addVectors <span class="operator">a</span> b = (fst <span class="operator">a</span> + fst b, snd <span class="operator">a</span> + snd b)
+</pre></td></tr></table></figure>
+
+<h2 id="-typeclass">常用的 TypeClass</h2>
+<p><code>Eq</code> 包含可判断相等性的类型, 提供实现的函数是 == 和 /=</p>
+<p><code>Ord</code> 包含可比较大小的类型. 包含了&lt;, &gt;, &lt;=, &gt;= 之类用于比较大小的函数..</p>
+<p><code>Show</code> 的成员为可用字串表示的类型, 可以取任一Show的成员类型并将其转为字串</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre>ghci&gt; show <span class="number">3</span>   
+<span class="string">"3"</span>   
+ghci&gt; show <span class="number">5.334</span>   
+<span class="string">"5.334"</span>   
+ghci&gt; show <span class="keyword">True</span>   
+<span class="string">"True"</span>
+</pre></td></tr></table></figure>
+
+<p><code>Read</code> 函数可以将一个字串转为 Read 的某成员类型</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+</pre></td><td class="code"><pre>ghci&gt; <span class="built_in">read</span> <span class="string">"True"</span> || False   
+True   
+ghci&gt; <span class="built_in">read</span> <span class="string">"8.2"</span> + <span class="number">3.8</span>   
+<span class="number">12.0</span>   
+ghci&gt; <span class="built_in">read</span> <span class="string">"5"</span> - <span class="number">2</span>   
+<span class="number">3</span>   
+ghci&gt; <span class="built_in">read</span> <span class="string">"[1,2,3,4]"</span> ++ [<span class="number">3</span>]   
+[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">3</span>]
+
+-- 搞不清楚究竟该是 Int 还是 Float 了
+ghci&gt; <span class="built_in">read</span> <span class="string">"5"</span> :: Int   
+<span class="number">5</span>   
+ghci&gt; <span class="built_in">read</span> <span class="string">"5"</span> :: Float   
+<span class="number">5.0</span>   
+ghci&gt; (<span class="built_in">read</span> <span class="string">"5"</span> :: Float) * <span class="number">4</span>   
+<span class="number">20.0</span>   
+ghci&gt; <span class="built_in">read</span> <span class="string">"[1,2,3,4]"</span> :: [Int]   
+[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>]   
+ghci&gt; <span class="built_in">read</span> <span class="string">"(3, 'a')"</span> :: (Int, Char)   
+(<span class="number">3</span>, <span class="string">'a'</span>)
+</pre></td></tr></table></figure>
+
+<p><code>Bounded</code> 的成员都有一个上限和下限</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre>ghci<span class="subst">&gt;</span> minBound <span class="tag">:: Int</span>   
+<span class="subst">-</span><span class="number">2147483648</span>   
+ghci<span class="subst">&gt;</span> maxBound <span class="tag">:: Char</span>   
+<span class="string">'\1114111'</span>   
+ghci<span class="subst">&gt;</span> maxBound <span class="tag">:: Bool</span>   
+<span class="literal">True</span>   
+ghci<span class="subst">&gt;</span> minBound <span class="tag">:: Bool</span>   
+<span class="literal">False</span>
+</pre></td></tr></table></figure>
+
+<p><code>Enum</code> 的成员都是连续的类型,
+个值都有后继子 (successer) 和前置子 (predecesor)，
+分别可以通过 succ 函数和 pred 函数得到</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre>ghci<span class="subst">&gt;</span> <span class="preprocessor">[</span><span class="string">'a'</span><span class="built_in">..<span class="variable">'e'</span></span><span class="preprocessor">]</span><span class="markup">   
+"abcde"   
+ghci&gt; </span><span class="preprocessor">[</span><span class="literal">LT</span> <span class="built_in">..</span> <span class="literal">GT</span><span class="preprocessor">]</span><span class="markup">   
+</span><span class="preprocessor">[</span><span class="literal">LT</span>,<span class="literal">EQ</span>,<span class="literal">GT</span><span class="preprocessor">]</span><span class="markup">   
+ghci&gt; </span><span class="preprocessor">[</span><span class="number">3</span> <span class="built_in">..</span> <span class="number">5</span><span class="preprocessor">]</span><span class="markup">   
+</span><span class="preprocessor">[</span><span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span><span class="preprocessor">]</span><span class="markup">   
+ghci&gt; succ 'B'   
+'C'</span>
+</pre></td></tr></table></figure>
+
+<p><code>Num</code> 是表示数字的 Typeclass，它的成员类型都具有数字的特征.
+类型只有亲近 <code>Show</code> 和 <code>Eq</code>，才可以加入 Num</p>
+<p><code>Integral</code> 同样是表示数字的 Typeclass。
+Num 包含所有的数字：实数和整数。
+而 Intgral 仅包含整数，其中的成员类型有 Int 和 Integer</p>
+<p><code>Floating</code> 仅包含浮点类型：Float 和 Double</p>
+  
 	</div>
 		<footer class="article-footer clearfix">
 
@@ -113,6 +327,14 @@
 	
 <nav class="article-nav clearfix">
  
+ <div class="prev" >
+ <a href="/2014/06/28/haskell趣学-函数的语法/" title="haskell趣学-常用的函数">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  haskell趣学-常用的函数</span>
+</a>
+</div>
+
 
 <div class="next">
 <a href="/2014/06/28/scala-implicits手记/"  title="Scala Implicits手记">
@@ -134,7 +356,7 @@
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#type"><span class="toc-number">1.</span> <span class="toc-text">Type</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#type-variables-"><span class="toc-number">2.</span> <span class="toc-text">Type variables(类型变量?泛型?)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#typeclasses"><span class="toc-number">3.</span> <span class="toc-text">Typeclasses</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-typeclass"><span class="toc-number">3.1.</span> <span class="toc-text">常用的 TypeClass</span></a></li></ol>
   </div>
 
 <div id="asidepart">

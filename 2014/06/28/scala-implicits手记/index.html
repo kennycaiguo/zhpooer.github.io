@@ -103,7 +103,7 @@ tr">
     </p>
   <p class="article-time">
     <time datetime="2014-06-28T01:57:30.000Z" itemprop="datePublished">6月 28 2014</time>
-    更新日期:<time datetime="2014-06-28T02:05:36.000Z" itemprop="dateModified">6月 28 2014</time>
+    更新日期:<time datetime="2014-06-28T09:20:48.000Z" itemprop="dateModified">6月 28 2014</time>
     
   </p>
 </header>
@@ -178,7 +178,7 @@ AddressLabelMaker().toLabel(Address(<span class="number">100</span>, <span class
 }
 
 def printLabel[<span class="link_label">T</span>](<span class="link_url">t: T</span>)(implicit lm: LabelMaker[T]) = lm.toLabel(t)
-// 简化成这样, 可以理解成 T 隐式可以转换成为 LabelMaker
+// 简化成这样, 可以理解 隐式捕获 和 T 相关的LabelMaker, 语法糖
 def printLabel[<span class="link_label">T: LabelMaker</span>](<span class="link_url">t: T</span>) = implicitly[LabelMaker[T]].toLabel(t)
 </pre></td></tr></table></figure>
 
