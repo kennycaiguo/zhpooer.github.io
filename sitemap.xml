@@ -2,6 +2,36 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://zhpooer.github.io/2014/06/28/haskell%E8%B6%A3%E5%AD%A6-typeclass/</loc>
+    <lastmod>2014-06-28T02:15:03.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://zhpooer.github.io/2014/06/28/scala-implicits%E6%89%8B%E8%AE%B0/</loc>
+    <lastmod>2014-06-28T01:57:30.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://zhpooer.github.io/2014/06/20/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2-oa%E7%B3%BB%E7%BB%9F/</loc>
+    <lastmod>2014-06-20T01:02:49.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://zhpooer.github.io/2014/06/08/scala-thoughtworks%E5%9F%B9%E8%AE%AD/</loc>
+    <lastmod>2014-06-08T05:06:47.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://zhpooer.github.io/2014/06/25/haskell%E8%B6%A3%E5%AD%A6-%E5%85%A5%E9%97%A8/</loc>
+    <lastmod>2014-06-25T06:58:38.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://zhpooer.github.io/2014/06/22/scala%E5%9F%B9%E8%AE%ADmonad/</loc>
+    <lastmod>2014-06-22T02:14:17.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://zhpooer.github.io/2014/06/17/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day48-javascript-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/</loc>
     <lastmod>2014-06-17T01:00:32.000Z</lastmod>
   </url>
@@ -64,11 +94,6 @@
   <url>
     <loc>http://zhpooer.github.io/2014/05/20/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day33-hibernate%E5%85%B3%E7%B3%BB%E4%BC%A0%E9%80%92/</loc>
     <lastmod>2014-05-20T07:28:47.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://zhpooer.github.io/2014/06/08/scala-thoughtworks%E5%9F%B9%E8%AE%AD/</loc>
-    <lastmod>2014-06-08T05:06:47.000Z</lastmod>
   </url>
   
   <url>
