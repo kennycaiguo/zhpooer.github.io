@@ -2,13 +2,18 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://zhpooer.github.io/2014/06/28/haskell%E8%B6%A3%E5%AD%A6-%E5%87%BD%E6%95%B0%E7%9A%84%E8%AF%AD%E6%B3%95/</loc>
-    <lastmod>2014-06-28T11:19:17.000Z</lastmod>
+    <loc>http://zhpooer.github.io/2014/07/11/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day55-oracle%E7%AE%A1%E7%90%86/</loc>
+    <lastmod>2014-07-11T02:08:35.000Z</lastmod>
   </url>
   
   <url>
-    <loc>http://zhpooer.github.io/2014/06/28/haskell%E8%B6%A3%E5%AD%A6-typeclass/</loc>
-    <lastmod>2014-06-28T02:15:03.000Z</lastmod>
+    <loc>http://zhpooer.github.io/2014/07/08/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day53-oracle-2/</loc>
+    <lastmod>2014-07-08T11:06:52.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://zhpooer.github.io/2014/07/10/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day54-plsql/</loc>
+    <lastmod>2014-07-10T01:02:36.000Z</lastmod>
   </url>
   
   <url>
@@ -17,8 +22,73 @@
   </url>
   
   <url>
+    <loc>http://zhpooer.github.io/2014/06/18/photoshop%E9%92%A2%E7%AC%94%E5%B7%A5%E5%85%B7/</loc>
+    <lastmod>2014-06-18T06:17:51.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://zhpooer.github.io/2014/07/05/haskell%E8%B6%A3%E5%AD%A6-%E6%9B%B4%E5%A4%9Amonad/</loc>
+    <lastmod>2014-07-05T13:54:04.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://zhpooer.github.io/2014/07/08/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day52-oracle/</loc>
+    <lastmod>2014-07-08T01:03:35.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://zhpooer.github.io/2014/07/05/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day52-activiti%E9%A1%B9%E7%9B%AE%E5%AE%9E%E4%BE%8B/</loc>
+    <lastmod>2014-07-05T01:11:56.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://zhpooer.github.io/2014/07/02/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day51-activiti-%E5%B7%A5%E4%BD%9C%E6%B5%81/</loc>
+    <lastmod>2014-07-02T01:17:28.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://zhpooer.github.io/2014/07/02/haskell%E8%B6%A3%E5%AD%A6-monad/</loc>
+    <lastmod>2014-07-02T00:43:39.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://zhpooer.github.io/2014/07/01/haskell%E8%B6%A3%E5%AD%A6-functors-applicative&monoids/</loc>
+    <lastmod>2014-07-01T07:09:10.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://zhpooer.github.io/2014/06/30/haskell%E8%B6%A3%E5%AD%A6-%E8%BE%93%E5%85%A5%E4%B8%8E%E8%BE%93%E5%87%BA/</loc>
+    <lastmod>2014-06-30T07:12:13.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://zhpooer.github.io/2014/06/20/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2-oa%E7%B3%BB%E7%BB%9F/</loc>
     <lastmod>2014-06-20T01:02:49.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://zhpooer.github.io/2014/06/29/haskell%E8%B6%A3%E5%AD%A6-%E6%9E%84%E9%80%A0type%E5%92%8Ctypeclass/</loc>
+    <lastmod>2014-06-29T07:02:14.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://zhpooer.github.io/2014/06/29/haskell%E8%B6%A3%E5%AD%A6-%E6%A8%A1%E5%9D%97/</loc>
+    <lastmod>2014-06-29T06:16:24.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://zhpooer.github.io/2014/06/29/haskell%E8%B6%A3%E5%AD%A6-%E9%AB%98%E9%98%B6%E5%87%BD%E6%95%B0/</loc>
+    <lastmod>2014-06-29T01:40:54.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://zhpooer.github.io/2014/06/28/haskell%E8%B6%A3%E5%AD%A6-%E5%87%BD%E6%95%B0%E7%9A%84%E8%AF%AD%E6%B3%95/</loc>
+    <lastmod>2014-06-28T11:19:17.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://zhpooer.github.io/2014/06/28/haskell%E8%B6%A3%E5%AD%A6-typeclass/</loc>
+    <lastmod>2014-06-28T02:15:03.000Z</lastmod>
   </url>
   
   <url>
@@ -39,11 +109,6 @@
   <url>
     <loc>http://zhpooer.github.io/2014/06/17/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day48-javascript-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/</loc>
     <lastmod>2014-06-17T01:00:32.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://zhpooer.github.io/2014/06/18/photoshop%E9%92%A2%E7%AC%94%E5%B7%A5%E5%85%B7/</loc>
-    <lastmod>2014-06-18T06:17:51.000Z</lastmod>
   </url>
   
   <url>

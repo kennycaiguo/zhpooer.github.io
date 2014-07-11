@@ -96,7 +96,7 @@
     </p>
   <p class="article-time">
     <time datetime="2014-06-18T06:17:51.000Z" itemprop="datePublished">6月 18 2014</time>
-    更新日期:<time datetime="2014-06-18T08:20:49.000Z" itemprop="dateModified">6月 18 2014</time>
+    更新日期:<time datetime="2014-07-09T09:19:02.000Z" itemprop="dateModified">7月 9 2014</time>
     
   </p>
 </header>
@@ -105,7 +105,7 @@
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">画出虚线</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-p-"><span class="toc-number">2.</span> <span class="toc-text">钢笔工具(P)</span></a></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">画出虚线</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-p-"><span class="toc-number">2.</span> <span class="toc-text">钢笔工具(P)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">四把锁头</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">4.</span> <span class="toc-text">图层蒙版</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">5.</span> <span class="toc-text">通道</span></a></li></ol>
 		</div>
 		
 		<h1 id="-">画出虚线</h1>
@@ -149,6 +149,54 @@
 <li>平滑点, 两条杠杆保持在同一条直线上</li>
 <li>贝塞尔点, 两条杠杆, 不在同一条直线上</li>
 </ol>
+<h1 id="-">四把锁头</h1>
+<ol>
+<li>锁定透明像素, 像素分为: 普通像素和透明像素. 只能对普通像素进行操作</li>
+<li>锁定像素, 锁定普通像素和透明像素, 不能用画笔工具进行任何操作</li>
+<li>锁定位置, 不能使用 v 移动工具进行拖动, 但是在有选区情况下是可以拖动的</li>
+<li>锁定全部</li>
+</ol>
+<p><code>alt + shift + 退格</code> 填充前景色到有普通像素的区域</p>
+<p><code>ctrl + shift + 退格</code> 填充背景色到有普通像素的区域</p>
+<h1 id="-">图层蒙版</h1>
+<p>控制画面的显示和隐藏, 从而实现图像合成等操作</p>
+<ol>
+<li>选择图层</li>
+<li>点击<code>图像蒙版</code>按钮</li>
+<li>选择蒙版的白板</li>
+<li>使用画笔操作, 黑色代表隐藏, 白色代表显示</li>
+</ol>
+<p><code>shift+click</code>暂时关闭蒙版</p>
+<p><code>alt+click</code>在画面内显示蒙版上的黑白关系</p>
+<p>应用蒙版</p>
+<p>可以用蒙版的方式进行, 无损抠图, 保留了图片的所有像素</p>
+<p>可以使用双蒙版, 使用钢笔工具进行操作</p>
+<p><code>ctrl + g</code> 选中的图层形成组</p>
+<p>可以在组上添加蒙版进行控制</p>
+<p>图像的分辨率(像素每英寸ppi):</p>
+<ul>
+<li>72, 屏幕显示的分辨率</li>
+<li>300, 印刷品的分辨率</li>
+</ul>
+<p>图层样式斜面和浮雕</p>
+<ol>
+<li>外斜面, 自身不动, 外面动</li>
+<li>内斜面, 自身动, 外面不动</li>
+<li>斜面浮雕, 外斜面 + 内斜面</li>
+<li>枕状浮雕, 向下凹陷</li>
+<li>描边浮雕, 结合图层像是下的描边效果</li>
+</ol>
+<p>复制图层样式, <code>alt + l + y + c</code> , <code>alt + l + y + p</code></p>
+<p>清除图层样式, <code>alt + l + y + a</code> </p>
+<h1 id="-">通道</h1>
+<p>RGB颜色模式下: 4个通道层</p>
+<ul>
+<li>RGB,专色通道: 用来承载专色通道上的颜色信息, 用黑白显示相应的颜色信息<ul>
+<li>黑色不显示, 白色显示</li>
+</ul>
+</li>
+<li>综合通道: 显示最终画面信息</li>
+</ul>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -201,7 +249,7 @@
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">画出虚线</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-p-"><span class="toc-number">2.</span> <span class="toc-text">钢笔工具(P)</span></a></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">画出虚线</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-p-"><span class="toc-number">2.</span> <span class="toc-text">钢笔工具(P)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">四把锁头</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">4.</span> <span class="toc-text">图层蒙版</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">5.</span> <span class="toc-text">通道</span></a></li></ol>
   </div>
 
 <div id="asidepart">
@@ -245,6 +293,8 @@
 		
 			<li><a href="/tags/StringBuffer/" title="StringBuffer">StringBuffer<sup>1</sup></a></li>
 		
+			<li><a href="/tags/activiti/" title="activiti">activiti<sup>2</sup></a></li>
+		
 			<li><a href="/tags/cookie/" title="cookie">cookie<sup>1</sup></a></li>
 		
 			<li><a href="/tags/css/" title="css">css<sup>1</sup></a></li>
@@ -252,8 +302,6 @@
 			<li><a href="/tags/dom4j/" title="dom4j">dom4j<sup>1</sup></a></li>
 		
 			<li><a href="/tags/dtd/" title="dtd">dtd<sup>1</sup></a></li>
-		
-			<li><a href="/tags/eclipse/" title="eclipse">eclipse<sup>1</sup></a></li>
 		
 		</ul>
 </div>

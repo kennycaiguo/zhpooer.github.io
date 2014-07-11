@@ -1,0 +1,1215 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>传智播客day52-Activiti项目实例 | Poe&#39;s World</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="zhpooer">
+    
+    <meta name="description" content="实现步骤
+
+绘制流程图(eclipse插件)
+准备业务模型, 只要保证模块CRUD基础功能都能使用
+流程部署部署管理
+发布新流程(文件上传)
+部署管理(删除部署)
+流程定义管理(查看规则流程图, 历史查看)
+
+
+任务查看(私有/共有任务查看)
+查看任务(办理任务, 接受任务)
+查看当前流程图
+
+
+任">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="Poe&#39;s World" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="Poe&#39;s World" title="Poe&#39;s World"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Poe&#39;s World">Poe&#39;s World</a></h1>
+				<h2 class="blog-motto">竹杖芒鞋轻胜马，一蓑烟雨任平生</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/english-monthly">英语角</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:zhpooer.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/07/05/传智播客day52-activiti项目实例/" title="传智播客day52-Activiti项目实例" itemprop="url">传智播客day52-Activiti项目实例</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://zhpooer.github.io" title="zhpooer">zhpooer</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2014-07-05T01:11:56.000Z" itemprop="datePublished">7月 5 2014</time>
+    更新日期:<time datetime="2014-07-07T02:16:35.000Z" itemprop="dateModified">7月 7 2014</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">实现步骤</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#activiti-ssh-"><span class="toc-number">2.</span> <span class="toc-text">Activiti和SSH集成</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">启动流程</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">4.</span> <span class="toc-text">请假流程启动</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">5.</span> <span class="toc-text">任务管理</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">5.1.</span> <span class="toc-text">查看当前流程图</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">6.</span> <span class="toc-text">办理任务</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">7.</span> <span class="toc-text">完成任务</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">8.</span> <span class="toc-text">流程监听器完成业务操作</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">9.</span> <span class="toc-text">多出口任务</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">10.</span> <span class="toc-text">完成任务</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">11.</span> <span class="toc-text">批注添加</span></a></li></ol>
+		</div>
+		
+		<h1 id="-">实现步骤</h1>
+<ol>
+<li>绘制流程图(eclipse插件)</li>
+<li>准备业务模型, 只要保证模块CRUD基础功能都能使用</li>
+<li>流程部署部署管理<ol>
+<li>发布新流程(文件上传)</li>
+<li>部署管理(删除部署)</li>
+<li>流程定义管理(查看规则流程图, 历史查看)</li>
+</ol>
+</li>
+<li>任务查看(私有/共有任务查看)<ol>
+<li>查看任务(办理任务, 接受任务)</li>
+<li>查看当前流程图</li>
+</ol>
+</li>
+<li>任务办理</li>
+<li>监听器, 完成业务动态办理</li>
+</ol>
+<p>扩展任务</p>
+<ol>
+<li>多出口任务</li>
+<li>批注的添加和查看</li>
+</ol>
+<h1 id="activiti-ssh-">Activiti和SSH集成</h1>
+<p>集成的核心, 把对应框架的核心类交给Spring管理
+(如果有事务或者数据源, 也得交给Spring管理)</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"processEngineConfiguration"</span> <span class="attribute">class</span>=<span class="value">"org.activiti.spring.SpringProcessEngineConfiguration"</span>&gt;</span>
+    <span class="comment">&lt;!-- 数据源  --&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"dataSource"</span> <span class="attribute">ref</span>=<span class="value">"dataSource"</span>&gt;</span><span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+    <span class="comment">&lt;!-- 建表策略 --&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"databaseSchemaUpdate"</span> <span class="attribute">value</span>=<span class="value">"true"</span>&gt;</span> <span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+    <span class="comment">&lt;!-- 事务 --&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"transactionManager"</span> <span class="attribute">ref</span>=<span class="value">"transactionManager"</span>&gt;</span><span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">bean</span>&gt;</span>
+<span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"processEngine"</span> <span class="attribute">class</span>=<span class="value">"org.activiti.spring.ProcessEngineFactoryBean"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"processEngineConfiguration"</span> <span class="attribute">ref</span>=<span class="value">"processEngineConfiguration"</span>&gt;</span><span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">bean</span>&gt;</span>
+<span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"repositoryService"</span> <span class="attribute">factory-bean</span>=<span class="value">"processEngine"</span> <span class="attribute">factory-method</span>=<span class="value">"getRepositoryService"</span>&gt;</span><span class="tag">&lt;/<span class="title">bean</span>&gt;</span>
+<span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"taskService"</span> <span class="attribute">factory-bean</span>=<span class="value">"processEngine"</span> <span class="attribute">factory-method</span>=<span class="value">"getTaskService"</span>&gt;</span><span class="tag">&lt;/<span class="title">bean</span>&gt;</span>
+<span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"runtimeService"</span> <span class="attribute">factory-bean</span>=<span class="value">"processEngine"</span> <span class="attribute">factory-method</span>=<span class="value">"getRuntimeService"</span>&gt;</span><span class="tag">&lt;/<span class="title">bean</span>&gt;</span>
+<span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"historyService"</span> <span class="attribute">factory-bean</span>=<span class="value">"processEngine"</span> <span class="attribute">factory-method</span>=<span class="value">"getHistoryService"</span>&gt;</span><span class="tag">&lt;/<span class="title">bean</span>&gt;</span>
+<span class="comment">&lt;!-- action --&gt;</span>
+<span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"workflowAction"</span> <span class="attribute">class</span>=<span class="value">"WorkFlowAction"</span> <span class="attribute">scope</span>=<span class="value">"prototype"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"workflowService"</span> <span class="attribute">ref</span>=<span class="value">"workflowService"</span>&gt;</span><span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">bean</span>&gt;</span>
+<span class="comment">&lt;!-- service --&gt;</span>
+<span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"workflowService"</span> <span class="attribute">class</span>=<span class="value">"WorkFlowServiceImpl"</span> &gt;</span>
+    
+<span class="tag">&lt;/<span class="title">bean</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<p>activiti具有额外功能,定时器</p>
+<p>控制器 action 功能,获取页面取得的参数</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+</pre></td><td class="code"><pre>
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WorkFlowServiceImpl</span> <span class="keyword">implements</span> <span class="title">IWorkFlowService</span> {</span>
+    <span class="annotation">@Resource</span> <span class="keyword">private</span> RepositoryService repositoryService;
+    
+    <span class="keyword">public</span> String <span class="title">newDeployment</span>(String processName, File processFile){
+        DeploymentBuilder builder = repositoryService.createDepoyment();
+        InputStream in = <span class="keyword">new</span> FileinputStream(processFile);
+        ZipInputStream zipInputStream = <span class="keyword">new</span> ZipinputStream(in);
+        builder.name(processName)
+               .addZipInputStream(zipInputStream);
+        builder.deploy();
+    }
+    <span class="keyword">public</span> List&lt;Deployment&gt; <span class="title">getAllDeployments</span>(){
+        <span class="keyword">return</span> repositoryService.createDeploymentQeury()
+                     .orderbyDeploymentTime()
+                     .desc().list()
+    }
+    <span class="keyword">public</span> List&lt;&gt; <span class="title">getAllDeploymentDefinitions</span>(){
+        <span class="keyword">return</span> repositoryService.createProcessDefinitionQuery().orderbyKey().asc().orderbyversion.dsc().list()
+    }
+}
+
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WorkFlowAction</span> <span class="keyword">extends</span> <span class="title">BaseAction</span>{</span>
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String LIST = <span class="string">"list"</span>;
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String MAIN = <span class="string">"main"</span>
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String DEPLOY_SUCCESS = <span class="string">"deploy_success"</span>;
+    
+    <span class="keyword">private</span> IWorkFlowService workFlowService;    
+    <span class="keyword">public</span> String <span class="title">execute</span>(){
+        List&lt;Depoyment&gt; ds = workFlowservice.getAllDeployments();
+        putContext(<span class="string">"ds"</span>, ds);
+
+        List&lt;ProcessDefinition&gt; pds = workFlowservice.getAllProcessDefinitions();
+        putContext(<span class="string">"pds"</span>, pds);
+        
+        <span class="keyword">return</span> SUCCESS;
+    }
+    privatge String name;
+    <span class="keyword">private</span> File file;
+    <span class="keyword">public</span> String <span class="title">newDeplyment</span>(){
+        workflowService.newDeployment(name, file);
+        <span class="keyword">return</span> ;
+    }
+}
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre>&lt;action <span class="property">name</span>=<span class="string">"workflow_*"</span> <span class="type">class</span>=<span class="string">"workflowAction"</span> method=<span class="string">"{1}"</span>&gt;
+    &lt;<span class="constant">result</span>&gt; /WEB-INF/views/workflow/deployment.jsp &lt;/<span class="constant">result</span>&gt;
+    &lt;<span class="constant">result</span> <span class="property">name</span>=<span class="string">"deploy_success"</span> type=<span class="string">"redirectAction"</span>&gt;
+        workflow.action
+    &lt;/<span class="constant">result</span>&gt;
+&lt;/action&gt;
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- deployment.jsp --&gt;</span>
+<span class="comment">&lt;!-- 部署信息查看 --&gt;</span>
+<span class="tag">&lt;<span class="title">table</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">tr</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">th</span>&gt;</span>编号<span class="tag">&lt;/<span class="title">th</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">th</span>&gt;</span>名称<span class="tag">&lt;/<span class="title">th</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">th</span>&gt;</span>发布时间<span class="tag">&lt;/<span class="title">th</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">th</span>&gt;</span>操作<span class="tag">&lt;/<span class="title">th</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">s:iterator</span> <span class="attribute">value</span>=<span class="value">"#ds"</span> &gt;</span>
+        <span class="tag">&lt;<span class="title">tr</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">td</span>&gt;</span> <span class="tag">&lt;<span class="title">s:property</span> <span class="attribute">value</span>=<span class="value">"id"</span>&gt;</span><span class="tag">&lt;/<span class="title">s:property</span>&gt;</span> <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">td</span>&gt;</span> <span class="tag">&lt;<span class="title">s:property</span> <span class="attribute">value</span>=<span class="value">"name"</span>&gt;</span><span class="tag">&lt;/<span class="title">s:property</span>&gt;</span> <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">td</span>&gt;</span>
+<span class="tag">&lt;<span class="title">s:date</span> <span class="attribute">name</span>=<span class="value">"deploymentTime"</span> <span class="attribute">format</span>=<span class="value">"yyyy-MM-dd"</span> <span class="attribute">hh:mm:ss</span>=<span class="value">""</span>&gt;</span><span class="tag">&lt;/<span class="title">s:date</span>&gt;</span>
+            <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">td</span>&gt;</span> 删除 <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">s:iterator</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">table</span>&gt;</span>
+
+<span class="comment">&lt;!-- 流程定义信息查看 --&gt;</span>
+<span class="tag">&lt;<span class="title">table</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">tr</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">th</span>&gt;</span>编号<span class="tag">&lt;/<span class="title">th</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">th</span>&gt;</span>名称<span class="tag">&lt;/<span class="title">th</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">th</span>&gt;</span>Key<span class="tag">&lt;/<span class="title">th</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">th</span>&gt;</span>版本<span class="tag">&lt;/<span class="title">th</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">th</span>&gt;</span>部署id<span class="tag">&lt;/<span class="title">th</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">th</span>&gt;</span>规则文件名<span class="tag">&lt;/<span class="title">th</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">th</span>&gt;</span>规则图片名<span class="tag">&lt;/<span class="title">th</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">th</span>&gt;</span>操作<span class="tag">&lt;/<span class="title">th</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">s:iterator</span> <span class="attribute">value</span>=<span class="value">"#pds"</span> &gt;</span>
+        <span class="tag">&lt;<span class="title">tr</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">td</span>&gt;</span> <span class="tag">&lt;<span class="title">s:property</span> <span class="attribute">value</span>=<span class="value">"id"</span>&gt;</span><span class="tag">&lt;/<span class="title">s:property</span>&gt;</span> <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">td</span>&gt;</span> <span class="tag">&lt;<span class="title">s:property</span> <span class="attribute">value</span>=<span class="value">"name"</span>&gt;</span><span class="tag">&lt;/<span class="title">s:property</span>&gt;</span> <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">td</span>&gt;</span> <span class="tag">&lt;<span class="title">s:property</span> <span class="attribute">value</span>=<span class="value">"key"</span>&gt;</span><span class="tag">&lt;/<span class="title">s:property</span>&gt;</span> <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">td</span>&gt;</span> <span class="tag">&lt;<span class="title">s:property</span> <span class="attribute">value</span>=<span class="value">"version"</span>&gt;</span><span class="tag">&lt;/<span class="title">s:property</span>&gt;</span> <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">td</span>&gt;</span> <span class="tag">&lt;<span class="title">s:property</span> <span class="attribute">value</span>=<span class="value">"deploymentId"</span>&gt;</span><span class="tag">&lt;/<span class="title">s:property</span>&gt;</span> <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">td</span>&gt;</span> <span class="tag">&lt;<span class="title">s:property</span> <span class="attribute">value</span>=<span class="value">"resourceName"</span>&gt;</span><span class="tag">&lt;/<span class="title">s:property</span>&gt;</span> <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">td</span>&gt;</span> <span class="tag">&lt;<span class="title">s:property</span> <span class="attribute">value</span>=<span class="value">"diagramResourceName"</span>&gt;</span><span class="tag">&lt;/<span class="title">s:property</span>&gt;</span> <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">td</span>&gt;</span> 查看规则流程图 查看历史 <span class="tag">&lt;/<span class="title">td</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">tr</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">s:iterator</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">table</span>&gt;</span>
+<span class="comment">&lt;!-- 上传流程图 --&gt;</span>
+
+<span class="tag">&lt;<span class="title">s:form</span> <span class="attribute">action</span>=<span class="value">"workflow_newDeployment"</span> <span class="attribute">enctype</span>=<span class="value">"multipart/form-data"</span>&gt;</span>
+    流程名称:
+    <span class="tag">&lt;<span class="title">s:textfield</span> <span class="attribute">name</span>=<span class="value">"name"</span>&gt;</span><span class="tag">&lt;/<span class="title">s:textfield</span>&gt;</span>
+    文件文件:
+    <span class="tag">&lt;<span class="title">s:file</span> <span class="attribute">name</span>=<span class="value">"file"</span>&gt;</span><span class="tag">&lt;/<span class="title">s:file</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">s:submit</span> <span class="attribute">value</span>=<span class="value">"上传流程"</span>&gt;</span><span class="tag">&lt;/<span class="title">s:submit</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">s:form</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<h1 id="-">启动流程</h1>
+<p>需要思考的问题</p>
+<ol>
+<li>如何通过业务对象启动对应的流程<pre><code> 让业务对象的特性和流程的Key有一定关系
+ 可以以业务类的类名作为流程的key
+</code></pre></li>
+<li>流程运行过程中需要些什么(流程变量)</li>
+<li>如何根据流程找到业务对象<pre><code> 根据id和类名
+</code></pre></li>
+<li><p>如何根据业务对象找到流程(流程实例), 根据 &quot;businessKey&quot;, 业务键</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="comment">// businessKey = classname + id</span>
+<span class="comment">// processDefinitionKey 和 businessKey 是唯一约束</span>
+runtimeService.startProcessInstanceByKey(processDefinitionKey, businessKey, variables);
+runtimeService.createProcessInstanceQuery()
+</pre></td></tr></table></figure>
+</li>
+<li><p>面对流程修改的解决方案</p>
+<pre><code> 不严重: 老流程按照老规则流转, 新流程按照新规则流转
+ 严重: 冻结老流程, 不允许老流程再进行审批, 所有的类似流程都按照新规则进行流转
+</code></pre></li>
+</ol>
+<h1 id="-">请假流程启动</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+</pre></td><td class="code"><pre><span class="comment">// LeaveBillAction, 启动请假业务流程</span>
+<span class="keyword">public</span> String <span class="title">startProcess</span>(){
+    <span class="comment">// 获取业务对象ID</span>
+    <span class="comment">// 调用业务逻辑</span>
+    leaveBillService.startProcess(id);
+}
+
+<span class="keyword">public</span> LeaveBillServiceImpl extends ILeaveBillService{
+    <span class="comment">// 启动流程</span>
+    <span class="comment">//   修改业务对象状态</span>
+    <span class="comment">//   封装流程需要参数</span>
+    <span class="comment">//   启动流程</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">startProcess</span>(Long id){
+        LeaveBill bill = <span class="keyword">get</span>(id);
+        <span class="keyword">if</span>(bill!=<span class="keyword">null</span>) {
+            bill.setState(<span class="number">1</span>);
+            update(bill);
+
+            Map&lt;String, Object&gt; vars = <span class="keyword">new</span> HashMap&lt;String, Object&gt;();
+            vars.put(<span class="string">"inputUser"</span>, bill.getUser());
+            vars.put(<span class="string">"days"</span>, bill.getDays());
+            vars.put(<span class="string">"id"</span>, bill.getId());
+            vars.put(<span class="string">"class"</span>, bill.getClass().getSimpleName());
+            
+            <span class="comment">// 启动流程</span>
+            String processKey = bill.getClass().getSimpleName();
+            workflowService.startProcess(processKey, vars);
+        }
+    }
+}
+
+<span class="comment">// workflowService</span>
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">startProcess</span>(String processKey, Map vars){
+    String businessKey = processKey + <span class="string">"."</span> + <span class="keyword">var</span>.<span class="keyword">get</span>(<span class="string">"id"</span>);
+    runtimeService.startProcessInstanceByKey(processKey, businessKey, vars);
+}
+</pre></td></tr></table></figure>
+
+<h1 id="-">任务管理</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="code"><pre><span class="comment">// WorkFlowAction</span>
+<span class="keyword">public</span> String <span class="title">listTask</span>(){
+    Employee currentUser = session.<span class="keyword">get</span>(<span class="string">"loginUser"</span>);
+    <span class="keyword">if</span>(currentUser != <span class="keyword">null</span>) {
+        <span class="comment">// 私有任务查看</span>
+        List&lt;Task&gt; pTasks = workflowService.getPersonalTask(currentUser.getName());
+    }
+    <span class="comment">// 公有任务查看</span>
+    <span class="keyword">return</span> LIST_TASK; <span class="comment">// task.jsp, 办理, 查看当前流程图</span>
+}
+
+<span class="comment">// workflowService</span>
+<span class="keyword">public</span> List <span class="title">getPersonalTask</span>(String assinee) {
+    taskService.createTaskQuery()...;
+}
+</pre></td></tr></table></figure>
+
+<h2 id="-">查看当前流程图</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+</pre></td><td class="code"><pre><span class="comment">// workflowAction</span>
+<span class="keyword">public</span> Strinig <span class="title">viewCurrentImage</span>(){ <span class="comment">// type=stream</span>
+    ProcessDefinition pd = workflowService.getProcessDefinitionByTaskId(taskId);
+    resourceName = pd.getDiagramName();
+    deploymentId = pd.getDeploymentId();
+    
+    <span class="comment">// 获取坐标, x: activity.x; y: activity.y; width & height</span>
+    Map&lt;String, Object&gt; currentActivityCoordinates =
+        workflowService.getCurrentActivityCoordinates(taskId);
+    putContext(asc, currentActivityCoordinates);
+    <span class="keyword">return</span> CURRENT_IMAGE;  <span class="comment">// return current.jsp &lt;img src=resource.../&gt;</span>
+}
+
+<span class="comment">// workflowService</span>
+<span class="keyword">public</span> ProcessDefinition <span class="title">getProcessDefinitionByTaskId</span>(String taskId){
+    Task task = getTask(taskId);
+    String processDefinitionId = task.getProcessDefinitionId();
+    <span class="keyword">return</span> repositoryService.createProcessDefinitionQuery()
+             .processDefinitionId(processDefinitionId);
+}
+
+<span class="keyword">public</span> ActivityImpl <span class="title">getActivity</span>(String taskId){
+    
+    Task task = getTask(taskId);
+    <span class="comment">// 通过taskId 获取 Execution</span>
+    Execution execution = getExecution(task.getExcutionId());
+    String activityId = execution.getActivityId();
+
+    <span class="comment">// 由与活动对象访问特别频繁, 所以设计者就把Activity信息放入了缓存中</span>
+    <span class="comment">// 而创建XXQuery对象, 只是进行了sql拼装, 只能到数据库汇总查询 获取不到缓存中的内容</span>
+    <span class="comment">// 所以下面这一句不行</span>
+    <span class="comment">// ProcessDefinitionEntity pd = getProcessDefinitionByTaskId(taskId);</span>
+    ProcessDefinitionEntity pd = repositoryService.getProcessDefinition(task.getProcessDefinitionId);
+    ActivityImpl activity = pd.findActivity(activityId)
+    <span class="keyword">return</span> ActivityImpl;
+}
+
+<span class="keyword">public</span> Execution <span class="title">getExecution</span>(String executionId) {
+    <span class="keyword">return</span> runtimeService.createExecutionQeury().excutionId(executionId);
+}
+<span class="keyword">public</span> Task <span class="title">getTask</span>(String taskId){
+    <span class="keyword">return</span> taskService.createTaskQeury()...;
+}
+</pre></td></tr></table></figure>
+
+<p><img src="/img/activiti_api.png" alt="关系图"></p>
+<h1 id="-">办理任务</h1>
+<p>在任务列表中, 提供一个 &quot;办理任务&quot; 按钮, 打开后打开任务表单,
+同时, 在表单的最下方提供&quot;办理任务&quot;操作</p>
+<p>在办理任务过程中, 如何找到业务表单?</p>
+<ul>
+<li>解决方案一(动态): 在task节点上, 制定&quot;表单属性&quot;, 存入规则, 在办理当前任务时,
+可以根据预先制定的表单项, 通过HTML DOM动态生成任务表单</li>
+<li>解决方案二(静态): 预先制定好任务表单(HTML或者JSP页面), 通过form key 属性,
+和这个表单建立关联<pre><code>  taskForm.jsp, 这个表单需要业务数据
+  **.audit.action 在每一个业务控制器中, 提供audit方法,
+  由此方法加载业务数据, 然后返回业务对象相关流程表单
+</code></pre></li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+</pre></td><td class="code"><pre><span class="comment">// formKey: leaveBillAudit.action</span>
+<span class="comment">// workflowAction</span>
+<span class="keyword">public</span> <span class="built_in">String</span> viewTaskForm(){
+    <span class="comment">// 通过taskId获取 formKey</span>
+    <span class="built_in">String</span> formKey <span class="subst">=</span> workflowService<span class="built_in">.</span>getTaskFormKey(taskId);
+    putContext(<span class="string">"formUrl"</span>, formKey <span class="subst">+</span> <span class="string">"?id="</span> <span class="subst">+</span> objId <span class="subst">+</span> <span class="string">"&taskId="</span> <span class="subst">+</span> taskId);
+    Long objId <span class="subst">=</span> workflowService<span class="built_in">.</span>getObjId(<span class="built_in">String</span> taskId);
+    <span class="keyword">return</span> TASK_FORM; <span class="comment">// redirectAction ${formUrl}_audit.action</span>
+}
+
+<span class="comment">// workflowService</span>
+<span class="keyword">public</span> <span class="built_in">String</span> getTaskFormKey(<span class="built_in">String</span> taskId) {
+    Task task <span class="subst">=</span> getTask(taskId);
+    <span class="built_in">String</span> processDefinitionId <span class="subst">=</span> task<span class="built_in">.</span>getProcessDefinitionId();
+    <span class="built_in">String</span> taskDefinitionKey <span class="subst">=</span> task<span class="built_in">.</span>getTaskDefinitionKey();
+    <span class="built_in">String</span> formKey <span class="subst">=</span> formSservice<span class="built_in">.</span>getTaskFormKey(processDefinitionId, taskDefinitionKey);
+    <span class="comment">// 方式二:</span>
+    <span class="comment">// formService.getTaskFormData(taskId);</span>
+    <span class="comment">// formKey = formData.getFormKey();</span>
+    <span class="keyword">return</span> formKey;
+}
+
+<span class="keyword">public</span> Long getObjId(<span class="built_in">String</span> taskId) {
+    <span class="built_in">String</span> variableName <span class="subst">=</span> <span class="string">"objId"</span>;
+    <span class="keyword">return</span> taskService<span class="built_in">.</span>getVariable(taskId, variableName);
+    <span class="comment">// 方式二:</span>
+    <span class="comment">// 通过task获取流程实例</span>
+    <span class="comment">// 获取businessKey &gt;&gt; leabeBill.5, 截取</span>
+}
+
+<span class="comment">// leaveBillAction</span>
+<span class="keyword">public</span> <span class="built_in">String</span> audit(){
+    <span class="comment">// 获取需要加载业务对象的唯一标识</span>
+    <span class="comment">// 加载业对象</span>
+    <span class="comment">// 放入值栈</span>
+}
+</pre></td></tr></table></figure>
+
+<h1 id="-">完成任务</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre><span class="comment">// workflowActioin</span>
+<span class="keyword">public</span> String <span class="title">completeTask</span>(){
+    workflowService.completeTask(String taskId);
+    <span class="keyword">return</span> TASK; <span class="comment">// workflow_listtask.action</span>
+}
+
+<span class="comment">// workflowService</span>
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">completeTask</span>(String taskId) {
+    taskService.complete(taskId);
+}
+</pre></td></tr></table></figure>
+
+<h1 id="-">流程监听器完成业务操作</h1>
+<p>任务监听器</p>
+<ol>
+<li>创建一个普通类来充当监听器, 需要实现TaskListener接口</li>
+<li>实现notify方法的逻辑</li>
+<li>需要把它们配置到流程中任务节点上</li>
+</ol>
+<p>执行监听器</p>
+<ol>
+<li>创建一个普通类充当监听器, 需要实现ExecutionListener接口</li>
+<li>实现notify方法的逻辑</li>
+<li>需要把它们配置到流程中的任意节点上</li>
+</ol>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+</pre></td><td class="code"><pre><span class="comment">// 自动安排审核者</span>
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MangerTaskHandler</span> <span class="keyword">implements</span> <span class="title">TaskListener</span> {</span>
+    <span class="annotation">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">notify</span>(DelegateTask delegateTask) {
+        <span class="comment">// 获取到任务申请人的唯一标识</span>
+        String inputUser = delegateTask.getVariable(<span class="string">"inputUser"</span>);
+        WebApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(servletContext);
+        IEmployService employeeService = ctx.getBean(<span class="string">"employeeService"</span>,IEmployeeService.class);
+        <span class="comment">// 通过唯一标识获取相对应的对象</span>
+        Employee emp = employeeService.getEmployeeByName(inputUser);
+        <span class="comment">//通过员工对象获取,他的经理</span>
+        Employee manager = emp.getManager();
+        delegateTask.setAssignee(manager.getName());
+    }
+}
+
+<span class="comment">// 请假流程结束时自动审批处理</span>
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LeaveBillAuditHandler</span> <span class="keyword">implements</span> <span class="title">ExcutionListener</span> {</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">notify</span>(){
+        <span class="comment">// 获取请假单Id</span>
+        Long objId = execution.getVariable(<span class="string">"objId"</span>);
+        <span class="comment">// 获取需要请假服务对象</span>
+        ILeaveBillService leaveBillService = get;
+        <span class="comment">// 调用请假服务对象上的审核逻辑, 完成请假单状态的修改</span>
+        leaveBillService.auditing(objId); 
+    }
+}
+
+<span class="comment">// leaveBillService</span>
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">auditing</span>(Long id) {
+    LeaveBill bill = get(id);
+    <span class="keyword">if</span>(bill!=<span class="keyword">null</span>) {
+        bill.setState(<span class="number">2</span>);
+        update(bill);
+    }
+}
+</pre></td></tr></table></figure>
+
+<h1 id="-">多出口任务</h1>
+<ol>
+<li>根据当前任务的出口集合<code>condition${outgoing==&quot;驳回&quot;}</code>, 动态生成按钮</li>
+<li>根据选择的按钮, 执行需要的流程<ol>
+<li>传入用户选择的决策信息</li>
+<li>把决策的信息放入流程变量中</li>
+<li>在规则流程中, 根据不同的流程出口, 指定流转条件</li>
+</ol>
+</li>
+</ol>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+</pre></td><td class="code"><pre><span class="comment">// LeaveBillAction</span>
+<span class="keyword">public</span> <span class="built_in">String</span> audit(){
+    <span class="built_in">List</span><span class="subst">&lt;</span><span class="built_in">String</span><span class="subst">&gt;</span> transNames <span class="subst">=</span> leaveBillService<span class="built_in">.</span>getTasksTransNames(taskId);
+    putContext(<span class="string">"transNames"</span>, transNames); <span class="comment">// &lt;submit value="${transname}" name="${tansname}"&gt;</span>
+}
+
+<span class="comment">// leaveBillService</span>
+<span class="keyword">public</span> <span class="built_in">List</span><span class="subst">&lt;</span><span class="built_in">String</span><span class="subst">&gt;</span> getTasksTransNames(taskId) {
+    <span class="comment">// 业务对象职责单一</span>
+    <span class="keyword">return</span> workflowService<span class="built_in">.</span>getTaskTransNames(taskId);
+}
+
+<span class="comment">// workflowservice</span>
+<span class="keyword">public</span> <span class="built_in">List</span><span class="subst">&lt;</span><span class="built_in">String</span><span class="subst">&gt;</span> getTaskTransNames(taskId){
+    <span class="built_in">List</span><span class="subst">&lt;</span><span class="built_in">String</span><span class="subst">&gt;</span> <span class="built_in">list</span> <span class="subst">=</span> <span class="literal">new</span> ArrayList<span class="subst">&lt;&gt;</span>();
+    <span class="comment">// 通过任务获取活动对象</span>
+    ActivityImpl acitivy <span class="subst">=</span> this<span class="built_in">.</span>getActivityByTaskId(taskId);
+    <span class="comment">// 通过活动获取所有的出口信息集合</span>
+    <span class="built_in">List</span><span class="subst">&lt;</span>PvmProcessElement<span class="subst">&gt;</span> trans <span class="subst">=</span> acitvity<span class="built_in">.</span>getOutgoingTransition();
+    <span class="comment">// 迭代所有出口信息集合, 获取出每个出口的name属性值</span>
+    for(PvmTransition trans : trans) {
+         <span class="built_in">String</span> name <span class="subst">=</span> (<span class="built_in">String</span>) trans<span class="built_in">.</span>getProperty(<span class="string">"name"</span>);
+         <span class="keyword">if</span>(StringUtils<span class="built_in">.</span>isNotBlank(name)){
+             <span class="built_in">list</span><span class="built_in">.</span>add(name);
+         }
+    }
+    <span class="comment">// 兼容, 如果集合到这里长度还是为0, 那么说明,</span>
+    <span class="comment">// 当前任务的出口只有一个, 并且这个出口是没有name属性值的</span>
+    <span class="keyword">if</span>(<span class="built_in">list</span><span class="built_in">.</span>size()<span class="subst">==</span><span class="number">0</span>) {
+        <span class="built_in">list</span><span class="built_in">.</span>add(<span class="string">"办理任务"</span>);
+    }
+    returnt <span class="built_in">list</span>;
+}
+</pre></td></tr></table></figure>
+
+<h1 id="-">完成任务</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre><span class="comment">// workflowAction</span>
+<span class="keyword">public</span> String <span class="title">completeTask</span>() {
+    workflowService.completeTask(taskId, outGoing);
+}
+
+<span class="comment">// workflowService</span>
+<span class="keyword">public</span> String <span class="title">completeTask</span>(String taskId, String outGoing){
+    taskService.setVariable(taskId, <span class="string">"outGoing"</span>, outGoing);
+    taskService.complete(taskId);
+}
+</pre></td></tr></table></figure>
+
+<h1 id="-">批注添加</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addComment</span>() {
+    String taskId = <span class="string">"608"</span>;
+    Task task = taskService.createTaskQeury().taskId(taskId).singleResult();
+    <span class="comment">// 设置用户上下文</span>
+    Authentication.setAuthenticatedUserId(<span class="string">'张三'</span>);
+    taskService.addComment(taskId, task.getProcessInstanceId(),<span class="string">"天气不错"</span>);
+}
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">getComment</span>() {
+    String taskId = <span class="number">607</span>;
+    List&lt;Comment&gt; taskComments = taskService.getTaskComments(taskId);
+    <span class="comment">// TODO</span>
+}
+</pre></td></tr></table></figure>
+
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/传智播客/">传智播客</a><a href="/tags/activiti/">activiti</a>
+  </div>
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://zhpooer.github.io/2014/07/05/传智播客day52-activiti项目实例/" data-title="传智播客day52-Activiti项目实例 | Poe&#39;s World" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2014/07/05/haskell趣学-更多monad/" title="haskell趣学-更多Monad">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  haskell趣学-更多Monad</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2014/07/02/传智播客day51-activiti-工作流/"  title="传智播客day51-Activiti 工作流">
+ <strong>NEXT:</strong><br/> 
+ <span>传智播客day51-Activiti 工作流
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">实现步骤</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#activiti-ssh-"><span class="toc-number">2.</span> <span class="toc-text">Activiti和SSH集成</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">启动流程</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">4.</span> <span class="toc-text">请假流程启动</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">5.</span> <span class="toc-text">任务管理</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">5.1.</span> <span class="toc-text">查看当前流程图</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">6.</span> <span class="toc-text">办理任务</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">7.</span> <span class="toc-text">完成任务</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">8.</span> <span class="toc-text">流程监听器完成业务操作</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">9.</span> <span class="toc-text">多出口任务</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">10.</span> <span class="toc-text">完成任务</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">11.</span> <span class="toc-text">批注添加</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/AJAX/" title="AJAX">AJAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/DOM/" title="DOM">DOM<sup>2</sup></a></li>
+		
+			<li><a href="/tags/EL表达式/" title="EL表达式">EL表达式<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Hibernate/" title="Hibernate">Hibernate<sup>2</sup></a></li>
+		
+			<li><a href="/tags/HttpSession/" title="HttpSession">HttpSession<sup>1</sup></a></li>
+		
+			<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JSP/" title="JSP">JSP<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaBean/" title="JavaBean">JavaBean<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaScript/" title="JavaScript">JavaScript<sup>1</sup></a></li>
+		
+			<li><a href="/tags/SAX/" title="SAX">SAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletRequest/" title="ServletRequest">ServletRequest<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletResponse/" title="ServletResponse">ServletResponse<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Spring/" title="Spring">Spring<sup>1</sup></a></li>
+		
+			<li><a href="/tags/String/" title="String">String<sup>1</sup></a></li>
+		
+			<li><a href="/tags/StringBuffer/" title="StringBuffer">StringBuffer<sup>1</sup></a></li>
+		
+			<li><a href="/tags/activiti/" title="activiti">activiti<sup>2</sup></a></li>
+		
+			<li><a href="/tags/cookie/" title="cookie">cookie<sup>1</sup></a></li>
+		
+			<li><a href="/tags/css/" title="css">css<sup>1</sup></a></li>
+		
+			<li><a href="/tags/dom4j/" title="dom4j">dom4j<sup>1</sup></a></li>
+		
+			<li><a href="/tags/dtd/" title="dtd">dtd<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2014 
+		
+		<a href="http://zhpooer.github.io" target="_blank" title="zhpooer">zhpooer</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"zhpoooer"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>

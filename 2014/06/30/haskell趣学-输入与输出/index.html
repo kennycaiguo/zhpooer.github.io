@@ -1,0 +1,1195 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>haskell趣学-输入与输出 | Poe&#39;s World</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="zhpooer">
+    
+    <meta name="description" content="HelloWorld
+函数式语言, 一个函数不能改变状态(改变变量的内容),
+当一个函数会改变状态,  我们说这函数是由副作用的.
+如果我们用同样的参数调用两次同一个函数，它会回传相同的结果.
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="Poe&#39;s World" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="Poe&#39;s World" title="Poe&#39;s World"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Poe&#39;s World">Poe&#39;s World</a></h1>
+				<h2 class="blog-motto">竹杖芒鞋轻胜马，一蓑烟雨任平生</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/english-monthly">英语角</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:zhpooer.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/06/30/haskell趣学-输入与输出/" title="haskell趣学-输入与输出" itemprop="url">haskell趣学-输入与输出</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://zhpooer.github.io" title="zhpooer">zhpooer</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2014-06-30T07:12:13.000Z" itemprop="datePublished">6月 30 2014</time>
+    更新日期:<time datetime="2014-07-01T06:54:23.000Z" itemprop="dateModified">7月 1 2014</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#helloworld"><span class="toc-number">1.</span> <span class="toc-text">HelloWorld</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#let-binding"><span class="toc-number">1.1.</span> <span class="toc-text">let binding</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#io-"><span class="toc-number">1.2.</span> <span class="toc-text">io 语法糖</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">2.</span> <span class="toc-text">文件和字符流</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#interact"><span class="toc-number">2.1.</span> <span class="toc-text">interact</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.2.</span> <span class="toc-text">文件读写</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">命令行引数</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">4.</span> <span class="toc-text">乱数</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#bytstrings"><span class="toc-number">5.</span> <span class="toc-text">Bytstrings</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#readfile"><span class="toc-number">5.1.</span> <span class="toc-text">ReadFile</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">6.</span> <span class="toc-text">异常</span></a></li></ol>
+		</div>
+		
+		<h1 id="helloworld">HelloWorld</h1>
+<p>函数式语言, 一个函数不能改变状态(改变变量的内容),
+当一个函数会改变状态,  我们说这函数是由副作用的.
+如果我们用同样的参数调用两次同一个函数，它会回传相同的结果.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+</pre></td><td class="code"><pre>main = putStrLn <span class="string">"hello, world"</span>
+
+&gt; ghc --make helloworld
+&gt; ./helloworld
+
+-- putStrLn 接受一个字符串并回传一个<span class="keyword">I</span>/<span class="keyword">O</span> action,
+-- 这<span class="keyword">I</span>/<span class="keyword">O</span> action包含了() 形态
+-- 一个 <span class="keyword">I</span>/<span class="keyword">O</span> action 是一个会造成副作用的动作，
+-- 常是指读取输入或输出到屏幕，同时也代表会回传某些值
+-- 一个 <span class="keyword">I</span>/<span class="keyword">O</span> action 会在我们把它绑定到 main
+-- 这个名字并且执行程序的时候触发。
+ghci&gt; :t putStrLn 
+putStrLn :: <span class="keyword">String</span> -&gt; IO () 
+ghci&gt; :t putStrLn <span class="string">"hello, world"</span> 
+putStrLn <span class="string">"hello, world"</span> :: IO ()
+
+-- 用 do 并且接着一连串指令, 每一步都是一个 <span class="keyword">I</span>/<span class="keyword">O</span> action
+-- 所有的<span class="keyword">I</span>/<span class="keyword">O</span> action 用 do 绑定在一起变成了一个大的<span class="keyword">I</span>/<span class="keyword">O</span> action
+-- main 的型态永远都是 main :: IO something
+main = do 
+    putStrLn <span class="string">"Hello, what's your name?"</span> 
+    name &lt;- getLine 
+    putStrLn (<span class="string">"Hey "</span> ++ name ++ <span class="string">", you rock!"</span>)
+
+-- main函数中执行一个 <span class="keyword">I</span>/<span class="keyword">O</span> action getLine 并将它的结果绑定到 name 这个名字
+ghci&gt; :t getLine 
+getLine :: IO <span class="keyword">String</span>
+</pre></td></tr></table></figure>
+
+<p>I/O action 就是一个盒子, 它会和真实世界交互(副作用),
+一旦它带了某些数据给你，打开盒子的唯一办法就是用 <code>&lt;-</code>.
+而且如果我们要从 I/O action 拿出某些数据，
+就一定同时要在另一个 I/O action 中</p>
+<p>getLine 在这样的意义下是不纯粹的,
+因为执行两次的时候它没办法保证会回传一样的值,
+所以它需要在一个<code>IO</code>的形态构建子中,
+任何一段程序一旦依赖着 I/O 数据的话，
+那段程序也会被视为 I/O code</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre>-- 错误用法, getLine 是<span class="keyword">I</span>/<span class="keyword">O</span> Action
+nameTag = <span class="string">"Hello, my name is "</span> ++ getLine
+
+-- 可以用 do 来串接 <span class="keyword">I</span>/<span class="keyword">O</span> actions，
+-- 再用 do 来串接这些串接起来的 <span class="keyword">I</span>/<span class="keyword">O</span> actions。
+-- 不过只有最外面的 <span class="keyword">I</span>/<span class="keyword">O</span> action 被指定给 main 才会触发执行。
+main = do
+    _ &lt;- putStrLn <span class="string">"hello, what's your name?"</span>
+    name &lt;- getLine
+    putStrLn(<span class="string">"Hey"</span> ++ name ++ <span class="string">", you rock"</span>)
+</pre></td></tr></table></figure>
+
+<h2 id="let-binding">let binding</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre><span class="title">main</span> = <span class="keyword">do</span> 
+    putStrLn <span class="string">"What's your first name?"</span> 
+    firstName &lt;- getLine 
+    putStrLn <span class="string">"What's your last name?"</span> 
+    lastName &lt;- getLine 
+    <span class="keyword">let</span> bigFirstName = map toUpper firstName 
+        bigLastName = map toUpper lastName 
+    putStrLn $ <span class="string">"hey "</span> ++ bigFirstName ++ <span class="string">" "</span> ++ bigLastName ++ <span class="string">", how are you?"</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+</pre></td><td class="code"><pre><span class="comment">-- return "haha" 的型态是 IO String</span>
+main = <span class="built_in">do</span> 
+    <span class="built_in">line</span> &lt;- getLine 
+    <span class="keyword">if</span> <span class="constant">null</span> <span class="built_in">line</span> 
+        <span class="keyword">then</span> <span class="constant">return</span> () 
+        <span class="keyword">else</span> <span class="built_in">do</span> 
+            putStrLn $ reverseWords <span class="built_in">line</span> 
+            main  <span class="comment">-- 递归调用了main</span>
+            
+<span class="comment">-- reverseWords st = unwords (map reverse (words st)) </span>
+reverseWords :: String -&gt; String 
+reverseWords = unwords . map reverse . <span class="keyword">words</span>
+
+<span class="comment">-- return 与 &lt;- 作用相反。return 把 value 装进盒子中，</span>
+<span class="comment">-- 而 &lt;- 将 value 从盒子拿出来，并绑定一个名称</span>
+main = <span class="built_in">do</span> 
+    <span class="operator">a</span> &lt;- <span class="constant">return</span> <span class="string">"hell"</span> 
+    b &lt;- <span class="constant">return</span> <span class="string">"yeah!"</span> 
+    putStrLn $ <span class="operator">a</span> ++ <span class="string">" "</span> ++ b
+
+<span class="comment">-- 另一个版本</span>
+main = <span class="built_in">do</span> 
+    let <span class="operator">a</span> = <span class="string">"hell"</span> 
+        b = <span class="string">"yeah"</span> 
+    putStrLn $ <span class="operator">a</span> ++ <span class="string">" "</span> ++ b
+
+main = <span class="built_in">do</span> print True
+          putChar <span class="string">'a'</span>
+          c &lt;- getChar
+</pre></td></tr></table></figure>
+
+<h2 id="io-">io 语法糖</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+</pre></td><td class="code"><pre>main = <span class="keyword">do</span> 
+    c &lt;- getChar 
+    <span class="keyword">if</span> c /= <span class="string">' '</span> 
+        <span class="keyword">then</span> <span class="keyword">do</span> 
+            putChar c 
+            main 
+        <span class="keyword">else</span> <span class="keyword">return</span> ()
+
+-- <span class="keyword">when</span> :: Monad m<span class="function"> =&gt;</span> Bool<span class="function"> -&gt;</span> m <span class="function"><span class="params">()</span> -&gt;</span> m ()
+<span class="reserved">import</span> Control.Monad 
+main = <span class="keyword">do</span> 
+    c &lt;- getChar 
+    <span class="keyword">when</span> (c /= <span class="string">' '</span>) $ <span class="keyword">do</span> 
+        putChar c 
+        main
+        
+-- sequence :: Monad m<span class="function"> =&gt;</span> [m a]<span class="function"> -&gt;</span> m [a]
+main = <span class="keyword">do</span> 
+    rs &lt;- sequence [getLine, getLine, getLine] 
+    <span class="built_in">print</span> rs
+
+ghci&gt; sequence (map <span class="built_in">print</span> [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>])  sequence (map <span class="built_in">print</span> [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>])
+-- 同上
+ghci&gt; mapM <span class="built_in">print</span> [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]     
+<span class="number">1</span> 
+<span class="number">2</span> 
+<span class="number">3</span> 
+[(),(),()]
+-- 同上, 把结果丢掉
+ghci&gt; mapM_ <span class="built_in">print</span> [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>] 
+<span class="number">1</span> 
+<span class="number">2</span> 
+<span class="number">3</span>
+
+-- forever :: Monad m<span class="function"> =&gt;</span> m a<span class="function"> -&gt;</span> m b, 不断的要用户输入东西
+<span class="reserved">import</span> Control.Monad 
+<span class="reserved">import</span> Data.Char 
+ 
+main = forever $ <span class="keyword">do</span> 
+    putStr <span class="string">"Give me some input: "</span> 
+    l &lt;- getLine 
+    putStrLn $ map toUpper l
+
+-- forM
+<span class="reserved">import</span> Control.Monad 
+main = <span class="keyword">do</span>  
+    colors &lt;- forM [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>] (\a<span class="function"> -&gt;</span> <span class="keyword">do</span> 
+        putStrLn $ <span class="string">"Which color do you associate with the number "</span> ++ show a ++ <span class="string">"?"</span> 
+        color &lt;- getLine 
+        <span class="keyword">return</span> color) 
+    putStrLn <span class="string">"The colors that you associate with 1, 2, 3 and 4 are: "</span> 
+    mapM putStrLn colors
+</pre></td></tr></table></figure>
+
+<h1 id="-">文件和字符流</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+</pre></td><td class="code"><pre><span class="comment">-- cat haiku.txt | ./capslocker</span>
+import Control.Monad
+import Data.Char
+main = <span class="keyword">forever</span> $ <span class="built_in">do</span>
+    putStr <span class="string">"Give me some input: "</span>
+    l &lt;- getLine
+    putStrLn $ map <span class="built_in">toUpper</span> l
+
+<span class="comment">-- 用 getContents 简单</span>
+<span class="comment">-- getContents 也是惰性 I/O, 会一行一行读入并输出大写的版本</span>
+import Data.Char
+main = <span class="built_in">do</span>
+    contents &lt;- getContents
+    putStr (map <span class="built_in">toUpper</span> contents)
+    
+<span class="comment">-- 运行效果</span>
+<span class="comment">-- &gt; $ ./capslocker </span>
+<span class="comment">-- &gt; hey ho </span>
+<span class="comment">-- &gt; HEY HO </span>
+<span class="comment">-- &gt; lets go </span>
+<span class="comment">-- &gt; LETS GO</span>
+
+main = <span class="built_in">do</span> 
+    contents &lt;- getContents 
+    putStr (shortLinesOnly contents) 
+shortLinesOnly :: String -&gt; String 
+shortLinesOnly input =  
+    let allLines = <span class="keyword">lines</span> input 
+        shortLines = <span class="built_in">filter</span> (\<span class="built_in">line</span> -&gt; <span class="built_in">length</span> <span class="built_in">line</span> &lt; <span class="number">10</span>) allLines 
+        <span class="built_in">result</span> = unlines shortLines 
+    <span class="operator">in</span> <span class="built_in">result</span>
+</pre></td></tr></table></figure>
+
+<h2 id="interact">interact</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="code"><pre><span class="comment">-- interact :: (String -&gt; String) -&gt; IO ()</span>
+<span class="comment">-- 从用户获取一行一行的输入，</span>
+<span class="comment">-- 然后丢回根据那一行运算的结果，再拿取另一行</span>
+<span class="comment">-- 这是基于 haskell 的惰性i/o</span>
+main = interact shortLinesOnly 
+ 
+shortLinesOnly :: String -&gt; String 
+shortLinesOnly input =  
+    let allLines = <span class="keyword">lines</span> input 
+        shortLines = <span class="built_in">filter</span> (\<span class="built_in">line</span> -&gt; <span class="built_in">length</span> <span class="built_in">line</span> &lt; <span class="number">10</span>) allLines 
+        <span class="built_in">result</span> = unlines shortLines 
+    <span class="operator">in</span> <span class="built_in">result</span>
+
+<span class="comment">-- 一行搞定</span>
+main = interact $ unlines . <span class="built_in">filter</span> ((&lt;<span class="number">10</span>) . <span class="built_in">length</span>) . <span class="keyword">lines</span>
+</pre></td></tr></table></figure>
+
+<h2 id="-">文件读写</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+</pre></td><td class="code"><pre><span class="title">main</span> = <span class="keyword">do</span>    
+    withFile <span class="string">"something.txt"</span> <span class="type">ReadMode</span> (\handle -&gt; <span class="keyword">do</span>   
+        hSetBuffering handle $ <span class="type">BlockBuffering</span> (<span class="type">Just</span> <span class="number">2048</span>)   
+        contents &lt;- hGetContents handle   
+        putStr contents)
+
+<span class="import"><span class="keyword">import</span> System.IO   </span>
+<span class="import"><span class="keyword">import</span> System.Directory   </span>
+<span class="import"><span class="keyword">import</span> Data.List   </span>
+   
+<span class="title">main</span> = <span class="keyword">do</span>         
+    handle &lt;- openFile <span class="string">"todo.txt"</span> <span class="type">ReadMode</span>   
+    (tempName, tempHandle) &lt;- openTempFile <span class="string">"."</span> <span class="string">"temp"</span>   
+    contents &lt;- hGetContents handle   
+    <span class="keyword">let</span> todoTasks = lines contents      
+    numberedTasks = zipWith (\n line -&gt; show n ++ <span class="string">" - "</span> ++ line) [<span class="number">0.</span>.] todoTasks      
+    putStrLn <span class="string">"These are your TO-DO items:"</span>   
+    putStr $ unlines numberedTasks   
+    putStrLn <span class="string">"Which one do you want to delete?"</span>      
+    numberString &lt;- getLine      
+    <span class="keyword">let</span> number = read numberString      
+    newTodoItems = delete (todoTasks !! number) todoTasks      
+    hPutStr tempHandle $ unlines newTodoItems   
+    hClose handle   
+    hClose tempHandle   
+    removeFile <span class="string">"todo.txt"</span>   
+    renameFile tempName <span class="string">"todo.txt"</span>
+</pre></td></tr></table></figure>
+
+<h1 id="-">命令行引数</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+</pre></td><td class="code"><pre>import System.Environment    
+import System.Directory   
+import System.IO   
+import Data.List   
+   
+<span class="built_in">dispatch</span> :: [(String, [String] -&gt; IO ())]   
+<span class="built_in">dispatch</span> =  [ (<span class="string">"add"</span>, <span class="built_in">add</span>)   
+            , (<span class="string">"view"</span>, view)   
+            , (<span class="string">"remove"</span>, remove)   
+            ]
+
+main = <span class="built_in">do</span>   
+    (<span class="command"><span class="keyword">command</span>:<span class="title">args</span>) &lt;- <span class="title">getArgs</span>   </span>
+    let (Just action) = lookup <span class="command"><span class="keyword">command</span> <span class="title">dispatch</span>   </span>
+    action args V
+
+<span class="built_in">add</span> :: [String] -&gt; IO ()   
+<span class="built_in">add</span> [fileName, todoItem] = appendFile fileName (todoItem ++ <span class="string">"\n"</span>)
+
+view :: [String] -&gt; IO ()   
+view [fileName] = <span class="built_in">do</span>   
+    contents &lt;- readFile fileName   
+    let todoTasks = <span class="keyword">lines</span> contents   
+    numberedTasks = zipWith (\n <span class="built_in">line</span> -&gt; show n ++ <span class="string">" - "</span> ++ <span class="built_in">line</span>) [<span class="number">0.</span>.] todoTasks   
+    putStr $ unlines numberedTasks
+
+remove :: [String] -&gt; IO ()   
+remove [fileName, numberString] = <span class="built_in">do</span>   
+    handle &lt;- openFile fileName ReadMode   
+    (<span class="built_in">tempName</span>, tempHandle) &lt;- openTempFile <span class="string">"."</span> <span class="string">"temp"</span>   
+    contents &lt;- hGetContents handle   
+    let <span class="built_in">number</span> = <span class="built_in">read</span> numberString   
+        todoTasks = <span class="keyword">lines</span> contents   
+        newTodoItems = <span class="built_in">delete</span> (todoTasks !! <span class="built_in">number</span>) todoTasks   
+    hPutStr tempHandle $ unlines newTodoItems   
+    hClose handle   
+    hClose tempHandle   
+    removeFile fileName   
+    renameFile <span class="built_in">tempName</span> fileName
+</pre></td></tr></table></figure>
+
+<h1 id="-">乱数</h1>
+<p>Haskell 是一个纯粹的函数式语言, 是引用透明的.
+那代表你喂给一个函数相同的参数，不管怎么调用都是回传相同的结果.</p>
+<p>所以说在 Haskell 中，假如我们能作一个函数，
+他会接受一个具随机性的参数，然后根据那些信息还传一个数值。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="keyword">import</span> System.Random
+-- RandomGen <span class="keyword">type</span><span class="class"><span class="keyword">class</span> 是指那些可以当作乱源的型态。</span>
+-- 而Random <span class="keyword">type</span><span class="class"><span class="keyword">class</span> 则是可以装乱数的型态</span>
+random :: (RandomGen g, Random a) =&gt; g -&gt; (a, g)
+</pre></td></tr></table></figure>
+
+<p>在 System.Random 中有一个很酷的型态，叫做 StdGen，
+他是 RandomGen 的一个 instance。
+我们可以自己手动作一个 StdGen 也可以告诉系统给我们一个现成的。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+</pre></td><td class="code"><pre>ghci&gt; random (mkStdGen <span class="number">949488</span>) :: (Float, StdGen)   
+(<span class="number">0.8938442</span>,<span class="number">1597344447</span> <span class="number">1655838864</span>)   
+ghci&gt; random (mkStdGen <span class="number">949488</span>) :: (Bool, StdGen)   
+(<span class="literal">False</span>,<span class="number">1485632275</span> <span class="number">40692</span>)   
+ghci&gt; random (mkStdGen <span class="number">949488</span>) :: (<span class="built_in">Integer</span>, StdGen)   
+(<span class="number">1691547873</span>,<span class="number">1597344447</span> <span class="number">1655838864</span>)
+
+threeCoins :: StdGen -&gt; (Bool, Bool, Bool)   
+threeCoins gen =    
+    <span class="keyword">let</span> (firstCoin, newGen) = random gen   
+    (secondCoin, newGen<span class="comment">') = random newGen   </span>
+    (thirdCoin, newGen<span class="comment">') = random newGen'   </span>
+    <span class="keyword">in</span> (firstCoin, secondCoin, thirdCoin))
+
+-- 返回n个随机数
+ghci&gt; <span class="keyword">take</span> <span class="number">5</span> $ randoms (mkStdGen <span class="number">11</span>) :: [Int]   
+[-<span class="number">1807975507</span>,<span class="number">545074951</span>,-<span class="number">1015194702</span>,-<span class="number">1622477312</span>,-<span class="number">502893664</span>]   
+ghci&gt; <span class="keyword">take</span> <span class="number">5</span> $ randoms (mkStdGen <span class="number">11</span>) :: [Bool]   
+[<span class="literal">True</span>,<span class="literal">True</span>,<span class="literal">True</span>,<span class="literal">True</span>,<span class="literal">False</span>]   
+ghci&gt; <span class="keyword">take</span> <span class="number">5</span> $ randoms (mkStdGen <span class="number">11</span>) :: [Float]   
+[<span class="number">7.904789e-2</span>,<span class="number">0.62691015</span>,<span class="number">0.26363158</span>,<span class="number">0.12223756</span>,<span class="number">0.38291094</span>]
+
+-- 返回一定范围内的乱数
+ghci&gt; randomR (<span class="number">1</span>,<span class="number">6</span>) (mkStdGen <span class="number">359353</span>)   
+(<span class="number">6</span>,<span class="number">1494289578</span> <span class="number">40692</span>)   
+ghci&gt; randomR (<span class="number">1</span>,<span class="number">6</span>) (mkStdGen <span class="number">35935335</span>)   
+(<span class="number">3</span>,<span class="number">1250031057</span> <span class="number">40692</span>)
+
+-- 他会产生一连串在给定范围内的乱数
+ghci&gt; <span class="keyword">take</span> <span class="number">10</span> $ randomRs (<span class="comment">'a','z') (mkStdGen 3) :: [Char]</span>
+</pre></td></tr></table></figure>
+
+<p>以上, 程序永远都会回传同样的乱数, <code>getStdGen</code> 会生成一个真实的随机数</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+</pre></td><td class="code"><pre><span class="keyword">import</span> System<span class="built_in">.</span>Random
+<span class="subst">--</span> getStdGen 的 类型是 IO StdGen
+main <span class="subst">=</span> <span class="keyword">do</span>   
+    gen <span class="subst">&lt;-</span> getStdGen   
+    putStr $ <span class="keyword">take</span> <span class="number">20</span> (randomRs (<span class="string">'a'</span>,<span class="string">'z'</span>) gen)
+
+<span class="subst">--</span> 连续两次调用, 实际上会回传同样的 <span class="built_in">global</span> generator, 可以使用 newStdGen
+main <span class="subst">=</span> <span class="keyword">do</span>   
+    gen <span class="subst">&lt;-</span> getStdGen   
+    putStrLn $ <span class="keyword">take</span> <span class="number">20</span> (randomRs (<span class="string">'a'</span>,<span class="string">'z'</span>) gen)   
+    gen2 <span class="subst">&lt;-</span> getStdGen   
+    putStr $ <span class="keyword">take</span> <span class="number">20</span> (randomRs (<span class="string">'a'</span>,<span class="string">'z'</span>) gen2)
+
+<span class="subst">--</span> newStdGen 用法
+main <span class="subst">=</span> <span class="keyword">do</span>      
+    gen <span class="subst">&lt;-</span> getStdGen      
+    putStrLn $ <span class="keyword">take</span> <span class="number">20</span> (randomRs (<span class="string">'a'</span>,<span class="string">'z'</span>) gen)      
+    gen<span class="string">' &lt;- newStdGen   
+    putStr $ take 20 (randomRs ('</span>a<span class="string">','</span>z<span class="string">') gen'</span>)
+</pre></td></tr></table></figure>
+
+<h1 id="bytstrings">Bytstrings</h1>
+<p>List 是惰性的, 在读取大文件的时候会出现性能问题.
+所以就有了 <code>bytestrings</code>, 他的每一个元素都是一个 byte(8 bits),
+而且分为不同程度的惰性: strict 和 lazy.</p>
+<p>strict: 放在 <code>Data.ByteString</code>, 完全没有惰性, 一个
+strict bytesstring 代表一连串 bytes.</p>
+<p>lazy: 放在 <code>Data.ByteString.Lazy</code>, 就有惰性, 但是没有 List 极端.
+他是一个 chunk(64k) 一个 chunk 地去读取, 不会使用大量的记忆体.</p>
+<p>lazy 和 strict 名字一样, 所以可以这么使用</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+</pre></td><td class="code"><pre><span class="comment">-- lazy</span>
+<span class="import"><span class="keyword">import</span> <span class="keyword">qualified</span> Data.ByteString.Lazy <span class="keyword">as</span> B</span>
+<span class="comment">-- strict</span>
+<span class="import"><span class="keyword">import</span> <span class="keyword">qualified</span> Data.ByteString <span class="keyword">as</span> S</span>
+
+
+<span class="comment">-- pack :: [Word8] -&gt; ByteString</span>
+<span class="title">ghci</span>&gt; <span class="type">B</span>.pack [<span class="number">99</span>,<span class="number">97</span>,<span class="number">110</span>]   
+<span class="type">Chunk</span> <span class="string">"can"</span> <span class="type">Empty</span>   
+<span class="title">ghci</span>&gt; <span class="type">B</span>.pack [<span class="number">98.</span><span class="number">.120</span>]   
+<span class="type">Chunk</span> <span class="string">"bcdefghijklmnopqrstuvwx"</span> <span class="type">Empty</span>
+
+<span class="comment">-- unpack 是 pack 的相反，他把一个 bytestring 变成一个 byte list。</span>
+<span class="comment">-- fromChunks 接受一串 strict 的 bytestrings 并把他变成一串 lazy bytestring。</span>
+<span class="comment">-- toChunks 接受一个 lazy bytestrings 并将他变成一串 strict bytestrings。</span>
+<span class="title">ghci</span>&gt; <span class="type">B</span>.fromChunks [<span class="type">S</span>.pack [<span class="number">40</span>,<span class="number">41</span>,<span class="number">42</span>], <span class="type">S</span>.pack [<span class="number">43</span>,<span class="number">44</span>,<span class="number">45</span>], <span class="type">S</span>.pack [<span class="number">46</span>,<span class="number">47</span>,<span class="number">48</span>]]   
+<span class="type">Chunk</span> <span class="string">"()*"</span> (<span class="type">Chunk</span> <span class="string">"+,-"</span> (<span class="type">Chunk</span> <span class="string">"./0"</span> <span class="type">Empty</span>))
+
+<span class="comment">-- cons 是 lazy 的操作，即使 bytestring 的第一个 chunk 不是满的，他也会新增一个 chunk</span>
+<span class="comment">-- 当你要插入很多 bytes 可以使用 strict 版本的 cons，也就是 cons'</span>
+<span class="title">ghci</span>&gt; <span class="type">B</span>.cons <span class="number">85</span> $ <span class="type">B</span>.pack [<span class="number">80</span>,<span class="number">81</span>,<span class="number">82</span>,<span class="number">84</span>]   
+<span class="type">Chunk</span> <span class="string">"U"</span> (<span class="type">Chunk</span> <span class="string">"PQRT"</span> <span class="type">Empty</span>)   
+<span class="title">ghci</span>&gt; <span class="type">B</span>.cons' <span class="number">85</span> $ <span class="type">B</span>.pack [<span class="number">80</span>,<span class="number">81</span>,<span class="number">82</span>,<span class="number">84</span>]   
+<span class="type">Chunk</span> <span class="string">"UPQRT"</span> <span class="type">Empty</span>   
+<span class="title">ghci</span>&gt; foldr <span class="type">B</span>.cons <span class="type">B</span>.empty [<span class="number">50.</span><span class="number">.60</span>]   
+<span class="type">Chunk</span> <span class="string">"2"</span> (<span class="type">Chunk</span> <span class="string">"3"</span> (<span class="type">Chunk</span> <span class="string">"4"</span> (<span class="type">Chunk</span> <span class="string">"5"</span> (<span class="type">Chunk</span> <span class="string">"6"</span> (<span class="type">Chunk</span> <span class="string">"7"</span> (<span class="type">Chunk</span> <span class="string">"8"</span> (<span class="type">Chunk</span> <span class="string">"9"</span> (<span class="type">Chunk</span> <span class="string">":"</span> (<span class="type">Chunk</span> <span class="string">";"</span> (<span class="type">Chunk</span> <span class="string">"&lt;"</span>   
+<span class="type">Empty</span>))))))))))   
+<span class="title">ghci</span>&gt; foldr <span class="type">B</span>.cons' <span class="type">B</span>.empty [<span class="number">50.</span><span class="number">.60</span>]   
+<span class="type">Chunk</span> <span class="string">"23456789:;&lt;"</span> <span class="type">Empty</span>
+</pre></td></tr></table></figure>
+
+<h2 id="readfile">ReadFile</h2>
+<p>如果你用了 strict bytestring 来读取一个文件，
+他会把文件内容都读进记忆体中。
+而使用 lazy bytestring，他则会读取 chunks。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre><span class="import"><span class="keyword">import</span> System.Environment   </span>
+<span class="import"><span class="keyword">import</span> <span class="keyword">qualified</span> Data.ByteString.Lazy <span class="keyword">as</span> B   </span>
+   
+<span class="title">main</span> = <span class="keyword">do</span>   
+    (fileName1:fileName2:_) &lt;- getArgs   
+    copyFile fileName1 fileName2   
+ 
+<span class="title">copyFile</span> :: <span class="type">FilePath</span> -&gt; <span class="type">FilePath</span> -&gt; <span class="type">IO</span> ()   
+<span class="title">copyFile</span> source dest = <span class="keyword">do</span>   
+    contents &lt;- <span class="type">B</span>.readFile source   
+    <span class="type">B</span>.writeFile dest contents
+</pre></td></tr></table></figure>
+
+<h1 id="-">异常</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>ghci&gt; <span class="number">4</span> `<span class="operator">div</span>` <span class="number">0</span>   
+*** Exception: <span class="built_in">divide</span> <span class="keyword">by</span> <span class="constant">zero</span>   
+ghci&gt; head []   
+*** Exception: Prelude.head: <span class="constant">empty</span> list
+</pre></td></tr></table></figure>
+
+<p>pure code 能丢出 Exception，但 Exception 只能在 I/O section 中被接到
+（也就是在 main 的 do block 中）
+这是因为在 pure code 中你不知道什么东西什么时候会被 evaluate。
+因为 lazy 特性的缘故，程序没有一个特定的执行顺序，但 I/O code 有。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+</pre></td><td class="code"><pre><span class="import"><span class="keyword">import</span> System.Environment   </span>
+<span class="import"><span class="keyword">import</span> System.IO   </span>
+<span class="import"><span class="keyword">import</span> System.IO.Error   </span>
+   
+<span class="title">main</span> = toTry `catch` handler   
+ 
+<span class="title">toTry</span> :: <span class="type">IO</span> ()   
+<span class="title">toTry</span> = <span class="keyword">do</span> (fileName:_) &lt;- getArgs   
+            contents &lt;- readFile fileName   
+            putStrLn $ <span class="string">"The file has "</span> ++ show (length (lines contents)) ++ <span class="string">" lines!"</span>
+<span class="comment">-- 抛出用户错误            </span>
+<span class="comment">-- ioError $ userError "remote computer unplugged!"</span>
+<span class="title">handler</span> :: <span class="type">IOError</span> -&gt; <span class="type">IO</span> ()   
+<span class="title">handler</span> e   
+    | isDoesNotExistError e =
+        <span class="keyword">case</span> ioeGetFileName e <span class="keyword">of</span> <span class="type">Just</span> path -&gt; putStrLn $ <span class="string">"Whoops! File does not exist at: "</span> ++ path   
+                                 <span class="type">Nothing</span> -&gt; putStrLn <span class="string">"Whoops! File does not exist at unknown location!"</span> 
+    | isFullError e = freeSomeSpace   
+    | isIllegalOperation e = notifyCops   
+    | otherwise = ioError e
+</pre></td></tr></table></figure>
+
+<p>程序里面有好几个运作在 IOError 上的 I/O action，当其中一个没有被 evaluate 成 True 时，就会掉到下一个 guard。
+这些 predicate 分别为：</p>
+<pre><code>isAlreadyExistsError
+
+isDoesNotExistError
+
+isFullError
+
+isEOFError
+
+isIllegalOperation
+
+isPermissionError
+
+isUserError
+</code></pre><figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre>main = <span class="keyword">do</span> toTry `<span class="javascript"><span class="keyword">catch</span></span>` handler1   
+          thenTryThis `<span class="javascript"><span class="keyword">catch</span></span>` handler2   
+          launchRockets  -- 其他处理函数
+</pre></td></tr></table></figure>
+
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/haskell/">haskell</a>
+  </div>
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://zhpooer.github.io/2014/06/30/haskell趣学-输入与输出/" data-title="haskell趣学-输入与输出 | Poe&#39;s World" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2014/07/01/haskell趣学-functors-applicative&monoids/" title="haskell趣学-Functors Applicative&amp;Monoids">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  haskell趣学-Functors Applicative&amp;Monoids</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2014/06/29/haskell趣学-构造type和typeclass/"  title="haskell趣学-构造Type和Typeclass">
+ <strong>NEXT:</strong><br/> 
+ <span>haskell趣学-构造Type和Typeclass
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#helloworld"><span class="toc-number">1.</span> <span class="toc-text">HelloWorld</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#let-binding"><span class="toc-number">1.1.</span> <span class="toc-text">let binding</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#io-"><span class="toc-number">1.2.</span> <span class="toc-text">io 语法糖</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">2.</span> <span class="toc-text">文件和字符流</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#interact"><span class="toc-number">2.1.</span> <span class="toc-text">interact</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.2.</span> <span class="toc-text">文件读写</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">命令行引数</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">4.</span> <span class="toc-text">乱数</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#bytstrings"><span class="toc-number">5.</span> <span class="toc-text">Bytstrings</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#readfile"><span class="toc-number">5.1.</span> <span class="toc-text">ReadFile</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">6.</span> <span class="toc-text">异常</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/AJAX/" title="AJAX">AJAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/DOM/" title="DOM">DOM<sup>2</sup></a></li>
+		
+			<li><a href="/tags/EL表达式/" title="EL表达式">EL表达式<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Hibernate/" title="Hibernate">Hibernate<sup>2</sup></a></li>
+		
+			<li><a href="/tags/HttpSession/" title="HttpSession">HttpSession<sup>1</sup></a></li>
+		
+			<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JSP/" title="JSP">JSP<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaBean/" title="JavaBean">JavaBean<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaScript/" title="JavaScript">JavaScript<sup>1</sup></a></li>
+		
+			<li><a href="/tags/SAX/" title="SAX">SAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletRequest/" title="ServletRequest">ServletRequest<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletResponse/" title="ServletResponse">ServletResponse<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Spring/" title="Spring">Spring<sup>1</sup></a></li>
+		
+			<li><a href="/tags/String/" title="String">String<sup>1</sup></a></li>
+		
+			<li><a href="/tags/StringBuffer/" title="StringBuffer">StringBuffer<sup>1</sup></a></li>
+		
+			<li><a href="/tags/activiti/" title="activiti">activiti<sup>2</sup></a></li>
+		
+			<li><a href="/tags/cookie/" title="cookie">cookie<sup>1</sup></a></li>
+		
+			<li><a href="/tags/css/" title="css">css<sup>1</sup></a></li>
+		
+			<li><a href="/tags/dom4j/" title="dom4j">dom4j<sup>1</sup></a></li>
+		
+			<li><a href="/tags/dtd/" title="dtd">dtd<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2014 
+		
+		<a href="http://zhpooer.github.io" target="_blank" title="zhpooer">zhpooer</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"zhpoooer"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>

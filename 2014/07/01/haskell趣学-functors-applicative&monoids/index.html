@@ -1,0 +1,1263 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>haskell趣学-Functors Applicative&amp;Monoids | Poe&#39;s World</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="zhpooer">
+    
+    <meta name="description" content="Functors 是可以被 map over 的对象，
+像是 lists，Maybe，trees 等等。
+在 Haskell 中用 Functor 这个 typeclass 来描述他。
+这个 typeclass 只有一个 method，叫做 fmap，他的型态是
+fmap :: (a -&gt; b">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="Poe&#39;s World" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="Poe&#39;s World" title="Poe&#39;s World"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Poe&#39;s World">Poe&#39;s World</a></h1>
+				<h2 class="blog-motto">竹杖芒鞋轻胜马，一蓑烟雨任平生</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/english-monthly">英语角</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:zhpooer.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/07/01/haskell趣学-functors-applicative&monoids/" title="haskell趣学-Functors Applicative&amp;Monoids" itemprop="url">haskell趣学-Functors Applicative&amp;Monoids</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://zhpooer.github.io" title="zhpooer">zhpooer</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2014-07-01T07:09:10.000Z" itemprop="datePublished">7月 1 2014</time>
+    更新日期:<time datetime="2014-07-01T14:20:06.000Z" itemprop="dateModified">7月 1 2014</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#applicative-functors"><span class="toc-number">1.</span> <span class="toc-text">Applicative functors</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-newtype"><span class="toc-number">2.</span> <span class="toc-text">关键字 newtype</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#type-vs-newtype-vs-data"><span class="toc-number">2.1.</span> <span class="toc-text">type vs newtype vs data</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#monoids"><span class="toc-number">3.</span> <span class="toc-text">Monoids</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#list-monoid"><span class="toc-number">3.1.</span> <span class="toc-text">List Monoid</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#maybe-monoid"><span class="toc-number">3.2.</span> <span class="toc-text">Maybe monoid</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#using-monoids-to-fold-data-structures"><span class="toc-number">3.3.</span> <span class="toc-text">Using monoids to fold data structures</span></a></li></ol>
+		</div>
+		
+		<p>Functors 是可以被 map over 的对象，
+像是 lists，Maybe，trees 等等。
+在 Haskell 中用 Functor 这个 typeclass 来描述他。
+这个 typeclass 只有一个 method，叫做 fmap，他的型态是
+<code>fmap :: (a -&gt; b) -&gt; f a -&gt; f b</code></p>
+<p>把盒子里的东西取出来, 调用函数 <code>f</code>, 并放回去.
+至于如何取出来(List 是一个一个取出来, Maybe 取出可以取出的),
+是看 Functors 的具体实现类</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+</pre></td><td class="code"><pre><span class="reserved">import</span> Data.Char   
+<span class="reserved">import</span> Data.List   
+   
+main = <span class="keyword">do</span> line &lt;- fmap (intersperse <span class="string">'-'</span> . reverse . map toUpper) getLine   
+        putStrLn line
+
+-- (<span class="function">-&gt;</span>) r a 也可以是一个 Functor
+-- <span class="function"><span class="params">(a -&gt; b)</span> -&gt;</span> <span class="function"><span class="params">(r -&gt; a)</span> -&gt;</span> (r<span class="function"> -&gt;</span> b)
+-- 跟一个从 r 到 a 的 <span class="reserved">function</span>，并回传一个从 r 到 b 的 <span class="reserved">function</span>
+instance Functor ((<span class="function">-&gt;</span>) r) where   
+    fmap f g = (\x<span class="function"> -&gt;</span> f (g x))
+
+-- fmap = (.)
+ghci&gt; :t fmap (*<span class="number">3</span>) (+<span class="number">100</span>)   
+fmap <span class="function"><span class="params">(*<span class="number">3</span>)</span> <span class="params">(+<span class="number">100</span>)</span> :: <span class="params">(Num a)</span> =&gt;</span> a<span class="function"> -&gt;</span> a   
+ghci&gt; fmap (*<span class="number">3</span>) (+<span class="number">100</span>) <span class="number">1</span>   
+<span class="number">303</span>   
+ghci&gt; (*<span class="number">3</span>) `<span class="javascript">fmap</span>` (+<span class="number">100</span>) $ <span class="number">1</span>   
+<span class="number">303</span>   
+ghci&gt; (*<span class="number">3</span>) . (+<span class="number">100</span>) $ <span class="number">1</span>   
+<span class="number">303</span>   
+ghci&gt; fmap (show . (*<span class="number">3</span>)) (*<span class="number">100</span>) <span class="number">1</span>   
+<span class="string">"300"</span>
+</pre></td></tr></table></figure>
+
+<p>Haskell 的 function 实际上只接受一个参数。
+一个型态是 <code>a -&gt; b -&gt; c</code> 的函数实际上是接受 a
+然后回传 <code>b -&gt; c</code>，而 <code>b -&gt; c</code> 实际上接受一个 b 然后回传一个 c。
+如果我们用比较少的参数调用一个函数，
+他就会回传一个函数需要接受剩下的参数。
+所以 <code>a -&gt; b -&gt; c</code> 可以写成 <code>a -&gt; (b -&gt; c)</code></p>
+<p><code>fmap</code> 可以想象成 接受 function 并回传一个新的 function 的 function,
+回传的 function 接受一个 functor 并回传一个 functor</p>
+<p>他接受 <code>a -&gt; b</code> 并回传 <code>f a -&gt; f b</code>。这动作叫做 <em>lifting</em>, functor的柯里化</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+</pre></td><td class="code"><pre><span class="comment">-- fmap (*2) 接受一个 functor f，并回传一个基于数字的 functor</span>
+<span class="comment">-- 这个 functor 可以是 Maybe, Either String</span>
+ghci&gt; :t fmap (*<span class="number">2</span>)   
+fmap (*<span class="number">2</span>) :: (Num a, Functor f) =&gt; f a -&gt; f a
+<span class="comment">-- fmap (replicate 3) 可以接受一个基于任何型态的 functor，</span>
+<span class="comment">-- 并回传一个基于 list 的 functor</span>
+ghci&gt; :t fmap (replicate <span class="number">3</span>)   
+fmap (replicate <span class="number">3</span>) :: (Functor f) =&gt; f a -&gt; f [a]
+
+<span class="comment">-- 理解为柯里化</span>
+
+ghci&gt; fmap (replicate <span class="number">3</span>) [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>]   
+<span class="string">[[1,1,1],[2,2,2],[3,3,3],[4,4,4]]</span>   
+ghci&gt; fmap (replicate <span class="number">3</span>) (Just <span class="number">4</span>)   
+Just [<span class="number">4</span>,<span class="number">4</span>,<span class="number">4</span>]   
+ghci&gt; fmap (replicate <span class="number">3</span>) (Right <span class="string">"blah"</span>)   
+Right [<span class="string">"blah"</span>,<span class="string">"blah"</span>,<span class="string">"blah"</span>]   
+ghci&gt; fmap (replicate <span class="number">3</span>) Nothing   
+Nothing   
+ghci&gt; fmap (replicate <span class="number">3</span>) (Left <span class="string">"foo"</span>)   
+Left <span class="string">"foo"</span>
+</pre></td></tr></table></figure>
+
+<p>functor law 的第一条说明，如果我们对 functor 做 map id，
+那得到的新的 functor 应该要跟原来的一样。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="code"><pre>-- <span class="keyword">id</span> 只是 identity function，他只会把参数照原样丢出
+ghci&gt; fmap <span class="keyword">id</span> (Just <span class="number">3</span>)   
+Just <span class="number">3</span>   
+ghci&gt; <span class="keyword">id</span> (Just <span class="number">3</span>)   
+Just <span class="number">3</span>   
+ghci&gt; fmap <span class="keyword">id</span> [<span class="number">1.</span><span class="number">.5</span>]   
+[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>]   
+ghci&gt; <span class="keyword">id</span> [<span class="number">1.</span><span class="number">.5</span>]   
+[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>]   
+ghci&gt; fmap <span class="keyword">id</span> []   
+[]   
+ghci&gt; fmap <span class="keyword">id</span> Nothing   
+Nothing
+</pre></td></tr></table></figure>
+
+<p>functors的结合律(第二定律):
+<code>fmap (f . g) = fmap f . fmap g</code>, 
+<code>fmap (f . g) F = fmap f (fmap g F)</code></p>
+<p>如果遵守了 functor laws，我们知道对他做 fmap 不会做多余的事情，
+只是用一个函数做映射而已。
+这让写出来的代码足够抽象也容易扩展。
+因为我们可以用定律来推论类型的行为。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre><span class="comment">-- 违反定律的案例</span>
+<span class="typedef"><span class="keyword">data</span> <span class="type">CMaybe</span> a = <span class="type">CNothing</span> | <span class="type">CJust</span> <span class="type">Int</span> a <span class="keyword">deriving</span> <span class="container">(<span class="type">Show</span>)</span></span>
+<span class="class"><span class="keyword">instance</span> <span class="type">Functor</span> <span class="type">CMaybe</span> <span class="keyword">where</span></span>   
+    fmap f <span class="type">CNothing</span> = <span class="type">CNothing</span>   
+    fmap f (<span class="type">CJust</span> counter x) = <span class="type">CJust</span> (counter+<span class="number">1</span>) (f x)
+
+<span class="title">ghci</span>&gt; fmap id (<span class="type">CJust</span> <span class="number">0</span> <span class="string">"haha"</span>)   
+<span class="type">CJust</span> <span class="number">1</span> <span class="string">"haha"</span>   
+<span class="title">ghci</span>&gt; id (<span class="type">CJust</span> <span class="number">0</span> <span class="string">"haha"</span>)   
+<span class="type">CJust</span> <span class="number">0</span> <span class="string">"haha"</span>
+</pre></td></tr></table></figure>
+
+<h1 id="applicative-functors">Applicative functors</h1>
+<p>它的核心是包装函数, 供盒子调用, 如何调用是盒子的具体实现</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+</pre></td><td class="code"><pre><span class="class"><span class="keyword">class</span> <span class="container">(<span class="type">Functor</span> <span class="title">f</span>)</span> =&gt; <span class="type">Applicative</span> f <span class="keyword">where</span></span>
+    <span class="comment">-- 包装成`盒子`, 主要用作包装 函数</span>
+    pure :: a -&gt; f a
+    <span class="comment">-- 装在盒子里的是 一个柯里化的函数</span>
+    (&lt;*&gt;) :: f (a -&gt; b) -&gt; f a -&gt; f b
+<span class="class">
+<span class="keyword">instance</span> <span class="type">Applicative</span> <span class="type">Maybe</span> <span class="keyword">where</span></span>   
+    pure = <span class="type">Just</span>   
+    <span class="type">Nothing</span> &lt;*&gt; _ = <span class="type">Nothing</span>   
+    (<span class="type">Just</span> f) &lt;*&gt; something = fmap f something
+
+<span class="title">ghci</span>&gt; <span class="type">Just</span> (+<span class="number">3</span>) &lt;*&gt; <span class="type">Just</span> <span class="number">9</span>   
+<span class="type">Just</span> <span class="number">12</span>   
+<span class="title">ghci</span>&gt; pure (+<span class="number">3</span>) &lt;*&gt; <span class="type">Just</span> <span class="number">10</span>   
+<span class="type">Just</span> <span class="number">13</span>   
+<span class="title">ghci</span>&gt; pure (+<span class="number">3</span>) &lt;*&gt; <span class="type">Just</span> <span class="number">9</span>   
+<span class="type">Just</span> <span class="number">12</span>   
+<span class="title">ghci</span>&gt; <span class="type">Just</span> (++<span class="string">"hahah"</span>) &lt;*&gt; <span class="type">Nothing</span>   
+<span class="type">Nothing</span>   
+<span class="title">ghci</span>&gt; <span class="type">Nothing</span> &lt;*&gt; <span class="type">Just</span> <span class="string">"woot"</span>   
+<span class="type">Nothing</span>
+
+<span class="title">ghci</span>&gt; pure (+) &lt;*&gt; <span class="type">Just</span> <span class="number">3</span> &lt;*&gt; <span class="type">Just</span> <span class="number">5</span>   
+<span class="type">Just</span> <span class="number">8</span>   
+<span class="title">ghci</span>&gt; pure (+) &lt;*&gt; <span class="type">Just</span> <span class="number">3</span> &lt;*&gt; <span class="type">Nothing</span>   
+<span class="type">Nothing</span>   
+<span class="title">ghci</span>&gt; pure (+) &lt;*&gt; <span class="type">Nothing</span> &lt;*&gt; <span class="type">Just</span> <span class="number">5</span>   
+<span class="type">Nothing</span>
+</pre></td></tr></table></figure>
+
+<p><code>pure f &lt;*&gt; x</code> 等于 <code>fmap f x</code>, 中缀版的 <code>fmap</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre><span class="function"><span class="params">(&lt;$&gt;)</span> :: <span class="params">(Functor f)</span> =&gt;</span> <span class="function"><span class="params">(a -&gt; b)</span> -&gt;</span> f a<span class="function"> -&gt;</span> f b   
+f &lt;$&gt; x = fmap f x
+
+-- 如果三个 applicative functor, 可以写成 f &lt;$&gt; x &lt;*&gt; y &lt;*&gt; z。
+-- 如果参数是普通值的话。我们则写成 f x y z
+
+ghci&gt; (++) &lt;$&gt; Just <span class="string">"johntra"</span> &lt;*&gt; Just <span class="string">"volta"</span>   
+Just <span class="string">"johntravolta"</span>
+ghci&gt; (++) <span class="string">"johntra"</span> <span class="string">"volta"</span>   
+<span class="string">"johntravolta"</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+</pre></td><td class="code"><pre><span class="tag">ghci</span>&gt; <span class="tag">pure</span> "<span class="tag">Hey</span>" :: <span class="attr_selector">[String]</span>   
+<span class="attr_selector">["Hey"]</span>   
+<span class="tag">ghci</span>&gt; <span class="tag">pure</span> "<span class="tag">Hey</span>" :: <span class="tag">Maybe</span> <span class="tag">String</span>   
+<span class="tag">Just</span> "<span class="tag">Hey</span>"
+
+<span class="tag">--</span> <span class="tag">List</span> 可以当做一个容器
+<span class="tag">--</span> <span class="tag">List</span> <span class="tag">instance</span>: (&lt;*&gt;) :: <span class="attr_selector">[a -&gt; b]</span> <span class="tag">-</span>&gt; <span class="attr_selector">[a]</span> <span class="tag">-</span>&gt; <span class="attr_selector">[b]</span>
+<span class="tag">ghci</span>&gt; <span class="attr_selector">[(*0),(+100),(^2)]</span> &lt;*&gt; <span class="attr_selector">[1,2,3]</span>   
+<span class="attr_selector">[0,0,0,101,102,103,1,4,9]</span>
+<span class="tag">ghci</span>&gt; <span class="attr_selector">[(+),(*)]</span> &lt;*&gt; <span class="attr_selector">[1,2]</span> &lt;*&gt; <span class="attr_selector">[3,4]</span>   
+<span class="attr_selector">[4,5,5,6,3,4,6,8]</span>
+
+<span class="tag">ghci</span>&gt; <span class="attr_selector">[ x*y | x &lt;- [2,5,10]</span>, <span class="tag">y</span> &lt;<span class="tag">-</span> <span class="attr_selector">[8,10,11]</span>]      
+<span class="attr_selector">[16,20,22,40,50,55,80,100,110]</span>
+<span class="tag">--</span> 比较这两个方法
+<span class="tag">ghci</span>&gt; (*) &lt;$&gt; <span class="attr_selector">[2,5,10]</span> &lt;*&gt; <span class="attr_selector">[8,10,11]</span>   
+<span class="attr_selector">[16,20,22,40,50,55,80,100,110]</span>
+
+<span class="tag">ghci</span>&gt; <span class="tag">filter</span> (&gt;50) $ (*) &lt;$&gt; <span class="attr_selector">[2,5,10]</span> &lt;*&gt; <span class="attr_selector">[8,10,11]</span>   
+<span class="attr_selector">[55,80,100,110]</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+</pre></td><td class="code"><pre>instance Applicative IO where   
+    pure = <span class="constant">return</span>   
+    <span class="operator">a</span> &lt;*&gt; b = <span class="built_in">do</span>   
+        f &lt;- <span class="operator">a</span>   
+        x &lt;- b   
+        <span class="constant">return</span> (f x)
+
+myAction :: IO String   
+myAction = <span class="built_in">do</span>   
+    <span class="operator">a</span> &lt;- getLine   
+    b &lt;- getLine   
+    <span class="constant">return</span> $ <span class="operator">a</span> ++ b
+<span class="comment">-- 更加抽象了</span>
+myAction :: IO String   
+myAction = (++) &lt;$&gt; getLine &lt;*&gt; getLine
+
+main = <span class="built_in">do</span>   
+    <span class="operator">a</span> &lt;- (++) &lt;$&gt; getLine &lt;*&gt; getLine   
+    putStrLn $ <span class="string">"The two lines concatenated turn out to be: "</span> ++ <span class="operator">a</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+</pre></td><td class="code"><pre>instance Applicative ((<span class="function">-&gt;</span>) r) where
+    -- 包装函数, 永远返回这个函数(或值)
+    pure x = (\_<span class="function"> -&gt;</span> x)
+    -- 这里有点不理解!!, 这里的 f 应该是 a<span class="function"> -&gt;</span> a<span class="function"> -&gt;</span> a
+    f &lt;*&gt; g = \x<span class="function"> -&gt;</span> f x (g x)
+
+-- 当我们用 pure 将一个值包成 applicative functor 的时候，他产生的结果永远都会是那个值
+ghci&gt; (pure <span class="number">3</span>) <span class="string">"blah"</span>
+<span class="number">3</span>
+
+ghci&gt; :t (+) &lt;$&gt; (+<span class="number">3</span>) &lt;*&gt; (*<span class="number">100</span>)   
+<span class="function"><span class="params">(+)</span> &lt;<span class="title">$</span>&gt; <span class="params">(+<span class="number">3</span>)</span> &lt;*&gt; <span class="params">(*<span class="number">100</span>)</span> :: <span class="params">(Num a)</span> =&gt;</span> a<span class="function"> -&gt;</span> a
+-- 原理是左结合, 直觉可以理解为(<span class="number">5</span>+<span class="number">3</span>) + (<span class="number">5</span>*<span class="number">100</span>)
+ghci&gt; (+) &lt;$&gt; (+<span class="number">3</span>) &lt;*&gt; (*<span class="number">100</span>) $ <span class="number">5</span>   
+<span class="number">508</span>
+ghci&gt; (\x y z<span class="function"> -&gt;</span> [x,y,z]) &lt;$&gt; (+<span class="number">3</span>) &lt;*&gt; (*<span class="number">2</span>) &lt;*&gt; (/<span class="number">2</span>) $ <span class="number">5</span>   
+[<span class="number">8.0</span>,<span class="number">10.0</span>,<span class="number">2.5</span>]
+
+-- ZipList用法
+instance Applicative ZipList where   
+        pure x = ZipList (repeat x)   
+        ZipList fs &lt;*&gt; ZipList xs = ZipList (zipWith (\f x<span class="function"> -&gt;</span> f x) fs xs)
+
+-- 必须用 getZipList 函数来从 zip list 取出一个普通的 list
+ghci&gt; getZipList $ (+) &lt;$&gt; ZipList [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>] &lt;*&gt; ZipList [<span class="number">100</span>,<span class="number">100</span>,<span class="number">100</span>]   
+[<span class="number">101</span>,<span class="number">102</span>,<span class="number">103</span>]   
+ghci&gt; getZipList $ (+) &lt;$&gt; ZipList [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>] &lt;*&gt; ZipList [<span class="number">100</span>,<span class="number">100.</span>.]   
+[<span class="number">101</span>,<span class="number">102</span>,<span class="number">103</span>]   
+ghci&gt; getZipList $ max &lt;$&gt; ZipList [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">3</span>] &lt;*&gt; ZipList [<span class="number">5</span>,<span class="number">3</span>,<span class="number">1</span>,<span class="number">2</span>]   
+[<span class="number">5</span>,<span class="number">3</span>,<span class="number">3</span>,<span class="number">4</span>]   
+ghci&gt; getZipList $ (,,) &lt;$&gt; ZipList <span class="string">"dog"</span> &lt;*&gt; ZipList <span class="string">"cat"</span> &lt;*&gt; ZipList <span class="string">"rat"</span>   
+[(<span class="string">'d'</span>,<span class="string">'c'</span>,<span class="string">'r'</span>),(<span class="string">'o'</span>,<span class="string">'a'</span>,<span class="string">'a'</span>),(<span class="string">'g'</span>,<span class="string">'t'</span>,<span class="string">'t'</span>)]
+</pre></td></tr></table></figure>
+
+<p>除了 zipWith，标准函式库中也有 zipWith3, zipWith4 之类的函数，
+最多支持到 7。
+zipWith 接受一个接受两个参数的函数，
+并把两个 list zip 起来。
+zipWith3 则接受一个接受三个参数的函数，
+然后把三个 list zip 起来。以此类推。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+</pre></td><td class="code"><pre><span class="comment">-- exist in Control.Applicative</span>
+liftA2 :: (Applicative f) =&gt; (a -&gt; b -&gt; c) -&gt; f a -&gt; f b -&gt; f c   
+liftA2 f a b = f &lt;$&gt; a &lt;*&gt; b
+
+ghci&gt; liftA2 (:) (Just <span class="number">3</span>) (Just [<span class="number">4</span>])   
+Just [<span class="number">3</span>,<span class="number">4</span>]   
+ghci&gt; (:) &lt;$&gt; Just <span class="number">3</span> &lt;*&gt; Just [<span class="number">4</span>]   
+Just [<span class="number">3</span>,<span class="number">4</span>]
+
+sequenceA :: (Applicative f) =&gt; [f a] -&gt; f [a]   
+sequenceA [] = pure []   
+sequenceA (x:xs) = (:) &lt;$&gt; x &lt;*&gt; sequenceA xs
+
+ghci&gt; sequenceA [Just <span class="number">1</span>, Just <span class="number">2</span>]
+Just [<span class="number">1</span>,<span class="number">2</span>]
+
+<span class="comment">-- 也可以这样定义</span>
+sequenceA :: (Applicative f) =&gt; [f a] -&gt; f [a]   
+sequenceA = foldr (liftA2 (:)) (pure [])
+
+ghci&gt; sequenceA [Just <span class="number">3</span>, Just <span class="number">2</span>, Just <span class="number">1</span>]   
+Just [<span class="number">3</span>,<span class="number">2</span>,<span class="number">1</span>]   
+ghci&gt; sequenceA [Just <span class="number">3</span>, Nothing, Just <span class="number">1</span>]   
+Nothing   
+ghci&gt; sequenceA [(+<span class="number">3</span>),(+<span class="number">2</span>),(+<span class="number">1</span>)] <span class="number">3</span>   
+[<span class="number">6</span>,<span class="number">5</span>,<span class="number">4</span>]   
+ghci&gt; sequenceA <span class="string">[[1,2,3],[4,5,6]]</span>   
+<span class="string">[[1,4],[1,5],[1,6],[2,4],[2,5],[2,6],[3,4],[3,5],[3,6]]</span>   
+ghci&gt; sequenceA <span class="string">[[1,2,3],[4,5,6],[3,4,4],[]]</span>   
+[]
+
+ghci&gt; sequenceA [(&gt;<span class="number">4</span>),(&lt;<span class="number">10</span>),odd] <span class="number">7</span>   
+[True,True,True]   
+ghci&gt; <span class="keyword">and</span> $ sequenceA [(&gt;<span class="number">4</span>),(&lt;<span class="number">10</span>),odd] <span class="number">7</span>   
+True
+
+ghci&gt; sequenceA <span class="string">[[1,2,3],[4,5,6]]</span>   
+<span class="string">[[1,4],[1,5],[1,6],[2,4],[2,5],[2,6],[3,4],[3,5],[3,6]]</span>   
+ghci&gt; <span class="string">[[x,y] | x &lt;- [1,2,3], y &lt;- [4,5,6]]</span>   
+<span class="string">[[1,4],[1,5],[1,6],[2,4],[2,5],[2,6],[3,4],[3,5],[3,6]]</span>   
+ghci&gt; sequenceA <span class="string">[[1,2],[3,4]]</span>   
+<span class="string">[[1,3],[1,4],[2,3],[2,4]]</span>   
+ghci&gt; <span class="string">[[x,y] | x &lt;- [1,2], y &lt;- [3,4]]</span>   
+<span class="string">[[1,3],[1,4],[2,3],[2,4]]</span>   
+ghci&gt; sequenceA <span class="string">[[1,2],[3,4],[5,6]]</span>   
+<span class="string">[[1,3,5],[1,3,6],[1,4,5],[1,4,6],[2,3,5],[2,3,6],[2,4,5],[2,4,6]]</span>   
+ghci&gt; <span class="string">[[x,y,z] | x &lt;- [1,2], y &lt;- [3,4], z &lt;- [5,6]]</span>   
+<span class="string">[[1,3,5],[1,3,6],[1,4,5],[1,4,6],[2,3,5],[2,3,6],[2,4,5],[2,4,6]]</span>
+
+<span class="comment">-- 当使用在 I/O action 上的时候，sequenceA 跟 sequence 是等价的</span>
+ghci&gt; sequenceA [getLine, getLine, getLine]   
+heyh   
+ho   
+woo   
+[<span class="string">"heyh"</span>,<span class="string">"ho"</span>,<span class="string">"woo"</span>]
+</pre></td></tr></table></figure>
+
+<p>applicative functor 应该遵守如下定律</p>
+<pre><code>pure id &lt;*&gt; v = v
+pure (.) &lt;*&gt; u &lt;*&gt; v &lt;*&gt; w = u &lt;*&gt; (v &lt;*&gt; w)
+pure f &lt;*&gt; pure x = pure (f x)
+u &lt;*&gt; pure y = pure ($ y) &lt;*&gt; u
+</code></pre><h1 id="-newtype">关键字 newtype</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre><span class="typedef"><span class="keyword">data</span> <span class="type">ZipList</span> a = <span class="type">ZipList</span> [a]</span>
+<span class="typedef"><span class="keyword">data</span> <span class="type">ZipList</span> a = <span class="type">ZipList</span> <span class="container">{ <span class="title">getZipList</span> :: [<span class="title">a</span>] }</span></span>
+<span class="comment">-- 为了可以调用 getZipList $ ZipList [(+1),(*100),(*5)] &lt;*&gt; ZipList [1,2,3]  </span>
+
+<span class="typedef"><span class="keyword">newtype</span> <span class="type">ZipList</span> a = <span class="type">ZipList</span> <span class="container">{ <span class="title">getZipList</span> :: [<span class="title">a</span>] }</span></span>
+<span class="comment">-- newtype 比较快速, 用data解开来需要成本.</span>
+<span class="comment">-- 用 newtype 的话，Haskell 会知道只是要将一个现有的类型包成一个新的类型</span>
+<span class="comment">-- 内部运作完全一样但只是要一个全新的类型而已。</span>
+</pre></td></tr></table></figure>
+
+<p>newtype 来制作一个新的类型时，
+只能定义单一一个值构造子，
+而且那个构造子只能有一个字段</p>
+<p>使用 data 的话，可以让那个类型有好几个值构造子，
+并且每个构造子可以有零个或多个字段</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="typedef"><span class="keyword">data</span> <span class="type">Profession</span> = <span class="type">Fighter</span> | <span class="type">Archer</span> | <span class="type">Accountant</span>   </span>
+   
+<span class="typedef"><span class="keyword">data</span> <span class="type">Race</span> = <span class="type">Human</span> | <span class="type">Elf</span> | <span class="type">Orc</span> | <span class="type">Goblin</span></span>
+
+<span class="typedef"><span class="keyword">newtype</span> <span class="type">CharList</span> = <span class="type">CharList</span> <span class="container">{ <span class="title">getCharList</span> :: [<span class="type">Char</span>] }</span> <span class="keyword">deriving</span> <span class="container">(<span class="type">Eq</span>, <span class="type">Show</span>)</span></span>
+</pre></td></tr></table></figure>
+
+<p>newtype 的 lazy 性</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="code"><pre><span class="typedef"><span class="keyword">data</span> <span class="type">CoolBool</span> = <span class="type">CoolBool</span> <span class="container">{ <span class="title">getCoolBool</span> :: <span class="type">Bool</span> }</span></span>
+<span class="title">helloMe</span> :: <span class="type">CoolBool</span> -&gt; <span class="type">String</span>   
+<span class="title">helloMe</span> (<span class="type">CoolBool</span> _) = <span class="string">"hello"</span>
+
+<span class="comment">-- 不能运行</span>
+<span class="title">ghci</span>&gt; helloMe undefined   
+<span class="string">"*** Exception: Prelude.undefined  "</span>
+
+<span class="comment">-- 使用 newtype 时，Haskell 内部可以将新的类型用旧的类型来表示</span>
+<span class="comment">-- Haskell 会知道 newtype 定义的类型一定只会有一个构造子，</span>
+<span class="comment">-- 不必计算喂给函数的值就能确定他是 (CoolBool _) 的形式，</span>
+<span class="comment">-- 因为 newtype 只有一个可能的值跟单一字段</span>
+<span class="typedef"><span class="keyword">newtype</span> <span class="type">CoolBool</span> = <span class="type">CoolBool</span> <span class="container">{ <span class="title">getCoolBool</span> :: <span class="type">Bool</span> }</span></span>
+<span class="title">ghci</span>&gt; helloMe undefined   
+<span class="string">"hello"</span>
+</pre></td></tr></table></figure>
+
+<p>对 newtype 做模式匹配并不是像从盒子中取出东西，
+他比较像是将一个类型转换成另一个类型。</p>
+<h2 id="type-vs-newtype-vs-data">type vs newtype vs data</h2>
+<p><code>type</code> 关键字是让我们定义 type synonyms。
+他代表我们只是要给一个现有的类型另一个名字</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="keyword">type</span> <span class="title">IntList</span> = [Int]
+
+ghci&gt; ([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>] :: IntList) ++ ([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>] :: [Int])   
+[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]
+</pre></td></tr></table></figure>
+
+<p><code>newtype</code> 关键字将现有的类型包成一个新的类型，
+大部分是为了要让他们可以是特定 typeclass 的 instance 而这样做.
+使用 <code>newtype</code> 来包裹一个现有的类型时，这个类型跟原有的类型是分开的</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre><span class="typedef"><span class="keyword">newtype</span> <span class="type">CharList</span> = <span class="type">CharList</span> <span class="container">{ <span class="title">getCharList</span> :: [<span class="type">Char</span>] }</span></span>
+</pre></td></tr></table></figure>
+
+<p>可以将 <code>newtype</code> 想成是只能定义一个构造子跟一个字段的 data 宣告</p>
+<p>使用 <code>data</code> 关键字是为了定义自己的类型。</p>
+<p>如果你只是希望你的 type signature 看起来比较干净，
+你可以只需要 <code>type synonym</code>。
+如果你想要将现有的类型包起来并定义成一个 <code>type class</code> 的 instance，
+你可以尝试使用 <code>newtype</code>。
+如果你想要定义完全新的类型，那你应该使用 data 关键字</p>
+<h1 id="monoids">Monoids</h1>
+<p>一个 monoid 是你有一个遵守结合律的二元函数还有
+一个可以相对于那个函数作为 identity 的值。</p>
+<p>monoid 可以是一个链式的抽取规则, 可以看 Ordering monoid</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre><span class="comment">-- import Data.Monoid</span>
+<span class="class"><span class="keyword">class</span> <span class="type">Monoid</span> m <span class="keyword">where</span></span>   
+    mempty :: m   
+    mappend :: m -&gt; m -&gt; m   
+    mconcat :: [m] -&gt; m   
+    mconcat = foldr mappend mempty
+</pre></td></tr></table></figure>
+
+<p>monoid 必须遵守结合律和交换律</p>
+<pre><code>mempty `mappend` x = x
+x `mappend` mempty = x
+(x `mappend` y) `mappend` z = x `mappend` (y `mappend` z)
+</code></pre><h2 id="list-monoid">List Monoid</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+</pre></td><td class="code"><pre><span class="class"><span class="keyword">instance</span> <span class="type">Monoid</span> [a] <span class="keyword">where</span></span>   
+    mempty = []   
+    mappend = (++)
+
+<span class="title">ghci</span>&gt; [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>] `mappend` [<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>]   
+[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>]   
+<span class="title">ghci</span>&gt; (<span class="string">"one"</span> `mappend` <span class="string">"two"</span>) `mappend` <span class="string">"tree"</span>   
+<span class="string">"onetwotree"</span>
+<span class="title">ghci</span>&gt; mconcat [[<span class="number">1</span>,<span class="number">2</span>],[<span class="number">3</span>,<span class="number">6</span>],[<span class="number">9</span>]]   
+[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">6</span>,<span class="number">9</span>]   
+<span class="title">ghci</span>&gt; mempty :: [a]   
+[]
+
+<span class="comment">-- 乘法的Monoid实现</span>
+<span class="typedef"><span class="keyword">newtype</span> <span class="type">Product</span> a =  <span class="type">Product</span> <span class="container">{ <span class="title">getProduct</span> :: <span class="title">a</span> }</span>   </span>
+    <span class="keyword">deriving</span> (<span class="type">Eq</span>, <span class="type">Ord</span>, <span class="type">Read</span>, <span class="type">Show</span>, <span class="type">Bounded</span>)
+<span class="class">
+<span class="keyword">instance</span> <span class="type">Num</span> a =&gt; <span class="type">Monoid</span> <span class="container">(<span class="type">Product</span> <span class="title">a</span>)</span> <span class="keyword">where</span></span>   
+    mempty = <span class="type">Product</span> <span class="number">1</span>   
+    <span class="type">Product</span> x `mappend` <span class="type">Product</span> y = <span class="type">Product</span> (x * y)
+
+<span class="comment">-- 或的Monoid实现</span>
+<span class="typedef"><span class="keyword">newtype</span> <span class="type">Any</span> = <span class="type">Any</span> <span class="container">{ <span class="title">getAny</span> :: <span class="type">Bool</span> }</span>   </span>
+    <span class="keyword">deriving</span> (<span class="type">Eq</span>, <span class="type">Ord</span>, <span class="type">Read</span>, <span class="type">Show</span>, <span class="type">Bounded</span>)
+<span class="class">
+<span class="keyword">instance</span> <span class="type">Monoid</span> <span class="type">Any</span> <span class="keyword">where</span></span>   
+    mempty = <span class="type">Any</span> <span class="type">False</span>   
+    <span class="type">Any</span> x `mappend` <span class="type">Any</span> y = <span class="type">Any</span> (x || y)
+
+<span class="comment">-- 与的Monoid实现</span>
+<span class="typedef"><span class="keyword">newtype</span> <span class="type">All</span> = <span class="type">All</span> <span class="container">{ <span class="title">getAll</span> :: <span class="type">Bool</span> }</span>   </span>
+        <span class="keyword">deriving</span> (<span class="type">Eq</span>, <span class="type">Ord</span>, <span class="type">Read</span>, <span class="type">Show</span>, <span class="type">Bounded</span>)
+<span class="class">        
+<span class="keyword">instance</span> <span class="type">Monoid</span> <span class="type">All</span> <span class="keyword">where</span></span>   
+        mempty = <span class="type">All</span> <span class="type">True</span>   
+        <span class="type">All</span> x `mappend` <span class="type">All</span> y = <span class="type">All</span> (x && y)
+
+
+<span class="comment">-- Ordering monoid</span>
+<span class="class"><span class="keyword">instance</span> <span class="type">Monoid</span> <span class="type">Ordering</span> <span class="keyword">where</span></span>   
+    mempty = <span class="type">EQ</span>   
+    <span class="type">LT</span> `mappend` _ = <span class="type">LT</span>   
+    <span class="type">EQ</span> `mappend` y = y   
+    <span class="type">GT</span> `mappend` _ = <span class="type">GT</span>
+
+<span class="comment">-- 使用</span>
+<span class="title">lengthCompare</span> :: <span class="type">String</span> -&gt; <span class="type">String</span> -&gt; <span class="type">Ordering</span>   
+<span class="title">lengthCompare</span> x y = <span class="keyword">let</span> a = length x `compare` length y    
+                        b = x `compare` y   
+                    <span class="keyword">in</span>  <span class="keyword">if</span> a == <span class="type">EQ</span> <span class="keyword">then</span> b <span class="keyword">else</span> a
+
+<span class="import"><span class="keyword">import</span> Data.Monoid</span>
+<span class="title">lengthCompare</span> :: <span class="type">String</span> -&gt; <span class="type">String</span> -&gt; <span class="type">Ordering</span>
+<span class="title">lengthCompare</span> x y = (length x `compare` length y) `mappend`
+                    (x `compare` y)
+</pre></td></tr></table></figure>
+
+<h2 id="maybe-monoid">Maybe monoid</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+</pre></td><td class="code"><pre>instance Monoid <span class="literal">a</span> =&gt; Monoid (Maybe <span class="literal">a</span>) where   
+    mempty = Nothing   
+    Nothing <span class="escape">`m</span>append<span class="escape">` </span>m = m   
+    m <span class="escape">`m</span>append<span class="escape">` </span>Nothing = m   
+    Just m1 <span class="escape">`m</span>append<span class="escape">` </span>Just m2 = Just (m1 <span class="escape">`m</span>append<span class="escape">` </span>m2)
+
+ghci&gt; Nothing <span class="escape">`m</span>append<span class="escape">` </span>Just <span class="string">"andy"</span>   
+Just <span class="string">"andy"</span>   
+ghci&gt; Just LT <span class="escape">`m</span>append<span class="escape">` </span>Nothing   
+Just LT   
+ghci&gt; Just (Sum <span class="number">3</span>) <span class="escape">`m</span>append<span class="escape">` </span>Just (Sum <span class="number">4</span>)   
+Just (Sum {getSum = <span class="number">7</span>})
+
+
+instance Monoid (First <span class="literal">a</span>) where   
+    mempty = First Nothing   
+    First (Just x) <span class="escape">`m</span>append<span class="escape">` </span>_ = First (Just x)   
+    First Nothing <span class="escape">`m</span>append<span class="escape">` </span>x = x
+
+ghci&gt; getFirst $ First (Just '<span class="literal">a</span>') <span class="escape">`m</span>append<span class="escape">` </span>First (Just 'b')   
+Just '<span class="literal">a</span>'   
+ghci&gt; getFirst $ First Nothing <span class="escape">`m</span>append<span class="escape">` </span>First (Just 'b')   
+Just 'b'   
+ghci&gt; getFirst $ First (Just '<span class="literal">a</span>') <span class="escape">`m</span>append<span class="escape">` </span>First Nothing   
+Just '<span class="literal">a</span>'
+</pre></td></tr></table></figure>
+
+<h2 id="using-monoids-to-fold-data-structures">Using monoids to fold data structures</h2>
+<p><code>import qualified Foldable as F</code></p>
+<p><code>foldr</code> 接受一个 list 并将他 fold 起来，
+<code>Data.Foldable</code> 中的 foldr 接受任何可以 fold 的类型。并不只是 list。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre>-- 结果相同
+ghci&gt; foldr <span class="comment">(*) 1 [1,2,3]   
+6   
+ghci&gt; F.foldr (*)</span> <span class="number">1</span> [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]   
+<span class="number">6</span>
+
+ghci&gt; F.foldl (+) <span class="number">2</span> (Just <span class="number">9</span>)   
+<span class="number">11</span>   
+ghci&gt; F.foldr (||) <span class="keyword">False</span> (Just <span class="keyword">True</span>)   
+<span class="keyword">True</span>
+</pre></td></tr></table></figure>
+
+<p>简化整棵树到只有单一一个 monoid</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+</pre></td><td class="code"><pre>
+<span class="comment">-- 定义 foldMap :: (Monoid m, Foldable t) =&gt; (a -&gt; m) -&gt; t a -&gt; m</span>
+<span class="typedef"><span class="keyword">data</span> <span class="type">Tree</span> a = <span class="type">Empty</span> | <span class="type">Node</span> a <span class="container">(<span class="type">Tree</span> <span class="title">a</span>)</span> <span class="container">(<span class="type">Tree</span> <span class="title">a</span>)</span> <span class="keyword">deriving</span> <span class="container">(<span class="type">Show</span>, <span class="type">Read</span>, <span class="type">Eq</span>)</span></span>
+<span class="class"><span class="keyword">instance</span> <span class="type">F</span>.<span class="type">Foldable</span> <span class="type">Tree</span> <span class="keyword">where</span></span>   
+    foldMap f <span class="type">Empty</span> = mempty   
+    foldMap f (<span class="type">Node</span> x l r) = <span class="type">F</span>.foldMap f l `mappend`   
+                                f x           `mappend`   
+                                <span class="type">F</span>.foldMap f r
+
+<span class="title">testTree</span> = <span class="type">Node</span> <span class="number">5</span>   
+            (<span class="type">Node</span> <span class="number">3</span>   
+             (<span class="type">Node</span> <span class="number">1</span> <span class="type">Empty</span> <span class="type">Empty</span>)   
+             (<span class="type">Node</span> <span class="number">6</span> <span class="type">Empty</span> <span class="type">Empty</span>)   
+            )   
+            (<span class="type">Node</span> <span class="number">9</span>   
+             (<span class="type">Node</span> <span class="number">8</span> <span class="type">Empty</span> <span class="type">Empty</span>)   
+             (<span class="type">Node</span> <span class="number">10</span> <span class="type">Empty</span> <span class="type">Empty</span>)   
+            )
+
+<span class="title">ghci</span>&gt; <span class="type">F</span>.foldl (+) <span class="number">0</span> testTree   
+<span class="number">42</span>   
+<span class="title">ghci</span>&gt; <span class="type">F</span>.foldl (*) <span class="number">1</span> testTree   
+<span class="number">64800</span>
+
+<span class="comment">-- foldMap 对简化结构至单一 monoid 值有用</span>
+<span class="comment">-- 树中有没有 3</span>
+<span class="title">ghci</span>&gt; getAny $ <span class="type">F</span>.foldMap (\x -&gt; <span class="type">Any</span> $ x == <span class="number">3</span>) testTree   
+<span class="type">True</span>
+<span class="comment">-- 树中有没有大于15的数</span>
+<span class="title">ghci</span>&gt; getAny $ <span class="type">F</span>.foldMap (\x -&gt; <span class="type">Any</span> $ x &gt; <span class="number">15</span>) testTree   
+<span class="type">False</span>
+</pre></td></tr></table></figure>
+
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/haskell/">haskell</a>
+  </div>
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://zhpooer.github.io/2014/07/01/haskell趣学-functors-applicative&monoids/" data-title="haskell趣学-Functors Applicative&amp;Monoids | Poe&#39;s World" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2014/07/02/haskell趣学-monad/" title="haskell趣学-Monad">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  haskell趣学-Monad</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2014/06/30/haskell趣学-输入与输出/"  title="haskell趣学-输入与输出">
+ <strong>NEXT:</strong><br/> 
+ <span>haskell趣学-输入与输出
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#applicative-functors"><span class="toc-number">1.</span> <span class="toc-text">Applicative functors</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-newtype"><span class="toc-number">2.</span> <span class="toc-text">关键字 newtype</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#type-vs-newtype-vs-data"><span class="toc-number">2.1.</span> <span class="toc-text">type vs newtype vs data</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#monoids"><span class="toc-number">3.</span> <span class="toc-text">Monoids</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#list-monoid"><span class="toc-number">3.1.</span> <span class="toc-text">List Monoid</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#maybe-monoid"><span class="toc-number">3.2.</span> <span class="toc-text">Maybe monoid</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#using-monoids-to-fold-data-structures"><span class="toc-number">3.3.</span> <span class="toc-text">Using monoids to fold data structures</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/AJAX/" title="AJAX">AJAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/DOM/" title="DOM">DOM<sup>2</sup></a></li>
+		
+			<li><a href="/tags/EL表达式/" title="EL表达式">EL表达式<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Hibernate/" title="Hibernate">Hibernate<sup>2</sup></a></li>
+		
+			<li><a href="/tags/HttpSession/" title="HttpSession">HttpSession<sup>1</sup></a></li>
+		
+			<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JSP/" title="JSP">JSP<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaBean/" title="JavaBean">JavaBean<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaScript/" title="JavaScript">JavaScript<sup>1</sup></a></li>
+		
+			<li><a href="/tags/SAX/" title="SAX">SAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletRequest/" title="ServletRequest">ServletRequest<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletResponse/" title="ServletResponse">ServletResponse<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Spring/" title="Spring">Spring<sup>1</sup></a></li>
+		
+			<li><a href="/tags/String/" title="String">String<sup>1</sup></a></li>
+		
+			<li><a href="/tags/StringBuffer/" title="StringBuffer">StringBuffer<sup>1</sup></a></li>
+		
+			<li><a href="/tags/activiti/" title="activiti">activiti<sup>2</sup></a></li>
+		
+			<li><a href="/tags/cookie/" title="cookie">cookie<sup>1</sup></a></li>
+		
+			<li><a href="/tags/css/" title="css">css<sup>1</sup></a></li>
+		
+			<li><a href="/tags/dom4j/" title="dom4j">dom4j<sup>1</sup></a></li>
+		
+			<li><a href="/tags/dtd/" title="dtd">dtd<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2014 
+		
+		<a href="http://zhpooer.github.io" target="_blank" title="zhpooer">zhpooer</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"zhpoooer"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>
