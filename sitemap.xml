@@ -2,8 +2,88 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://zhpooer.github.io/2014/07/23/scala-in-action-concurrency-programming/</loc>
+    <lastmod>2014-07-23T12:17:00.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://zhpooer.github.io/2014/07/19/scala-in-action-type-system/</loc>
+    <lastmod>2014-07-19T08:46:35.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://zhpooer.github.io/2014/07/22/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day62-%E5%8C%BB%E8%8D%AF%E9%9B%86%E4%B8%AD%E9%87%87%E8%B4%AD%E5%B9%B3%E5%8F%B0-%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86/</loc>
+    <lastmod>2014-07-22T06:22:07.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://zhpooer.github.io/2014/07/21/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day61-%E5%8C%BB%E8%8D%AF%E9%9B%86%E4%B8%AD%E9%87%87%E8%B4%AD%E5%B9%B3%E5%8F%B0-%E6%A1%86%E6%9E%B6%E6%90%AD%E5%BB%BA/</loc>
+    <lastmod>2014-07-21T01:13:07.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://zhpooer.github.io/2014/07/16/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day58-mybatis%E6%8F%90%E9%AB%98/</loc>
+    <lastmod>2014-07-16T01:09:13.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://zhpooer.github.io/2014/07/19/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day60-cxf/</loc>
+    <lastmod>2014-07-19T01:41:34.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://zhpooer.github.io/2014/07/17/scala-in-action-working-with-scala/</loc>
+    <lastmod>2014-07-17T03:35:34.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://zhpooer.github.io/2014/07/18/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day59-Webservice/</loc>
+    <lastmod>2014-07-18T01:08:54.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://zhpooer.github.io/2014/07/15/scala-in-action-functional-programming-in-scala/</loc>
+    <lastmod>2014-07-15T03:35:59.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://zhpooer.github.io/2014/07/15/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day57-mybatis/</loc>
+    <lastmod>2014-07-15T01:12:17.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://zhpooer.github.io/about/index.html</loc>
+    <lastmod>2014-05-16T10:54:17.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://zhpooer.github.io/2014/07/12/scala-in-action-oop-in-scala/</loc>
+    <lastmod>2014-07-12T13:56:24.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://zhpooer.github.io/2014/04/22/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day17-jdbc/</loc>
+    <lastmod>2014-04-22T01:29:44.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://zhpooer.github.io/2014/07/13/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day56-spring-mvc/</loc>
+    <lastmod>2014-07-13T01:05:32.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://zhpooer.github.io/2014/07/11/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day55-oracle%E7%AE%A1%E7%90%86/</loc>
     <lastmod>2014-07-11T02:08:35.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://zhpooer.github.io/2014/07/12/scala-in-action-scala-%E5%85%A5%E9%97%A8/</loc>
+    <lastmod>2014-07-12T01:20:07.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://zhpooer.github.io/2014/06/17/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day48-javascript-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/</loc>
+    <lastmod>2014-06-17T01:00:32.000Z</lastmod>
   </url>
   
   <url>
@@ -107,11 +187,6 @@
   </url>
   
   <url>
-    <loc>http://zhpooer.github.io/2014/06/17/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day48-javascript-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/</loc>
-    <lastmod>2014-06-17T01:00:32.000Z</lastmod>
-  </url>
-  
-  <url>
     <loc>http://zhpooer.github.io/2014/06/12/photoshop%E5%85%A5%E9%97%A8-%E7%94%BB%E7%AC%94%E7%B1%BB%E5%B7%A5%E5%85%B7/</loc>
     <lastmod>2014-06-12T08:08:31.000Z</lastmod>
   </url>
@@ -134,11 +209,6 @@
   <url>
     <loc>http://zhpooer.github.io/2014/06/11/photoshop%E5%85%A5%E9%97%A8-%E6%B5%B7%E5%B0%94%E6%A1%88%E4%BE%8B/</loc>
     <lastmod>2014-06-11T13:40:39.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://zhpooer.github.io/about/index.html</loc>
-    <lastmod>2014-05-16T10:54:17.000Z</lastmod>
   </url>
   
   <url>
@@ -329,11 +399,6 @@
   <url>
     <loc>http://zhpooer.github.io/2014/04/22/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day17-%E6%A1%88%E4%BE%8B%E5%AE%A2%E6%88%B7%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/</loc>
     <lastmod>2014-04-22T07:41:49.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://zhpooer.github.io/2014/04/22/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day17-jdbc/</loc>
-    <lastmod>2014-04-22T01:29:44.000Z</lastmod>
   </url>
   
   <url>

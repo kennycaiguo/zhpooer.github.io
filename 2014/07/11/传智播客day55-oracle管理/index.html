@@ -96,7 +96,7 @@ DBA工作:
     </p>
   <p class="article-time">
     <time datetime="2014-07-11T02:08:35.000Z" itemprop="datePublished">7月 11 2014</time>
-    更新日期:<time datetime="2014-07-11T12:35:53.000Z" itemprop="dateModified">7月 11 2014</time>
+    更新日期:<time datetime="2014-07-12T12:08:39.000Z" itemprop="dateModified">7月 12 2014</time>
     
   </p>
 </header>
@@ -105,7 +105,7 @@ DBA工作:
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#dbca"><span class="toc-number">1.</span> <span class="toc-text">DBCA</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-flashback-"><span class="toc-number">2.</span> <span class="toc-text">闪回(flashback)</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.1.</span> <span class="toc-text">闪回表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.2.</span> <span class="toc-text">闪回删除</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.3.</span> <span class="toc-text">闪回版本查询</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.4.</span> <span class="toc-text">闪回事务查询</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">导入和导出</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-schema-"><span class="toc-number">4.</span> <span class="toc-text">管理方案(Schema)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">5.</span> <span class="toc-text">管理用户安全</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">5.1.</span> <span class="toc-text">权限的级联</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-role-"><span class="toc-number">5.2.</span> <span class="toc-text">角色 (Role)</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-profile-"><span class="toc-number">6.</span> <span class="toc-text">概要文件(profile)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">7.</span> <span class="toc-text">分布式数据库</span></a></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#dbca"><span class="toc-number">1.</span> <span class="toc-text">DBCA</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-flashback-"><span class="toc-number">2.</span> <span class="toc-text">闪回(flashback)</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.1.</span> <span class="toc-text">闪回表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.2.</span> <span class="toc-text">闪回删除</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.3.</span> <span class="toc-text">闪回版本查询</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.4.</span> <span class="toc-text">闪回事务查询</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">导入和导出</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-schema-"><span class="toc-number">4.</span> <span class="toc-text">管理方案(Schema)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">5.</span> <span class="toc-text">管理用户安全</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">5.1.</span> <span class="toc-text">权限的级联</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-role-"><span class="toc-number">5.2.</span> <span class="toc-text">角色 (Role)</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-profile-"><span class="toc-number">6.</span> <span class="toc-text">概要文件(profile)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">7.</span> <span class="toc-text">分布式数据库</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">7.1.</span> <span class="toc-text">分布式数据库跨节点更新</span></a></li></ol>
 		</div>
 		
 		<h1 id="dbca">DBCA</h1>
@@ -509,6 +509,102 @@ revoke <span class="operator"><span class="keyword">select</span> <span class="k
 <li>以及对资源的使用控制</li>
 </ul>
 <h1 id="-">分布式数据库</h1>
+<p>物理上被存放在网络的多个节点上, 逻辑上是一个整体</p>
+<p>独立性, 不必关系数据如何分割和存储, 只关心数据本身</p>
+<p>分布操作, 创建数据库链路, 本地服务名</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+</pre></td><td class="code"><pre><span class="comment">-- 通过工具, 创建本地服务名配置文件 remoteorcl</span>
+<span class="comment">-- 授予远程登陆权限</span>
+<span class="operator"><span class="keyword">grant</span> <span class="keyword">create</span> <span class="keyword">database</span> link <span class="keyword">to</span> scott;</span>
+<span class="comment">-- 创建数据库链路</span>
+<span class="operator"><span class="keyword">create</span> <span class="keyword">database</span> link l2 <span class="keyword">connect</span> <span class="keyword">to</span> scott identified <span class="keyword">by</span>
+tiger <span class="keyword">using</span> <span class="string">'remoteorcl'</span>;</span>
+
+<span class="comment">-- 分布式数据库查询</span>
+<span class="comment">-- 查询员工信息, emp在远端, dept在本地</span>
+<span class="operator"><span class="keyword">create</span> synonym  remoteemp <span class="keyword">for</span> emp@L2;</span>
+
+<span class="operator"><span class="keyword">select</span> ename, dname
+<span class="keyword">from</span> dept, remoteemp
+<span class="keyword">where</span> remoteemp.deptno=dept.deptno;</span>
+
+<span class="comment">-- 建立远程表的本地视图</span>
+<span class="operator"><span class="keyword">create</span> <span class="keyword">view</span> emp
+<span class="keyword">as</span>
+    <span class="keyword">select</span> * <span class="keyword">from</span> emp1@L1
+    <span class="keyword">union</span>
+    <span class="keyword">select</span> * <span class="keyword">from</span> emp2@L2;</span>
+
+<span class="operator"><span class="keyword">select</span> * <span class="keyword">from</span> emp;</span>
+</pre></td></tr></table></figure>
+
+<h2 id="-">分布式数据库跨节点更新</h2>
+<p>快照, 定义快照维护关系表的异步副本.
+主表修改后的指定时间内刷新副本, 用户主表修改少, 单查询查询的表.
+定义在备份端</p>
+<p>触发器, 同步完成, 定义在主数据库端</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+</pre></td><td class="code"><pre><span class="comment">-- 定义快照</span>
+<span class="operator"><span class="keyword">create</span> snapshot emp refresh
+-- 第一次刷新刷新
+<span class="keyword">start</span> <span class="keyword">with</span> sysdate
+-- 到下个星期刷新一次
+<span class="keyword">next</span> next_day(sysdate, <span class="string">'Monday'</span>)
+<span class="keyword">as</span> <span class="keyword">select</span> * <span class="keyword">from</span> emp@L1;</span>
+
+
+<span class="comment">-- 定义触发器</span>
+<span class="comment">-- 实现数据的同步备份</span>
+<span class="operator"><span class="keyword">create</span> ro <span class="keyword">replace</span> <span class="keyword">trigger</span> syncsal
+<span class="keyword">after</span> <span class="keyword">update</span>
+<span class="keyword">on</span> emp
+<span class="keyword">for</span> <span class="keyword">each</span> <span class="keyword">row</span>
+<span class="keyword">begin</span>
+   -- 将涨后的薪水备份到远端数据库中
+   <span class="keyword">update</span> remoteemp <span class="keyword">set</span> sal=:new.sal <span class="keyword">where</span> empno=:new.empno;</span>
+<span class="operator"><span class="keyword">end</span>;</span>
+</pre></td></tr></table></figure>
+
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -532,6 +628,14 @@ revoke <span class="operator"><span class="keyword">select</span> <span class="k
 	
 <nav class="article-nav clearfix">
  
+ <div class="prev" >
+ <a href="/2014/07/12/scala-in-action-scala-入门/" title="Scala in Action-scala 入门">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  Scala in Action-scala 入门</span>
+</a>
+</div>
+
 
 <div class="next">
 <a href="/2014/07/10/传智播客day54-plsql/"  title="传智播客day54-PL/SQL">
@@ -553,7 +657,7 @@ revoke <span class="operator"><span class="keyword">select</span> <span class="k
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#dbca"><span class="toc-number">1.</span> <span class="toc-text">DBCA</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-flashback-"><span class="toc-number">2.</span> <span class="toc-text">闪回(flashback)</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.1.</span> <span class="toc-text">闪回表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.2.</span> <span class="toc-text">闪回删除</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.3.</span> <span class="toc-text">闪回版本查询</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.4.</span> <span class="toc-text">闪回事务查询</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">导入和导出</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-schema-"><span class="toc-number">4.</span> <span class="toc-text">管理方案(Schema)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">5.</span> <span class="toc-text">管理用户安全</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">5.1.</span> <span class="toc-text">权限的级联</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-role-"><span class="toc-number">5.2.</span> <span class="toc-text">角色 (Role)</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-profile-"><span class="toc-number">6.</span> <span class="toc-text">概要文件(profile)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">7.</span> <span class="toc-text">分布式数据库</span></a></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#dbca"><span class="toc-number">1.</span> <span class="toc-text">DBCA</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-flashback-"><span class="toc-number">2.</span> <span class="toc-text">闪回(flashback)</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.1.</span> <span class="toc-text">闪回表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.2.</span> <span class="toc-text">闪回删除</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.3.</span> <span class="toc-text">闪回版本查询</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.4.</span> <span class="toc-text">闪回事务查询</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">导入和导出</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-schema-"><span class="toc-number">4.</span> <span class="toc-text">管理方案(Schema)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">5.</span> <span class="toc-text">管理用户安全</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">5.1.</span> <span class="toc-text">权限的级联</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-role-"><span class="toc-number">5.2.</span> <span class="toc-text">角色 (Role)</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-profile-"><span class="toc-number">6.</span> <span class="toc-text">概要文件(profile)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">7.</span> <span class="toc-text">分布式数据库</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">7.1.</span> <span class="toc-text">分布式数据库跨节点更新</span></a></li></ol>
   </div>
 
 <div id="asidepart">
@@ -585,6 +689,8 @@ revoke <span class="operator"><span class="keyword">select</span> <span class="k
 		
 			<li><a href="/tags/JavaScript/" title="JavaScript">JavaScript<sup>1</sup></a></li>
 		
+			<li><a href="/tags/Mybatis/" title="Mybatis">Mybatis<sup>1</sup></a></li>
+		
 			<li><a href="/tags/SAX/" title="SAX">SAX<sup>1</sup></a></li>
 		
 			<li><a href="/tags/ServletRequest/" title="ServletRequest">ServletRequest<sup>1</sup></a></li>
@@ -592,6 +698,8 @@ revoke <span class="operator"><span class="keyword">select</span> <span class="k
 			<li><a href="/tags/ServletResponse/" title="ServletResponse">ServletResponse<sup>1</sup></a></li>
 		
 			<li><a href="/tags/Spring/" title="Spring">Spring<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Spring MVC/" title="Spring MVC">Spring MVC<sup>1</sup></a></li>
 		
 			<li><a href="/tags/String/" title="String">String<sup>1</sup></a></li>
 		
@@ -602,10 +710,6 @@ revoke <span class="operator"><span class="keyword">select</span> <span class="k
 			<li><a href="/tags/cookie/" title="cookie">cookie<sup>1</sup></a></li>
 		
 			<li><a href="/tags/css/" title="css">css<sup>1</sup></a></li>
-		
-			<li><a href="/tags/dom4j/" title="dom4j">dom4j<sup>1</sup></a></li>
-		
-			<li><a href="/tags/dtd/" title="dtd">dtd<sup>1</sup></a></li>
 		
 		</ul>
 </div>

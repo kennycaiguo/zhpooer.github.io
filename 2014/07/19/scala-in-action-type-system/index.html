@@ -1,0 +1,1235 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Scala in Action-type system | Poe&#39;s World</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="zhpooer">
+    
+    <meta name="description" content="入门
+It provides the following features:
+
+Error detection—Think of the compiler as a suite of test cases that can detect
+common type and other program e">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="Poe&#39;s World" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="Poe&#39;s World" title="Poe&#39;s World"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Poe&#39;s World">Poe&#39;s World</a></h1>
+				<h2 class="blog-motto">竹杖芒鞋轻胜马，一蓑烟雨任平生</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/english-monthly">英语角</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:zhpooer.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/07/19/scala-in-action-type-system/" title="Scala in Action-type system" itemprop="url">Scala in Action-type system</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://zhpooer.github.io" title="zhpooer">zhpooer</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2014-07-19T08:46:35.000Z" itemprop="datePublished">7月 19 2014</time>
+    更新日期:<time datetime="2014-07-23T11:56:24.000Z" itemprop="dateModified">7月 23 2014</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">入门</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#abstract-type-members"><span class="toc-number">2.</span> <span class="toc-text">Abstract type members</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#self-type-members"><span class="toc-number">3.</span> <span class="toc-text">Self type members</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#building-a-scalable-component"><span class="toc-number">4.</span> <span class="toc-text">Building a scalable component</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#building-an-extensible-component"><span class="toc-number">5.</span> <span class="toc-text">Building an extensible component</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#the-expression-problem-and-the-extensibility-challenge"><span class="toc-number">5.1.</span> <span class="toc-text">THE EXPRESSION PROBLEM AND THE EXTENSIBILITY CHALLENGE</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#practice-example"><span class="toc-number">5.2.</span> <span class="toc-text">practice example</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#solving-the-expression-problem"><span class="toc-number">5.3.</span> <span class="toc-text">SOLVING THE EXPRESSION PROBLEM</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#types-of-types"><span class="toc-number">6.</span> <span class="toc-text">Types of types</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#structural-types"><span class="toc-number">6.1.</span> <span class="toc-text">Structural types</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#higher-kinded-types"><span class="toc-number">6.2.</span> <span class="toc-text">Higher-kinded types</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#phantom-types"><span class="toc-number">6.3.</span> <span class="toc-text">Phantom types</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#ad-hoc-polymorphism-with-type-classes"><span class="toc-number">7.</span> <span class="toc-text">Ad hoc polymorphism with type classes</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#solving-the-expression-problem-using-type-classes"><span class="toc-number">7.1.</span> <span class="toc-text">Solving the expression problem using type classes</span></a></li></ol>
+		</div>
+		
+		<h1 id="-">入门</h1>
+<p>It provides the following features:</p>
+<ul>
+<li><em>Error detection</em>—Think of the compiler as a suite of test cases that can detect
+common type and other program errors.</li>
+<li><em>Abstractions</em>—This is the focus of this chapter. You’ll learn how the type system
+provides abstractions to build components.</li>
+<li><em>Documentation</em>—The signature of a function or method tells you a lot about
+what it’s doing.</li>
+<li><em>Efficiency</em>—The type system helps the compiler generate optimized binary code.</li>
+</ul>
+<p>scala 提供的抽象工具</p>
+<table>
+<thead>
+<tr>
+<th>Technique</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Modular mixin</td>
+<td>a mechanism for composing traits for designing reusable components without the problems of multiple inheritance.</td>
+</tr>
+<tr>
+<td>Abstract type</td>
+<td>Scala lets you declare abstract type members to class, trait, and subclasses that can provide concrete types.</td>
+</tr>
+<tr>
+<td>Self type</td>
+<td>A minin use fields or methods of the class it’s mixed into</td>
+</tr>
+</tbody>
+</table>
+<h1 id="abstract-type-members">Abstract type members</h1>
+<p>Abstract types are those whose identity is
+unknown at the time of declaration.
+Unlike concrete types, the type of an abstract type
+member is specified during the concrete implementation
+of the enclosing class.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="class"><span class="keyword">trait</span> <span class="title">Calculator</span> {</span> <span class="keyword">type</span> S }
+
+<span class="class"><span class="keyword">class</span> <span class="title">SomeCalculator</span> <span class="keyword">extends</span> <span class="title">Calculator</span> {</span> <span class="keyword">type</span> S = String }
+</pre></td></tr></table></figure>
+
+<p>The benefit of abstract type members is they can hide the
+internal information of a component. </p>
+<p>You’re going to build a price
+calculator that can take a product ID and return the price of the product. There can
+be many ways to calculate the price, and each way could use a different type of data
+source to retrieve the price.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre>trait Calculator {
+  <span class="function"><span class="keyword">def</span> <span class="title">initialize</span>:</span> DbConnection
+  <span class="function"><span class="keyword">def</span> <span class="title">close</span><span class="params">(s: DbConnection)</span>:</span> Unit
+  <span class="function"><span class="keyword">def</span> <span class="title">calculate</span><span class="params">(productId: String)</span>:</span> Double = {
+    val s = initialize
+    val price = calculate(s, productId)
+    close(s)
+    price
+  }
+  <span class="function"><span class="keyword">def</span> <span class="title">calculate</span><span class="params">(s: DbConnection, productId: String)</span>:</span> Double
+</pre></td></tr></table></figure>
+
+<p>The problem with the current implementation is that it’s hard-wired to a DAO,
+and a calculator that uses a different kind of data source
+won’t be able to use the calculator.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="code"><pre>// 模板方法
+trait Calculator {
+  type S
+  <span class="function"><span class="keyword">def</span> <span class="title">initialize</span>:</span> S
+  <span class="function"><span class="keyword">def</span> <span class="title">close</span><span class="params">(s: S)</span>:</span> Unit
+  <span class="function"><span class="keyword">def</span> <span class="title">calculate</span><span class="params">(productId: String)</span>:</span> Double = {
+    val s = initialize
+    val price = calculate(s, productId)
+    close(s)
+    price
+  }
+  <span class="function"><span class="keyword">def</span> <span class="title">calculate</span><span class="params">(s: S, productId: String)</span>:</span> Double
+}
+</pre></td></tr></table></figure>
+
+<h1 id="self-type-members">Self type members</h1>
+<p>The self type annotation allows you to access members of a mixin trait or class, and
+the Scala compiler ensures that all the dependencies are correctly wired before you’re
+allowed to instantiate the class. </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre>trait B {
+  <span class="function"><span class="keyword">def</span> <span class="title">b</span>:</span>Unit = ...
+}
+//  trait A <span class="keyword">is</span> defining a dependency to trait B
+trait A {  self: B =&gt;
+  <span class="function"><span class="keyword">def</span> <span class="title">a</span>:</span>Unit = b
+}
+</pre></td></tr></table></figure>
+
+<p>Because the required services are annotated with self type this , you can still access
+those services, and the Scala compiler will ensure that the final class gets mixed with a
+trait or a class that implements RequiredServices. </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+</pre></td><td class="code"><pre><span class="class"><span class="keyword">trait</span> <span class="title">Connection</span> {</span>
+  <span class="keyword">def</span> query(q: String): String
+}
+<span class="class"><span class="keyword">trait</span> <span class="title">Logger</span> {</span>
+  <span class="keyword">def</span> log(l: String): Unit
+}
+<span class="class"><span class="keyword">trait</span> <span class="title">RequiredServices</span> {</span>
+  <span class="keyword">def</span> makeDatabaseConnection: Connection
+  <span class="keyword">def</span> logger: Logger
+}
+
+<span class="class"><span class="keyword">trait</span> <span class="title">ProductFinder</span> {</span> <span class="keyword">this</span>: RequiredServices =&gt;
+  <span class="keyword">def</span> findProduct(productId: String) = {
+    <span class="keyword">val</span> c = makeDatabaseConnection
+    c.query(<span class="string">"find the lowest price"</span>)
+    logger.log(<span class="string">"querying database..."</span>)
+  }
+}
+<span class="comment">// 有点像spring的简化</span>
+<span class="class"><span class="keyword">trait</span> <span class="title">TestServices</span> <span class="keyword">extends</span> <span class="title">RequiredServices</span> {</span>
+  <span class="keyword">def</span> makeDatabaseConnection =
+    <span class="keyword">new</span> Connection { <span class="keyword">def</span> query(q: String) = <span class="string">"test"</span> }
+  <span class="keyword">def</span> logger = <span class="keyword">new</span> Logger { <span class="keyword">def</span> log(l: String) = println(l) }
+}
+
+<span class="class"><span class="keyword">object</span> <span class="title">FinderSystem</span> <span class="keyword">extends</span> <span class="title">ProductFinder</span> <span class="keyword">with</span> <span class="title">TestServices</span></span>
+</pre></td></tr></table></figure>
+
+<h1 id="building-a-scalable-component">Building a scalable component</h1>
+<p>To build a generic product ordering system. It will be reusable in that a user can
+order any kind of product.</p>
+<ul>
+<li>An order component that represents the order placed by the customer.</li>
+<li>An inventory component that stores the products. You need to check the
+inventory to make sure you have the product before you place the order.</li>
+<li>A shipping component that knows how to ship an order to customer.</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre>trait OrderingSystem {
+  type O &lt;: Order
+  type I &lt;: Inventory
+  type S &lt;: Shipping
+  trait Order { <span class="function"><span class="keyword">def</span> <span class="title">placeOrder</span> <span class="params">(i: I)</span>:</span> Unit }
+  trait Inventory { <span class="function"><span class="keyword">def</span> <span class="title">itemExists</span><span class="params">(order: O)</span>:</span> Boolean }
+  trait Shipping {<span class="function"><span class="keyword">def</span> <span class="title">scheduleShipping</span><span class="params">(order: O)</span>:</span> Long }
+</pre></td></tr></table></figure>
+
+<p>You still need to implement the steps for placing the order. Here they are:</p>
+<ul>
+<li>Check whether that item exists in inventory.</li>
+<li>Place the order against the inventory. (Inventory will reduce the count by the
+amount of product in the inventory.)</li>
+<li>Schedule the order for shipping.</li>
+<li>If the item doesn’t exist in inventory, return without placing the order and
+possibly notify Inventory to replenish the product.</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre>// declared <span class="keyword">in</span> OrderingSystem
+// Self type annotation <span class="keyword">for</span> two mixin traits
+trait Ordering { this: I <span class="keyword">with</span> S =&gt;
+  <span class="function"><span class="keyword">def</span> <span class="title">placeOrder</span><span class="params">(o: O)</span>:</span> Option[Long] = {
+    <span class="keyword">if</span>(itemExists(o)) {
+      o.placeOrder (this)
+      Some(scheduleShipping(o))
+    }
+    <span class="keyword">else</span> <span class="keyword">None</span>
+  }
+}
+</pre></td></tr></table></figure>
+
+<p>to use it</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+</pre></td><td class="code"><pre><span class="class"><span class="keyword">object</span> <span class="title">BookOrderingSystem</span> <span class="keyword">extends</span> <span class="title">OrderingSystem</span> {</span>
+  <span class="keyword">type</span> O = BookOrder
+  <span class="keyword">type</span> I = AmazonBookStore
+  <span class="keyword">type</span> S = UPS
+  <span class="class"><span class="keyword">class</span> <span class="title">BookOrder</span> <span class="keyword">extends</span> <span class="title">Order</span> {</span>
+    <span class="keyword">def</span> placeOrder(i: AmazonBookStore): Unit = ...
+  }
+  <span class="class"><span class="keyword">trait</span> <span class="title">AmazonBookStore</span> <span class="keyword">extends</span> <span class="title">Inventory</span> {</span>
+    <span class="keyword">def</span> itemExists(o: BookOrder) = ...
+  }
+  <span class="class"><span class="keyword">trait</span> <span class="title">UPS</span> <span class="keyword">extends</span> <span class="title">Shipping</span> {</span>
+    <span class="keyword">def</span> scheduleShipping(order: BookOrder): Long = ...
+  }
+  <span class="class"><span class="keyword">object</span> <span class="title">BookOrdering</span> <span class="keyword">extends</span> <span class="title">Ordering</span> <span class="keyword">with</span> <span class="title">AmazonBookStore</span> <span class="keyword">with</span> <span class="title">UPS</span></span>
+}
+
+<span class="keyword">import</span> BookOrderingSystem._
+BookOrdering.placeOrder(<span class="keyword">new</span> BookOrder)
+</pre></td></tr></table></figure>
+
+<h1 id="building-an-extensible-component">Building an extensible component</h1>
+<h2 id="the-expression-problem-and-the-extensibility-challenge">THE EXPRESSION PROBLEM AND THE EXTENSIBILITY CHALLENGE</h2>
+<p>The goal is to define a data type and operations on that data type in which one can
+add new data types and operations without recompiling existing code, but while
+retaining static type safety.</p>
+<p>Any implementation of the expression problem should satisfy the following
+requirements:</p>
+<ul>
+<li>Extensibility in both dimensions. You should be able to add new types
+and operations that work on all the types.
+(I look into this in detail in this section.)</li>
+<li>Strong static type-safety. Type casting and reflection are out of the question.</li>
+<li>No modification of the existing code and no duplication.</li>
+<li>Separate compilation.</li>
+</ul>
+<h2 id="practice-example">practice example</h2>
+<p>You have a payroll system that
+processes salaries for full-time employees in the United States and Canada:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+</pre></td><td class="code"><pre><span class="class"><span class="keyword">case</span> <span class="keyword">class</span> <span class="title">Employee</span><span class="params">(name: String, id: Long)</span></span>
+
+<span class="class"><span class="keyword">trait</span> <span class="title">Payroll</span> {</span>
+  <span class="keyword">def</span> processEmployees(employees: Vector[Employee]): Either[String, Throwable]
+}
+
+<span class="class"><span class="keyword">class</span> <span class="title">USPayroll</span> <span class="keyword">extends</span> <span class="title">Payroll</span> {</span>
+  <span class="keyword">def</span> processEmployees(employees: Vector[Employee]) = ...
+}
+
+<span class="class"><span class="keyword">class</span> <span class="title">CanadaPayroll</span> <span class="keyword">extends</span> <span class="title">Payroll</span> {</span>
+  <span class="keyword">def</span> processEmployees(employees: Vector[Employee]) = ...
+}
+
+<span class="comment">// With current changes in the business, you also have to process salaries of full-time</span>
+<span class="comment">// employees in Japan. </span>
+<span class="class"><span class="keyword">class</span> <span class="title">JapanPayroll</span> <span class="keyword">extends</span> <span class="title">Payroll</span> {</span>
+  <span class="keyword">def</span> processEmployees(employees: Vector[Employee]) = ...
+}
+</pre></td></tr></table></figure>
+
+<p>This is one type of extension the expression problem talks about.
+The solution is type-safe, and you can add JapanPayroll as an extension
+and plug it in to an existing payroll system with a separate compilation.</p>
+<p>What happens when you try to add a new operation?</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre><span class="comment">// In this case the business has decided to hire contractors,</span>
+<span class="comment">// and you also have to process their monthly pay.</span>
+<span class="class"><span class="keyword">case</span> <span class="keyword">class</span> <span class="title">Employee</span><span class="params">(name: String, id: Long)</span></span>
+<span class="class"><span class="keyword">case</span> <span class="keyword">class</span> <span class="title">Contractor</span><span class="params">(name: String)</span></span>
+<span class="comment">//  The new Payroll interface should look like the following:</span>
+<span class="class"><span class="keyword">trait</span> <span class="title">Payroll</span> <span class="keyword">extends</span> <span class="title">super</span>.<span class="title">Payroll</span> {</span>
+  <span class="keyword">def</span> processEmployees(
+      employees: Vector[Employee]): Either[String, Throwable]
+  <span class="keyword">def</span> processContractors(
+      contractors: Vector[Contractor]): Either[String, Throwable]
+}
+</pre></td></tr></table></figure>
+
+<p>The problem is you can’t go back and modify the trait because that will force you to
+rebuild everything—which you can’t do because of the constraint put on you by the
+expression problem.</p>
+<p>Using the Visitor pattern to solve this problem.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+</pre></td><td class="code"><pre><span class="class"><span class="keyword">case</span> <span class="keyword">class</span> <span class="title">USPayroll</span> {</span>
+  <span class="keyword">def</span> accept(v: PayrollVisitor) = v.visit(<span class="keyword">this</span>)
+}
+<span class="class"><span class="keyword">case</span> <span class="keyword">class</span> <span class="title">CanadaPayroll</span> {</span>
+  <span class="keyword">def</span> accept(v: PayrollVisitor) = v.visit(<span class="keyword">this</span>)
+}
+<span class="class"><span class="keyword">trait</span> <span class="title">PayrollVisitor</span> {</span>
+  <span class="keyword">def</span> visit(payroll: USPayroll): Either[String, Throwable]
+  <span class="keyword">def</span> visit(payroll: CanadaPayroll): Either[String, Throwable]
+}
+<span class="class"><span class="keyword">class</span> <span class="title">EmployeePayrollVisitor</span> <span class="keyword">extends</span> <span class="title">PayrollVisitor</span> {</span>
+  <span class="keyword">def</span> visit(payroll: USPayroll): Either[String, Throwable] = ...
+  <span class="keyword">def</span> visit(payroll: CanadaPayroll): Either[String, Throwable] = ...
+}
+
+<span class="comment">// you can easily create a new class called ContractorPayrollVisitor</span>
+<span class="class"><span class="keyword">class</span> <span class="title">ContractorPayrollVisitor</span> <span class="keyword">extends</span> <span class="title">PayrollVisitor</span> {</span>
+  <span class="keyword">def</span> visit(payroll: USPayroll): Either[String, Throwable] = ...
+  <span class="keyword">def</span> visit(payroll: CanadaPayroll): Either[String, Throwable] = ...
+}
+<span class="comment">// Using the Visitor pattern, it’s easy to add new operations,</span>
+<span class="comment">// but what about type</span>
+</pre></td></tr></table></figure>
+
+<p>If you try to add a new type called JapanPayroll, you have a problem.
+You have to go back and change all the visitors
+to accept a JapanPayroll type.</p>
+<h2 id="solving-the-expression-problem">SOLVING THE EXPRESSION PROBLEM</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+</pre></td><td class="code"><pre><span class="class"><span class="keyword">trait</span> <span class="title">PayrollSystem</span> {</span>
+  <span class="class"><span class="keyword">case</span> <span class="keyword">class</span> <span class="title">Employee</span><span class="params">(name: String, id: Long)</span></span>
+  <span class="keyword">type</span> P &lt;: Payroll
+  <span class="class"><span class="keyword">trait</span> <span class="title">Payroll</span> {</span>
+    <span class="keyword">def</span> processEmployees(
+      employees: Vector[Employee]): Either[String, Throwable]
+  }
+  <span class="keyword">def</span> processPayroll(p: P): Either[String, Throwable]
+}
+
+<span class="class"><span class="keyword">trait</span> <span class="title">USPayrollSystem</span> <span class="keyword">extends</span> <span class="title">PayrollSystem</span> {</span>
+  <span class="class"><span class="keyword">class</span> <span class="title">USPayroll</span> <span class="keyword">extends</span> <span class="title">Payroll</span> {</span>
+    <span class="keyword">def</span> processEmployees(employees: Vector[Employee]) =
+      Left(<span class="string">"US payroll"</span>)
+  }
+}
+
+<span class="class"><span class="keyword">trait</span> <span class="title">CanadaPayrollSystem</span> <span class="keyword">extends</span> <span class="title">PayrollSystem</span> {</span>
+  <span class="class"><span class="keyword">class</span> <span class="title">CanadaPayroll</span> <span class="keyword">extends</span> <span class="title">Payroll</span> {</span>
+    <span class="keyword">def</span> processEmployees(employees: Vector[Employee]) =
+      Left(<span class="string">"Canada payroll"</span>)
+  }
+}
+
+<span class="class"><span class="keyword">object</span> <span class="title">USPayrollInstance</span> <span class="keyword">extends</span> <span class="title">USPayrollSystem</span> {</span>
+  <span class="keyword">type</span> P = USPayroll
+  <span class="keyword">def</span> processPayroll(p: USPayroll) = {
+    <span class="keyword">val</span> employees: Vector[Employee] = ...
+    <span class="keyword">val</span> result = p.processEmployees(employees)
+    ...
+  }
+}
+
+<span class="comment">// add new Payroll Type</span>
+<span class="class"><span class="keyword">trait</span> <span class="title">JapanPayrollSystem</span> <span class="keyword">extends</span> <span class="title">PayrollSystem</span> {</span>
+  <span class="class"><span class="keyword">class</span> <span class="title">JapanPayroll</span> <span class="keyword">extends</span> <span class="title">Payroll</span> {</span>
+    <span class="keyword">def</span> processEmployees(employees: Vector[Employee]) = ...
+  }
+}
+
+<span class="comment">// Now add a new method to the Payroll trait</span>
+<span class="comment">// without recompiling everything</span>
+<span class="class"><span class="keyword">trait</span> <span class="title">ContractorPayrollSystem</span> <span class="keyword">extends</span> <span class="title">PayrollSystem</span> {</span>
+  <span class="keyword">type</span> P &lt;: Payroll
+  <span class="class"><span class="keyword">case</span> <span class="keyword">class</span> <span class="title">Contractor</span><span class="params">(name: String)</span></span>
+  <span class="class"><span class="keyword">trait</span> <span class="title">Payroll</span> <span class="keyword">extends</span> <span class="title">super</span>.<span class="title">Payroll</span> {</span>
+    <span class="keyword">def</span> processContractors(
+        contractors: Vector[Contractor]): Either[String, Throwable]
+  }
+}
+
+<span class="class"><span class="keyword">trait</span> <span class="title">USContractorPayrollSystem</span> <span class="keyword">extends</span> <span class="title">USPayrollSystem</span> <span class="keyword">with</span></span>
+    ContractorPayrollSystem {
+  <span class="class"><span class="keyword">class</span> <span class="title">USPayroll</span> <span class="keyword">extends</span> <span class="title">super</span>.<span class="title">USPayroll</span> <span class="keyword">with</span> <span class="title">Payroll</span> {</span>
+    <span class="keyword">def</span> processContractors(contractors: Vector[Contractor]) =
+      Left(<span class="string">"US contract payroll"</span>)
+  }
+}
+
+<span class="comment">// use it</span>
+<span class="class"><span class="keyword">object</span> <span class="title">RunNewPayroll</span> {</span>
+  <span class="class"><span class="keyword">object</span> <span class="title">USNewPayrollInstance</span> <span class="keyword">extends</span> <span class="title">USContractorPayrollSystem</span> {</span>
+    <span class="keyword">type</span> P = USPayroll
+    <span class="keyword">def</span> processPayroll(p: USPayroll) = {
+      p.processEmployees(Vector(Employee(<span class="string">"a"</span>, <span class="number">1</span>)))
+      p.processContractors(Vector(Contractor(<span class="string">"b"</span>)))
+      Left(<span class="string">"payroll processed successfully"</span>)
+    }
+  }
+  <span class="keyword">def</span> main(args: Array[String]): Unit = run
+  
+  <span class="keyword">def</span> run = {
+    <span class="keyword">val</span> usPayroll = <span class="keyword">new</span> USPayroll
+    USNewPayrollInstance.processPayroll(usPayroll)
+  }
+}
+</pre></td></tr></table></figure>
+
+<h1 id="types-of-types">Types of types</h1>
+<h2 id="structural-types">Structural types</h2>
+<p>Structural typing in Scala is the way to describe types by their structure, not by their
+names, as with other typing.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code"><pre><span class="keyword">def</span> close(closable: { <span class="keyword">def</span> close: Unit }) = {
+  closable.close
+}
+
+<span class="comment">// used like this</span>
+<span class="keyword">type</span> Closable = { <span class="keyword">def</span> close: Unit }
+<span class="keyword">def</span> close(closable: { <span class="keyword">def</span> close: Unit }) = {
+  closable.close
+}
+
+<span class="keyword">def</span> amountPaidAsSalary2(workers: Vector[{<span class="keyword">def</span> salary: BigDecimal }]) = {
+}
+</pre></td></tr></table></figure>
+
+<h2 id="higher-kinded-types">Higher-kinded types</h2>
+<p>Higher-kinded types are types that know how to create a
+new type from the type argument.</p>
+<p>The <code>scala.collections.immutable.List[+A]</code> is
+an example of a higher-kinded type. It takes a type
+parameter and creates a new concrete type.
+import <code>scala.language.higherKinds</code> to enable it</p>
+<h2 id="phantom-types">Phantom types</h2>
+<p>Phantom types are types that don’t provide any constructors to create values. You only
+need these types during compile time to enforce constraints. </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre>case class <span class="keyword">Order</span>(itemId: Option[<span class="keyword">Item</span>], address: Option[<span class="keyword">String</span>])
+
+def addItem(item: <span class="keyword">String</span>, o: <span class="keyword">Order</span>) =
+  <span class="keyword">Order</span> (Some(item), o.shippingAddress)
+def addShipping(address: <span class="keyword">String</span>, o: <span class="keyword">Order</span>) =
+  <span class="keyword">Order</span> (o.itemId, Some(address))
+def placeOrder (o: <span class="keyword">Order</span>) = <span class="list">{ ... }</span>
+</pre></td></tr></table></figure>
+
+<p>The problem with this approach is that the methods could get called out of order. </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+</pre></td><td class="code"><pre>sealed trait ItemProvided
+sealed trait NoItem
+sealed trait AddressProvided
+sealed trait NoAddress
+
+case class Order[<span class="link_label">A, B, C</span>](<span class="link_url">itemId: Option[String], shippingAddress: Option[String]</span>)
+
+def emptyOrder = Order[<span class="link_label">InCompleteOrder, NoItem, NoAddress</span>](<span class="link_url">None, None</span>)
+
+def addItem[<span class="link_label">A, B</span>](<span class="link_url">item: String, o: Order[A, NoItem, B]</span>) =
+  o.copy[<span class="link_label">A, ItemProvided, B</span>](<span class="link_url">itemId = Some(item</span>))
+
+def addShipping[<span class="link_label">A, B</span>](<span class="link_url">address: String, o: Order[A, B, NoAddress]</span>) =
+  o.copy[<span class="link_label">A, B, AddressProvided</span>](<span class="link_url">shippingAddress = Some(address</span>))
+
+def placeOrder (o: Order[InCompleteOrder, ItemProvided, AddressProvided]) ={
+  ...
+  o.copy[OrderCompleted, ItemProvided, AddressProvided]()
+}
+</pre></td></tr></table></figure>
+
+<h1 id="ad-hoc-polymorphism-with-type-classes">Ad hoc polymorphism with type classes</h1>
+<p>Ad hoc polymorphism is a kind of polymorphism in which
+polymorphic functions can be applied to arguments of different types.
+Ad hoc polymorphism lets you add features to a type any time you want.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+</pre></td><td class="code"><pre><span class="class"><span class="keyword">trait</span> <span class="title">XmlConverter</span>[<span class="title">A</span>] {</span>
+  <span class="keyword">def</span> toXml(a: A): String
+}
+
+<span class="class"><span class="keyword">case</span> <span class="keyword">class</span> <span class="title">Movie</span><span class="params">(name: String, year: Int, rating: Double)</span></span>
+
+<span class="class"><span class="keyword">object</span> <span class="title">Converters</span> {</span>
+  implicit <span class="class"><span class="keyword">object</span> <span class="title">MovieConverter</span> <span class="keyword">extends</span> <span class="title">XmlConverter</span>[<span class="title">Movie</span>] {</span>
+    <span class="keyword">def</span> toXml(a: Movie) = &lt;movie&gt;
+            &lt;name&gt;{a.name}&lt;/name&gt;
+            &lt;year&gt;{a.year}&lt;/year&gt;
+            &lt;rating&gt;{a.rating}&lt;/rating&gt;
+        &lt;/movie&gt;.toString
+  }
+}
+
+<span class="class"><span class="keyword">object</span> <span class="title">Main</span> {</span>
+  <span class="keyword">import</span> Converters._
+  <span class="keyword">def</span> toXml[A](a: A)(implicit converter: XmlConverter[A]) =
+      converter.toXml(a)
+  <span class="keyword">def</span> main(args: Array[String]) = {
+    <span class="keyword">val</span> p = Movie(<span class="string">"Inception"</span>, <span class="number">2010</span>, <span class="number">10</span>)
+    toXml(p)
+  }
+}
+
+<span class="comment">// 可以写成这样, scala2.8 之后的语法糖</span>
+<span class="keyword">def</span> toXml[A: XmlConverter](a: A) =
+   implicitly[XmlConverter[A]].toXml(a)
+</pre></td></tr></table></figure>
+
+<h2 id="solving-the-expression-problem-using-type-classes">Solving the expression problem using type classes</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+</pre></td><td class="code"><pre><span class="keyword">import</span> scala.langage.higherkinds
+
+<span class="class"><span class="keyword">object</span> <span class="title">PayrollSystemWithTypeclass</span> {</span>
+  <span class="class"><span class="keyword">case</span> <span class="keyword">class</span> <span class="title">Employee</span><span class="params">(name: String, id: Long)</span></span>
+  <span class="class"><span class="keyword">trait</span> <span class="title">PayrollProcessor</span>[<span class="title">C</span>[<span class="title">_</span>], <span class="title">A</span>] {</span>
+    <span class="keyword">def</span> processPayroll(payees: Seq[A]): Either[String, Throwable]
+  }
+  <span class="class"><span class="keyword">case</span> <span class="keyword">class</span> <span class="title">USPayroll</span>[<span class="title">A</span>]<span class="params">(payees: Seq[A])</span></span>
+       (implicit processor: PayrollProcessor[USPayroll, A]) {
+    <span class="keyword">def</span> processPayroll = processor.processPayroll(payees)
+  }
+  <span class="class"><span class="keyword">case</span> <span class="keyword">class</span> <span class="title">CanadaPayroll</span>[<span class="title">A</span>]<span class="params">(payees: Seq[A])</span></span>
+      (implicit processor: PayrollProcessor[CanadaPayroll, A]){
+    <span class="keyword">def</span> processPayroll = processor.processPayroll(payees)
+  }
+}
+
+<span class="class"><span class="keyword">object</span> <span class="title">PayrollProcessors</span> {</span>
+  <span class="keyword">import</span> PayrollSystemWithTypeclass._
+  implicit <span class="class"><span class="keyword">object</span> <span class="title">USPayrollProcessor</span> <span class="keyword">extends</span> <span class="title">PayrollProcessor</span>[<span class="title">USPayroll</span>, <span class="title">Employee</span>] {</span>
+    <span class="keyword">def</span> processPayroll(payees: Seq[Employee]) = Left(<span class="string">"us employees are processed"</span>)
+  }
+  implicit <span class="class"><span class="keyword">object</span> <span class="title">CanadaPayrollProcessor</span> <span class="keyword">extends</span> <span class="title">PayrollProcessor</span>[<span class="title">CanadaPayroll</span>, <span class="title">Employee</span>] {</span>
+    <span class="keyword">def</span> processPayroll(payees: Seq[Employee]) =
+        Left(<span class="string">"canada employees are processed"</span>)
+  }
+}
+<span class="comment">// 扩展他时</span>
+
+<span class="class"><span class="keyword">object</span> <span class="title">PayrollSystemWithTypeclassExtension</span> {</span>
+  <span class="keyword">import</span> PayrollSystemWithTypeclass._
+  <span class="class"><span class="keyword">case</span> <span class="keyword">class</span> <span class="title">JapanPayroll</span>[<span class="title">A</span>]<span class="params">(payees: Vector[A])</span></span>
+        (implicit processor: PayrollProcessor[JapanPayroll, A]) {
+    <span class="keyword">def</span> processPayroll = processor.processPayroll(payees)
+  }
+  <span class="class"><span class="keyword">case</span> <span class="keyword">class</span> <span class="title">Contractor</span><span class="params">(name: String)</span></span>
+}
+
+<span class="class"><span class="keyword">object</span> <span class="title">PayrollProcessorsExtension</span> {</span>
+  <span class="keyword">import</span> PayrollSystemWithTypeclassExtension._
+  <span class="keyword">import</span> PayrollSystemWithTypeclass._
+  implicit <span class="class"><span class="keyword">object</span> <span class="title">JapanPayrollProcessor</span> <span class="keyword">extends</span></span>
+        PayrollProcessor[JapanPayroll, Employee] {
+    <span class="keyword">def</span> processPayroll(payees: Seq[Employee]) =
+         Left(<span class="string">"japan employees are processed"</span>)
+  }
+}
+
+implicit <span class="class"><span class="keyword">object</span> <span class="title">USContractorPayrollProcessor</span></span>
+      <span class="keyword">extends</span> PayrollProcessor[USPayroll, Contractor] {
+  <span class="keyword">def</span> processPayroll(payees: Seq[Contractor]) =
+        Left(<span class="string">"us contractors are processed"</span>)
+}
+<span class="comment">// TODO</span>
+
+<span class="class"><span class="keyword">object</span> <span class="title">RunNewPayroll</span> {</span>
+  <span class="keyword">import</span> PayrollSystemWithTypeclass._
+  <span class="keyword">import</span> PayrollProcessors._
+  <span class="keyword">import</span> PayrollSystemWithTypeclassExtension._
+  <span class="keyword">import</span> PayrollProcessorsExtension._
+  <span class="keyword">def</span> main(args: Array[String]): Unit = run
+  <span class="keyword">def</span> run = {
+    <span class="keyword">val</span> r1 = JapanPayroll(Vector(Employee(<span class="string">"a"</span>, <span class="number">1</span>))).processPayroll
+    <span class="keyword">val</span> r2 = JapanPayroll(Vector(Contractor(<span class="string">"a"</span>))).processPayroll
+  }
+}
+</pre></td></tr></table></figure>
+
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/scala/">scala</a>
+  </div>
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://zhpooer.github.io/2014/07/19/scala-in-action-type-system/" data-title="Scala in Action-type system | Poe&#39;s World" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2014/07/21/传智播客day61-医药集中采购平台-框架搭建/" title="传智播客day61-医药集中采购平台 框架搭建">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  传智播客day61-医药集中采购平台 框架搭建</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2014/07/19/传智播客day60-cxf/"  title="传智播客day60-CXF">
+ <strong>NEXT:</strong><br/> 
+ <span>传智播客day60-CXF
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">入门</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#abstract-type-members"><span class="toc-number">2.</span> <span class="toc-text">Abstract type members</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#self-type-members"><span class="toc-number">3.</span> <span class="toc-text">Self type members</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#building-a-scalable-component"><span class="toc-number">4.</span> <span class="toc-text">Building a scalable component</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#building-an-extensible-component"><span class="toc-number">5.</span> <span class="toc-text">Building an extensible component</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#the-expression-problem-and-the-extensibility-challenge"><span class="toc-number">5.1.</span> <span class="toc-text">THE EXPRESSION PROBLEM AND THE EXTENSIBILITY CHALLENGE</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#practice-example"><span class="toc-number">5.2.</span> <span class="toc-text">practice example</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#solving-the-expression-problem"><span class="toc-number">5.3.</span> <span class="toc-text">SOLVING THE EXPRESSION PROBLEM</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#types-of-types"><span class="toc-number">6.</span> <span class="toc-text">Types of types</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#structural-types"><span class="toc-number">6.1.</span> <span class="toc-text">Structural types</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#higher-kinded-types"><span class="toc-number">6.2.</span> <span class="toc-text">Higher-kinded types</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#phantom-types"><span class="toc-number">6.3.</span> <span class="toc-text">Phantom types</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#ad-hoc-polymorphism-with-type-classes"><span class="toc-number">7.</span> <span class="toc-text">Ad hoc polymorphism with type classes</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#solving-the-expression-problem-using-type-classes"><span class="toc-number">7.1.</span> <span class="toc-text">Solving the expression problem using type classes</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/AJAX/" title="AJAX">AJAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/DOM/" title="DOM">DOM<sup>2</sup></a></li>
+		
+			<li><a href="/tags/EL表达式/" title="EL表达式">EL表达式<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Hibernate/" title="Hibernate">Hibernate<sup>2</sup></a></li>
+		
+			<li><a href="/tags/HttpSession/" title="HttpSession">HttpSession<sup>1</sup></a></li>
+		
+			<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JSP/" title="JSP">JSP<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaBean/" title="JavaBean">JavaBean<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaScript/" title="JavaScript">JavaScript<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Mybatis/" title="Mybatis">Mybatis<sup>1</sup></a></li>
+		
+			<li><a href="/tags/SAX/" title="SAX">SAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletRequest/" title="ServletRequest">ServletRequest<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletResponse/" title="ServletResponse">ServletResponse<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Spring/" title="Spring">Spring<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Spring MVC/" title="Spring MVC">Spring MVC<sup>1</sup></a></li>
+		
+			<li><a href="/tags/String/" title="String">String<sup>1</sup></a></li>
+		
+			<li><a href="/tags/StringBuffer/" title="StringBuffer">StringBuffer<sup>1</sup></a></li>
+		
+			<li><a href="/tags/activiti/" title="activiti">activiti<sup>2</sup></a></li>
+		
+			<li><a href="/tags/cookie/" title="cookie">cookie<sup>1</sup></a></li>
+		
+			<li><a href="/tags/css/" title="css">css<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2014 
+		
+		<a href="http://zhpooer.github.io" target="_blank" title="zhpooer">zhpooer</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"zhpoooer"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>

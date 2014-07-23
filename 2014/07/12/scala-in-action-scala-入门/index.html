@@ -1,0 +1,579 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Scala in Action-scala 入门 | Poe&#39;s World</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="zhpooer">
+    
+    <meta name="description" content="面向对象
+什么是纯粹的面向对象语言
+
+Encapsulation/information hiding.(封装)
+Inheritance.(继承)
+Polymorphism/dynamic binding.(多态)
+All predefined types are objects.
+All oper">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="Poe&#39;s World" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="Poe&#39;s World" title="Poe&#39;s World"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Poe&#39;s World">Poe&#39;s World</a></h1>
+				<h2 class="blog-motto">竹杖芒鞋轻胜马，一蓑烟雨任平生</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/english-monthly">英语角</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:zhpooer.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/07/12/scala-in-action-scala-入门/" title="Scala in Action-scala 入门" itemprop="url">Scala in Action-scala 入门</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://zhpooer.github.io" title="zhpooer">zhpooer</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2014-07-12T01:20:07.000Z" itemprop="datePublished">7月 12 2014</time>
+    更新日期:<time datetime="2014-07-12T09:01:09.000Z" itemprop="dateModified">7月 12 2014</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">面向对象</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">2.</span> <span class="toc-text">函数式编程</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">多范式编程</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">3.1.</span> <span class="toc-text">函数即对象</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">4.</span> <span class="toc-text">静态类型</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#command-line-rest-client"><span class="toc-number">5.</span> <span class="toc-text">Command-line REST client</span></a></li></ol>
+		</div>
+		
+		<h1 id="-">面向对象</h1>
+<p>什么是纯粹的面向对象语言</p>
+<ul>
+<li>Encapsulation/information hiding.(封装)</li>
+<li>Inheritance.(继承)</li>
+<li>Polymorphism/dynamic binding.(多态)</li>
+<li>All predefined types are objects.</li>
+<li>All operations are performed by sending messages to objects.</li>
+<li>All user-defined types are objects.</li>
+</ul>
+<p>every value is an object, and every operation is a message send,
+<code>1+2</code> 的被scala翻译为 <code>1.+(2)</code></p>
+<p>Along with the pure object-oriented features, Scala has made some <em>innovations</em> on
+OOP space:</p>
+<ul>
+<li>模块混入(Modular mixin composition), This feature of Scala has traits in common with
+both Java interfaces and abstract classes. You can define contracts using one or
+more traits and provide implementations for some or all of the methods.(trait)</li>
+<li><em>Self-type</em> — A mixin doesn’t depend on any methods or fields of the class that it’s
+mixed into, but sometimes it’s useful to use fields or methods of the class it’s
+mixed into, and this feature of Scala is called self-type.</li>
+<li><em>Type abstraction</em>, 类型抽象 — There are two principle forms of abstraction in programming
+languages: parameterization and abstract members. Scala supports both forms
+of abstraction uniformly for types and values.</li>
+</ul>
+<h1 id="-">函数式编程</h1>
+<p>Functional programming is a programming paradigm
+that treats computation as the evaluation of mathematical functions and avoids state
+and mutable data.(像数学方法调用, 去除状态和可变数据)</p>
+<p><strong>Mutable vs. immutable data</strong></p>
+<p>An object is called mutable when you can alter the contents of the object if you have
+a reference to it. In the case of an immutable object, the contents of the object can’t
+be altered if you have a reference to it.</p>
+<p>It’s easy to create a mutable object; all you have to do is provide access to the muta-
+ble state of the object. The disadvantage of mutable objects is keeping track of the
+changes. In a multithreaded environment you need lock/synchronization techniques
+to avoid concurrent access. For immutable objects, you don’t have to worry about
+these situations.</p>
+<p>A function relates every value of the domain (the input) to exactly one value of the codomain (the out-
+t). (输入与结果的不变性)</p>
+<p>Another aspect of functional program-ming
+is that it doesn’t have side effects or mutability. </p>
+<p>Functional programming languages that
+support this style of programming provide at least
+some of the following features:</p>
+<ul>
+<li>Higher-order functions </li>
+<li>Lexical closures </li>
+<li>Pattern matching</li>
+<li>Single assignment </li>
+<li>Lazy evaluation </li>
+<li>Type inference </li>
+<li>Tail call optimization </li>
+<li>List comprehensions</li>
+<li>Mondadic effects </li>
+</ul>
+<p>scala支持 头等函数(first-class)</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>val <span class="function"><span class="title">inc</span> = <span class="params">(x:Int)</span> =&gt;</span> x + <span class="number">1</span>
+inc(<span class="number">1</span>)
+
+List<span class="function"><span class="params">(<span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>)</span>.<span class="title">map</span><span class="params">((x:Int) =&gt; x + <span class="number">1</span>)</span></span>
+</pre></td></tr></table></figure>
+
+<h1 id="-">多范式编程</h1>
+<p>提供多范式编程的原因:
+可以为程序员提供各种解决问题的方案, 以及最佳实现取解决问题.
+函数式编程可以提供一些简单的组件(function)非常容易地实现一个有趣的功能.
+面向对象使用继承, 类等功能简单地实现一个复杂的系统.</p>
+<p>In the case of OOP , building blocks are objects, and in
+functional programming building blocks are functions.
+In Scala, functions are treated as objects.</p>
+<h2 id="-">函数即对象</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre>List(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>).map((x:Int) =&gt; x + <span class="number">1</span>)
+// 会被翻译成
+List(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>).map(new Function1[Int, Int]{ <span class="function"><span class="keyword">def</span> <span class="title">apply</span><span class="params">(x:Int)</span>:</span> Int = x + <span class="number">1</span>})
+</pre></td></tr></table></figure>
+
+<p>scala 提供了简单的语言胶合机制, 使添加新的语言特性变得简单方便.
+你可以使用提供一些方法, 结合中缀操作符, 后缀操作符以及闭包, 传名函数.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre><span class="function"><span class="keyword">def</span> <span class="title">loopTill</span><span class="params">(cond: =&gt; Boolean)</span><span class="params">(body: =&gt; Unit)</span> :</span>Unit = {
+    <span class="keyword">if</span>(conf) {
+        body
+        loopTill(cond)(body)
+    }
+}
+var i = <span class="number">10</span>
+loopTill(i&gt;<span class="number">0</span>) {
+    println(i)
+    i -= <span class="number">1</span>
+}
+</pre></td></tr></table></figure>
+
+<blockquote>
+<p>什么是闭包<br>Closure is a first-class function with free variables that are bound
+in the lexical environment. In the loopTill example, the free variable is i.
+Even though it’s defined outside the closure, you could still use it inside. The
+second parameter in the loopTill example is a closure, and in Scala that’s
+represented as an object of type scala.Function0.</p>
+</blockquote>
+<p>The biggest complaint from the dynamic language camp about
+statically typed languages is that they don’t help the productivity of the programmer
+and they reduce productivity by forcing programmers to write boilerplate code. And</p>
+<p>Counting the number of lines in a file in Scala</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre>val src = scala<span class="preprocessor">.io</span><span class="preprocessor">.Source</span><span class="preprocessor">.fromFile</span>(“someFile<span class="preprocessor">.txt</span>”)
+val count = src<span class="preprocessor">.getLines</span>()<span class="preprocessor">.map</span>(<span class="built_in">x</span> =&gt; <span class="number">1</span>)<span class="preprocessor">.sum</span>
+</pre></td></tr></table></figure>
+
+<h1 id="-">静态类型</h1>
+<p>静态类型:
+Static typing is a typing system where the values and the variables
+have types. A number variable can’t hold anything other than a number.
+Types are determined and enforced at compile time or declaration time.</p>
+<p>动态类型:
+Dynamic typing is a typing system where values have types but the
+variables don’t. It’s possible to successively put a number and a string inside
+the same variable.</p>
+<p>静态类型的类型检查, 可以在编译时防止错误的发送,
+但是动态类型需要在运行时, 发现错误</p>
+<p>静态类型的另一个好处就是可以有一个强大的 IDEs 帮助你重构</p>
+<p>传统的静态类型语言在声明一个变量或者调用一个函数时,强制你提供过于的类型信息.
+但是scala 提供了类型推断来帮助程序员像编写动态函数一样编写scala</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>val computers <span class="subst">=</span> <span class="built_in">Array</span>(
+    <span class="built_in">Map</span>(<span class="string">"name"</span> <span class="subst">-&gt; </span><span class="string">"Macbook"</span>, <span class="string">"color"</span> <span class="subst">-&gt; </span><span class="string">"white"</span>),
+    <span class="built_in">Map</span>(<span class="string">"name"</span> <span class="subst">-&gt; </span><span class="string">"HP Pavillion"</span>, <span class="string">"color"</span> <span class="subst">-&gt; </span><span class="string">"black"</span>)
+)
+</pre></td></tr></table></figure>
+
+<p><em>COMPILE MACROS</em> The Scala 2.10 release adds experimental support for
+compile-time macros.11 This allows programmers to write macro defs: func-
+tions that are transparently loaded by the compiler and executed during com-
+pilation. This realizes the notion of compile-time metaprogramming for Scala.</p>
+<table>
+<thead>
+<tr>
+<th>sbt 命令</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>:help</td>
+<td>帮助</td>
+</tr>
+<tr>
+<td>:cp</td>
+<td>进入复制文本模式</td>
+</tr>
+<tr>
+<td>:load</td>
+<td>载入 scala 文件</td>
+</tr>
+<tr>
+<td>:replay or :r</td>
+<td>从新载入</td>
+</tr>
+<tr>
+<td>:quite or :q</td>
+<td>退出</td>
+</tr>
+<tr>
+<td>:type</td>
+<td>显示类型</td>
+</tr>
+<tr>
+<td>:import</td>
+<td>显示所有已经导入的包</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>val <span class="keyword">first</span> :: <span class="property">rest</span> = List(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>)
+</pre></td></tr></table></figure>
+
+<p>If the function has side effects, the common convention is to use “()” even though it
+isn’t required.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre><span class="function"><span class="keyword">def</span> </span>myFirstMethod = <span class="string">"exciting times ahead"</span>
+</pre></td></tr></table></figure>
+
+<h1 id="command-line-rest-client">Command-line REST client</h1>
+<p>REST, REpresentational State Transfer</p>
+<ul>
+<li>Application state and functionality are divided into resources.</li>
+<li>Every resource is uniquely addressable using a universal syntax.</li>
+<li>All resources share a uniform interface for transfer of state between client
+and resource, consisting of well-defined operations (GET, POST, PUT, DELETE,
+OPTIONS, and so on, for RESTful web services) and content types.</li>
+<li>A protocol that’s client/server, stateless cacheable, and layered.</li>
+</ul>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/scala/">scala</a>
+  </div>
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://zhpooer.github.io/2014/07/12/scala-in-action-scala-入门/" data-title="Scala in Action-scala 入门 | Poe&#39;s World" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2014/07/12/scala-in-action-oop-in-scala/" title="Scala in Action-OOP in Scala">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  Scala in Action-OOP in Scala</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2014/07/11/传智播客day55-oracle管理/"  title="传智播客day55-Oracle管理">
+ <strong>NEXT:</strong><br/> 
+ <span>传智播客day55-Oracle管理
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">面向对象</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">2.</span> <span class="toc-text">函数式编程</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">多范式编程</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">3.1.</span> <span class="toc-text">函数即对象</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">4.</span> <span class="toc-text">静态类型</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#command-line-rest-client"><span class="toc-number">5.</span> <span class="toc-text">Command-line REST client</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/AJAX/" title="AJAX">AJAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/DOM/" title="DOM">DOM<sup>2</sup></a></li>
+		
+			<li><a href="/tags/EL表达式/" title="EL表达式">EL表达式<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Hibernate/" title="Hibernate">Hibernate<sup>2</sup></a></li>
+		
+			<li><a href="/tags/HttpSession/" title="HttpSession">HttpSession<sup>1</sup></a></li>
+		
+			<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JSP/" title="JSP">JSP<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaBean/" title="JavaBean">JavaBean<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaScript/" title="JavaScript">JavaScript<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Mybatis/" title="Mybatis">Mybatis<sup>1</sup></a></li>
+		
+			<li><a href="/tags/SAX/" title="SAX">SAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletRequest/" title="ServletRequest">ServletRequest<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletResponse/" title="ServletResponse">ServletResponse<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Spring/" title="Spring">Spring<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Spring MVC/" title="Spring MVC">Spring MVC<sup>1</sup></a></li>
+		
+			<li><a href="/tags/String/" title="String">String<sup>1</sup></a></li>
+		
+			<li><a href="/tags/StringBuffer/" title="StringBuffer">StringBuffer<sup>1</sup></a></li>
+		
+			<li><a href="/tags/activiti/" title="activiti">activiti<sup>2</sup></a></li>
+		
+			<li><a href="/tags/cookie/" title="cookie">cookie<sup>1</sup></a></li>
+		
+			<li><a href="/tags/css/" title="css">css<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2014 
+		
+		<a href="http://zhpooer.github.io" target="_blank" title="zhpooer">zhpooer</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"zhpoooer"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>

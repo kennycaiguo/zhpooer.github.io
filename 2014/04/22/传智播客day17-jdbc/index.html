@@ -89,7 +89,7 @@ jdbc 编码步骤
     </p>
   <p class="article-time">
     <time datetime="2014-04-22T01:29:44.000Z" itemprop="datePublished">4月 22 2014</time>
-    更新日期:<time datetime="2014-04-22T07:40:29.000Z" itemprop="dateModified">4月 22 2014</time>
+    更新日期:<time datetime="2014-07-15T01:42:49.000Z" itemprop="dateModified">7月 15 2014</time>
     
   </p>
 </header>
@@ -159,7 +159,7 @@ jdbc 编码步骤
 15
 16
 </pre></td><td class="code"><pre>DriverManager<span class="preprocessor">.registerDriver</span>(new <span class="keyword">com</span><span class="preprocessor">.mysql</span><span class="preprocessor">.jdbc</span><span class="preprocessor">.Driver</span>)<span class="comment">;</span>
-Connection conn = DriverManager<span class="preprocessor">.getConnection</span>(<span class="string">"jdbc:mysql://localhost:3306/test"</span>, <span class="string">"root"</span>, <span class="string">"root"</span>)<span class="comment">;</span>
+Connection conn = DriverManager<span class="preprocessor">.getConnection</span>(<span class="string">"jdbc:mysql://localhost:3306/test?characterEncoding=utf-8"</span>, <span class="string">"root"</span>, <span class="string">"root"</span>)<span class="comment">;</span>
 Statement stmt = conn<span class="preprocessor">.createStatement</span>()<span class="comment">;</span>
 // resultset 是一个游标, 该游标可以滚动, 默认指向第一行的前面
 ResultSet rs = stmt<span class="preprocessor">.excuteQuery</span>(<span class="string">"select * from user"</span>)<span class="comment">;</span>
@@ -807,6 +807,8 @@ stmt<span class="preprocessor">.excuteUpdate</span>()<span class="comment">; // 
 		
 			<li><a href="/tags/JavaScript/" title="JavaScript">JavaScript<sup>1</sup></a></li>
 		
+			<li><a href="/tags/Mybatis/" title="Mybatis">Mybatis<sup>1</sup></a></li>
+		
 			<li><a href="/tags/SAX/" title="SAX">SAX<sup>1</sup></a></li>
 		
 			<li><a href="/tags/ServletRequest/" title="ServletRequest">ServletRequest<sup>1</sup></a></li>
@@ -814,6 +816,8 @@ stmt<span class="preprocessor">.excuteUpdate</span>()<span class="comment">; // 
 			<li><a href="/tags/ServletResponse/" title="ServletResponse">ServletResponse<sup>1</sup></a></li>
 		
 			<li><a href="/tags/Spring/" title="Spring">Spring<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Spring MVC/" title="Spring MVC">Spring MVC<sup>1</sup></a></li>
 		
 			<li><a href="/tags/String/" title="String">String<sup>1</sup></a></li>
 		
@@ -824,10 +828,6 @@ stmt<span class="preprocessor">.excuteUpdate</span>()<span class="comment">; // 
 			<li><a href="/tags/cookie/" title="cookie">cookie<sup>1</sup></a></li>
 		
 			<li><a href="/tags/css/" title="css">css<sup>1</sup></a></li>
-		
-			<li><a href="/tags/dom4j/" title="dom4j">dom4j<sup>1</sup></a></li>
-		
-			<li><a href="/tags/dtd/" title="dtd">dtd<sup>1</sup></a></li>
 		
 		</ul>
 </div>
