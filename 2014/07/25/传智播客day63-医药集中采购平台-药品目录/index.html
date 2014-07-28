@@ -1,0 +1,1130 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>传智播客day63-医药集中采购平台 药品目录 | Poe&#39;s World</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="zhpooer">
+    
+    <meta name="description" content="数据字典
+系统中定义的类型数据, 在数据字典表定义.
+数据字典明细表 (dictinfo)
+
+info
+typecode 外键关联
+
+数据字典类型表 (dicttype)
+
+typecode primary key
+dictcode
+
+1
+2
+-- 选择药品
+select * form dictin">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="Poe&#39;s World" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="Poe&#39;s World" title="Poe&#39;s World"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Poe&#39;s World">Poe&#39;s World</a></h1>
+				<h2 class="blog-motto">竹杖芒鞋轻胜马，一蓑烟雨任平生</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/english-monthly">英语角</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:zhpooer.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/07/25/传智播客day63-医药集中采购平台-药品目录/" title="传智播客day63-医药集中采购平台 药品目录" itemprop="url">传智播客day63-医药集中采购平台 药品目录</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://zhpooer.github.io" title="zhpooer">zhpooer</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2014-07-25T01:04:29.000Z" itemprop="datePublished">7月 25 2014</time>
+    更新日期:<time datetime="2014-07-27T07:45:20.000Z" itemprop="dateModified">7月 27 2014</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">数据字典</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">2.</span> <span class="toc-text">用户身份认证</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.1.</span> <span class="toc-text">登陆拦截器</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">药品目录</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#poi"><span class="toc-number">3.1.</span> <span class="toc-text">POI</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">3.1.1.</span> <span class="toc-text">导出</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">3.2.</span> <span class="toc-text">导出药品目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">3.3.</span> <span class="toc-text">药品信息的导入</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">4.</span> <span class="toc-text">供货商药品目录</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">4.1.</span> <span class="toc-text">业务操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">4.2.</span> <span class="toc-text">供货商目录维护</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">4.3.</span> <span class="toc-text">数据范围权限</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">4.4.</span> <span class="toc-text">供货商药品目录添加查询</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">4.5.</span> <span class="toc-text">批量提交</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">4.6.</span> <span class="toc-text">供货商删除供货商药品目录</span></a></li></ol>
+		</div>
+		
+		<h1 id="-">数据字典</h1>
+<p>系统中定义的类型数据, 在数据字典表定义.</p>
+<p>数据字典明细表 (dictinfo)</p>
+<ul>
+<li>info</li>
+<li>typecode 外键关联</li>
+</ul>
+<p>数据字典类型表 (dicttype)</p>
+<ul>
+<li>typecode primary key</li>
+<li>dictcode</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre><span class="comment">-- 选择药品</span>
+<span class="operator"><span class="keyword">select</span> * form dictinfo <span class="keyword">where</span> typecode=<span class="string">'001'</span>;</span>
+</pre></td></tr></table></figure>
+
+<p>应用</p>
+<ol>
+<li><p>将数据字典明细表中的id存储在业务表的字段中, 如医院信息(useryy)中的级别</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="operator"><span class="keyword">select</span> t.*,
+  (<span class="keyword">select</span> info <span class="keyword">from</span> dictinfo <span class="keyword">where</span> id=t.jb)
+t.rowid <span class="keyword">from</span> useryy t;</span>
+</pre></td></tr></table></figure>
+</li>
+<li><p>将数据字典表中的dictcode字段存储在业务表中, 比如系统用户表中的groupid,
+对应数据字典表中typecode为 01的 dictcode</p>
+</li>
+</ol>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- 系统配置接口 --&gt;</span>
+<span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">""</span> <span class="attribute">class</span>=<span class="value">"SystemConfigServiceImpl"</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">bean</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="keyword">class</span> UserAction {
+    @RequestMapping(<span class="string">"/userquery"</span>)
+    <span class="keyword">public</span> String <span class="title">userquery</span>(Model model) {
+        List&lt;DictInfo&gt; grouplist = systemConfgiService.findDictInfoByType(<span class="string">"s01"</span>);
+        model.addAttribut(<span class="string">"groupinfo"</span>, grouplist)
+        <span class="keyword">return</span> <span class="string">"base/userquery"</span>;
+    }
+}
+</pre></td></tr></table></figure>
+
+<p>将 硬编码判断, 数据库用户预定义类型(1-&gt;info,2-&gt;info,3-&gt;info) 在数据库关联</p>
+<h1 id="-">用户身份认证</h1>
+<p>静态密码方式, 用户名对应的密码设置在系统, 以设置一边不再改变,
+安全性低容易被木马窃取, 可以定期修改密码, 但是不容易记忆</p>
+<p>动态密码: 短信密码</p>
+<p>验证码, 防止恶意攻击</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LoginAction</span> {</span>
+    <span class="comment">// 登陆页面</span>
+    <span class="annotation">@RequestMapping</span>(<span class="string">"/login"</span>)
+    <span class="keyword">public</span> String <span class="title">login</span>(){
+        <span class="keyword">return</span> <span class="string">"/base/login"</span>
+    }
+    <span class="comment">// 登陆提交</span>
+    <span class="annotation">@RequestMapping</span>(<span class="string">"/loginsubmit"</span>)
+    <span class="keyword">public</span> @ResponseBody SubmitResultInfo <span class="title">loginSubmit</span>(
+        HttpSession session, 
+        String userid, String pwd, String randomcode 
+    ) {
+        <span class="comment">// 校验验证码是否正确</span>
+        String validateCode_session = session.getAttribute(<span class="string">"validateCode"</span>);
+        <span class="keyword">if</span>(!validateCode_session.equals(randomcode)) {
+            ResultUtil.throwException(ResultUtil.createFail(Config.MESSAGE, <span class="number">113</span>, <span class="keyword">null</span>));
+        }
+        <span class="comment">// 校验用户身份</span>
+        ActiveUser activeUser = userManagerService.userloginCheck(userid, pwd);
+        session.setAttribute(Config.ACTIVE_key, activeUser);
+        <span class="keyword">return</span> ResultUtil.createSubmitResult(ResultUtil.createSuccess(Config.Message, <span class="number">107</span>, <span class="keyword">new</span> Object[]{activeUser.userId}));
+    }
+}
+
+<span class="comment">// userManagerService</span>
+
+<span class="comment">// 校验通过返回用户身份信息</span>
+<span class="keyword">public</span> ActiveUser <span class="title">userloginCheck</span>(String userid, String pwd) {
+    Sysuser sysuser = findSysuserByuserid(userid);
+    <span class="keyword">if</span>(sysuser==<span class="keyword">null</span>) {
+        ResultUtil.throwException(ResultUtil.createFail(Config.MESSAGE, <span class="number">110</span>, <span class="keyword">null</span>));
+    }
+    String pwd_md5 = <span class="keyword">new</span> MD5.getMD5ofStr(pwd);
+    <span class="keyword">if</span>(!sysuser.getPwd().equals(pwd_md5)) {
+        <span class="comment">// 提示 用户密码不正确</span>
+        ResultUtil.throwException(ResultUtil.createFail(Config.MESSAGE, <span class="number">114</span>, <span class="keyword">null</span>)); 
+    }
+    ActiverUser activeUser = <span class="keyword">new</span> ActiveUser();
+    activeUser.setGroupid(sysuser.getGroupid);
+    activeUser.setUserId(); <span class="comment">// username, sysid</span>
+    <span class="keyword">return</span> activeUser;
+}
+
+<span class="annotation">@Controller</span>
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">First</span> {</span>
+   <span class="annotation">@ResourceMapping</span>(<span class="string">"/logout"</span>)
+   <span class="keyword">public</span> String <span class="title">logout</span>() {
+       <span class="comment">// 清除session</span>
+       session.setAtrribute(<span class="string">""</span>, <span class="keyword">null</span>);
+       <span class="keyword">return</span> View.recirect(<span class="string">"login.action"</span>); <span class="comment">// "redirect:login.action"</span>
+   }
+}
+</pre></td></tr></table></figure>
+
+<h2 id="-">登陆拦截器</h2>
+<p><code>anonimousAction.properties</code>, 配置用户无需登录就可操作的配置</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre>login<span class="preprocessor">.action</span>
+login<span class="preprocessor">.submit</span><span class="preprocessor">.action</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LoginInterceptor</span> <span class="keyword">implements</span> <span class="title">HandlerInterceptor</span> {</span>
+    <span class="comment">// 进入action方法之前调用</span>
+    <span class="comment">// 权限管理</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">preHandler</span>() {
+        Activeuser activeUser = session.getAttribute();
+        <span class="keyword">if</span>(activeUser!=<span class="keyword">null</span>) {
+            <span class="keyword">return</span> <span class="keyword">true</span>;
+        }
+        List&lt;String&gt; open_url = ResourcesUtil.getKeyList(Config.ANONYMOUST_ACIOTNS);
+        <span class="comment">// 获取请求地址</span>
+        String url = request.getRequestURI();
+        <span class="keyword">for</span>(String url_l : open_url){
+            <span class="keyword">if</span>(url.contains(url_l)) {
+                <span class="keyword">return</span> <span class="keyword">true</span>;
+            }
+        }
+        <span class="comment">// request.getRequestDispatcher("login.jsp").forword(request, response);</span>
+        <span class="comment">// 抛出一个异常信息, 由全局异常处理器同一执行</span>
+            <span class="comment">// 如果异常代码为106, 跳转到登陆页面</span>
+        <span class="keyword">return</span> <span class="keyword">false</span>;
+    }
+    <span class="comment">// 执行 action 之后, 返回视图之前</span>
+    <span class="comment">// 给页面添加共有数据</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">postHandle</span>() {
+    }
+    <span class="comment">// 执行 action 之后</span>
+    <span class="comment">// 捕获异常, 性能监视</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">afterCompletion</span>() {
+    }
+}
+</pre></td></tr></table></figure>
+
+<h1 id="-">药品目录</h1>
+<p>药品目录: 通用名, 价格, 企业名称, 商品名称, 规格, 药品流水号(编号, 通用),
+剂型(胶囊, 针剂), 规格(一个胶囊毫克), 转换系数(40片胶囊), 药品状态(1. 正常交易, 暂停交易)</p>
+<p>药品目录表的记录id与业务表存在很多的外键关联, 规定药品目录不再删除, 进行逻辑删除,
+更新药品交易状态为暂停交易</p>
+<p>省级的药品目录通过接口将信息录入到市药品采购平台, 通过 excel 导出, excel 导入</p>
+<p>excel需要导入导出模板</p>
+<h2 id="poi">POI</h2>
+<p>操作微软文档的 java api</p>
+<p>HSSF, 只支持 excel 97-2003</p>
+<p>XSSF, 支持2007以上的版本, <code>.xlsx</code>, 文件是基于xml存储的</p>
+<h3 id="-">导出</h3>
+<p>Workbook(工作簿), Sheet, Row(行), Cell(单元格)</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre><span class="comment">// HSSF 操作</span>
+Workbook wb = <span class="keyword">new</span> HSSFWorkbook();
+
+Sheet sheet = wb.createSheet(<span class="string">"new sheet"</span>);
+sheet.createRow((<span class="keyword">short</span>)<span class="number">0</span>);
+<span class="comment">// row 表示单元格所在行, 创建时指定单元格所在列</span>
+Cell cell = row.createCell(<span class="number">0</span>);
+cell.setValue(<span class="number">1</span>);
+</pre></td></tr></table></figure>
+
+<p>HSSF导出数据如果数据量足够大, 可能会发生内存溢出</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre><span class="comment">// 关闭自动刷新, 100, 保持100条行在内存</span>
+SXSSFWorkbook wb = <span class="keyword">new</span> SXSSWorkbook(-<span class="number">1</span>);
+Sheet sh = createSheet();
+Row row = sh.createRow(<span class="number">0</span>);
+Cell cell = row.createCell(<span class="number">0</span>);
+
+<span class="comment">// 刷入硬盘, 但是保留最后插入的100行</span>
+<span class="comment">// 会被写入临时文件</span>
+(SXSSSheet)sh.flushRows(<span class="number">100</span>); 
+
+wb.dispose(); <span class="comment"><span class="xmlDocTag">///</span> 清除临时文件</span>
+</pre></td></tr></table></figure>
+
+<p>处理数据速度不快, 除非由大数据要求, 否则建议使用 XSSF</p>
+<h2 id="-">导出药品目录</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+</pre></td><td class="code"><pre>
+<span class="comment">// 药品信息</span>
+<span class="annotation">@Controller</span>
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">YpxxActiona</span> {</span>
+    <span class="comment">// 药品信息导出页面</span>
+    <span class="annotation">@RequestMapping</span>(<span class="string">"/ypxxExport"</span>)
+    <span class="keyword">public</span> String <span class="title">ypxxExport</span>(Model model) {
+        <span class="comment">// 药品类别</span>
+        List&lt;Dictinfo&gt; yplbList = systemConfigService.findDictinfoByType(<span class="string">"001"</span>);
+        <span class="comment">// 交易状态</span>
+        List&lt;Dictinfo&gt; jyztList = systemConfigService.findDictinfoByType(<span class="string">"003"</span>);
+        model.addAttribute(<span class="string">"yplbList"</span>, yplbList);
+        model.addAttribute(<span class="string">"jyztList"</span>, jyztList);
+        
+        <span class="keyword">return</span> View.toBusiness(<span class="string">"/ypml/ypxxExport"</span>);
+    }
+    <span class="annotation">@RequestMapping</span>(<span class="string">"/ypxxExportSubmit"</span>)
+    <span class="keyword">public</span> @ResponseBody SubmitResultInfo <span class="title">ypxxExportSubmit</span>() {
+        String webpath = ypmlservice.ypxxExport(ypxxQueryVo);
+        <span class="comment">// 导出成功, 点击下载</span>
+        <span class="keyword">return</span> ResultUtil.createSubmitResult(ResultUtil.createSuccess(Config.Message, <span class="number">318</span>, ))
+    }
+}
+
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">YpmlService</span> {</span>
+    <span class="keyword">public</span> List&lt;YpxxCustom&gt; <span class="title">findYpxxList</span>(YpxxQueryVo ypxxQueryVo) {
+       <span class="keyword">return</span> ypxxMapperCustom.findYpxxList(ypxxQeuryVo);
+    }
+    
+    <span class="comment">// 药品信息导出</span>
+    <span class="comment">// 导出后将下载的文件路径返回</span>
+    <span class="keyword">public</span> String <span class="title">ypxxExport</span>(YpxxQeuryVo ypxxQueryVo) {
+        List&lt;YpxxCustom&gt; list = <span class="keyword">this</span>.findYpxxList(ypxxQeuryVo);
+        <span class="comment">// 调用封装类, 执行导出</span>
+        
+    }
+}
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="code"><pre>&lt;<span class="keyword">select</span> id=<span class="string">"findYpxxList"</span> parameterType=<span class="string">"YpxxQueryVO"</span> resultType=<span class="string">"YpxxCustom"</span>&gt;
+    <span class="keyword">select</span> * <span class="keyword">from</span> ypxx.*,
+        (<span class="keyword">select</span> form dictinfo <span class="keyword">where</span> dictcode=ypxx.jyzt <span class="keyword">and</span> typecode=<span class="comment">'003') jyztmc</span>
+    <span class="keyword">from</span> ypxx
+    &lt;<span class="keyword">where</span>&gt;
+        &lt;<span class="keyword">if</span> test=<span class="string">"ypxxCustom!=null"</span>&gt;
+           &lt;<span class="keyword">if</span> test=<span class="string">"ypxxCustom.bm!=null and ypxxCustom.bm!=''"</span>&gt;
+               ypxx.bm=<span class="preprocessor">#{ypxxCustom.mc}</span>
+           &lt;/<span class="keyword">if</span>&gt;
+           <span class="keyword">and</span> ypxx.mc <span class="keyword">like</span> <span class="comment">''</span>
+           <span class="keyword">and</span> ypxx.lb=<span class="comment">''</span>
+           <span class="keyword">and</span> ypxx.jyzt=<span class="comment">''</span>
+        &lt;/<span class="keyword">if</span>&gt;
+    &lt;/<span class="keyword">where</span>&gt;
+&lt;/<span class="keyword">select</span>&gt;
+</pre></td></tr></table></figure>
+
+<p>basicinfo表, 保存系统配置, 如 导出文件的保存路径</p>
+<h2 id="-">药品信息的导入</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="code"><pre><span class="comment">// 03版本读取, 只能读取xsl的文件,</span>
+<span class="comment">// 如果使用用户驱动, 如果数据量过大, 内存溢出</span>
+<span class="comment">// 但是可以使用 事件驱动机制 来避免 内存溢出, 但是速度不快,</span>
+<span class="comment">// 需要程序员自定义 processRecord 方法去处理读取到的数据</span>
+HSSFWorkbook wb = <span class="keyword">new</span> HSSFWorkbook(inputStream);
+wb.getNumberOfSheets();
+Sheet sheet = wb.getSheetAt(<span class="keyword">index</span>);
+HSSFRow row = wb.getRow(rownum);
+HSSFCell cell = row.getCell();
+</pre></td></tr></table></figure>
+
+<p>使用 XSSF 方式读取 excel 文件, 是基于 sax 方式, 属于事件驱动</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+</pre></td><td class="code"><pre><span class="comment">//YpxxAction</span>
+<span class="annotation">@RequestMapping</span>(<span class="string">"/ypxximport"</span>)
+<span class="keyword">public</span> String ypxximport {
+    <span class="comment">// 药品信息导入页面</span>
+    <span class="keyword">return</span> View.toBusiness(<span class="string">"/ypxl/ypxximport"</span>);
+}
+
+<span class="annotation">@ReqeustMappng</span>(<span class="string">"/ypxximportstudent"</span>)
+<span class="keyword">public</span> @ResponseBody SubmitResultInfo <span class="title">ypxximportsubmit</span>(MultipartFile ypxximportfile) {
+    String filename = ypxximportfile.getOriginalFilename();
+    File file = <span class="keyword">new</span> File(<span class="string">"d:/upload/"</span> + filename_original);
+    <span class="keyword">if</span>(!file.exist()) {
+        file.mkdirs(); <span class="comment">// 如果文件所在的路径不存在则创建</span>
+    }
+    <span class="comment">// 将内存中文件的数据写入磁盘</span>
+    ypxximportfile.transferTo(file);
+    <span class="comment">// 导入, 若导入失败, 形成失败记录文件, 返回给用户</span>
+}
+<span class="comment">// 上传多个文件</span>
+<span class="comment">// public SubmitResultInfo ypxximportsubmit(@RequestParam("ypxximportfile") MultipartFile[] ypxximportfiles)</span>
+
+
+
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">YpxxImportServiceImpl</span> <span class="keyword">implements</span> <span class="title">HxlsOptRowsInterface</span> {</span>
+    <span class="comment">// 流水号, 再插入时, 使用触发器自动生成</span>
+}
+</pre></td></tr></table></figure>
+
+<p>内连接, 通过外键关联的两个表的查询, 也可以通过子查询,
+不是外键关联可能会出现重复记录</p>
+<h1 id="-">供货商药品目录</h1>
+<p>供货商将自己供应的药品发布到供应商药品目录(gysypml)</p>
+<ul>
+<li>id</li>
+<li>ypxxid</li>
+<li>usergysid</li>
+</ul>
+<p>监督单位可以对供货商对应的药品进行控制, 允许供货或不允许供货(gysypml_control),
+记录药品控制的状态(只更新, 不添加)</p>
+<ul>
+<li>id</li>
+<li>ypxxid, 药品信息</li>
+<li>usergysid, 供应商id</li>
+<li>control, 监督机构控制状态(1. 正常, 2. 暂停)</li>
+<li>advice, 监督机构意见</li>
+</ul>
+<p>两张表在数据库级别没有关系</p>
+<p>供货商药品目录维护, 供货商在ypsypml表中添加, 删除记录</p>
+<ul>
+<li>添加, 供货商添加自己供应的药品</li>
+<li>删除, 供货商删除自己不再供应的药品</li>
+</ul>
+<p>如果将控制状态设置在供货商商品目录表,
+供应商添加一条记录, 监督单位更新一条记录(控制状态更新为暂停),
+供货商删除一条记录, 删除的同时将监督单位的控制状态也删除了.
+<strong>供货商操作影响了监督单位</strong></p>
+<p>查询供货商药品目录和供货商药品目录控制表时, 通过供货商id和药品信息一块儿关联查询</p>
+<h2 id="-">业务操作</h2>
+<ul>
+<li>供货商药品目录查询, 供货商 + 药品信息 + 状态</li>
+<li>供货商添加药品查询, 药品总目录存在的药品, 但是在供货商目录没有的药品</li>
+<li>确认添加药品, 到供货商药品目录</li>
+<li>监督单位对供货商的药品进行控制<ol>
+<li>查询所有供货商供应的药品的控制状态</li>
+<li>进行控制, 选择要控制的对象, 选择供货状态, 点击确认提交</li>
+</ol>
+</li>
+</ul>
+<h2 id="-">供货商目录维护</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">select</span> <span class="attribute">id</span>=<span class="value">"findGysypmlList"</span> <span class="attribute">parameterType</span>=<span class="value">"GysypxxQeuryVo"</span> <span class="attribute">resultType</span>=<span class="value">"GysypmlCustom6"</span>&gt;</span>
+select gysypml.*, ypxx.*,
+      (seelct info from dictinfo where 控制状态),
+      (seelct info from dictinfo where 交易状态)
+    from gysypml, ypxx, gysyml_control
+    where gysypml.ypxxid=ypxx.id
+      and gysypml.ypxxid=gysyml_control.ypxxid
+      and gysypml.usergysid=gysyml_control.usergysid;
+    <span class="comment">&lt;!-- 药品信息查询条件  --&gt;</span>
+    <span class="comment">&lt;!-- 控制状态条件 --&gt;</span>
+    <span class="comment">&lt;!-- 分页条件, 参考 baseuser --&gt;</span>
+<span class="tag">&lt;/<span class="title">select</span>&gt;</span>
+<span class="tag">&lt;<span class="title">select</span> <span class="attribute">id</span>=<span class="value">"findGysypmlCount"</span> <span class="attribute">parameterType</span>=<span class="value">"GysypxxQeuryVo"</span> <span class="attribute">resultType</span>=<span class="value">"GysypmlCustom6"</span>&gt;</span>
+select gysypml.*, ypxx.*,
+      (seelct info from dictinfo where 控制状态),
+      (seelct info from dictinfo where 交易状态)
+    from gysypml, ypxx, gysyml_control
+    where gysypml.ypxxid=ypxx.id
+      and gysypml.ypxxid=gysyml_control.ypxxid
+      and gysypml.usergysid=gysyml_control.usergysid;
+    <span class="comment">&lt;!-- 药品信息查询条件  --&gt;</span>
+    <span class="comment">&lt;!-- 控制状态条件 --&gt;</span>
+<span class="tag">&lt;/<span class="title">select</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+</pre></td><td class="code"><pre><span class="comment">// ypmlAction</span>
+<span class="comment">// 供货商药品目录查询</span>
+<span class="keyword">public</span> String <span class="title">gysypmlquery</span>(Model model, GyspmQeuryVo gyspmlQeuryVo) {
+    
+    <span class="keyword">return</span> View.toBusiness(<span class="string">"/ypml/gysypmlquery"</span>);
+}
+
+<span class="comment">// 供货商药品目录查询结果集</span>
+<span class="annotation">@ResultMapping</span>(<span class="string">"/y"</span>)
+<span class="keyword">public</span> @ResponseBody DatagridResultInfo <span class="title">findGysypmlCount</span>(
+      GyspmQeuryVo gyspmlQeuryVo
+      <span class="keyword">int</span> page,
+      <span class="keyword">int</span> rows) {
+    <span class="keyword">int</span> count = ypmlService.findGysymlcount(gysypmlQeuryVo);
+    <span class="comment">// 分页</span>
+    PageQuery pageQuery = <span class="keyword">new</span> PageQuery()
+    pageQuery.setPageParams(count, rows, page);
+    gpsymlQeuryVo.setPageQuery(pageQuery);
+
+    List&lt;GysypmlCustom&gt; list = ypmlService.findGysymlList(gpsymlQeuryVo);
+    DataGridResultInfo dinfo = <span class="keyword">new</span> DataGridResultInfo();
+    dinfo.setTotal(count);
+    dinfo.setRows(list);
+    <span class="keyword">return</span> dinfo;
+}
+</pre></td></tr></table></figure>
+
+<h2 id="-">数据范围权限</h2>
+<p>企业控制范围权限</p>
+<ul>
+<li>身份用户认证</li>
+<li>用户权限控制(功能操作)</li>
+<li>数据范围权限(通过 sql 硬编码, 必须要有用户id传入)<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>在service层传入 用户id 和 <span class="keyword">query</span><span class="variable">Vo</span>, 然后再封装
+</pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2 id="-">供货商药品目录添加查询</h2>
+<p>查找供应商允许添加的药品目录</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre>&lt;<span class="keyword">select</span> id=<span class="string">"findGysypmlAddList"</span> parameterType=<span class="string">"yycg.business.vo.GysypmlQueryVo"</span>
+        resultType=<span class="string">"GysypmlCustom"</span>&gt;
+    <span class="keyword">select</span> ypxx.*,
+        (<span class="keyword">select</span> info <span class="keyword">from</span> dictinfo <span class="keyword">where</span> dictcode=ypxx.jyzt <span class="keyword">and</span> typecod=<span class="comment">'003') jyztmc</span>
+    <span class="keyword">from</span> ypxx;
+&lt;/<span class="keyword">select</span>&gt;
+&lt;<span class="keyword">select</span> id=<span class="string">"findGysypmlAddListCount"</span>&gt;
+&lt;/<span class="keyword">select</span>&gt;
+</pre></td></tr></table></figure>
+
+<h2 id="-">批量提交</h2>
+<p>供货商选择药品添加药品到供货商药品目录(gysypml)</p>
+<p>后置条件: 数据库操作, 在供货商药品目录表插入数据时, 同时向供货商药品目录控制表插入记录</p>
+<p>Action 用 List 接收页面提交的数据, <code>String[] index</code>
+接收被选择的序列</p>
+<p>使用 hidden 命名规范 <code>gysypmls[index].ypxxid</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+</pre></td><td class="code"><pre><span class="keyword">public</span> @Response SubmitResultInfo <span class="title">gysypmladdsubmit</span>(
+        GysymplQueryVo qgysypmlQueryVo, // 这里
+        Sring[] index // 选择的行){
+    List gyspmls = gysspmlQueryVo.getGysypmls();
+    <span class="keyword">int</span> num = indexs.length;
+    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;num;i++) {
+        <span class="keyword">int</span> index = Integer.parseInt(indexs[i]);
+        gysypmls.<span class="keyword">get</span>(index);
+        ypmlService.insertGysypl(usergysid, ypxxid);
+    }
+}
+<span class="comment">// YmplService</span>
+<span class="comment">// 根据供应商的id和药品信息id获取供应商目录表的一条记录</span>
+<span class="keyword">public</span> Gysypml <span class="title">findGysypmlByYpxxAdnUsergysid</span>(String usergysid, String ypxxid) {
+    GysypmlExample gysypmlExample = <span class="keyword">new</span> GysypmlExample();
+    GysypmlExample.Createria c = gysypmlExample.createCriteria;
+    c.andUsergysidEqualTo(usergysid);
+    c.andYpxxidEqualTo(yapxixid);
+    List list  = gysypmlMapper.selectByExample(gysypmlControlExample)
+    <span class="keyword">return</span> list.<span class="keyword">get</span>(<span class="number">0</span>);
+}
+<span class="keyword">public</span> Gysypml <span class="title">findGysypmlControlByYpxxAdnUsergysid</span>(String usergysid, String ypxxid) {
+    GysypmlExample gysypmlExample = <span class="keyword">new</span> GysypmlExample();
+    GysypmlExample.Createria c = gysypmlExample.createCriteria;
+    c.andUsergysidEqualTo(usergysid);
+    c.andYpxxidEqualTo(yapxixid);
+    List list  = gysypmlMapper.selectByExample(gysypmlControlExample);
+    <span class="keyword">return</span> list.<span class="keyword">get</span>(<span class="number">0</span>);
+}
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insertGysypml</span>(String usergysid, String gyxxid) {
+    Ypxx ypxx = ypxxMapper.selectByPrimaryKey(ypxxid);
+    <span class="comment">// 校验记录是否重复</span>
+    Gysypml gysypml = findGysypmlByYpxxAdnUsergysid(usergysid, ypxxid);
+    <span class="keyword">if</span>(gysypml!=<span class="keyword">null</span>) {
+        ResultUtil.throwException(createFail());
+    }
+    
+    Gysypml gysympl_insert = <span class="keyword">new</span> Gysypml();
+    gysypml_insert.setId(UUDIBuild.getUUID());
+    gysypmlMapper.insert(gysypml_insert);
+
+   <span class="comment">// 向供货商药品目录写一条表</span>
+   <span class="comment">// 校验, 再添加</span>
+}
+</pre></td></tr></table></figure>
+
+<h2 id="-">供货商删除供货商药品目录</h2>
+<p>提交内容, 药品信息id</p>
+<p>删除供货商药品目录提交</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/传智播客/">传智播客</a>
+  </div>
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://zhpooer.github.io/2014/07/25/传智播客day63-医药集中采购平台-药品目录/" data-title="传智播客day63-医药集中采购平台 药品目录 | Poe&#39;s World" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2014/07/25/scala-in-action-java-integration/" title="Scala in Action-Java integration">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  Scala in Action-Java integration</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2014/07/24/scala-in-action-scalatest/"  title="Scala in Action-ScalaTest">
+ <strong>NEXT:</strong><br/> 
+ <span>Scala in Action-ScalaTest
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">数据字典</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">2.</span> <span class="toc-text">用户身份认证</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.1.</span> <span class="toc-text">登陆拦截器</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">药品目录</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#poi"><span class="toc-number">3.1.</span> <span class="toc-text">POI</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">3.1.1.</span> <span class="toc-text">导出</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">3.2.</span> <span class="toc-text">导出药品目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">3.3.</span> <span class="toc-text">药品信息的导入</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">4.</span> <span class="toc-text">供货商药品目录</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">4.1.</span> <span class="toc-text">业务操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">4.2.</span> <span class="toc-text">供货商目录维护</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">4.3.</span> <span class="toc-text">数据范围权限</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">4.4.</span> <span class="toc-text">供货商药品目录添加查询</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">4.5.</span> <span class="toc-text">批量提交</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">4.6.</span> <span class="toc-text">供货商删除供货商药品目录</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/AJAX/" title="AJAX">AJAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/DOM/" title="DOM">DOM<sup>2</sup></a></li>
+		
+			<li><a href="/tags/EL表达式/" title="EL表达式">EL表达式<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Hibernate/" title="Hibernate">Hibernate<sup>2</sup></a></li>
+		
+			<li><a href="/tags/HttpSession/" title="HttpSession">HttpSession<sup>1</sup></a></li>
+		
+			<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JSP/" title="JSP">JSP<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaBean/" title="JavaBean">JavaBean<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaScript/" title="JavaScript">JavaScript<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Mybatis/" title="Mybatis">Mybatis<sup>1</sup></a></li>
+		
+			<li><a href="/tags/SAX/" title="SAX">SAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletRequest/" title="ServletRequest">ServletRequest<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletResponse/" title="ServletResponse">ServletResponse<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Spring/" title="Spring">Spring<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Spring MVC/" title="Spring MVC">Spring MVC<sup>1</sup></a></li>
+		
+			<li><a href="/tags/String/" title="String">String<sup>1</sup></a></li>
+		
+			<li><a href="/tags/StringBuffer/" title="StringBuffer">StringBuffer<sup>1</sup></a></li>
+		
+			<li><a href="/tags/activiti/" title="activiti">activiti<sup>2</sup></a></li>
+		
+			<li><a href="/tags/cookie/" title="cookie">cookie<sup>1</sup></a></li>
+		
+			<li><a href="/tags/css/" title="css">css<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2014 
+		
+		<a href="http://zhpooer.github.io" target="_blank" title="zhpooer">zhpooer</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"zhpoooer"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>

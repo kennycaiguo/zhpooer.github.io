@@ -99,7 +99,7 @@ bss_sys_a">
     </p>
   <p class="article-time">
     <time datetime="2014-07-22T06:22:07.000Z" itemprop="datePublished">7月 22 2014</time>
-    更新日期:<time datetime="2014-07-22T08:45:14.000Z" itemprop="dateModified">7月 22 2014</time>
+    更新日期:<time datetime="2014-07-24T10:26:18.000Z" itemprop="dateModified">7月 24 2014</time>
     
   </p>
 </header>
@@ -108,7 +108,7 @@ bss_sys_a">
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">模型</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.1.</span> <span class="toc-text">单位信息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.2.</span> <span class="toc-text">用户信息</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">2.</span> <span class="toc-text">系统用户列表</span></a></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">模型</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.1.</span> <span class="toc-text">单位信息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.2.</span> <span class="toc-text">用户信息</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">2.</span> <span class="toc-text">系统用户列表</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.1.</span> <span class="toc-text">添加页面</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.2.</span> <span class="toc-text">异常处理器</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">国际化</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">4.</span> <span class="toc-text">删除</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">5.</span> <span class="toc-text">修改用户</span></a></li></ol>
 		</div>
 		
 		<h1 id="-">模型</h1>
@@ -196,7 +196,6 @@ bss_sys_a">
 41
 42
 43
-44
 </pre></td><td class="code"><pre><span class="annotation">@RequestMapping</span>(<span class="string">"/userquery"</span>)
 <span class="keyword">public</span> String <span class="title">userquery</span>(Model model) {
     <span class="keyword">return</span> <span class="string">"userquery.jsp"</span>;
@@ -205,17 +204,17 @@ bss_sys_a">
 <span class="annotation">@RequestMapping</span>(<span class="string">"/userquery_result"</span>)
 <span class="comment">// form 表单中的数据可以被序列化成 json 数据</span>
 <span class="keyword">public</span> @ResponseBody DataGridResultInfo <span class="title">userquery_result</span>(
-    SysuserQueryVo sysuserQueryvo,
-    <span class="keyword">int</span> page,
-    <span class="keyword">int</span> rows
-    ) {
+  SysuserQueryVo sysuserQueryvo,
+  <span class="keyword">int</span> page,
+  <span class="keyword">int</span> rows
+) {
     <span class="keyword">if</span>(sysuserQueryvo = <span class="keyword">null</span>) sysuserQueryvo = <span class="keyword">new</span> SysuserQueryvo();
     <span class="comment">/// 查询列表的数量</span>
     <span class="keyword">int</span> count = userManagerService.findSysuserCount(sysuserQueryvo);
     <span class="comment">// 穿件分页参数</span>
     PageQuery pageQuery = <span class="keyword">new</span> PageQuery();
     pageQuery.setPageParams(count, rows, page);
-
+    
     sysuserQeury.setPageQuery(pageQeury);
     <span class="comment">// 根据page 和rows查询数据列表</span>
     List list = userManagerList.findSysuserList(sysuserQueryVo);
@@ -223,7 +222,6 @@ bss_sys_a">
     data.setTotal(count);
     data.setRows(list);
     <span class="keyword">return</span> data;
-    
 }
 
 <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SysuserCustom</span> <span class="keyword">extends</span> <span class="title">Sysuser</span> {</span>}
@@ -234,12 +232,144 @@ bss_sys_a">
 }
 
 <span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">SysuserMapperCustom</span> {</span>
-    <span class="comment">// 用户查询列表</span>
-    <span class="comment">// 用户查询总数</span>
+<span class="comment">// 用户查询列表</span>
+<span class="comment">// 用户查询总数</span>
 }
 <span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserManagerService</span> {</span>
-    <span class="comment">// 用户查询列表</span>
-    <span class="comment">// 用户查询总数</span>
+<span class="comment">// 用户查询列表</span>
+<span class="comment">// 用户查询总数</span>
+}
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+</pre></td><td class="code"><pre>&lt;mapper&gt;
+    &lt;<span class="keyword">select</span> id=<span class="string">"findUserList"</span> parameterType=<span class="string">"vo.SysuserQueryVo"</span>
+       resultType=<span class="string">"voSysuserCustom"</span>&gt;
+          <span class="keyword">select</span> sysuser.id, sysuser.userid, sysuser.username, sysuer.groupid,
+              nvl(sysuser,useryymc, nvl(sysuser.gysmc, sysuser.userjdmc)) sysmc <span class="keyword">from</span> (
+                <span class="keyword">select</span> stsuser.*, useryy.mc, userjd.mc, usergys.mc <span class="keyword">from</span> sysuser
+                  left <span class="keyword">join</span> useryy <span class="keyword">on</span> sysuser.sysid=useryy.id
+                  left <span class="keyword">join</span> userjd <span class="keyword">on</span> sysuser.sysid=userjd.id
+                  left <span class="keyword">join</span> usergys <span class="keyword">on</span> sysuser.sysid=usergys.id
+              ) sysuser
+          &lt;<span class="keyword">where</span>&gt;
+          &lt;<span class="keyword">if</span> test=<span class="string">"sysuserCustom!=null"</span>&gt;
+              &lt;<span class="keyword">if</span> test=<span class="string">"sysuserCustome.groupid!=null and sysuserCustom.groupid!=''"</span>&gt;
+                  <span class="keyword">and</span> groupid=<span class="preprocessor">#{sysuserCustome.groupid}</span>
+              &lt;/<span class="keyword">if</span>&gt;
+              &lt;<span class="keyword">if</span> test=<span class="string">"sysuserCustome.userid!=null and sysuserCustom.userid!=''"</span>&gt;
+                  <span class="keyword">and</span> userid=<span class="preprocessor">#{sysuserCustome.userid}</span>
+              &lt;/<span class="keyword">if</span>&gt;
+              &lt;<span class="keyword">if</span> test=<span class="string">"sysuserCustome.username!=null and sysuserCustom.username!=''"</span>&gt;
+                  <span class="keyword">and</span> username <span class="keyword">like</span> <span class="comment">'%${sysuserCustome.username}%'</span>
+              &lt;/<span class="keyword">if</span>&gt;
+              &lt;<span class="keyword">if</span> test=<span class="string">"sysuserCustome.sysmc!=null and sysuserCustom.sysmc!=''"</span>&gt;
+                  <span class="keyword">and</span> sysmc <span class="keyword">like</span><span class="comment">'%${sysuserCustome.sysmc}%'</span>
+              &lt;/<span class="keyword">if</span>&gt; 
+          &lt;/<span class="keyword">if</span>&gt;
+          &lt;/<span class="keyword">where</span>&gt;
+            -- 加入分页 写法 思路
+            -- pageQuery.start
+            -- pageQuery.<span class="keyword">end</span>
+            <span class="keyword">select</span> * <span class="keyword">from</span> (
+            <span class="keyword">select</span> rownum page_rownum, page_0.*
+            <span class="keyword">from</span> (
+              <span class="keyword">select</span> * <span class="keyword">from</span> user0
+            ) page_0
+              <span class="keyword">where</span> rownum&lt;=<span class="number">100</span>
+            ) page_1
+            <span class="keyword">where</span> page_1.page_rownum &gt; <span class="number">90</span>;
+        &lt;/<span class="keyword">select</span>&gt;
+        
+    &lt;<span class="keyword">select</span> id=<span class="string">"findUserCount"</span> parameterType=<span class="string">"vo.SysuserQueryVo"</span>
+      resultType=<span class="string">"int"</span>&gt;
+        <span class="keyword">select</span> count(*) <span class="keyword">from</span> (
+            <span class="keyword">select</span> stsuser.*, useryy.mc, userjd.mc, usergys.mc <span class="keyword">from</span> sysuser
+              left <span class="keyword">join</span> useryy <span class="keyword">on</span> sysuser.sysid=useryy.id
+              left <span class="keyword">join</span> userjd <span class="keyword">on</span> sysuser.sysid=userjd.id
+              left <span class="keyword">join</span> usergys <span class="keyword">on</span> sysuser.sysid=usergys.id
+            ) sysuser
+        &lt;<span class="keyword">where</span>&gt;
+            &lt;include refid=<span class="string">"query_sysuser_where"</span>&gt; &lt;/include&gt;
+        &lt;/<span class="keyword">where</span>&gt;
+    &lt;/<span class="keyword">select</span>&gt;
+&lt;/mapper&gt;
+</pre></td></tr></table></figure>
+
+<h2 id="-">添加页面</h2>
+<p>使用 jqueryEasyUI, modal 嵌套 iframe 来生成添加页面, <code>parent.closewindow()</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre><span class="keyword">function</span> sysusersave(){
+    <span class="keyword">if</span>($.formValidator.pageIsValidate()) {
+        var formObj = $(<span class="string">"#formId"</span>);
+        var options = {
+            dataType: <span class="string">"json"</span>
+            <span class="keyword">...</span>
+        }
+        // jquery form 提交
+        formObj.ajaxSubmit(options);
+    }
 }
 </pre></td></tr></table></figure>
 
@@ -296,59 +426,373 @@ bss_sys_a">
 51
 52
 53
-</pre></td><td class="code"><pre>
-&lt;mapper&gt;
-    &lt;<span class="keyword">select</span> id=<span class="string">"findUserList"</span> parameterType=<span class="string">"vo.SysuserQueryVo"</span>
-            resultType=<span class="string">"voSysuserCustom"</span>&gt;
-        <span class="keyword">select</span> sysuser.id, sysuser.userid, sysuser.username, sysuer.groupid,
-            nvl(sysuser,useryymc, nvl(sysuser.gysmc, sysuser.userjdmc)) sysmc <span class="keyword">from</span> (
-                <span class="keyword">select</span> stsuser.*, useryy.mc, userjd.mc, usergys.mc <span class="keyword">from</span> sysuser
-                    left <span class="keyword">join</span> useryy <span class="keyword">on</span> sysuser.sysid=useryy.id
-                    left <span class="keyword">join</span> userjd <span class="keyword">on</span> sysuser.sysid=userjd.id
-                    left <span class="keyword">join</span> usergys <span class="keyword">on</span> sysuser.sysid=usergys.id
-        ) sysuser
-        &lt;<span class="keyword">where</span>&gt;
-            &lt;<span class="keyword">if</span> test=<span class="string">"sysuserCustom!=null"</span>&gt;
-                &lt;<span class="keyword">if</span> test=<span class="string">"sysuserCustome.groupid!=null and sysuserCustom.groupid!=''"</span>&gt;
-                    <span class="keyword">and</span> groupid=<span class="preprocessor">#{sysuserCustome.groupid}</span>
-                &lt;/<span class="keyword">if</span>&gt;
-                &lt;<span class="keyword">if</span> test=<span class="string">"sysuserCustome.userid!=null and sysuserCustom.userid!=''"</span>&gt;
-                    <span class="keyword">and</span> userid=<span class="preprocessor">#{sysuserCustome.userid}</span>
-                &lt;/<span class="keyword">if</span>&gt;
-                &lt;<span class="keyword">if</span> test=<span class="string">"sysuserCustome.username!=null and sysuserCustom.username!=''"</span>&gt;
-                    <span class="keyword">and</span> username <span class="keyword">like</span> <span class="comment">'%${sysuserCustome.username}%'</span>
-                &lt;/<span class="keyword">if</span>&gt;
-                &lt;<span class="keyword">if</span> test=<span class="string">"sysuserCustome.sysmc!=null and sysuserCustom.sysmc!=''"</span>&gt;
-                    <span class="keyword">and</span> sysmc <span class="keyword">like</span><span class="comment">'%${sysuserCustome.sysmc}%'</span>
-                &lt;/<span class="keyword">if</span>&gt; 
-            &lt;/<span class="keyword">if</span>&gt;
-        &lt;/<span class="keyword">where</span>&gt;
-        -- 加入分页 写法 思路
-        -- pageQuery.start
-        -- pageQuery.<span class="keyword">end</span>
-        <span class="keyword">select</span> * <span class="keyword">from</span> (
-            <span class="keyword">select</span> rownum page_rownum, page_0.*
-                <span class="keyword">from</span> (
-                    <span class="keyword">select</span> * <span class="keyword">from</span> user0
-                ) page_0
-            <span class="keyword">where</span> rownum&lt;=<span class="number">100</span>
-        ) page_1
-        <span class="keyword">where</span> page_1.page_rownum &gt; <span class="number">90</span>;
-    &lt;/<span class="keyword">select</span>&gt;
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+</pre></td><td class="code"><pre><span class="comment">// userAction</span>
+
+<span class="comment">// 用户添加页面</span>
+<span class="annotation">@RequestMapping</span>(<span class="string">"/useradd"</span>)
+<span class="keyword">public</span> String <span class="title">useradd</span>(Model model) {
+    <span class="keyword">return</span> <span class="string">"/base/user/useradd"</span>;
+}
+
+
+<span class="keyword">private</span> Sysuser sysuser;  <span class="comment">// 用于添加/修改用户信息提交</span>
+
+<span class="comment">// 用户添加提交</span>
+<span class="annotation">@RequestMapping</span>(<span class="string">"/useradd"</span>)
+<span class="keyword">public</span> @ResponseBody ResultInfo <span class="title">useraddsubmit</span>(Model model, SysuserQueryvo sysuserQeuryVo) {
+    sysuserQeury = sysuserQeuryVo != <span class="keyword">null</span> ? sysuserQeuryVo : <span class="keyword">new</span> SysuserQueryvo;
+    ResultInfo resultInfo = <span class="keyword">null</span>;
+    <span class="comment">// 调用service 添加用户</span>
+    <span class="comment">// 捕获异常添加信息</span>
+    <span class="keyword">try</span> {
+       userManagerService.insertsysuser()
+    } <span class="keyword">catch</span> (ResultInfoException e) {
+       resutlInfo = e.getResultInfo();
+    } <span class="keyword">catch</span> (Exception e){
+        resultInfo = <span class="keyword">new</span> ResultInfo()
+        resultInfo.setType(ResultInfo.TYPE_RESULT_FAIL);
+        resultInfo.setMessage(<span class="string">"未知错误"</span>);
+    }
+    <span class="keyword">if</span>(resultInfo == <span class="keyword">null</span> ) {
+    }
+    <span class="keyword">return</span> resultInfo;
+}
+
+<span class="comment">// userManagerService</span>
+<span class="comment">// 添加用户</span>
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insertsysUser</span>(Sysuser sysuser){
+   <span class="comment">// 校验用户账号唯一</span>
+   <span class="comment">// 根据用户账号查询数据库sysuser, 如果查出一条表示重复</span>
+   Sysuser sysuser_l = findSysuserByUserid(sysuser.getUserId());
+   <span class="keyword">if</span>( sysuser_l != <span class="keyword">null</span>) { <span class="comment">// 表示账号重复</span>
+       ResultInfo info = <span class="keyword">new</span> ResultInfo;
+       info.setType(ResultInfo.Failed);
+       info.setMessage(<span class="string">"账号重复"</span>);
+       <span class="comment">// 提示用户账号存在</span>
+       <span class="keyword">throw</span> <span class="keyword">new</span> ResultInfoException(info);
+   }
+   
+   <span class="comment">// 调用dao插入用户信息</span>
+   <span class="comment">// 根据单位名称 得到单位id</span>
+   <span class="comment">// 根据页面提交的groupid, 如果groupid等于1或2, 单位名称在 userjd 表存在</span>
+   <span class="comment">// TODO 11.35</span>
+   <span class="keyword">if</span>(groupid == <span class="string">"1"</span> || groupid == <span class="string">"2"</span>) {
+       Userjd userjd = findUserjdByMc(mc);
+       sysid == userjd.getId();
+   } <span class="keyword">else</span> <span class="keyword">if</span>(groupid==<span class="string">"3"</span>) { <span class="comment">// 医院</span>
+   } <span class="keyword">else</span> <span class="keyword">if</span>(groupid=n=<span class="string">"4"</span>) { <span class="comment">// 供货商</span>
+   }
+   sysuser.setId(UUIDBuild.getUUID());
+   sysuser.setSysid(sysid);
+   sysuserDao.insert(sysuser);
+}
+
+<span class="keyword">public</span> Sysuser <span class="title">findSysuserByUserid</span>(String userid) {
+   SysuserExample sysuserExample = <span class="keyword">new</span> SysuserExample();
+   SysuserExample.Criteria criteria = sysuperExample.createCriteria();
+   criteria.addUseridEqualTo(sysuser.getUserid);
+   List list = sysuserMapper.selectByExample(sysuserExample);
+   <span class="keyword">if</span>(list!=<span class="keyword">null</span> && list.size()==<span class="number">1</span>) {
+       <span class="keyword">return</span> list.get(<span class="number">0</span>);
+   }
+   <span class="keyword">return</span> <span class="keyword">null</span>;
+}
+</pre></td></tr></table></figure>
+
+<p>自定义异常类</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ExceptionResultInfo</span> <span class="keyword">extends</span> <span class="title">Exception</span> {</span>
+    <span class="comment">// 习题同一使用的结果类</span>
+    <span class="keyword">private</span> ResultInfo resultInfo;
+    <span class="keyword">public</span>  <span class="title">ExceptionResultInfo</span>(Info resultInfo){
+    }
+}
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ResultInfo</span> {</span>
+  <span class="keyword">private</span> <span class="keyword">int</span> type;
+  <span class="keyword">private</span> String message;
+}
+</pre></td></tr></table></figure>
+
+<h2 id="-">异常处理器</h2>
+<p><code>yycg.base.process</code>, 存储信息处理类</p>
+<p>全局异常处理器:
+如果返回的类型是 json 数据, 异常以json返回.
+如果返回的类型是 页面, 返回错误页面</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- Http messageConverters，用于将对象转换为json输出到客户端 --&gt;</span>
+<span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"jsonmessageConverter"</span>
+    <span class="attribute">class</span>=<span class="value">"org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">bean</span>&gt;</span>
+<span class="tag">&lt;<span class="title">bean</span> <span class="attribute">id</span>=<span class="value">"handlerExceptionResolver"</span> <span class="attribute">class</span>=<span class="value">"ExceptionResolverCustom"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">property</span> <span class="attribute">name</span>=<span class="value">"jsonmessageConverter"</span> <span class="attribute">ref</span>=<span class="value">"jsonmessageConverter"</span>&gt;</span><span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">bean</span>&gt;</span>
+
+<span class="comment">&lt;!-- web.xml --&gt;</span>
+<span class="comment">&lt;!-- --&gt;</span>
+<span class="tag">&lt;<span class="title">servlet</span>&gt;</span>
+    <span class="comment">&lt;!-- 屏蔽自动注册异常处理器，固定使用bean的id为handlerExceptionResolver的异常处理器 --&gt;</span>
+    <span class="tag">&lt;<span class="title">init-param</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">param-name</span>&gt;</span> detectAllHandlerExceptionResolvers<span class="tag">&lt;/<span class="title">param-name</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">param-value</span>&gt;</span> false <span class="tag">&lt;/<span class="title">param-value</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">init-param</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">servlet</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<p>系统全局异常处理器</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ExceptionResolverCustom</span> <span class="keyword">implements</span> <span class="title">HandlerExceptionResolver</span> {</span>
+    <span class="comment">// json 转换</span>
+    <span class="keyword">private</span> HttpMessageConverter&lt;ExceptionResultInfo&gt; jsonmessageConverter;
     
-    &lt;<span class="keyword">select</span> id=<span class="string">"findUserCount"</span> parameterType=<span class="string">"vo.SysuserQueryVo"</span>
-            resultType=<span class="string">"int"</span>&gt;
-        <span class="keyword">select</span> count(*) <span class="keyword">from</span> (
-                <span class="keyword">select</span> stsuser.*, useryy.mc, userjd.mc, usergys.mc <span class="keyword">from</span> sysuser
-                    left <span class="keyword">join</span> useryy <span class="keyword">on</span> sysuser.sysid=useryy.id
-                    left <span class="keyword">join</span> userjd <span class="keyword">on</span> sysuser.sysid=userjd.id
-                    left <span class="keyword">join</span> usergys <span class="keyword">on</span> sysuser.sysid=usergys.id
-        ) sysuser
-        &lt;<span class="keyword">where</span>&gt;
-            &lt;include refid=<span class="string">"query_sysuser_where"</span>&gt; &lt;/include&gt;
-        &lt;/<span class="keyword">where</span>&gt;
-    &lt;/<span class="keyword">select</span>&gt;
-&lt;/mapper&gt;
+    <span class="keyword">public</span> ModelAndView <span class="title">resolverException</span>(request, response, handler, ex){
+        <span class="comment">// 找action方法是否是标注了根据注解responseBody</span>
+        <span class="comment">// 获取action的方法</span>
+        HandlerMethod handlerMethod = (HandlerMethod) handler;
+        Method method = handlerMethod.getMethod();
+        ResponseBody responseBodyAnn = AnnotationUtils.findAnnotaion(method, ResponseBody.class);
+        <span class="keyword">if</span>(responseBodyAnn!=<span class="keyword">null</span>) { <span class="comment">// 说明方法返回的responseBody注解</span>
+            <span class="comment">// 处理返回类型是json的异常信息</span>
+            <span class="comment">//创建http输出对象</span>
+            HttpOutputMessage outputMessage = <span class="keyword">new</span> ServletServerHttpResponse(response);
+            <span class="comment">//将异常信息输出json</span>
+            jsonmessageConverter.write(value, MediaType.APPLICATION_JSON,outputMessage);
+            <span class="keyword">return</span> <span class="keyword">new</span> ModelAndView();
+        }
+        <span class="comment">// handler excpeption to get resultInfo</span>
+        <span class="comment">// 返回的是页面</span>
+        ModelAndView modelAndView = <span class="keyword">new</span> ModelAndView();
+        modelAndView.setViewName(<span class="string">"/base/error"</span>);
+        modelAdnView.addObject(<span class="string">"exceptionresultInfo"</span>, resultInfo);
+        <span class="keyword">return</span> modelAdnView;
+    }
+}
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="keyword">class</span> SubmitResultInfo {
+    <span class="keyword">private</span> ResultInfo resultInfo;
+}
+</pre></td></tr></table></figure>
+
+<h1 id="-">国际化</h1>
+<p>Internationalization: I18N.</p>
+<p><code>java.util.ResourceBundle</code>: 用于加载一个资源</p>
+<p><code>java.util.Local</code>: 对应一个特定的国家/区域, 语言环境</p>
+<p><code>java.text.MessageFormat</code>: 用于将消息的格式化</p>
+<p>资源文件命名格式</p>
+<pre><code>message_zh_CN.properties 中文, 中过
+message_en_US.properties 英语, 美国
+message.properties
+</code></pre><figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre>Locale locale = Locale.getDefault();
+
+<span class="comment">// 先在 message_zh_CN找, 再到 message.proerties</span>
+ResourceBundle rb = ResourceBundle.getResource(<span class="string">"message.properties"</span>, locale);
+<span class="built_in">String</span> retValue = rb.getString(<span class="number">102</span>);
+
+<span class="comment">// 102=恭喜你登陆成功{1}</span>
+MessageFormat.format(retValue, <span class="keyword">new</span> <span class="built_in">Object</span>[]{<span class="string">"张三"</span>})
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre>// <span class="number">208</span>=用户名已经存在
+ResultUtils<span class="preprocessor">.throwException</span>(ResultUtils<span class="preprocessor">.createFail</span>(Config<span class="preprocessor">.Message</span>, <span class="number">208</span>, null))<span class="comment">;</span>
+
+ResultUtils<span class="preprocessor">.createSubmitResult</span>(ResultUtils<span class="preprocessor">.createSuccess</span>(Config<span class="preprocessor">.Message</span>, <span class="number">906</span>, null))<span class="comment">;</span>
+// 客户端封装函数 message_alert(value)<span class="comment">; value = {resultInfo...}</span>
+</pre></td></tr></table></figure>
+
+<h1 id="-">删除</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+</pre></td><td class="code"><pre>// userManagerService
+public void deleteSysuser(String id){
+    // 校验用户是否存在
+    Sysuser sysuser = sysuserMapper.selectByPrimaryKey(id)<span class="comment">;</span>
+    <span class="keyword">if</span>(sysuser == null) {
+        ResultUtils.throwException(ResultUtil.createWarning(config.Message, , null))<span class="comment">;</span>
+    }
+    sysuserMapper.deleteByPrimarKey(id)<span class="comment">;</span>
+}
+
+// action
+@RequestMapping(<span class="string">"/userdelete"</span>)
+public @ResponseBody SubmitResultInfo userdel(String deleteid){
+    sysuserManager.deleteSysuser(deleteid)<span class="comment">;</span>
+    <span class="keyword">return</span> ResultUtil.createSubmitResult(ResultUtils.createSuccess(cofnig.message, , null))<span class="comment">;</span>
+}
+</pre></td></tr></table></figure>
+
+<h1 id="-">修改用户</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+</pre></td><td class="code"><pre><span class="comment">// action 参考 添加用户, 要查询用户和单位名称 SysuserCustom</span>
+<span class="comment">// BeanUtils.copyProperties(sysuser, sysuserCustomer);d</span>
+
+<span class="comment">// service</span>
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">updateSysuser</span>(Sysuser sysuser) {
+    <span class="comment">// 校验用户</span>
+    <span class="comment">// 如果根据主键查询出来一条记录, 如果这条记录的账号是自己的表示用户没有修改账号(userid</span>
+    <span class="comment">// 如果查询出来的账号是别人, 抛出占用别人账号</span>
+    
+    <span class="comment">// 先查询用户信息</span>
+    Sysuser sysuser_update = <span class="keyword">this</span>.findSysuserById(sysuser.getId());
+    sysuser_update.setUsername();
+    sysuser_update.setUserstate();
+    <span class="comment">// ...userid username userstate sysid</span>
+    <span class="comment">// 如果页面传过来密码信息表示用户要修改密码</span>
+    <span class="comment">// 更新用户信息</span>
+    <span class="comment">// 如果用户输入的单位id不存在, 则抛出提示信息</span>
+    <span class="keyword">return</span> sysuserMapper.updateByPrimaryKey(sysuser);
+}
+<span class="comment">// 用户信息显示</span>
+<span class="keyword">public</span> Sysuser <span class="title">findSysuserById</span>(String id) {
+    <span class="comment">// 根据页面提交的账号查询用户信息</span>
+
+    <span class="keyword">return</span> userMapper.selectByPrimaryKey(id);
+}
+<span class="comment">// 医院信息显示</span>
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">findUseryyBId</span>(String id) {
+    <span class="keyword">return</span> useryyMapper.selectByPrimaryKey(id);
+}
+<span class="comment">// 供货商信息显示</span>
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">findUsergysBId</span>(String id) {
+    <span class="keyword">return</span> usergysMapper.selectByPrimaryKey(id);
+}
+<span class="comment">// 监督单位信息显示</span>
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="title">findUserjdBId</span>(String id) {
+    <span class="keyword">return</span> userjdMapper.selectByPrimaryKey(id);
+}
 </pre></td></tr></table></figure>
 
   
@@ -403,7 +847,7 @@ bss_sys_a">
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">模型</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.1.</span> <span class="toc-text">单位信息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.2.</span> <span class="toc-text">用户信息</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">2.</span> <span class="toc-text">系统用户列表</span></a></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">模型</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.1.</span> <span class="toc-text">单位信息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">1.2.</span> <span class="toc-text">用户信息</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">2.</span> <span class="toc-text">系统用户列表</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.1.</span> <span class="toc-text">添加页面</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.2.</span> <span class="toc-text">异常处理器</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">国际化</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">4.</span> <span class="toc-text">删除</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">5.</span> <span class="toc-text">修改用户</span></a></li></ol>
   </div>
 
 <div id="asidepart">
