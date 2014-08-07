@@ -1,0 +1,1564 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>learning scalaz 进阶3 | Poe&#39;s World</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="zhpooer">
+    
+    <meta name="description" content="Origami programming
+The dual of folding is unfolding.
+The Haskell standard List library deﬁnes
+the function unfoldr for generating lists.
+1
+2
+Prelude ">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="Poe&#39;s World" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="Poe&#39;s World" title="Poe&#39;s World"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Poe&#39;s World">Poe&#39;s World</a></h1>
+				<h2 class="blog-motto">竹杖芒鞋轻胜马，一蓑烟雨任平生</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/english-monthly">英语角</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:zhpooer.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/07/30/learning-scalaz-进阶3/" title="learning scalaz 进阶3" itemprop="url">learning scalaz 进阶3</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://zhpooer.github.io" title="zhpooer">zhpooer</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2014-07-30T06:43:47.000Z" itemprop="datePublished">7月 30 2014</time>
+    更新日期:<time datetime="2014-08-01T02:51:36.000Z" itemprop="dateModified">8月 1 2014</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#origami-programming"><span class="toc-number">1.</span> <span class="toc-text">Origami programming</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#dlist"><span class="toc-number">1.1.</span> <span class="toc-text">DList</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#folds-for-streams"><span class="toc-number">1.2.</span> <span class="toc-text">Folds for Streams</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#the-essence-of-the-iterator-pattern"><span class="toc-number">1.3.</span> <span class="toc-text">The Essence of the Iterator Pattern</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#monoidal-applicatives"><span class="toc-number">1.4.</span> <span class="toc-text">Monoidal applicatives</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#combining-applicative-functors"><span class="toc-number">1.5.</span> <span class="toc-text">Combining applicative functors</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#idiomatic-traversal"><span class="toc-number">1.6.</span> <span class="toc-text">Idiomatic traversal</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sequence"><span class="toc-number">1.7.</span> <span class="toc-text">sequence</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#import-guide"><span class="toc-number">2.</span> <span class="toc-text">import guide</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#import-scalaz-_"><span class="toc-number">2.1.</span> <span class="toc-text">import scalaz._</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#import-scalaz-_"><span class="toc-number">2.2.</span> <span class="toc-text">import Scalaz._</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#statefunctions"><span class="toc-number">2.2.1.</span> <span class="toc-text">StateFunctions</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#std-allfunctions"><span class="toc-number">2.2.2.</span> <span class="toc-text">std.AllFunctions</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#idinstances"><span class="toc-number">2.2.3.</span> <span class="toc-text">IdInstances</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#std-allinstances"><span class="toc-number">2.2.4.</span> <span class="toc-text">std.AllInstances</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#syntax-totypeclassops"><span class="toc-number">2.2.5.</span> <span class="toc-text">syntax.totypeclassops</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#syntax-todataops"><span class="toc-number">2.2.6.</span> <span class="toc-text">syntax.todataops</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#syntax-std-toallstdops"><span class="toc-number">2.2.7.</span> <span class="toc-text">syntax.std.toallstdops</span></a></li></ol></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#hacking-on-a-project"><span class="toc-number">3.</span> <span class="toc-text">hacking on a project</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#arrow"><span class="toc-number">4.</span> <span class="toc-text">Arrow</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#category-and-compose"><span class="toc-number">4.1.</span> <span class="toc-text">Category and Compose</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#arrow-again"><span class="toc-number">4.2.</span> <span class="toc-text">Arrow, again</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#unapply"><span class="toc-number">5.</span> <span class="toc-text">Unapply</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#parallel-composition"><span class="toc-number">5.1.</span> <span class="toc-text">parallel composition</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#momo"><span class="toc-number">6.</span> <span class="toc-text">Momo</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#functional-programming"><span class="toc-number">7.</span> <span class="toc-text">functional programming</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#effect-system"><span class="toc-number">8.</span> <span class="toc-text">Effect system</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#st"><span class="toc-number">8.1.</span> <span class="toc-text">ST</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#stref"><span class="toc-number">8.2.</span> <span class="toc-text">STRef</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#io-monad"><span class="toc-number">9.</span> <span class="toc-text">IO Monad</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#enumeration-based-i-o-with-iteratees"><span class="toc-number">9.1.</span> <span class="toc-text">Enumeration-Based I/O with Iteratees</span></a></li></ol>
+		</div>
+		
+		<h1 id="origami-programming">Origami programming</h1>
+<p>The dual of folding is unfolding.
+The Haskell standard List library deﬁnes
+the function unfoldr for generating lists.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre>Prelude <span class="built_in">Data</span><span class="built_in">.</span><span class="built_in">List</span><span class="subst">&gt;</span> unfoldr (<span class="subst">\</span>b <span class="subst">-&gt; </span><span class="keyword">if</span> b <span class="subst">==</span> <span class="number">0</span> then Nothing <span class="keyword">else</span> Just (b, b<span class="subst">-</span><span class="number">1</span>)) <span class="number">10</span>
+<span class="preprocessor">[</span><span class="number">10</span>,<span class="number">9</span>,<span class="number">8</span>,<span class="number">7</span>,<span class="number">6</span>,<span class="number">5</span>,<span class="number">4</span>,<span class="number">3</span>,<span class="number">2</span>,<span class="number">1</span><span class="preprocessor">]</span><span class="markup"></span>
+</pre></td></tr></table></figure>
+
+<h2 id="dlist">DList</h2>
+<p>There’s a data structure called DList that supports <code>DList.unfoldr</code>.
+DList, or difference list, is a data structure that supports
+constant-time appending.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre>scala&gt; DList.unfoldr<span class="function"><span class="params">(<span class="number">10</span>, { (x: Int) =&gt; <span class="keyword">if</span> (x == <span class="number">0</span>) none <span class="keyword">else</span> (x, x - <span class="number">1</span>).some })</span>
+<span class="title">res50</span>: <span class="title">scalaz</span>.<span class="title">DList</span>[<span class="title">Int</span>] = <span class="title">scalaz</span>.<span class="title">DListFunctions$$anon$3</span>@70627153
+
+<span class="title">scala</span>&gt; <span class="title">res50</span>.<span class="title">toList</span>
+<span class="title">res51</span>: <span class="title">List</span>[<span class="title">Int</span>] = <span class="title">List</span><span class="params">(<span class="number">10</span>, <span class="number">9</span>, <span class="number">8</span>, <span class="number">7</span>, <span class="number">6</span>, <span class="number">5</span>, <span class="number">4</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">1</span>)</span></span>
+</pre></td></tr></table></figure>
+
+<h2 id="folds-for-streams">Folds for Streams</h2>
+<p>In Scalaz unfold defined in StreamFunctions is introduced by <code>import Scalaz._</code>:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre>scala&gt; unfold<span class="function"><span class="params">(<span class="number">10</span>)</span> { <span class="params">(x)</span> =&gt;</span> <span class="keyword">if</span> (x == <span class="number">0</span>) none <span class="keyword">else</span> (x, x - <span class="number">1</span>).some }
+<span class="attribute">res36</span>: Stream[Int] = Stream(<span class="number">10</span>, ?)
+
+scala&gt; res36.toList
+<span class="attribute">res37</span>: List[Int] = List(<span class="number">10</span>, <span class="number">9</span>, <span class="number">8</span>, <span class="number">7</span>, <span class="number">6</span>, <span class="number">5</span>, <span class="number">4</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">1</span>)
+</pre></td></tr></table></figure>
+
+<h2 id="the-essence-of-the-iterator-pattern">The Essence of the Iterator Pattern</h2>
+<p>In 2006 the same author wrote <a href="http://www.cs.ox.ac.uk/jeremy.gibbons/publications/iterator.pdf" target="_blank">The Essence of the Iterator Pattern</a>.
+This paper discusses applicative style by breaking down the GoF Iterator
+pattern into two aspects: mapping and accumulating.</p>
+<h2 id="monoidal-applicatives">Monoidal applicatives</h2>
+<p>Scalaz implements Monoid[m].applicative to turn any monoids into
+an applicative.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre>scala&gt; Monoid[Int]<span class="preprocessor">.applicative</span><span class="preprocessor">.ap</span>2(<span class="number">1</span>, <span class="number">1</span>)(<span class="number">0</span>)
+<span class="label">res99:</span> Int = <span class="number">2</span>
+
+scala&gt; Monoid[List[Int]]<span class="preprocessor">.applicative</span><span class="preprocessor">.ap</span>2(List(<span class="number">1</span>), List(<span class="number">1</span>))(Nil)
+<span class="label">res100:</span> List[Int] = List(<span class="number">1</span>, <span class="number">1</span>)
+</pre></td></tr></table></figure>
+
+<h2 id="combining-applicative-functors">Combining applicative functors</h2>
+<p>Like monads, applicative functors are closed under products;
+so two independent idiomatic effects can generally be fused into one,
+their product.</p>
+<p>In Scalaz, product is implemented under Applicative typeclass</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code"><pre>scala&gt; Applicative[<span class="keyword">List</span>].product[Option]
+res0: scalaz.Applicative[[α](<span class="keyword">List</span>[α], Option[α])] = scalaz.Applicative$$anon$<span class="number">2</span>@<span class="number">211</span>b3c6a
+
+scala&gt; Applicative[<span class="keyword">List</span>].product[Option].point(<span class="number">1</span>)
+res1: (<span class="keyword">List</span>[Int], Option[Int]) = (<span class="keyword">List</span>(<span class="number">1</span>),Some(<span class="number">1</span>))
+
+// The product seems to be implemented as a Tuple2. 
+scala&gt; ((<span class="keyword">List</span>(<span class="number">1</span>), <span class="number">1.</span>some) |@| (<span class="keyword">List</span>(<span class="number">1</span>), <span class="number">1.</span>some)) <span class="list">{_ |+| _}</span>
+res2: (<span class="keyword">List</span>[Int], Option[Int]) = (<span class="keyword">List</span>(<span class="number">1</span>, <span class="number">1</span>),Some(<span class="number">2</span>))
+
+scala&gt; ((<span class="keyword">List</span>(<span class="number">1</span>), <span class="number">1.</span>success[<span class="keyword">String</span>]) |@| (<span class="keyword">List</span>(<span class="number">1</span>), <span class="string">"boom"</span>.failure[Int])) <span class="list">{_ |+| _}</span>
+res6: (<span class="keyword">List</span>[Int], scalaz.Validation[<span class="keyword">String</span>,Int]) = (<span class="keyword">List</span>(<span class="number">1</span>, <span class="number">1</span>),Failure(boom))
+</pre></td></tr></table></figure>
+
+<p>two sequentially-dependent idiomatic effects
+can generally be fused into one, their composition.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="code"><pre><span class="class"><span class="keyword">trait</span> <span class="title">Applicative</span>[<span class="title">F</span>[<span class="title">_</span>]] <span class="keyword">extends</span> <span class="title">Apply</span>[<span class="title">F</span>] <span class="keyword">with</span> <span class="title">Pointed</span>[<span class="title">F</span>] {</span> self =&gt;
+...
+  <span class="javadoc">/**The composition of Applicatives `F` and `G`, `[x]F[G[x]]`, is an Applicative */</span>
+  <span class="keyword">def</span> compose[G[_]](implicit G0: Applicative[G]): Applicative[({<span class="keyword">type</span> λ[α] = F[G[α]]})#λ] = <span class="keyword">new</span> CompositionApplicative[F, G] {
+    implicit <span class="keyword">def</span> F = self
+    implicit <span class="keyword">def</span> G = G0
+  }
+...
+}
+
+scala&gt; Applicative[List].compose[Option]
+res7: scalaz.Applicative[[α]List[Option[α]]] = scalaz.Applicative$$anon$<span class="number">1</span>@<span class="number">461800</span>f1
+
+scala&gt; Applicative[List].compose[Option].point(<span class="number">1</span>)
+res8: List[Option[Int]] = List(Some(<span class="number">1</span>))
+</pre></td></tr></table></figure>
+
+<h2 id="idiomatic-traversal">Idiomatic traversal</h2>
+<p>The corresponding typeclass in Scalaz 7 is called Traverse:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="code"><pre><span class="class"><span class="keyword">trait</span> <span class="title">Traverse</span>[<span class="title">F</span>[<span class="title">_</span>]] <span class="keyword">extends</span> <span class="title">Functor</span>[<span class="title">F</span>] <span class="keyword">with</span> <span class="title">Foldable</span>[<span class="title">F</span>] {</span> self =&gt;
+  <span class="keyword">def</span> traverseImpl[G[_]:Applicative,A,B](fa: F[A])(f: A =&gt; G[B]): G[F[B]]
+}
+
+<span class="class"><span class="keyword">trait</span> <span class="title">TraverseOps</span>[<span class="title">F</span>[<span class="title">_</span>],<span class="title">A</span>] <span class="keyword">extends</span> <span class="title">Ops</span>[<span class="title">F</span>[<span class="title">A</span>]] {</span>
+  <span class="keyword">final</span> <span class="keyword">def</span> traverse[G[_], B](f: A =&gt; G[B])(implicit G: Applicative[G]): G[F[B]] =
+    G.traverse(self)(f)
+  ...
+}
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre>scala&gt; <span class="keyword">List</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>) traverse <span class="list">{ x =&gt; (x &gt; 0) option (x + 1) }</span>
+res14: Option[<span class="keyword">List</span>[Int]] = Some(<span class="keyword">List</span>(<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>))
+
+scala&gt; <span class="keyword">List</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">0</span>) traverse <span class="list">{ x =&gt; (x &gt; 0) option (x + 1) }</span>
+res15: Option[<span class="keyword">List</span>[Int]] = <span class="keyword">None</span>
+</pre></td></tr></table></figure>
+
+<h2 id="sequence">sequence</h2>
+<p>There’s a useful method that Traverse introduces called sequence.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre>/<span class="emphasis">** Traverse with the identity function *</span>/
+final def sequence[<span class="link_label">G[_</span>], B](implicit ev: A === G[B], G: Applicative[G]): G[F[B]] = {
+  val fgb: F[<span class="link_label">G[B</span>]] = ev.subst[<span class="link_label">F</span>](<span class="link_url">self</span>)
+  F.sequence(fgb)
+}
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre>scala&gt; <span class="keyword">List</span>(<span class="number">1.</span>some, <span class="number">2.</span>some).sequence
+res156: Option[<span class="keyword">List</span>[Int]] = Some(<span class="keyword">List</span>(<span class="number">1</span>, <span class="number">2</span>))
+
+scala&gt; <span class="keyword">List</span>(<span class="number">1.</span>some, <span class="number">2.</span>some, none).sequence
+res157: Option[<span class="keyword">List</span>[Int]] = <span class="keyword">None</span>
+</pre></td></tr></table></figure>
+
+<h1 id="import-guide">import guide</h1>
+<p>In Scala, imports are used for two purposes:</p>
+<ol>
+<li>To include names of values and types into the scope.</li>
+<li>To include implicits into the scope.</li>
+</ol>
+<h2 id="import-scalaz-_">import scalaz._</h2>
+<ol>
+<li>First, the names. Typeclasses like <code>Equal[A]</code> and <code>Functor[F[_]]</code>
+are implemented as trait,
+and are defined under scalaz package.</li>
+<li>also the names, but type aliases. scalaz’s package object
+declares most of the major type aliases like <code>@@[T, Tag]</code> and <code>Reader[E, A]</code>,
+which is treated as a specialization of ReaderT transformer.</li>
+<li>idInstance is defined as typeclass instance of <code>Id[A]</code> for <code>Traverse[F[_]]</code>, <code>Monad[F[_]]</code></li>
+</ol>
+<h2 id="import-scalaz-_">import Scalaz._</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre><span class="keyword">package</span> scalaz
+
+object Scalaz
+  extends StateFunctions        // Functions related <span class="keyword">to</span> the state monad
+  <span class="keyword">with</span> syntax.ToTypeClassOps    // syntax associated <span class="keyword">with</span> <span class="keyword">type</span> classes
+  <span class="keyword">with</span> syntax.ToDataOps         // syntax associated <span class="keyword">with</span> Scalaz data structures
+  <span class="keyword">with</span> std.AllInstances         // <span class="keyword">Type</span> class instances <span class="keyword">for</span> the standard <span class="keyword">library</span> types
+  <span class="keyword">with</span> std.AllFunctions         // Functions related <span class="keyword">to</span> standard <span class="keyword">library</span> types
+  <span class="keyword">with</span> syntax.std.ToAllStdOps   // syntax associated <span class="keyword">with</span> standard <span class="keyword">library</span> types
+  <span class="keyword">with</span> IdInstances              // Identity <span class="keyword">type</span> <span class="keyword">and</span> instances
+</pre></td></tr></table></figure>
+
+<h3 id="statefunctions">StateFunctions</h3>
+<p>Remember, import brings in names and implicits. First, the names.
+StateFunctions defines several functions:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code"><pre>package scalaz
+
+trait StateFunctions {
+  <span class="function"><span class="keyword">def</span> <span class="title">constantState</span>[<span class="title">S</span>, <span class="title">A</span>]<span class="params">(a: A, s: =&gt; S)</span>:</span> State[S, A] = ...
+  <span class="function"><span class="keyword">def</span> <span class="title">state</span>[<span class="title">S</span>, <span class="title">A</span>]<span class="params">(a: A)</span>:</span> State[S, A] = ...
+  <span class="function"><span class="keyword">def</span> <span class="title">init</span>[<span class="title">S</span>]:</span> State[S, S] = ...
+  <span class="function"><span class="keyword">def</span> <span class="title">get</span>[<span class="title">S</span>]:</span> State[S, S] = ...
+  <span class="function"><span class="keyword">def</span> <span class="title">gets</span>[<span class="title">S</span>, <span class="title">T</span>]<span class="params">(f: S =&gt; T)</span>:</span> State[S, T] = ...
+  <span class="function"><span class="keyword">def</span> <span class="title">put</span>[<span class="title">S</span>]<span class="params">(s: S)</span>:</span> State[S, Unit] = ...
+  <span class="function"><span class="keyword">def</span> <span class="title">modify</span>[<span class="title">S</span>]<span class="params">(f: S =&gt; S)</span>:</span> State[S, Unit] = ...
+  <span class="function"><span class="keyword">def</span> <span class="title">delta</span>[<span class="title">A</span>]<span class="params">(a: A)</span><span class="params">(implicit A: Group[A])</span>:</span> State[A, A] = ...
+}
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="keyword">for</span> {
+  xs &lt;- <span class="keyword">get</span>[List[Int]]
+  _ &lt;- put(xs.tail)
+} <span class="keyword">yield</span> xs.head
+</pre></td></tr></table></figure>
+
+<h3 id="std-allfunctions">std.AllFunctions</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre><span class="keyword">package</span> scalaz
+<span class="keyword">package</span> std
+
+<span class="class"><span class="keyword">trait</span> <span class="title">AllFunctions</span></span>
+  <span class="keyword">extends</span> ListFunctions
+  <span class="keyword">with</span> OptionFunctions
+  <span class="keyword">with</span> StreamFunctions
+  <span class="keyword">with</span> math.OrderingFunctions
+  <span class="keyword">with</span> StringFunctions
+
+<span class="class"><span class="keyword">object</span> <span class="title">AllFunctions</span> <span class="keyword">extends</span> <span class="title">AllFunctions</span></span>
+</pre></td></tr></table></figure>
+
+<p>For example, ListFunctions bring in intersperse function that puts
+a given element in ever other position:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre><span class="function">intersperse(<span class="function">List(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>)</span>, <span class="number">7</span>)</span>
+</pre></td></tr></table></figure>
+
+<h3 id="idinstances">IdInstances</h3>
+<p>defines the type alias <code>Id[A]</code> as follows:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre><span class="class"><span class="keyword">type</span> <span class="title">Id</span>[+<span class="title">X</span>] =</span> X
+</pre></td></tr></table></figure>
+
+<h3 id="std-allinstances">std.AllInstances</h3>
+<p>the fact that list is a monad and that
+monad introduces <code>&gt;&gt;=</code> operator are two different things.</p>
+<p>one of the most interesting design of scalaz 7 is that it
+rigorously separates the two concepts into “instance” and “syntax.”</p>
+<p><code>std.allinstances</code> is a mixin of typeclass instances for built-in (std) data structures:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+</pre></td><td class="code"><pre><span class="keyword">package</span> scalaz.std
+
+<span class="class"><span class="keyword">trait</span> <span class="title">allinstances</span></span>
+  <span class="keyword">extends</span> anyvalinstances <span class="keyword">with</span> functioninstances <span class="keyword">with</span> listinstances <span class="keyword">with</span> mapinstances
+  <span class="keyword">with</span> optioninstances <span class="keyword">with</span> setinstances <span class="keyword">with</span> stringinstances <span class="keyword">with</span> streaminstances <span class="keyword">with</span> tupleinstances
+  <span class="keyword">with</span> eitherinstances <span class="keyword">with</span> partialfunctioninstances <span class="keyword">with</span> typeconstraintinstances
+  <span class="keyword">with</span> scalaz.std.math.bigdecimalinstances <span class="keyword">with</span> scalaz.std.math.bigints
+  <span class="keyword">with</span> scalaz.std.math.orderinginstances
+  <span class="keyword">with</span> scalaz.std.util.parsing.combinator.parsers
+  <span class="keyword">with</span> scalaz.std.java.util.mapinstances
+  <span class="keyword">with</span> scalaz.std.java.math.bigintegerinstances
+  <span class="keyword">with</span> scalaz.std.java.util.concurrent.callableinstances
+  <span class="keyword">with</span> nodeseqinstances
+  <span class="comment">// intentionally omitted: iterableinstances</span>
+
+<span class="class"><span class="keyword">object</span> <span class="title">allinstances</span> <span class="keyword">extends</span> <span class="title">allinstances</span></span>
+</pre></td></tr></table></figure>
+
+<h3 id="syntax-totypeclassops">syntax.totypeclassops</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code"><pre><span class="keyword">package</span> scalaz
+<span class="keyword">package</span> syntax
+
+<span class="class"><span class="keyword">trait</span> <span class="title">totypeclassops</span></span>
+  <span class="keyword">extends</span> tosemigroupops <span class="keyword">with</span> tomonoidops <span class="keyword">with</span> togroupops <span class="keyword">with</span> toequalops <span class="keyword">with</span> tolengthops <span class="keyword">with</span> toshowops
+  <span class="keyword">with</span> toorderops <span class="keyword">with</span> toenumops <span class="keyword">with</span> tometricspaceops <span class="keyword">with</span> toplusemptyops <span class="keyword">with</span> toeachops <span class="keyword">with</span> toindexops
+  <span class="keyword">with</span> tofunctorops <span class="keyword">with</span> topointedops <span class="keyword">with</span> tocontravariantops <span class="keyword">with</span> tocopointedops <span class="keyword">with</span> toapplyops
+  <span class="keyword">with</span> toapplicativeops <span class="keyword">with</span> tobindops <span class="keyword">with</span> tomonadops <span class="keyword">with</span> tocojoinops <span class="keyword">with</span> tocomonadops
+  <span class="keyword">with</span> tobifoldableops <span class="keyword">with</span> tocozipops
+  <span class="keyword">with</span> toplusops <span class="keyword">with</span> toapplicativeplusops <span class="keyword">with</span> tomonadplusops <span class="keyword">with</span> totraverseops <span class="keyword">with</span> tobifunctorops
+  <span class="keyword">with</span> tobitraverseops <span class="keyword">with</span> toarridops <span class="keyword">with</span> tocomposeops <span class="keyword">with</span> tocategoryops
+  <span class="keyword">with</span> toarrowops <span class="keyword">with</span> tofoldableops <span class="keyword">with</span> tochoiceops <span class="keyword">with</span> tosplitops <span class="keyword">with</span> tozipops <span class="keyword">with</span> tounzipops <span class="keyword">with</span> tomonadwriterops <span class="keyword">with</span> tolistenablemonadwriterops
+</pre></td></tr></table></figure>
+
+<h3 id="syntax-todataops">syntax.todataops</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+</pre></td><td class="code"><pre><span class="class"><span class="keyword">trait</span> <span class="title">todataops</span> <span class="keyword">extends</span> <span class="title">toidops</span> <span class="keyword">with</span> <span class="title">totreeops</span> <span class="keyword">with</span> <span class="title">towriterops</span> <span class="keyword">with</span> <span class="title">tovalidationops</span> <span class="keyword">with</span> <span class="title">toreducerops</span> <span class="keyword">with</span> <span class="title">tokleisliops</span></span>
+
+<span class="comment">///</span>
+<span class="keyword">package</span> scalaz.syntax
+
+<span class="class"><span class="keyword">trait</span> <span class="title">idops</span>[<span class="title">a</span>] <span class="keyword">extends</span> <span class="title">ops</span>[<span class="title">a</span>] {</span>
+  <span class="keyword">final</span> <span class="keyword">def</span> ??(d: =&gt; a)(implicit ev: <span class="keyword">null</span> &lt;:&lt; a): a = ...
+  <span class="keyword">final</span> <span class="keyword">def</span> |&gt;[b](f: a =&gt; b): b = ...
+  <span class="keyword">final</span> <span class="keyword">def</span> squared: (a, a) = ...
+  <span class="keyword">def</span> left[b]: (a \/ b) = ...
+  <span class="keyword">def</span> right[b]: (b \/ a) = ...
+  <span class="keyword">final</span> <span class="keyword">def</span> wrapnel: nonemptylist[a] = ...
+  <span class="keyword">def</span> matchorzero[b: monoid](pf: partialfunction[a, b]): b = ...
+  <span class="keyword">final</span> <span class="keyword">def</span> dowhile(f: a =&gt; a, p: a =&gt; boolean): a = ...
+  <span class="keyword">final</span> <span class="keyword">def</span> whiledo(f: a =&gt; a, p: a =&gt; boolean): a = ...
+  <span class="keyword">def</span> visit[f[_] : pointed](p: partialfunction[a, f[a]]): f[a] = ...
+}
+
+<span class="class"><span class="keyword">trait</span> <span class="title">toidops</span> {</span>
+  implicit <span class="keyword">def</span> toidops[a](a: a): idops[a] = <span class="keyword">new</span> idops[a] {
+    <span class="keyword">def</span> self: a = a
+  }
+}
+
+<span class="comment">///</span>
+<span class="keyword">package</span> scalaz
+<span class="keyword">package</span> syntax
+
+<span class="class"><span class="keyword">trait</span> <span class="title">treeops</span>[<span class="title">a</span>] <span class="keyword">extends</span> <span class="title">ops</span>[<span class="title">a</span>] {</span>
+  <span class="keyword">def</span> node(subforest: tree[a]*): tree[a] = ...
+  <span class="keyword">def</span> leaf: tree[a] = ...
+}
+
+<span class="class"><span class="keyword">trait</span> <span class="title">totreeops</span> {</span>
+  implicit <span class="keyword">def</span> totreeops[a](a: a) = <span class="keyword">new</span> treeops[a]{ <span class="keyword">def</span> self = a }
+}
+</pre></td></tr></table></figure>
+
+<p>the same goes for <code>writerops[a]</code>, <code>validationops[a]</code>,
+<code>reducerops[a]</code>, and <code>kleisliidops[a]</code>:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="code"><pre>scala&gt; <span class="number">1.</span>node(<span class="number">2.</span>leaf)
+<span class="label">res7:</span> scalaz<span class="preprocessor">.tree</span>[int] = &lt;tree&gt;
+
+scala&gt; <span class="number">1.</span><span class="keyword">set</span>(<span class="string">"log1"</span>)
+<span class="label">res8:</span> scalaz<span class="preprocessor">.writer</span>[string,int] = scalaz<span class="preprocessor">.writertfunctions</span>$$anon$26<span class="localvars">@2375</span>d245
+
+scala&gt; <span class="string">"log2"</span><span class="preprocessor">.tell</span>
+<span class="label">res9:</span> scalaz<span class="preprocessor">.writer</span>[string,unit] = scalaz<span class="preprocessor">.writertfunctions</span>$$anon$26<span class="localvars">@699289</span>fb
+
+scala&gt; <span class="number">1.</span>success[string]
+<span class="label">res11:</span> scalaz<span class="preprocessor">.validation</span>[string,int] = success(<span class="number">1</span>)
+
+scala&gt; <span class="string">"boom"</span><span class="preprocessor">.failurenel</span>[int]
+<span class="label">res12:</span> scalaz<span class="preprocessor">.validationnel</span>[string,int] = failure(nonemptylist(boom))
+</pre></td></tr></table></figure>
+
+<h3 id="syntax-std-toallstdops">syntax.std.toallstdops</h3>
+<p>introduces methods and operators to scala’s standard types.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre><span class="keyword">package</span> scalaz
+<span class="keyword">package</span> syntax
+<span class="keyword">package</span> std
+
+<span class="class"><span class="keyword">trait</span> <span class="title">toallstdops</span></span>
+  <span class="keyword">extends</span> tobooleanops <span class="keyword">with</span> tooptionops <span class="keyword">with</span> tooptionidops <span class="keyword">with</span> tolistops <span class="keyword">with</span> tostreamops
+  <span class="keyword">with</span> tofunction2ops <span class="keyword">with</span> tofunction1ops <span class="keyword">with</span> tostringops <span class="keyword">with</span> totupleops <span class="keyword">with</span> tomapops <span class="keyword">with</span> toeitherops
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+</pre></td><td class="code"><pre>scala&gt; <span class="constant">false</span> /\ <span class="constant">true</span>
+res14: <span class="type">boolean</span> = <span class="constant">false</span>
+
+scala&gt; <span class="constant">false</span> \/ <span class="constant">true</span>
+res15: <span class="type">boolean</span> = <span class="constant">true</span>
+
+scala&gt; <span class="constant">true</span> option <span class="string">"foo"</span>
+res16: option[<span class="type">string</span>] = <span class="keyword">some</span>(foo)
+
+scala&gt; (<span class="number">1</span> &gt; <span class="number">10</span>)? <span class="string">"foo"</span> | <span class="string">"bar"</span>
+res17: <span class="type">string</span> = bar
+
+scala&gt; (<span class="number">1</span> &gt; <span class="number">10</span>)?? {<span class="type">list</span>(<span class="string">"foo"</span>)}
+res18: <span class="type">list</span>[<span class="type">string</span>] = <span class="type">list</span>()
+
+
+scala&gt; <span class="number">1.</span><span class="keyword">some</span>? <span class="string">"foo"</span> | <span class="string">"bar"</span>
+res28: <span class="type">string</span> = foo
+
+scala&gt; <span class="number">1.</span><span class="keyword">some</span> | <span class="number">2</span>
+res30: int = <span class="number">1</span>
+
+
+scala&gt; <span class="type">list</span>(<span class="number">1</span>, <span class="number">2</span>) filterm {_ =&gt; <span class="type">list</span>(<span class="constant">true</span>, <span class="constant">false</span>)}
+res37: <span class="type">list</span>[<span class="type">list</span>[int]] = <span class="type">list</span>(<span class="type">list</span>(<span class="number">1</span>, <span class="number">2</span>), <span class="type">list</span>(<span class="number">1</span>), <span class="type">list</span>(<span class="number">2</span>), <span class="type">list</span>())
+</pre></td></tr></table></figure>
+
+<h1 id="hacking-on-a-project">hacking on a project</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre>git clone <span class="attribute">-b</span> scalaz<span class="attribute">-seven</span> git:<span class="comment">//github.com/scalaz/scalaz.git scalaz-seven</span>
+git branch topic/vectorinstance
+git co topic/vectorinstance
+</pre></td></tr></table></figure>
+
+<p>What’s actually going on is not just the combination of applicative
+<code>functors (m ⊠ n)</code>, but the combination of applicative functions:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre><span class="label">(⊗)::</span>(Functor m,Functor n) ⇒ (<span class="literal">a</span> → m b) → (<span class="literal">a</span> → n b) → (<span class="literal">a</span> → (m ⊠ n) b)
+(f ⊗ g) x = Prod (f x) (g x)
+</pre></td></tr></table></figure>
+
+<p>Int is a Monoid, and any Monoid can be treated as an applicative functor,
+which is called monoidal applicatives.
+The problem is that when we make that into a function, it’s not distinguishable
+from <code>Int =&gt; Int</code>, but we need <code>Int =&gt; [α]Int</code></p>
+<p>TODO</p>
+<h1 id="arrow">Arrow</h1>
+<p>An arrow is the term used in category theory as an abstract
+notion of thing that behaves like a function.</p>
+<p>In Scalaz, these are <code>Function1[A, B]</code>, <code>PartialFunction[A, B]</code>,
+<code>Kleisli[F[_], A, B], and CoKleisli[F[_], A, B]</code>. Arrow
+abstracts them all similar to the way other typeclasses abtracts containers.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre>// Looks like Arrow[=&gt;:[_, _]] extends Category[=&gt;:].
+trait Arrow[=&gt;:[_, _]] extends Category[=&gt;:] { self =&gt;
+  <span class="function"><span class="keyword">def</span> <span class="title">id</span>[<span class="title">A</span>]:</span> A =&gt;: A
+  <span class="function"><span class="keyword">def</span> <span class="title">arr</span>[<span class="title">A</span>, <span class="title">B</span>]<span class="params">(f: A =&gt; B)</span>:</span> A =&gt;: B
+  <span class="function"><span class="keyword">def</span> <span class="title">first</span>[<span class="title">A</span>, <span class="title">B</span>, <span class="title">C</span>]<span class="params">(f: <span class="params">(A =&gt;: B)</span>)</span>:</span> ((A, C) =&gt;: (B, C))
+}
+</pre></td></tr></table></figure>
+
+<h2 id="category-and-compose">Category and Compose</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre>trait Category[=&gt;:[_, _]] extends Compose[=&gt;:] { self =&gt;
+  /** The left <span class="keyword">and</span> right identity over `compose`. */
+  <span class="function"><span class="keyword">def</span> <span class="title">id</span>[<span class="title">A</span>]:</span> A =&gt;: A
+}
+
+trait Compose[=&gt;:[_, _]]  { self =&gt;
+  <span class="function"><span class="keyword">def</span> <span class="title">compose</span>[<span class="title">A</span>, <span class="title">B</span>, <span class="title">C</span>]<span class="params">(f: B =&gt;: C, g: A =&gt;: B)</span>:</span> (A =&gt;: C)
+}
+</pre></td></tr></table></figure>
+
+<p>compose function composes two arrows into one. Using compose, Compose
+introduces the following operators:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>trait ComposeOps[F[_, _],A, B] extends Ops[F[A, B]] {
+  final <span class="function"><span class="keyword">def</span> &lt;&lt;&lt;[<span class="title">C</span>]<span class="params">(x: F[C, A])</span>:</span> F[C, B] = F.compose(self, x)
+  final <span class="function"><span class="keyword">def</span> &gt;&gt;&gt;[<span class="title">C</span>]<span class="params">(x: F[B, C])</span>:</span> F[A, C] = F.compose(x, self)
+}
+</pre></td></tr></table></figure>
+
+<p>The meaning of <code>&gt;&gt;&gt;</code> and <code>&lt;&lt;&lt;</code> depends on the arrow, but for functions,
+it’s the same as andThen and compose:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre>scala&gt; val f = (_:<span class="built_in">Int</span>) + <span class="number">1</span>
+f: <span class="built_in">Int</span> =&gt; <span class="built_in">Int</span> = &lt;function1&gt;
+
+scala&gt; val g = (_:<span class="built_in">Int</span>) * <span class="number">100</span>
+g: <span class="built_in">Int</span> =&gt; <span class="built_in">Int</span> = &lt;function1&gt;
+
+scala&gt; (f &gt;&gt;&gt; g)(<span class="number">2</span>)
+res0: <span class="built_in">Int</span> = <span class="number">300</span>
+
+scala&gt; (f &lt;&lt;&lt; g)(<span class="number">2</span>)
+res1: <span class="built_in">Int</span> = <span class="number">201</span>
+</pre></td></tr></table></figure>
+
+<h2 id="arrow-again">Arrow, again</h2>
+<p><code>=&gt;:[A, B]</code> as <code>A =&gt;: B</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre>trait ArrowOps[F[_, _],A, B] extends Ops[F[A, B]] {
+  final <span class="function"><span class="keyword">def</span> ***[<span class="title">C</span>, <span class="title">D</span>]<span class="params">(k: F[C, D])</span>:</span> F[(A, C), (B, D)] = F.splitA(self, k)
+  final <span class="function"><span class="keyword">def</span> &&&[<span class="title">C</span>]<span class="params">(k: F[A, C])</span>:</span> F[A, (B, C)] = F.combine(self, k)
+  ...
+}
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="code"><pre>scala&gt; val f = (<span class="attribute">_</span>:Int) + <span class="number">1</span>
+<span class="attribute">f</span>: Int<span class="function"> =&gt;</span> Int = &lt;function1&gt;
+
+scala&gt; val g = (<span class="attribute">_</span>:Int) * <span class="number">100</span>
+<span class="attribute">g</span>: Int<span class="function"> =&gt;</span> Int = &lt;function1&gt;
+
+<span class="regexp">//</span> combines two arrows into a <span class="keyword">new</span> arrow <span class="keyword">by</span> running
+<span class="regexp">//</span> the two arrows <span class="literal">on</span> a pair <span class="keyword">of</span> values
+scala&gt; (f *** g)(<span class="number">1</span>, <span class="number">2</span>)
+<span class="attribute">res3</span>: (Int, Int) = (<span class="number">2</span>,<span class="number">200</span>)
+
+<span class="regexp">//</span> combines two arrows into a <span class="keyword">new</span> arrow <span class="keyword">by</span> running the
+<span class="regexp">//</span> two arrows <span class="literal">on</span> the same value
+scala&gt; (f &&& g)(<span class="number">2</span>)
+<span class="attribute">res4</span>: (Int, Int) = (<span class="number">3</span>,<span class="number">200</span>)
+</pre></td></tr></table></figure>
+
+<h1 id="unapply">Unapply</h1>
+<p>One thing that I’ve been fighting the Scala compiler over
+is the lack of type inference support across the different kinded types
+like <code>F[M[_, _]]</code> and <code>F[M[_]]</code>, and <code>M[_] and F[M[_]]</code>.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre>scala&gt; Applicative[Function1[Int, Int]]
+&lt;<span class="built_in">console</span>&gt;:<span class="number">14</span>: <span class="attribute">error</span>: Int<span class="function"> =&gt;</span> Int takes <span class="literal">no</span> type parameters, <span class="attribute">expected</span>: one
+              Applicative[Function1[Int, Int]]
+                          ^
+<span class="regexp">//</span> an instance <span class="keyword">of</span> Applicative[M[_]] <span class="keyword">is</span> <span class="function"><span class="params">(* -&gt; *)</span> -&gt;</span> *                          
+scala&gt; Applicative[({type l[A]=Function1[Int, A]})<span class="comment">#l]</span>
+<span class="attribute">res14</span>: scalaz.Applicative[[A]Int<span class="function"> =&gt;</span> A] = scalaz.std.FunctionInstances$$anon$<span class="number">2</span>@<span class="number">56</span>ae78ac
+</pre></td></tr></table></figure>
+
+<p>One of the way Scalaz helps you out is to provide
+meta-instances of typeclass instance called Unapply.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre><span class="class"><span class="keyword">trait</span> <span class="title">Unapply</span>[<span class="title">TC</span>[<span class="title">_</span>[<span class="title">_</span>]], <span class="title">MA</span>] {</span>
+  <span class="javadoc">/** The type constructor */</span>
+  <span class="keyword">type</span> M[_]
+  <span class="javadoc">/** The type that `M` was applied to */</span>
+  <span class="keyword">type</span> A
+  <span class="javadoc">/** The instance of the type class */</span>
+  <span class="keyword">def</span> TC: TC[M]
+  <span class="javadoc">/** Evidence that MA =:= M[A] */</span>
+  <span class="keyword">def</span> apply(ma: MA): M[A]
+}
+</pre></td></tr></table></figure>
+
+<p>TODO</p>
+<h2 id="parallel-composition">parallel composition</h2>
+<p>TODO</p>
+<h1 id="momo">Momo</h1>
+<p>Pure functions don’t imply they are computationally cheap.</p>
+<p>Given you have some space in RAM, we could trade some of the
+expensive calculations for space by caching the result.
+This is called memoization.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre>sealed trait Memo[<span class="decorator">@specialized(Int) K, @specialized(Int, Long, Double) V] {</span>
+  <span class="function"><span class="keyword">def</span> <span class="title">apply</span><span class="params">(z: K =&gt; V)</span>:</span> K =&gt; V
+}
+</pre></td></tr></table></figure>
+
+<p>We pass in a potentially expensive function as an input
+and you get back a function that behaves the same but may cache the result.</p>
+<p>Memo object there are some default implementations of Memo like
+<code>Memo.mutableHashMapMemo[K, V]</code>, <code>Memo.weakHashMapMemo[K, V]</code>, and <code>Memo.arrayMemo[V]</code>.</p>
+<p>缓存每次运算的结果</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+</pre></td><td class="code"><pre>scala&gt; val slowFib: Int =&gt; Int = {
+         <span class="keyword">case</span> <span class="number">0</span> =&gt; <span class="number">0</span>
+         <span class="keyword">case</span> <span class="number">1</span> =&gt; <span class="number">1</span>
+         <span class="keyword">case</span> n =&gt; slowFib(n - <span class="number">2</span>) + slowFib(n - <span class="number">1</span>)
+       }
+slowFib: Int =&gt; Int = &lt;function1&gt;
+
+scala&gt; slowFib(<span class="number">45</span>)
+res2: Int = <span class="number">1134903170</span>
+
+scala&gt; val memoizedFib: Int =&gt; Int = Memo.mutableHashMapMemo {
+         <span class="keyword">case</span> <span class="number">0</span> =&gt; <span class="number">0</span>
+         <span class="keyword">case</span> <span class="number">1</span> =&gt; <span class="number">1</span>
+         <span class="keyword">case</span> n =&gt; memoizedFib(n - <span class="number">2</span>) + memoizedFib(n - <span class="number">1</span>)
+       }
+memoizedFib: Int =&gt; Int = &lt;function1&gt;
+
+scala&gt; memoizedFib(<span class="number">45</span>)
+res14: Int = <span class="number">1134903170</span>
+</pre></td></tr></table></figure>
+
+<h1 id="functional-programming">functional programming</h1>
+<p>An expression e is referentially transparent if every occurrence e can
+be replaced with its value without affecting the observable result of the program.</p>
+<h1 id="effect-system">Effect system</h1>
+<h2 id="st">ST</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre>sealed trait ST[S, A] {
+  private[effect] <span class="function"><span class="keyword">def</span> <span class="title">apply</span><span class="params">(s: World[S])</span>:</span> (World[S], A)
+}
+</pre></td></tr></table></figure>
+
+<p>This looks similar to State monad, but the difference I think is that
+the state is mutated in-place, and in return is not observable from outside.</p>
+<h2 id="stref">STRef</h2>
+<p>STRef is a mutable variable that’s used only within
+the context of ST monad. It’s created using ST.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+</pre></td><td class="code"><pre><span class="keyword">sealed</span> <span class="class"><span class="keyword">trait</span> <span class="title">STRef</span>[<span class="title">S</span>, <span class="title">A</span>] {</span>
+  <span class="keyword">protected</span> <span class="keyword">var</span> value: A
+
+  <span class="javadoc">/**Reads the value pointed at by this reference. */</span>
+  <span class="keyword">def</span> read: ST[S, A] = returnST(value)
+  <span class="javadoc">/**Modifies the value at this reference with the given function. */</span>
+  <span class="keyword">def</span> mod[B](f: A =&gt; A): ST[S, STRef[S, A]] = ...
+  <span class="javadoc">/**Associates this reference with the given value. */</span>
+  <span class="keyword">def</span> write(a: =&gt; A): ST[S, STRef[S, A]] = ...
+  <span class="javadoc">/**Synonym for write*/</span>
+  <span class="keyword">def</span> |=(a: =&gt; A): ST[S, STRef[S, A]] = ...
+  <span class="javadoc">/**Swap the value at this reference with the value at another. */</span>
+  <span class="keyword">def</span> swap(that: STRef[S, A]): ST[S, Unit] = ...
+}
+
+<span class="keyword">sealed</span> <span class="class"><span class="keyword">trait</span> <span class="title">STArray</span>[<span class="title">S</span>, <span class="title">A</span>] {</span>
+  <span class="keyword">val</span> size: Int
+  <span class="keyword">val</span> z: A
+  <span class="keyword">private</span> <span class="keyword">val</span> value: Array[A] = Array.fill(size)(z)
+  <span class="javadoc">/**Reads the value at the given index. */</span>
+  <span class="keyword">def</span> read(i: Int): ST[S, A] = returnST(value(i))
+  <span class="javadoc">/**Writes the given value to the array, at the given offset. */</span>
+  <span class="keyword">def</span> write(i: Int, a: A): ST[S, STArray[S, A]] = ...
+  <span class="javadoc">/**Turns a mutable array into an immutable one which is safe to return. */</span>
+  <span class="keyword">def</span> freeze: ST[S, ImmutableArray[A]] = ...
+  <span class="javadoc">/**Fill this array from the given association list. */</span>
+  <span class="keyword">def</span> fill[B](f: (A, B) =&gt; A, xs: Traversable[(Int, B)]): ST[S, Unit] = ...
+  <span class="javadoc">/**Combine the given value with the value at the given index, using the given function. */</span>
+  <span class="keyword">def</span> update[B](f: (A, B) =&gt; A, i: Int, v: B) = ...
+}
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+</pre></td><td class="code"><pre><span class="title">scala</span>&gt; <span class="import"><span class="keyword">import</span> effect._</span>
+<span class="import"><span class="keyword">import</span> effect._</span>
+
+<span class="title">scala</span>&gt; <span class="import"><span class="keyword">import</span> ST.{newVar, runST, newArr, returnST}</span>
+<span class="import"><span class="keyword">import</span> ST.{newVar, runST, newArr, returnST}</span>
+
+<span class="title">scala</span>&gt; def e1[<span class="type">S</span>] = for {
+         x &lt;- newVar[<span class="type">S</span>](<span class="number">0</span>)
+         r &lt;- x mod {_ + <span class="number">1</span>}
+       } yield x
+<span class="title">e1</span>: [<span class="type">S</span>]=&gt; scalaz.effect.<span class="type">ST</span>[<span class="type">S</span>,scalaz.effect.<span class="type">STRef</span>[<span class="type">S</span>,<span class="type">Int</span>]]
+
+<span class="title">scala</span>&gt; def e2[<span class="type">S</span>]: <span class="type">ST</span>[<span class="type">S</span>, <span class="type">Int</span>] = for {
+         x &lt;- e1[<span class="type">S</span>]
+         r &lt;- x.read
+       } yield r 
+<span class="title">e2</span>: [<span class="type">S</span>]=&gt; scalaz.effect.<span class="type">ST</span>[<span class="type">S</span>,<span class="type">Int</span>]
+
+<span class="title">scala</span>&gt; <span class="typedef"><span class="keyword">type</span> <span class="type">ForallST</span>[<span class="type">A</span>] = <span class="type">Forall</span>[<span class="container">({<span class="title">type</span> λ[<span class="type">S</span>] = <span class="type">ST</span>[<span class="type">S</span>, <span class="type">A</span>]})</span>#λ]</span>
+<span class="title">defined</span> <span class="typedef"><span class="keyword">type</span> alias <span class="type">ForallST</span></span>
+
+<span class="title">scala</span>&gt; runST(new <span class="type">ForallST</span>[<span class="type">Int</span>] { def apply[<span class="type">S</span>] = e2[<span class="type">S</span>] })
+<span class="title">res5</span>: <span class="type">Int</span> = <span class="number">1</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="code"><pre><span class="string">"STArray"</span> <span class="keyword">in</span> {
+  def e1[S] = <span class="keyword">for</span> {
+    arr &lt;- newArr[S, <span class="built_in">Boolean</span>](<span class="number">3</span>, <span class="literal">true</span>)
+    _ &lt;- arr.write(<span class="number">0</span>, <span class="literal">false</span>)
+    r &lt;- arr.freeze
+  } <span class="keyword">yield</span> r
+  runST(<span class="keyword">new</span> ForallST[ImmutableArray[<span class="built_in">Boolean</span>]] { def apply[S] = e1[S] }).toList must be_===(
+    List(<span class="literal">false</span>, <span class="literal">true</span>, <span class="literal">true</span>))
+}
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+</pre></td><td class="code"><pre>scala&gt; def mapM[<span class="link_label">A, S, B</span>](<span class="link_url">xs: List[A]</span>)(f: A =&gt; ST[S, B]): ST[S, List[B]] =
+<span class="code">         Monad[({type λ[α] = ST[S, α]})#λ].sequence(xs map f)</span>
+mapM: [<span class="link_label">A, S, B</span>](<span class="link_url">xs: List[A]</span>)(f: A =&gt; scalaz.effect.ST[S,B])scalaz.effect.ST[S,List[B]]
+
+scala&gt; def sieve[<span class="link_label">S</span>](<span class="link_url">n: Int</span>) = for {
+<span class="code">         arr &lt;- newArr[S, Boolean](n + 1, true)</span>
+<span class="code">         _ &lt;- arr.write(0, false)</span>
+<span class="code">         _ &lt;- arr.write(1, false)</span>
+<span class="code">         val nsq = (math.sqrt(n.toDouble).toInt + 1)</span>
+<span class="code">         _ &lt;- mapM (1 |-&gt; nsq) { i =&gt;</span>
+<span class="code">           for {</span>
+<span class="code">             x &lt;- arr.read(i)</span>
+<span class="code">             _ &lt;-</span>
+<span class="code">               if (x) mapM (i * i |--&gt; (i, n)) { j =&gt; arr.write(j, false) }</span>
+<span class="code">               else returnST[S, List[Boolean]] {Nil}</span>
+<span class="code">           } yield ()</span>
+<span class="code">         }</span>
+<span class="code">         r &lt;- arr.freeze</span>
+<span class="code">       } yield r</span>
+sieve: [<span class="link_label">S</span>](<span class="link_url">n: Int</span>)scalaz.effect.ST[S,scalaz.ImmutableArray[Boolean]]
+
+scala&gt; type ForallST[A] = Forall[({type λ[S] = ST[S, A]})#λ]
+defined type alias ForallST
+
+scala&gt; def prime(n: Int) =
+<span class="code">         runST(new ForallST[ImmutableArray[Boolean]] { def apply[S] = sieve[S](n) }).toArray.</span>
+<span class="code">         zipWithIndex collect { case (true, x) =&gt; x }</span>
+prime: (n: Int)Array[Int]
+
+scala&gt; prime(1000)
+</pre></td></tr></table></figure>
+
+<h1 id="io-monad">IO Monad</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre>sealed trait IO[+A] {
+  private[effect] <span class="function"><span class="keyword">def</span> <span class="title">apply</span><span class="params">(rw: World[RealWorld])</span>:</span> Trampoline[(World[RealWorld], A)]
+}
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre>scala&gt; import scalaz._, Scalaz._, effect._, IO._
+scala&gt; val action1 = for {
+         _ &lt;- putStrLn(<span class="string">"Hello, world!"</span>)
+       } yield ()
+<span class="label">action1:</span> scalaz<span class="preprocessor">.effect</span><span class="preprocessor">.IO</span>[Unit] = scalaz<span class="preprocessor">.effect</span><span class="preprocessor">.IOFunctions</span>$$anon$4<span class="localvars">@149</span>f6f65
+
+scala&gt; action1<span class="preprocessor">.unsafePerformIO</span>
+Hello, world!
+</pre></td></tr></table></figure>
+
+<p>IO actions</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+</pre></td><td class="code"><pre>  /** Reads a character <span class="keyword">from</span> standard input. */
+  <span class="function"><span class="keyword">def</span> <span class="title">getChar</span>:</span> IO[Char] = ...
+  /** Writes a character to standard output. */
+  <span class="function"><span class="keyword">def</span> <span class="title">putChar</span><span class="params">(c: Char)</span>:</span> IO[Unit] = ...
+  /** Writes a string to standard output. */
+  <span class="function"><span class="keyword">def</span> <span class="title">putStr</span><span class="params">(s: String)</span>:</span> IO[Unit] = ...
+  /** Writes a string to standard output, followed by a newline.*/
+  <span class="function"><span class="keyword">def</span> <span class="title">putStrLn</span><span class="params">(s: String)</span>:</span> IO[Unit] = ...
+  /** Reads a line of standard input. */
+  <span class="function"><span class="keyword">def</span> <span class="title">readLn</span>:</span> IO[String] = ...
+  /** Write the given value to standard output. */
+  <span class="function"><span class="keyword">def</span> <span class="title">putOut</span>[<span class="title">A</span>]<span class="params">(a: A)</span>:</span> IO[Unit] = ...
+  // Mutable variables <span class="keyword">in</span> the IO monad
+  <span class="function"><span class="keyword">def</span> <span class="title">newIORef</span>[<span class="title">A</span>]<span class="params">(a: =&gt; A)</span>:</span> IO[IORef[A]] = ...
+  /**Throw the given error <span class="keyword">in</span> the IO monad. */
+  <span class="function"><span class="keyword">def</span> <span class="title">throwIO</span>[<span class="title">A</span>]<span class="params">(e: Throwable)</span>:</span> IO[A] = ...
+  /** An IO action that does nothing. */
+  val ioUnit: IO[Unit] = ...
+}
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre>scala&gt; val action2 = IO {
+         val source = scala<span class="preprocessor">.io</span><span class="preprocessor">.Source</span><span class="preprocessor">.fromFile</span>(<span class="string">"./README.md"</span>)
+         source<span class="preprocessor">.getLines</span><span class="preprocessor">.toStream</span>
+       }
+<span class="label">action2:</span> scalaz<span class="preprocessor">.effect</span><span class="preprocessor">.IO</span>[scala<span class="preprocessor">.collection</span><span class="preprocessor">.immutable</span><span class="preprocessor">.Stream</span>[String]] = scalaz<span class="preprocessor">.effect</span><span class="preprocessor">.IOFunctions</span>$$anon$4@bab4387
+
+scala&gt; action2<span class="preprocessor">.unsafePerformIO</span><span class="preprocessor">.toList</span>
+<span class="label">res57:</span> List[String] = List(<span class="preprocessor"># Scalaz, "", Scalaz is a Scala library for functional programming., "", It provides purely functional data structures to complement those from the Scala standard library., ...</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre><span class="function"><span class="keyword">def</span> <span class="title">program</span>:</span> IO[Unit] = <span class="keyword">for</span> {
+  line &lt;- readLn
+  _    &lt;- putStrLn(line)
+} <span class="keyword">yield</span> ()
+
+scala&gt; (program |+| program).unsafePerformIO
+<span class="number">123</span>
+<span class="number">123</span>
+</pre></td></tr></table></figure>
+
+<h2 id="enumeration-based-i-o-with-iteratees">Enumeration-Based I/O with Iteratees</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+</pre></td><td class="code"><pre>sealed trait Input[E] {
+  def fold[<span class="link_label">Z</span>](<span class="link_url">empty: =&gt; Z, el: (=&gt; E</span>) =&gt; Z, eof: =&gt; Z): Z
+  def apply[<span class="link_label">Z</span>](<span class="link_url">empty: =&gt; Z, el: (=&gt; E</span>) =&gt; Z, eof: =&gt; Z) =
+<span class="code">    fold(empty, el, eof)</span>
+}
+
+sealed trait IterateeT[E, F[_], A] {
+  def value: F[StepT[E, F, A]]
+}
+type Iteratee[E, A] = IterateeT[E, Id, A]
+
+object Iteratee
+  extends IterateeFunctions
+  with IterateeTFunctions
+  with EnumeratorTFunctions
+  with EnumeratorPFunctions
+  with EnumerateeTFunctions
+  with StepTFunctions
+  with InputFunctions {
+
+  def apply[<span class="link_label">E, A</span>](<span class="link_url">s: Step[E, A]</span>): Iteratee[E, A] = iteratee(s)
+}
+
+type &gt;@&gt;[E, A] = Iteratee[E, A]
+</pre></td></tr></table></figure>
+
+<p>Let’s try implementing the counter example from EBIOI.
+For that we switch to iteratee project using sbt:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+</pre></td><td class="code"><pre>sealed trait IterateeT[E, F[_], A] {
+  <span class="function"><span class="keyword">def</span> <span class="title">value</span>:</span> F[StepT[E, F, A]]
+}
+type Iteratee[E, A] = IterateeT[E, Id, A]
+
+object Iteratee
+  extends IterateeFunctions
+  <span class="keyword">with</span> IterateeTFunctions
+  <span class="keyword">with</span> EnumeratorTFunctions
+  <span class="keyword">with</span> EnumeratorPFunctions
+  <span class="keyword">with</span> EnumerateeTFunctions
+  <span class="keyword">with</span> StepTFunctions
+  <span class="keyword">with</span> InputFunctions {
+
+  <span class="function"><span class="keyword">def</span> <span class="title">apply</span>[<span class="title">E</span>, <span class="title">A</span>]<span class="params">(s: Step[E, A])</span>:</span> Iteratee[E, A] = iteratee(s)
+}
+
+type &gt;<span class="decorator">@&gt;[E, A] = Iteratee[E, A]</span>
+</pre></td></tr></table></figure>
+
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/scala/">scala</a><a href="/tags/scalaz/">scalaz</a>
+  </div>
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://zhpooer.github.io/2014/07/30/learning-scalaz-进阶3/" data-title="learning scalaz 进阶3 | Poe&#39;s World" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2014/08/02/vim-快捷键小计/" title="vim spf13 快捷键小记">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  vim spf13 快捷键小记</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2014/07/30/learning-scalaz-进阶2/"  title="learning scalaz 进阶2">
+ <strong>NEXT:</strong><br/> 
+ <span>learning scalaz 进阶2
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#origami-programming"><span class="toc-number">1.</span> <span class="toc-text">Origami programming</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#dlist"><span class="toc-number">1.1.</span> <span class="toc-text">DList</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#folds-for-streams"><span class="toc-number">1.2.</span> <span class="toc-text">Folds for Streams</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#the-essence-of-the-iterator-pattern"><span class="toc-number">1.3.</span> <span class="toc-text">The Essence of the Iterator Pattern</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#monoidal-applicatives"><span class="toc-number">1.4.</span> <span class="toc-text">Monoidal applicatives</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#combining-applicative-functors"><span class="toc-number">1.5.</span> <span class="toc-text">Combining applicative functors</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#idiomatic-traversal"><span class="toc-number">1.6.</span> <span class="toc-text">Idiomatic traversal</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sequence"><span class="toc-number">1.7.</span> <span class="toc-text">sequence</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#import-guide"><span class="toc-number">2.</span> <span class="toc-text">import guide</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#import-scalaz-_"><span class="toc-number">2.1.</span> <span class="toc-text">import scalaz._</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#import-scalaz-_"><span class="toc-number">2.2.</span> <span class="toc-text">import Scalaz._</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#statefunctions"><span class="toc-number">2.2.1.</span> <span class="toc-text">StateFunctions</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#std-allfunctions"><span class="toc-number">2.2.2.</span> <span class="toc-text">std.AllFunctions</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#idinstances"><span class="toc-number">2.2.3.</span> <span class="toc-text">IdInstances</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#std-allinstances"><span class="toc-number">2.2.4.</span> <span class="toc-text">std.AllInstances</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#syntax-totypeclassops"><span class="toc-number">2.2.5.</span> <span class="toc-text">syntax.totypeclassops</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#syntax-todataops"><span class="toc-number">2.2.6.</span> <span class="toc-text">syntax.todataops</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#syntax-std-toallstdops"><span class="toc-number">2.2.7.</span> <span class="toc-text">syntax.std.toallstdops</span></a></li></ol></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#hacking-on-a-project"><span class="toc-number">3.</span> <span class="toc-text">hacking on a project</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#arrow"><span class="toc-number">4.</span> <span class="toc-text">Arrow</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#category-and-compose"><span class="toc-number">4.1.</span> <span class="toc-text">Category and Compose</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#arrow-again"><span class="toc-number">4.2.</span> <span class="toc-text">Arrow, again</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#unapply"><span class="toc-number">5.</span> <span class="toc-text">Unapply</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#parallel-composition"><span class="toc-number">5.1.</span> <span class="toc-text">parallel composition</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#momo"><span class="toc-number">6.</span> <span class="toc-text">Momo</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#functional-programming"><span class="toc-number">7.</span> <span class="toc-text">functional programming</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#effect-system"><span class="toc-number">8.</span> <span class="toc-text">Effect system</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#st"><span class="toc-number">8.1.</span> <span class="toc-text">ST</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#stref"><span class="toc-number">8.2.</span> <span class="toc-text">STRef</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#io-monad"><span class="toc-number">9.</span> <span class="toc-text">IO Monad</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#enumeration-based-i-o-with-iteratees"><span class="toc-number">9.1.</span> <span class="toc-text">Enumeration-Based I/O with Iteratees</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/AJAX/" title="AJAX">AJAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+		
+			<li><a href="/tags/DOM/" title="DOM">DOM<sup>2</sup></a></li>
+		
+			<li><a href="/tags/EL表达式/" title="EL表达式">EL表达式<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Hibernate/" title="Hibernate">Hibernate<sup>2</sup></a></li>
+		
+			<li><a href="/tags/HttpSession/" title="HttpSession">HttpSession<sup>1</sup></a></li>
+		
+			<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JSP/" title="JSP">JSP<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaBean/" title="JavaBean">JavaBean<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaScript/" title="JavaScript">JavaScript<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Mybatis/" title="Mybatis">Mybatis<sup>1</sup></a></li>
+		
+			<li><a href="/tags/SAX/" title="SAX">SAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletRequest/" title="ServletRequest">ServletRequest<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletResponse/" title="ServletResponse">ServletResponse<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Spring/" title="Spring">Spring<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Spring MVC/" title="Spring MVC">Spring MVC<sup>1</sup></a></li>
+		
+			<li><a href="/tags/String/" title="String">String<sup>1</sup></a></li>
+		
+			<li><a href="/tags/StringBuffer/" title="StringBuffer">StringBuffer<sup>1</sup></a></li>
+		
+			<li><a href="/tags/activiti/" title="activiti">activiti<sup>2</sup></a></li>
+		
+			<li><a href="/tags/akka/" title="akka">akka<sup>6</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2014 
+		
+		<a href="http://zhpooer.github.io" target="_blank" title="zhpooer">zhpooer</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"zhpoooer"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>

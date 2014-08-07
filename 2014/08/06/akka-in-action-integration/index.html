@@ -1,0 +1,1131 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Akka in Action-Integration | Poe&#39;s World</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="zhpooer">
+    
+    <meta name="description" content="Message endpoints
+The implementation of an interface between two systems isn&#39;t always
+easy, because the interface contains two areas: the transpor">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="Poe&#39;s World" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="Poe&#39;s World" title="Poe&#39;s World"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Poe&#39;s World">Poe&#39;s World</a></h1>
+				<h2 class="blog-motto">竹杖芒鞋轻胜马，一蓑烟雨任平生</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/english-monthly">英语角</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:zhpooer.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/08/06/akka-in-action-integration/" title="Akka in Action-Integration" itemprop="url">Akka in Action-Integration</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://zhpooer.github.io" title="zhpooer">zhpooer</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2014-08-06T06:45:54.000Z" itemprop="datePublished">8月 6 2014</time>
+    更新日期:<time datetime="2014-08-07T02:17:39.000Z" itemprop="dateModified">8月 7 2014</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#message-endpoints"><span class="toc-number">1.</span> <span class="toc-text">Message endpoints</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#normalizer"><span class="toc-number">1.1.</span> <span class="toc-text">Normalizer</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#canonical-data-model"><span class="toc-number">1.2.</span> <span class="toc-text">Canonical Data Model</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#camel-framework"><span class="toc-number">2.</span> <span class="toc-text">Camel Framework</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#implement-a-consumer-endpoint"><span class="toc-number">2.1.</span> <span class="toc-text">Implement a consumer endpoint</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#changing-the-transport-layer-of-our-consumer"><span class="toc-number">2.2.</span> <span class="toc-text">CHANGING THE TRANSPORT LAYER OF OUR CONSUMER</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#using-the-camel-context"><span class="toc-number">2.3.</span> <span class="toc-text">USING THE CAMEL CONTEXT</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#implement-a-producer-endpoint"><span class="toc-number">2.4.</span> <span class="toc-text">Implement a producer endpoint</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#example-of-implementing-a-rest-interface"><span class="toc-number">3.</span> <span class="toc-text">Example of implementing a REST interface</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#implementing-a-rest-endpoint-with-spray"><span class="toc-number">3.1.</span> <span class="toc-text">Implementing a Rest endpoint with Spray</span></a></li></ol>
+		</div>
+		
+		<h1 id="message-endpoints">Message endpoints</h1>
+<p>The implementation of an interface between two systems isn&#39;t always
+easy, because the interface contains two areas: the transport layer and the data
+which is sent over this transport layer.</p>
+<p>For example, we are creating an order system for use in a book
+stockroom, that processes orders from all kinds of customers. These customers can
+order the books by visiting the store. The bookstore already uses an application to
+sell and order books.  So the new system needs to exchange data with this existing
+application.</p>
+<p>Because you probably can&#39;t change the external
+application, you have to create a component that can send and/or receive messages
+from the existing application. This component is called an endpoint. Endpoints are
+part of your system and are the glue between the external system and the rest of
+your system.</p>
+<p>There are a lot of different transport protocols to potentially
+support: REST/HTTP, TCP, MQueues, or simple files. </p>
+<h2 id="normalizer">Normalizer</h2>
+<p>We have seen that our order system receives the orders from the bookshop
+application, but it is possible that our system also receives orders from a web shop,
+or by customers sending email.</p>
+<p>We can use the Normalizer pattern to make these
+different sources all feed into a single interface on the application side. The pattern
+translates the different external messages to a common, canonical message.</p>
+<p>We create three different endpoints to consume the different messages, but
+translate them into the same message, which is sent to the rest of the system.</p>
+<p><img src="/img/akka_order_system.png" alt="akka order system"></p>
+<p>Translating the different messages into a common message is called the
+Normalizer pattern.</p>
+<p> Let us assume that
+there is another bookshop that is connecting to this system using the same
+messages but using MQueue to send those message.</p>
+<p><img src="/img/akka_normalizer.png" alt="akka normalizer partern"></p>
+<h2 id="canonical-data-model">Canonical Data Model</h2>
+<p> But when the connectivity requirements between the systems
+increases we need more and more endpoints.</p>
+<p>To solve this problem, we can use the Canonical Data Model. This pattern
+connects multiple applications using interface(s) that are independent of any
+specific system.</p>
+<p>When the Bookshop application
+wants to send a message to the order system, the message is first translated to the
+canonical format and then it is sent using the common transport layer.</p>
+<p>The Normalizer
+pattern is used to connect several similar clients to another system. But when the
+number of integrated systems increases, we need the Canonical Data Model, which
+looks like the Normalizer Pattern, because it also uses normalized messages.</p>
+<p>The difference is that the Canonical Data Model provides an additional level of
+indirection between the application&#39;s individual data formats and those used by the
+remote systems. While the Normalizer is only within one application.</p>
+<h1 id="camel-framework">Camel Framework</h1>
+<p>Camel is an apache framework whose goal is to make integration easier and more
+accessible. It makes it possible to implement the standard enterprise integration
+patterns in a few lines of code. This is achieved by addressing three areas:</p>
+<ol>
+<li>Concrete implementations of the widely used Enterprise Integration Patterns</li>
+<li>Connectivity to a great variety of transports and APIs</li>
+<li>Easy to use Domain Specific Languages (DSLs) to wire EIPs and transports together</li>
+</ol>
+<p>The Camel module works internally with Camel classes. Important Camel
+classes are the camel context and the ProducerTemplate. The CamelContext
+represents a single Camel routing rule base, and the ProducerTemplate is needed
+when producing messages.</p>
+<h2 id="implement-a-consumer-endpoint">Implement a consumer endpoint</h2>
+<p>The example we are going to implement is an Order System receiving messages
+from a bookshop. 
+Let&#39;s say the received messages are XML files in a
+directory. The transport layer is in this case the file system. The endpoint of the
+order system needs to track new files and when there is a new file it has to parse
+the XML content and create a message the system can process.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+</pre></td><td class="code"><pre><span class="comment">// Consumer Endpoint</span>
+
+<span class="keyword">import</span> akka.camel.{CamelMessage, Consumer}
+
+<span class="class"><span class="keyword">class</span> <span class="title">OrderConsumerXml</span><span class="params">(uri:String, next:ActorRef)</span> <span class="keyword">extends</span> <span class="title">Consumer</span>{</span>
+  <span class="comment">// override the endpointUri</span>
+  <span class="keyword">def</span> endpointUri = uri
+
+  <span class="comment">// receive the Camel message</span>
+  <span class="keyword">def</span> receive = {
+    <span class="keyword">case</span> msg:CamelMessage =&gt; {
+      <span class="keyword">val</span> content = msg.bodyAs[String]
+      <span class="keyword">val</span> xml = XML.loadString(content)
+      <span class="keyword">val</span> order = xml\\<span class="string">"order"</span>
+      <span class="keyword">val</span> customer = (order \\ <span class="string">"customerId"</span>).text
+      <span class="keyword">val</span> productId = (order \\ <span class="string">"productId"</span>).text
+      <span class="keyword">val</span> number = (order \\ <span class="string">"number"</span>).text.toInt
+      next ! <span class="keyword">new</span> Order(customer, productId, number)
+    }
+  }
+}
+
+<span class="comment">// This Uri starts with the Camel component.</span>
+<span class="comment">// http://camel.apache.org/components.html</span>
+<span class="keyword">val</span> camelUri = <span class="string">"file:messages"</span>
+</pre></td></tr></table></figure>
+
+<p>When a new message is received, it comes to the Actor through its usual
+method, as a CamelMessage. A CamelMessage contains a body, which is the
+actual message received, and a map of headers. The content of these headers
+depends on the protocol used. </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="keyword">val</span> probe = TestProbe()
+<span class="keyword">val</span> camelUri = <span class="string">"file:messages"</span>
+<span class="keyword">val</span> consumer = system.actorOf(Props(<span class="keyword">new</span> OrderConsumerXml(camelUri, probe.<span class="keyword">ref</span>)))
+</pre></td></tr></table></figure>
+
+<p>Because we use the Camel Consumer trait, a lot of components are started and
+we have to wait for these components before we can proceed with our test. To be
+able detect that Camel&#39;s startup has finished, we need to use the CamelExtension.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+</pre></td><td class="code"><pre>val camelExtention = CamelExtension(<span class="keyword">system</span>)
+val activated =
+  camelExtention.activationFutureFor(consumer)(timeout = <span class="number">10</span> <span class="built_in">seconds</span>, executor = <span class="keyword">system</span>.dispatcher)
+Await.<span class="built_in">result</span>(activated, <span class="number">5</span> <span class="built_in">seconds</span>)
+
+
+val msg = <span class="built_in">new</span> Order(<span class="string">"me"</span>, <span class="string">"Akka in Action"</span>, <span class="number">10</span>)
+val xml =
+  &lt;order&gt;
+    &lt;customerId&gt;{ msg.customerId }&lt;/customerId&gt;
+    &lt;productId&gt;{ msg.productId }&lt;/productId&gt;
+    &lt;<span class="built_in">number</span>&gt;{ msg.<span class="built_in">number</span> }&lt;/<span class="built_in">number</span>&gt;
+  &lt;/order&gt;
+val msgFile = <span class="built_in">new</span> File(dir, <span class="string">"msg1.xml"</span>)
+FileUtils.<span class="built_in">write</span>(msgFile, xml.toString())
+probe.expectMsg(msg)
+<span class="keyword">system</span>.stop(consumer)
+</pre></td></tr></table></figure>
+
+<h2 id="changing-the-transport-layer-of-our-consumer">CHANGING THE TRANSPORT LAYER OF OUR CONSUMER</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+</pre></td><td class="code"><pre>val probe = TestProbe()
+val camelUri = <span class="string">"mina:tcp://localhost:8888?textline=true&sync=false"</span>
+val consumer = <span class="keyword">system</span>.actorOf(Props(<span class="built_in">new</span> OrderConsumerXml(camelUri, probe.ref)))
+
+val activated =
+  CamelExtension(<span class="keyword">system</span>).activationFutureFor(consumer)(timeout = <span class="number">10</span> <span class="built_in">seconds</span>, executor = <span class="keyword">system</span>.dispatcher)
+  
+Await.<span class="built_in">result</span>(activated, <span class="number">5</span> <span class="built_in">seconds</span>)
+val msg = <span class="built_in">new</span> Order(<span class="string">"me"</span>, <span class="string">"Akka in Action"</span>, <span class="number">10</span>)
+val xml = &lt;order&gt;
+            &lt;customerId&gt;{ msg.customerId }&lt;/customerId&gt;
+            &lt;productId&gt;{ msg.productId }&lt;/productId&gt;
+            &lt;<span class="built_in">number</span>&gt;{ msg.<span class="built_in">number</span> }&lt;/<span class="built_in">number</span>&gt;
+          &lt;/order&gt;
+val xmlStr = xml.toString().<span class="built_in">replace</span>(<span class="string">"n"</span>, <span class="string">""</span>)
+
+val sock = <span class="built_in">new</span> Socket(<span class="string">"localhost"</span>, <span class="number">8888</span>)
+val ouputWriter = <span class="built_in">new</span> PrintWriter(sock.getOutputStream, <span class="constant">true</span>)
+ouputWriter.println(xmlStr)
+ouputWriter.flush()
+probe.expectMsg(msg)
+ouputWriter.<span class="built_in">close</span>()
+<span class="keyword">system</span>.stop(consumer)
+</pre></td></tr></table></figure>
+
+<ul>
+<li><code>textline=true</code>, This indicates that we are expecting plain text over this connection and that each message
+is ended with a newline</li>
+<li><code>sync=false</code>, This indicates that we don&#39;t create a response</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+</pre></td><td class="code"><pre><span class="keyword">def</span> receive = {
+  <span class="keyword">case</span> msg: CamelMessage =&gt; {
+    <span class="keyword">try</span> {
+      <span class="keyword">val</span> content = msg.bodyAs[String]
+      <span class="keyword">val</span> xml = XML.loadString(content)
+      <span class="keyword">val</span> order = xml \ <span class="string">"order"</span>
+      <span class="keyword">val</span> customer = (order \ <span class="string">"customerId"</span>).text
+      <span class="keyword">val</span> productId = (order \ <span class="string">"productId"</span>).text
+      <span class="keyword">val</span> number = (order \ <span class="string">"number"</span>).text.toInt
+      next ! <span class="keyword">new</span> Order(customer, productId, number)
+      sender ! <span class="string">"&lt;confirm&gt;OK&lt;/confirm&gt;"</span>
+    } <span class="keyword">catch</span> {
+      <span class="comment">// 如果是同步的通信, 发生错误, actor重启, 会失去发送者的信息</span>
+      <span class="keyword">case</span> ex: Exception =&gt;
+        sender ! <span class="string">"&lt;confirm&gt;%s&lt;/confirm&gt;"</span>.format(ex.getMessage)
+    }
+  }
+}
+</pre></td></tr></table></figure>
+
+<h2 id="using-the-camel-context">USING THE CAMEL CONTEXT</h2>
+<p>For example when we want to use the ActiveMQ component. To be able to use
+this we need to add the component to the Camel context and define the MQ broker.
+This requires the camel context.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+</pre></td><td class="code"><pre>// Component name should be used <span class="keyword">in</span> the Uri
+val camelContext = CamelExtension(system)<span class="preprocessor">.context</span>
+camelContext<span class="preprocessor">.addComponent</span>(<span class="string">"activemq"</span>,
+  ActiveMQComponent<span class="preprocessor">.activeMQComponent</span>(
+    <span class="string">"vm:(broker:(tcp://localhost:8899)?persistent=false)"</span>))
+
+val camelUri = <span class="string">"activemq:queue:xmlTest"</span>
+val consumer = system<span class="preprocessor">.actorOf</span>(
+    Props(new OrderConsumerXml(camelUri, probe<span class="preprocessor">.ref</span>)))
+val activated = CamelExtension(system)<span class="preprocessor">.activationFutureFor</span>(
+    consumer)(timeout = <span class="number">10</span> seconds, executor = system<span class="preprocessor">.dispatcher</span>)
+...
+sendMQMessage(xml<span class="preprocessor">.toString</span>())
+probe<span class="preprocessor">.expectMsg</span>(msg)
+system<span class="preprocessor">.stop</span>(consumer)
+
+// Because a broker is started, we also need to stop them when we are ready. 
+// This can be done using the BrokerRegistry of ActiveMQ
+val brokers = BrokerRegistry<span class="preprocessor">.getInstance</span>()<span class="preprocessor">.getBrokers</span>
+brokers<span class="preprocessor">.foreach</span> { case (name, broker) =&gt; broker<span class="preprocessor">.stop</span>() }
+</pre></td></tr></table></figure>
+
+<h2 id="implement-a-producer-endpoint">Implement a producer endpoint</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+</pre></td><td class="code"><pre><span class="keyword">import</span> akka.camel.Producer
+
+<span class="class"><span class="keyword">class</span> <span class="title">SimpleProducer</span><span class="params">(uri: Strint)</span> <span class="keyword">extends</span> <span class="title">Producer</span> {</span>
+  <span class="keyword">def</span> endpointUri = uri
+}
+
+implicit <span class="keyword">val</span> ExecutionContext = system.dispatcher
+<span class="keyword">val</span> probe = TestProbe()
+<span class="keyword">val</span> camelUri =
+  <span class="string">"mina:tcp://localhost:8888?textline=true&sync=false"</span>
+<span class="keyword">val</span> consumer = system.actorOf(
+  Props(<span class="keyword">new</span> OrderConsumerXml(camelUri, probe.ref)))
+  
+<span class="keyword">val</span> producer = system.actorOf(
+  Props(<span class="keyword">new</span> SimpleProducer(camelUri)))
+<span class="keyword">val</span> activatedCons = CamelExtension(system).activationFutureFor(
+  consumer)(timeout = <span class="number">10</span> seconds, executor = system.dispatcher)
+<span class="keyword">val</span> activatedProd = CamelExtension(system).activationFutureFor(
+  producer)(timeout = <span class="number">10</span> seconds, executor = system.dispatcher)
+  
+<span class="keyword">val</span> camel = Future.sequence(List(activatedCons, activatedProd))
+Await.result(camel, <span class="number">5</span> seconds)
+</pre></td></tr></table></figure>
+
+<p>Here we can do the translation of our message to the expected XML</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+</pre></td><td class="code"><pre><span class="class"><span class="keyword">class</span> <span class="title">OrderProducerXml</span><span class="params">(uri: String)</span> <span class="keyword">extends</span> <span class="title">Producer</span> {</span>
+  <span class="keyword">def</span> endpointUri = uri
+  <span class="keyword">override</span> <span class="keyword">def</span> oneway: Boolean = <span class="keyword">false</span>
+  <span class="keyword">override</span> <span class="keyword">protected</span> <span class="keyword">def</span> transformOutgoingMessage(message: Any): Any = {
+    message <span class="keyword">match</span> {
+      <span class="keyword">case</span> msg: Order =&gt; {
+        <span class="keyword">val</span> xml = &lt;order&gt;
+          &lt;customerId&gt;{ msg.customerId }&lt;/customerId&gt;
+          &lt;productId&gt;{ msg.productId }&lt;/productId&gt;
+          &lt;number&gt;{ msg.number }&lt;/number&gt;
+        &lt;/order&gt;
+        
+        xml.toString().replace(<span class="string">"n"</span>, <span class="string">""</span>)
+      }
+      <span class="keyword">case</span> other =&gt; message
+    }
+  }
+  
+  <span class="comment">// 反向序列化</span>
+  <span class="keyword">override</span> <span class="keyword">def</span> transformResponse(message: Any): Any = {
+    message <span class="keyword">match</span> {
+      <span class="keyword">case</span> msg: CamelMessage =&gt; {
+        <span class="keyword">try</span> {
+          <span class="keyword">val</span> content = msg.bodyAs[String]
+          <span class="keyword">val</span> xml = XML.loadString(content)
+          (xml \ <span class="string">"confirm"</span>).text
+        } <span class="keyword">catch</span> {
+          <span class="keyword">case</span> ex: Exception =&gt;
+            <span class="string">"TransformException: %s"</span>.format(ex.getMessage)
+        }
+      }
+      <span class="keyword">case</span> other =&gt; message
+    }
+  }
+}
+</pre></td></tr></table></figure>
+
+<p>There is a method called routeResponse.
+This method is responsible for sending the received
+response to the original sender. </p>
+<h1 id="example-of-implementing-a-rest-interface">Example of implementing a REST interface</h1>
+<p>REST is a standard protocol to expose intuitive interfaces
+to systems. We are still creating an endpoint for our system.</p>
+<p>Spray is an open-source toolkit for REST/HTTP and low-level network IO on
+top of Scala and Akka.</p>
+<p>We start by defining the
+messages for both interfaces. The Order system will support two functions. The
+first function is to add a new order and the second function is to get the status of an
+order. The REST interface we are going to implement supports a POST and a GET.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+</pre></td><td class="code"><pre><span class="class"><span class="keyword">class</span> <span class="title">ProcssOrders</span> <span class="keyword">extends</span> <span class="title">Actor</span> {</span>
+  val orderList = <span class="keyword">new</span> mutable.HashMap[Long, TrackingOrder]
+  val lastOrderId = <span class="number">0</span>L
+
+  def receive = {
+    <span class="keyword">case</span> order:Order =&gt; {
+      lastOrderId += <span class="number">1</span>
+      val newOrder = <span class="keyword">new</span> TrackingOrder(lastOrderId, <span class="string">"received"</span>, order)
+      orderList += lastOrdered -&gt; newOrder
+      sender ! newOrder
+    }
+    <span class="keyword">case</span> order:OrderId =&gt; {
+      orderList.get(order.id) match {
+        <span class="keyword">case</span> Some(intOrder) =&gt;
+          sender ! intOrder.copy(status=<span class="string">"process"</span>)
+        <span class="keyword">case</span> None =&gt; sender ! NoSuchOrder(order.id)
+      }
+    }
+    <span class="keyword">case</span> <span class="string">"reset"</span> =&gt; {
+      lastOrderId = <span class="number">0</span>
+      orderList.clear()
+    }
+  }
+}
+</pre></td></tr></table></figure>
+
+<h2 id="implementing-a-rest-endpoint-with-spray">Implementing a Rest endpoint with Spray</h2>
+<p>Spray also has it own test kit and is able to test your code without
+building a complete application.</p>
+<p>When you need REST/HTTP support, Spray is a great way to connect your Akka
+applications to other Systems.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+</pre></td><td class="code"><pre>import spray.routing.HttpService
+
+trait OrderService extends HttpService {
+  val myRoute = path("orderTest") {
+    get {
+      parameters('id.as[Long]).as(OrderId) { orderId =&gt;
+        complete {
+          val askFuture = orderSystem ? orderId
+          askFuture.map {
+            case result:TrackingOrder =&gt; {
+              <span class="tag">&lt;<span class="title">statusResponse</span>&gt;</span>
+                <span class="tag">&lt;<span class="title">id</span>&gt;</span>{result.id}<span class="tag">&lt;/<span class="title">id</span>&gt;</span>
+                <span class="tag">&lt;<span class="title">status</span>&gt;</span>{result.status}<span class="tag">&lt;/<span class="title">status</span>&gt;</span>
+              <span class="tag">&lt;/<span class="title">statusResponse</span>&gt;</span>
+            }
+            case result:NoSuchOrder =&gt; {
+              <span class="tag">&lt;<span class="title">statusResponse</span>&gt;</span>
+                <span class="tag">&lt;<span class="title">id</span>&gt;</span>{result.id}<span class="tag">&lt;/<span class="title">id</span>&gt;</span>
+                <span class="tag">&lt;<span class="title">status</span>&gt;</span>ID is unknown<span class="tag">&lt;/<span class="title">status</span>&gt;</span>
+              <span class="tag">&lt;/<span class="title">statusResponse</span>&gt;</span>
+            }
+          }
+        }
+      }
+    } ~
+    post {
+      //add order
+      entity(as[String]) { body =&gt;
+        val order = XMLConverter.createOrder(body.toString)
+        complete {
+          val askFuture = orderSystem ? order
+          askFuture.map {
+            case result: TrackingOrder =&gt; {
+              <span class="tag">&lt;<span class="title">confirm</span>&gt;</span>
+                <span class="tag">&lt;<span class="title">id</span>&gt;</span>{ result.id }<span class="tag">&lt;/<span class="title">id</span>&gt;</span>
+                <span class="tag">&lt;<span class="title">status</span>&gt;</span>{ result.status }<span class="tag">&lt;/<span class="title">status</span>&gt;</span>
+              <span class="tag">&lt;/<span class="title">confirm</span>&gt;</span>.toString()
+            }
+            case result: Any =&gt; {
+              <span class="tag">&lt;<span class="title">confirm</span>&gt;</span>
+                <span class="tag">&lt;<span class="title">status</span>&gt;</span>
+                  Response is unknown{ result.toString() }
+                <span class="tag">&lt;/<span class="title">status</span>&gt;</span>
+              <span class="tag">&lt;/<span class="title">confirm</span>&gt;</span>.toString()
+            }
+          }
+        }
+      }
+    }
+  }
+}
+class OrderServiceActor (val orderSystem:ActorRef) extends Actor with OrderService {
+  // actorRefFactory used by Spray framework
+  def actorRefFactory = context
+  
+  // use Spray Route
+  def receive = runRoute(myRoute)
+}
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="code"><pre><span class="class"><span class="keyword">class</span> <span class="title">OrderHttpServer</span><span class="params">(host: String, portNr: Int, orderSystem: ActorRef)</span></span>
+    <span class="keyword">extends</span> SprayCanHttpServerApp {
+  <span class="comment">//create and start our service actor</span>
+  <span class="keyword">val</span> service = system.actorOf(Props(
+    <span class="keyword">new</span> OrderServiceActor(orderSystem)), <span class="string">"my-service"</span>)
+  <span class="comment">//create a new HttpServer using our handler tell it where to bind to</span>
+  <span class="keyword">val</span> httpServer = newHttpServer(service)
+  httpServer ! Bind(interface = host, port = portNr)
+  
+  <span class="keyword">def</span> stop() {
+    system.stop(httpServer)
+    system.shutdown()
+  }
+}
+</pre></td></tr></table></figure>
+
+<p>测试代码</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+</pre></td><td class="code"><pre>val orderSystem = <span class="keyword">system</span>.actorOf(Props[OrderSystem])
+val orderHttp = <span class="built_in">new</span> OrderHttpServer(<span class="string">"localhost"</span>, <span class="number">8181</span>, orderSystem)
+
+orderSystem ! <span class="string">"reset"</span>
+val url = <span class="string">"http://localhost:8181/orderTest"</span>
+val msg = <span class="built_in">new</span> Order(<span class="string">"me"</span>, <span class="string">"Akka in Action"</span>, <span class="number">10</span>)
+val xml =
+  &lt;order&gt;
+    &lt;customerId&gt;{ msg.customerId }&lt;/customerId&gt;
+    &lt;productId&gt;{ msg.productId }&lt;/productId&gt;
+    &lt;<span class="built_in">number</span>&gt;{ msg.<span class="built_in">number</span> }&lt;/<span class="built_in">number</span>&gt;
+  &lt;/order&gt;
+
+val urlConnection = <span class="built_in">new</span> <span class="built_in">URL</span>(url)
+val conn = urlConnection.openConnection()
+conn.setDoOutput(<span class="constant">true</span>)
+conn.setRequestProperty(<span class="string">"Content-type"</span>, <span class="string">"text/xml; charset=UTF-8"</span>)
+val writer = <span class="built_in">new</span> OutputStreamWriter(conn.getOutputStream)
+writer.<span class="built_in">write</span>(xml.toString())
+writer.flush()
+<span class="comment">
+//check result</span>
+val reader = <span class="built_in">new</span> BufferedReader(<span class="built_in">new</span> InputStreamReader((conn.getInputStream)))
+val response = <span class="built_in">new</span> StringBuffer()
+var <span class="built_in">line</span> = reader.readLine()
+<span class="keyword">while</span> (<span class="built_in">line</span> != <span class="constant">null</span>) {
+  response.append(<span class="built_in">line</span>)
+  <span class="built_in">line</span> = reader.readLine()
+}
+writer.<span class="built_in">close</span>()
+reader.<span class="built_in">close</span>()
+
+conn.getHeaderField(<span class="constant">null</span>) must be(<span class="string">"HTTP/1.1 200 OK"</span>)
+val responseXml = XML.loadString(response.toString)
+val confirm = responseXml \ <span class="string">"confirm"</span>
+
+(confirm \ <span class="string">"id"</span>).<span class="keyword">text</span> must be(<span class="string">"1"</span>)
+(confirm \ <span class="string">"status"</span>).<span class="keyword">text</span> must be(<span class="string">"received"</span>)
+
+val url2 = <span class="string">"http://localhost:8181/orderTest?id=1"</span>
+
+
+val urlConnection2 = <span class="built_in">new</span> <span class="built_in">URL</span>(url2)
+val conn2 = urlConnection2.openConnection()<span class="comment">
+//Get response</span>
+val reader2 = <span class="built_in">new</span> BufferedReader(<span class="built_in">new</span> InputStreamReader((conn2.getInputStream)))
+val response2 = <span class="built_in">new</span> StringBuffer()
+<span class="built_in">line</span> = reader2.readLine()
+<span class="keyword">while</span> (<span class="built_in">line</span> != <span class="constant">null</span>) {
+  response2.append(<span class="built_in">line</span>)
+  <span class="built_in">line</span> = reader2.readLine()
+}
+reader2.<span class="built_in">close</span>()
+<span class="comment">
+// check response</span>
+conn2.getHeaderField(<span class="constant">null</span>) must be(<span class="string">"HTTP/1.1 200 OK"</span>)
+val responseXml2 = XML.loadString(response2.toString)
+val status = responseXml2 \ <span class="string">"statusResponse"</span>
+
+(status \ <span class="string">"id"</span>).<span class="keyword">text</span> must be(<span class="string">"1"</span>)
+(status \ <span class="string">"status"</span>).<span class="keyword">text</span> must be(<span class="string">"processing"</span>)
+</pre></td></tr></table></figure>
+
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/akka/">akka</a><a href="/tags/scala/">scala</a>
+  </div>
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://zhpooer.github.io/2014/08/06/akka-in-action-integration/" data-title="Akka in Action-Integration | Poe&#39;s World" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2014/08/07/play-for-scala-getting-start/" title="Play for Scala-Getting Start">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  Play for Scala-Getting Start</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2014/08/06/akka-in-action-working-with-transactions/"  title="Akka in Action-Working with Transactions">
+ <strong>NEXT:</strong><br/> 
+ <span>Akka in Action-Working with Transactions
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#message-endpoints"><span class="toc-number">1.</span> <span class="toc-text">Message endpoints</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#normalizer"><span class="toc-number">1.1.</span> <span class="toc-text">Normalizer</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#canonical-data-model"><span class="toc-number">1.2.</span> <span class="toc-text">Canonical Data Model</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#camel-framework"><span class="toc-number">2.</span> <span class="toc-text">Camel Framework</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#implement-a-consumer-endpoint"><span class="toc-number">2.1.</span> <span class="toc-text">Implement a consumer endpoint</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#changing-the-transport-layer-of-our-consumer"><span class="toc-number">2.2.</span> <span class="toc-text">CHANGING THE TRANSPORT LAYER OF OUR CONSUMER</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#using-the-camel-context"><span class="toc-number">2.3.</span> <span class="toc-text">USING THE CAMEL CONTEXT</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#implement-a-producer-endpoint"><span class="toc-number">2.4.</span> <span class="toc-text">Implement a producer endpoint</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#example-of-implementing-a-rest-interface"><span class="toc-number">3.</span> <span class="toc-text">Example of implementing a REST interface</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#implementing-a-rest-endpoint-with-spray"><span class="toc-number">3.1.</span> <span class="toc-text">Implementing a Rest endpoint with Spray</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/AJAX/" title="AJAX">AJAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+		
+			<li><a href="/tags/DOM/" title="DOM">DOM<sup>2</sup></a></li>
+		
+			<li><a href="/tags/EL表达式/" title="EL表达式">EL表达式<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Hibernate/" title="Hibernate">Hibernate<sup>2</sup></a></li>
+		
+			<li><a href="/tags/HttpSession/" title="HttpSession">HttpSession<sup>1</sup></a></li>
+		
+			<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JSP/" title="JSP">JSP<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaBean/" title="JavaBean">JavaBean<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaScript/" title="JavaScript">JavaScript<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Mybatis/" title="Mybatis">Mybatis<sup>1</sup></a></li>
+		
+			<li><a href="/tags/SAX/" title="SAX">SAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletRequest/" title="ServletRequest">ServletRequest<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletResponse/" title="ServletResponse">ServletResponse<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Spring/" title="Spring">Spring<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Spring MVC/" title="Spring MVC">Spring MVC<sup>1</sup></a></li>
+		
+			<li><a href="/tags/String/" title="String">String<sup>1</sup></a></li>
+		
+			<li><a href="/tags/StringBuffer/" title="StringBuffer">StringBuffer<sup>1</sup></a></li>
+		
+			<li><a href="/tags/activiti/" title="activiti">activiti<sup>2</sup></a></li>
+		
+			<li><a href="/tags/akka/" title="akka">akka<sup>6</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2014 
+		
+		<a href="http://zhpooer.github.io" target="_blank" title="zhpooer">zhpooer</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"zhpoooer"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>

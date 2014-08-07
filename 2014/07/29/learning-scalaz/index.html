@@ -1,0 +1,1210 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>learning scalaz | Poe&#39;s World</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="zhpooer">
+    
+    <meta name="description" content="猛击我
+polymorphism
+Parametric polymorphism
+1
+def head[A](xs: List[A]): A = xs(0)
+
+
+in this function head, it takes a list of A’s,
+and returns an A. And ">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="Poe&#39;s World" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="Poe&#39;s World" title="Poe&#39;s World"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Poe&#39;s World">Poe&#39;s World</a></h1>
+				<h2 class="blog-motto">竹杖芒鞋轻胜马，一蓑烟雨任平生</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/english-monthly">英语角</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:zhpooer.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/07/29/learning-scalaz/" title="learning scalaz" itemprop="url">learning scalaz</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://zhpooer.github.io" title="zhpooer">zhpooer</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2014-07-29T06:48:01.000Z" itemprop="datePublished">7月 29 2014</time>
+    更新日期:<time datetime="2014-07-29T08:47:51.000Z" itemprop="dateModified">7月 29 2014</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#polymorphism"><span class="toc-number">1.</span> <span class="toc-text">polymorphism</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#parametric-polymorphism"><span class="toc-number">1.1.</span> <span class="toc-text">Parametric polymorphism</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#subtype-polymorphism"><span class="toc-number">1.2.</span> <span class="toc-text">Subtype polymorphism</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ad-hoc-polymorphism"><span class="toc-number">1.3.</span> <span class="toc-text">Ad-hoc polymorphism</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#monoid"><span class="toc-number">2.</span> <span class="toc-text">Monoid</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#foldleft"><span class="toc-number">3.</span> <span class="toc-text">FoldLeft</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#typeclass-in-scalaz"><span class="toc-number">4.</span> <span class="toc-text">Typeclass in Scalaz</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#typeclasses"><span class="toc-number">5.</span> <span class="toc-text">typeclasses</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#equal"><span class="toc-number">5.1.</span> <span class="toc-text">Equal</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#order"><span class="toc-number">5.2.</span> <span class="toc-text">Order</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#show"><span class="toc-number">5.3.</span> <span class="toc-text">Show</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#read"><span class="toc-number">5.4.</span> <span class="toc-text">Read</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#enum"><span class="toc-number">5.5.</span> <span class="toc-text">Enum</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#bounded"><span class="toc-number">5.6.</span> <span class="toc-text">Bounded</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#num"><span class="toc-number">5.7.</span> <span class="toc-text">Num</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#making-our-own-types-and-typeclasses"><span class="toc-number">6.</span> <span class="toc-text">Making Our Own Types and Typeclasses</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#yes-no-typeclass"><span class="toc-number">6.1.</span> <span class="toc-text">Yes-No typeclass</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#functor"><span class="toc-number">7.</span> <span class="toc-text">Functor</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#applicative"><span class="toc-number">8.</span> <span class="toc-text">Applicative</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">8.1.</span> <span class="toc-text">一些有趣用法</span></a></li></ol>
+		</div>
+		
+		<p><a href="http://eed3si9n.com/learning-scalaz/Combined+Pages.html" target="_blank">猛击我</a></p>
+<h1 id="polymorphism">polymorphism</h1>
+<h2 id="parametric-polymorphism">Parametric polymorphism</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre><span class="function"><span class="keyword">def</span> <span class="title">head</span>[<span class="title">A</span>]<span class="params">(xs: List[A])</span>:</span> A = xs(<span class="number">0</span>)
+</pre></td></tr></table></figure>
+
+<p>in this function head, it takes a list of A’s,
+and returns an A. And it doesn’t matter what the A is:
+It could be Ints, Strings, Oranages, Cars, whatever.
+Any A would work, and the function is defined for every A that there can be.</p>
+<h2 id="subtype-polymorphism">Subtype polymorphism</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre><span class="function"><span class="keyword">def</span> <span class="title">plus</span>[<span class="title">A</span> &lt;:</span> Plus[A]](a1: A, a2: A): A = a1.plus(a2)
+</pre></td></tr></table></figure>
+
+<h2 id="ad-hoc-polymorphism">Ad-hoc polymorphism</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>def plus[<span class="link_label">A: Plus</span>](<span class="link_url">a1: A, a2: A</span>): A = implicitly[Plus[A]].plus(a1, a2)
+</pre></td></tr></table></figure>
+
+<ul>
+<li>we can provide separate function definitions for different types of A</li>
+<li>we can provide function definitions to types (like Int) without
+access to its source code</li>
+<li>the function definitions can be enabled or disabled in different scopes</li>
+</ul>
+<h1 id="monoid">Monoid</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre>object IntMonoid {
+  <span class="function"><span class="keyword">def</span> <span class="title">mappend</span><span class="params">(a: Int, b: Int)</span>:</span> Int = a + b
+  <span class="function"><span class="keyword">def</span> <span class="title">mzero</span>:</span> Int = <span class="number">0</span>
+}
+<span class="function"><span class="keyword">def</span> <span class="title">sum</span><span class="params">(xs: List[Int])</span>:</span> Int = xs.foldLeft(IntMonoid.mzero)(IntMonoid.mappend)
+</pre></td></tr></table></figure>
+
+<p>version 2</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="code"><pre>trait Monoid[A] {
+  <span class="function"><span class="keyword">def</span> <span class="title">mappend</span><span class="params">(a1: A, a2: A)</span>:</span> A
+  <span class="function"><span class="keyword">def</span> <span class="title">mzero</span>:</span> A
+}
+object IntMonoid extends Monoid[Int] {
+  <span class="function"><span class="keyword">def</span> <span class="title">mappend</span><span class="params">(a: Int, b: Int)</span>:</span> Int = a + b
+  <span class="function"><span class="keyword">def</span> <span class="title">mzero</span>:</span> Int = <span class="number">0</span>
+}
+<span class="function"><span class="keyword">def</span> <span class="title">sum</span>[<span class="title">A</span>]<span class="params">(xs: List[A], m: Monoid[A])</span>:</span> A = xs.foldLeft(m.mzero)(m.mappend)
+</pre></td></tr></table></figure>
+
+<p>version 3</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre><span class="function"><span class="keyword">def</span> <span class="title">sum</span>[<span class="title">A</span>]<span class="params">(xs: List[A])</span><span class="params">(implicit m: Monoid[A])</span>:</span> A = xs.foldLeft(m.mzero)(m.mappend)
+implicit val intMonoid = IntMonoid
+// 也可以这样
+<span class="function"><span class="keyword">def</span> <span class="title">sum</span>[<span class="title">A</span>:</span> Monoid](xs:List[A]):A = {
+  val m = implicity[Monoid[A]]
+  xs.foldLeft(m.mzero)(m.mappend)
+}
+</pre></td></tr></table></figure>
+
+<p>我们也可以提供其他Monoid</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre>val multiMoinoid: Monoid[Int] = new Monoid[Int] {
+  <span class="function"><span class="keyword">def</span> <span class="title">mappend</span><span class="params">(a:Int, b:Int)</span>:</span> Int = a * b
+  <span class="function"><span class="keyword">def</span> <span class="title">mzero</span>:</span>Int = <span class="number">1</span>
+}
+sum(List(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>))(multiMonoid)
+</pre></td></tr></table></figure>
+
+<h1 id="foldleft">FoldLeft</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre>object FoldLeftList {
+  def foldLeft[<span class="link_label">A, B</span>](<span class="link_url">xs: List[A], b: B, f: (B, A</span>) =&gt; B) = xs.foldLeft(b)(f)
+}
+def sum[<span class="link_label">A: Monoid</span>](<span class="link_url">xs: List[A]</span>): A = {
+  val m = implicitly[Monoid[A]]
+  FoldLeftList.foldLeft(xs, m.mzero, m.mappend)
+}
+
+// 可以这样使用
+sum(List(1, 2, 3, 4))(multiMonoid)
+</pre></td></tr></table></figure>
+
+<p>版本2</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+</pre></td><td class="code"><pre>trait FoldLeft[F[_]] {
+  def foldLeft[<span class="link_label">A, B</span>](<span class="link_url">xs: F[A], b: B, f: (B, A</span>) =&gt; B): B
+}
+
+object FoldLeft {
+  implicit val FoldLeftList: FoldLeft[List] = new FoldLeft[List] {
+<span class="code">    def foldLeft[A, B](xs:List[a], b: B, f: (B, A) =&gt; B) = xs.foldLeft(b)(f)</span>
+  }
+}
+
+def sum[<span class="link_label">M[_</span>]: FoldLeft, A: Monoid](xs: M[A]): A = {
+  val m = implicitly[Monoid[A]]
+  val fl = implicitly[FoldLeft[M]]
+  fl.foldLeft(xs, m.mzero, m.mappend)
+}
+
+// 用法如下
+sum(List("a", "b", "c"))
+</pre></td></tr></table></figure>
+
+<h1 id="typeclass-in-scalaz">Typeclass in Scalaz</h1>
+<p>We would like to provide an operator.
+But we don’t want to enrich just one type,
+but enrich all types that has an instance for Monoid. </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="code"><pre>trait MonoidOp[A] {
+  val F: Monoid[A]
+  val value: A
+  def |+|(a2:A) = F.mappend(value, v2)
+}
+
+implicit def toMonoidOp[<span class="link_label">A: Monoid</span>](<span class="link_url">a: A</span>):MonoidOp[A] = new MonoidOp[A] {
+  val F = implicitly[Monoid[A]]
+  val value = a
+}
+
+// 简写如下
+3 |+| 4
+</pre></td></tr></table></figure>
+
+<p>Using the same technique above, Scalaz also provides method
+injections for standard library types like Option and Boolean:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre>scala&gt; <span class="number">1.</span>some | <span class="number">2</span>
+res0: <span class="built_in">Int</span> = <span class="number">1</span>
+
+scala&gt; Some(<span class="number">1</span>).getOrElse(<span class="number">2</span>)
+res1: <span class="built_in">Int</span> = <span class="number">1</span>
+
+scala&gt; (<span class="number">1</span> &gt; <span class="number">10</span>)? <span class="number">1</span> | <span class="number">2</span>
+res3: <span class="built_in">Int</span> = <span class="number">2</span>
+
+scala&gt; <span class="keyword">if</span> (<span class="number">1</span> &gt; <span class="number">10</span>) <span class="number">1</span> <span class="keyword">else</span> <span class="number">2</span>
+res4: <span class="built_in">Int</span> = <span class="number">2</span>
+</pre></td></tr></table></figure>
+
+<h1 id="typeclasses">typeclasses</h1>
+<p>It provides purely functional data structures to complement those from
+the Scala standard library. It defines a set of foundational
+type classes (e.g. Functor, Monad) and corresponding instances
+for a large number of data structures.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="code"><pre>scalaVersion <span class="symbol">:</span>= <span class="string">"2.11.0"</span>
+
+val scalazVersion = <span class="string">"7.0.6"</span>
+
+libraryDependencies ++= <span class="constant">Seq</span>(
+  <span class="string">"org.scalaz"</span> <span class="string">%% "scalaz-core" %</span> scalazVersion,
+  <span class="string">"org.scalaz"</span> <span class="string">%% "scalaz-effect" %</span> scalazVersion,
+  <span class="string">"org.scalaz"</span> <span class="string">%% "scalaz-typelevel" %</span> scalazVersion,
+  <span class="string">"org.scalaz"</span> <span class="string">%% "scalaz-scalacheck-binding" %</span> scalazVersion % <span class="string">"test"</span>
+)
+
+scalacOptions += <span class="string">"-feature"</span>
+
+initialCommands <span class="keyword">in</span> console <span class="symbol">:</span>= <span class="string">"import scalaz._, Scalaz._"</span>
+</pre></td></tr></table></figure>
+
+<p>runt <code>sbt console</code></p>
+<h2 id="equal">Equal</h2>
+<p>Instead of the standard ==, Equal enables ===, =/=, and assert_=== syntax
+by declaring equal method. The main difference is that === would fail
+compilation if you tried to compare Int and String.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code"><pre>scala&gt; <span class="number">1</span> === <span class="number">1</span>
+res0: <span class="built_in">Boolean</span> = <span class="literal">true</span>
+
+scala&gt; <span class="number">1</span> === <span class="string">"foo"</span>
+&lt;console&gt;:<span class="number">14</span>: <span class="keyword">error</span>: could <span class="keyword">not</span> find implicit value <span class="keyword">for</span> parameter F0: scalaz.Equal[<span class="built_in">Object</span>]
+              <span class="number">1</span> === <span class="string">"foo"</span>
+
+scala&gt; <span class="number">1.</span>some =/= <span class="number">2.</span>some
+res3: <span class="built_in">Boolean</span> = <span class="literal">true</span>
+
+scala&gt; <span class="number">1</span> assert_=== <span class="number">2</span>
+java.lang.RuntimeException: <span class="number">1</span> ≠ <span class="number">2</span>
+</pre></td></tr></table></figure>
+
+<h2 id="order">Order</h2>
+<p>Ord is for types that have an ordering.
+Ord covers all the standard comparing functions
+such as <code>&gt;, &lt;, &gt;= and &lt;=</code>.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre>scala&gt; <span class="number">1.0</span> ?|? <span class="number">2.0</span>
+<span class="label">res10:</span> scalaz<span class="preprocessor">.Ordering</span> = LT
+
+scala&gt; <span class="number">1.0</span> max <span class="number">2.0</span>
+<span class="label">res11:</span> Double = <span class="number">2.0</span>
+</pre></td></tr></table></figure>
+
+<h2 id="show">Show</h2>
+<p>Members of Show can be presented as strings.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre>scala&gt; <span class="number">3.</span>show
+<span class="label">res14:</span> scalaz<span class="preprocessor">.Cord</span> = <span class="number">3</span>
+
+scala&gt; <span class="number">3.</span>shows
+<span class="label">res15:</span> String = <span class="number">3</span>
+
+scala&gt; <span class="string">"hello"</span><span class="preprocessor">.println</span>
+<span class="string">"hello"</span>
+</pre></td></tr></table></figure>
+
+<h2 id="read">Read</h2>
+<p>Read is sort of the opposite typeclass of Show.
+The read function takes a string and returns a type
+which is a member of Read.</p>
+<p>I could not find Scalaz equivalent for this typeclass.</p>
+<h2 id="enum">Enum</h2>
+<p>Enum members are sequentially ordered types — they can be enumerated.
+The main advantage of the Enum typeclass is that we can use its types in list ranges.
+They also have defined successors and predecesors,
+which you can get with the succ and pred functions.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre>scala&gt; <span class="string">'a'</span> to <span class="string">'e'</span>
+<span class="label">res30:</span> scala<span class="preprocessor">.collection</span><span class="preprocessor">.immutable</span><span class="preprocessor">.NumericRange</span><span class="preprocessor">.Inclusive</span>[Char] = NumericRange(a, b, c, d, e)
+
+scala&gt; <span class="string">'a'</span> |-&gt; <span class="string">'e'</span>
+<span class="label">res31:</span> List[Char] = List(a, b, c, d, e)
+
+scala&gt; <span class="number">3</span> |=&gt; <span class="number">5</span>
+<span class="label">res32:</span> scalaz<span class="preprocessor">.EphemeralStream</span>[Int] = scalaz<span class="preprocessor">.EphemeralStreamFunctions</span>$$anon$4<span class="localvars">@6</span>a61c7b6
+
+scala&gt; <span class="string">'B'</span><span class="preprocessor">.succ</span>
+<span class="label">res33:</span> Char = C
+</pre></td></tr></table></figure>
+
+<p>Instead of the standard to, Enum enables |-&gt; that returns a List by
+declaring pred and succ method on top of Order typeclass.
+There are a bunch of other operations it enables like
+<code>-+-, ---, from, fromStep, pred, predx, succ, succx, |--&gt;, |-&gt;, |==&gt;, and |=&gt;.</code>
+these are all about stepping forward or backward, and returning ranges.</p>
+<h2 id="bounded">Bounded</h2>
+<p>Bounded members have an upper and a lower bound.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre>scala&gt; implicitly[<span class="keyword">Enum</span>[<span class="built_in">Char</span>]].min
+res43: <span class="keyword">Option</span>[<span class="built_in">Char</span>] = Some(?)
+
+scala&gt; implicitly[<span class="keyword">Enum</span>[<span class="built_in">Char</span>]].max
+res44: <span class="keyword">Option</span>[<span class="built_in">Char</span>] = Some( )
+
+scala&gt; implicitly[<span class="keyword">Enum</span>[<span class="built_in">Double</span>]].max
+res45: <span class="keyword">Option</span>[<span class="built_in">Double</span>] = Some(<span class="number">1.7976931348623157E308</span>)
+
+scala&gt; implicitly[<span class="keyword">Enum</span>[Int]].min
+res46: <span class="keyword">Option</span>[Int] = Some(-<span class="number">2147483648</span>)
+</pre></td></tr></table></figure>
+
+<p>Enum typeclass instance returns Option[T] for max values.</p>
+<h2 id="num">Num</h2>
+<p>Num is a numeric typeclass.
+Its members have the property of being able to act like numbers.</p>
+<p>I did not find Scalaz equivalent for Num, Floating, and Integral.</p>
+<h1 id="making-our-own-types-and-typeclasses">Making Our Own Types and Typeclasses</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code"><pre><span class="xml"><span class="php"><span class="class">// 下面这样是不行的, 因为 <span class="title">Equal</span>[<span class="title">F</span>] 是 <span class="title">nonvariant</span>
+// <span class="title">sealed</span> <span class="title">trait</span> <span class="title">TrafficLight</span>
+// <span class="title">case</span> <span class="title">object</span> <span class="title">Red</span> <span class="keyword">extends</span> <span class="title">TrafficLight</span>
+// <span class="title">case</span> <span class="title">object</span> <span class="title">Yellow</span> <span class="keyword">extends</span> <span class="title">TrafficLight</span>
+// <span class="title">case</span> <span class="title">object</span> <span class="title">Green</span> <span class="keyword">extends</span> <span class="title">TrafficLight</span>
+
+<span class="title">case</span> <span class="title">class</span> <span class="title">TrafficLight</span>(<span class="title">name</span>: <span class="title">String</span>)
+<span class="title">val</span> <span class="title">red</span> = <span class="title">TrafficLight</span>("<span class="title">red</span>")
+<span class="title">val</span> <span class="title">yellow</span> = <span class="title">TrafficLight</span>("<span class="title">yellow</span>")
+<span class="title">val</span> <span class="title">green</span> = <span class="title">TrafficLight</span>("<span class="title">green</span>")
+
+<span class="title">implicit</span> <span class="title">val</span> <span class="title">TrafficLightEqual</span>: <span class="title">Equal</span>[<span class="title">TrafficLight</span>] = <span class="title">Equal</span>.<span class="title">equal</span>(<span class="title">_</span> == <span class="title">_</span>)</span></span></span>
+</pre></td></tr></table></figure>
+
+<h2 id="yes-no-typeclass">Yes-No typeclass</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+</pre></td><td class="code"><pre><span class="class"><span class="keyword">trait</span> <span class="title">CanTruthy</span>[<span class="title">A</span>] {</span> self =&gt;
+  <span class="javadoc">/** <span class="javadoctag">@return</span> true, if `a` is truthy. */</span>
+  <span class="keyword">def</span> truthys(a: A): Boolean
+}
+
+<span class="class"><span class="keyword">object</span> <span class="title">CanTruthy</span> {</span>
+  <span class="keyword">def</span> apply[A](implicit ev: CanTruthy[A]): CanTruthy[A] = ev
+  <span class="keyword">def</span> truthys[A](f: A =&gt; Boolean): CanTruthy[A] = <span class="keyword">new</span> CanTruthy[A] {
+    <span class="keyword">def</span> truthys(a: A): Boolean = f(a)
+  }
+}
+
+<span class="class"><span class="keyword">trait</span> <span class="title">CanTruthyOps</span>[<span class="title">A</span>] {</span>
+  <span class="keyword">def</span> self: A
+  implicit <span class="keyword">def</span> F: CanTruthy[A]
+  <span class="keyword">final</span> <span class="keyword">def</span> truthy: Boolean = F.truthys(self)
+}
+
+<span class="class"><span class="keyword">object</span> <span class="title">ToCanIsTruthyOps</span> {</span>
+  implicit <span class="keyword">def</span> toCanIsTruthyOps[A](v: A)(implicit ev: CanTruthy[A]) =
+    <span class="keyword">new</span> CanTruthyOps[A] {
+      <span class="keyword">def</span> self = v
+      implicit <span class="keyword">def</span> F: CanTruthy[A] = ev
+    }
+}
+
+<span class="comment">// 可以这样使用</span>
+implicit <span class="keyword">val</span> intCanTruthy: CanTruthy[Int] = CanTruthy.truthys({
+  <span class="keyword">case</span> <span class="number">0</span> =&gt; <span class="keyword">false</span>
+  <span class="keyword">case</span> _ =&gt; <span class="keyword">true</span>
+})
+<span class="number">10.</span>truthy  <span class="comment">// true</span>
+
+<span class="comment">// list can truthy</span>
+implicit <span class="keyword">def</span> listCanTruthy[A]: CanTruthy[List[A]] = CanTruthy.truthys({
+  <span class="keyword">case</span> Nil =&gt; <span class="keyword">false</span>
+  <span class="keyword">case</span> _   =&gt; <span class="keyword">true</span>  
+})
+<span class="comment">// 如果不加这一句, 那么 Nil.truthy 会报错, 因为 canTruthy 是 nonvariance 的</span>
+implicit <span class="keyword">val</span> nilCanTruthy: CanTruthy[scala.collection.immutable.Nil.<span class="keyword">type</span>] = CanTruthy.truthys(_ =&gt; <span class="keyword">false</span>)
+
+<span class="comment">// 按需要计算</span>
+<span class="keyword">def</span> truthyIf[A: CanTruthy, B, C](cond: A)(ifyes: =&gt; B)(ifno: =&gt; C) =
+  <span class="keyword">if</span> (cond.truthy) ifyes
+  <span class="keyword">else</span> ifno
+
+truthyIf (<span class="keyword">true</span>) {<span class="string">"YEAH!"</span>} {<span class="string">"NO!"</span>}
+truthyIf (Nil) {<span class="string">"YEAH!"</span>} {<span class="string">"NO!"</span>}
+truthyIf (<span class="number">2</span> :: <span class="number">3</span> :: <span class="number">4</span> :: Nil) {<span class="string">"YEAH!"</span>} {<span class="string">"NO!"</span>}
+</pre></td></tr></table></figure>
+
+<h1 id="functor">Functor</h1>
+<p>And now, we’re going to take a look at the Functor typeclass,
+which is basically for things that can be mapped over.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre>trait FunctorOps[F[_],A] extends Ops[F[A]] {
+  implicit <span class="function"><span class="keyword">def</span> <span class="title">F</span>:</span> Functor[F]
+  ////
+  <span class="keyword">import</span> Leibniz.===
+
+  final <span class="function"><span class="keyword">def</span> <span class="title">map</span>[<span class="title">B</span>]<span class="params">(f: A =&gt; B)</span>:</span> F[B] = F.map(self)(f)
+  ...
+}
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code"><pre>scala&gt; <span class="keyword">List</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>) map <span class="list">{_ + 1}</span>
+res15: <span class="keyword">List</span>[Int] = <span class="keyword">List</span>(<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>)
+
+scala&gt; (<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>) map <span class="list">{_ + 1}</span>
+res28: (Int, Int, Int) = (<span class="number">1</span>,<span class="number">2</span>,<span class="number">4</span>)
+
+// Scalaz also defines Functor instance for Function1.
+scala&gt; ((x: Int) =&gt; x + <span class="number">1</span>) map <span class="list">{_ * 7}</span>
+res30: Int =&gt; Int = &lt;function1&gt;
+
+scala&gt; res30(<span class="number">3</span>)
+res31: Int = <span class="number">28</span>
+</pre></td></tr></table></figure>
+
+<p>in Haskell</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre>-- fmap :: <span class="function"><span class="params">(a -&gt; b)</span> -&gt;</span> <span class="function"><span class="params">(r -&gt; a)</span> -&gt;</span> (r<span class="function"> -&gt;</span> b)
+ghci&gt; fmap (*<span class="number">3</span>) (+<span class="number">100</span>) <span class="number">1</span>
+<span class="number">303</span>
+ghci&gt; (*<span class="number">3</span>) . (+<span class="number">100</span>) $ <span class="number">1</span>  
+<span class="number">303</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+</pre></td><td class="code"><pre><span class="comment">// 注意 这是左结合</span>
+scala&gt; (((_: Int) * <span class="number">3</span>) map {_ + <span class="number">100</span>}) (<span class="number">1</span>)
+res40: Int = <span class="number">103</span>
+
+<span class="comment">// scalaz defined in F[A]</span>
+<span class="keyword">final</span> def map[B](f: A =&gt; B): F[B] = F.map(<span class="keyword">self</span>)(f)
+
+<span class="keyword">List</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>) map {<span class="number">3</span>*}  <span class="comment">// res41: List[Int] = List(3, 6, 9)</span>
+
+<span class="comment">// this is a Lift</span>
+<span class="comment">// There are several neat functions under Functor typeclass</span>
+scala&gt; Functor[<span class="keyword">List</span>].lift {(_: Int) * <span class="number">2</span>}
+res45: <span class="keyword">List</span>[Int] =&gt; <span class="keyword">List</span>[Int] = &lt;function1&gt;
+
+scala&gt; res45(<span class="keyword">List</span>(<span class="number">3</span>))
+res47: <span class="keyword">List</span>[Int] = <span class="keyword">List</span>(<span class="number">6</span>)
+
+
+<span class="comment">// functor 的一些其他用法</span>
+scala&gt; <span class="keyword">List</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>) &gt;| <span class="string">"x"</span>
+res47: <span class="keyword">List</span>[String] = <span class="keyword">List</span>(x, x, x)
+
+scala&gt; <span class="keyword">List</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>) <span class="keyword">as</span> <span class="string">"x"</span>
+res48: <span class="keyword">List</span>[String] = <span class="keyword">List</span>(x, x, x)
+
+scala&gt; <span class="keyword">List</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>).fpair
+res49: <span class="keyword">List</span>[(Int, Int)] = <span class="keyword">List</span>((<span class="number">1</span>,<span class="number">1</span>), (<span class="number">2</span>,<span class="number">2</span>), (<span class="number">3</span>,<span class="number">3</span>))
+
+scala&gt; <span class="keyword">List</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>).strengthL(<span class="string">"x"</span>)
+res50: <span class="keyword">List</span>[(String, Int)] = <span class="keyword">List</span>((x,<span class="number">1</span>), (x,<span class="number">2</span>), (x,<span class="number">3</span>))
+
+scala&gt; <span class="keyword">List</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>).strengthR(<span class="string">"x"</span>)
+res51: <span class="keyword">List</span>[(Int, String)] = <span class="keyword">List</span>((<span class="number">1</span>,x), (<span class="number">2</span>,x), (<span class="number">3</span>,x))
+
+scala&gt; <span class="keyword">List</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>).void
+res52: <span class="keyword">List</span>[Unit] = <span class="keyword">List</span>((), (), ())
+</pre></td></tr></table></figure>
+
+<h1 id="applicative">Applicative</h1>
+<p>So far, when we were mapping functions over functors,
+we usually mapped functions that take only one parameter.
+ut what happens when we map a function like *, which takes two parameters,
+over a functor?</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre>scala&gt; List(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>) map {(_: <span class="built_in">Int</span>) * (_:<span class="built_in">Int</span>)}
+&lt;console&gt;:<span class="number">14</span>: <span class="keyword">error</span>: type mismatch;
+ found   : (<span class="built_in">Int</span>, <span class="built_in">Int</span>) =&gt; <span class="built_in">Int</span>
+ required: <span class="built_in">Int</span> =&gt; ?
+              List(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>) map {(_: <span class="built_in">Int</span>) * (_:<span class="built_in">Int</span>)}
+
+scala&gt; List(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>) map {(_: <span class="built_in">Int</span>) * (_:<span class="built_in">Int</span>)}.curried
+res11: List[<span class="built_in">Int</span> =&gt; <span class="built_in">Int</span>] = List(&lt;function1&gt;, &lt;function1&gt;, &lt;function1&gt;, &lt;function1&gt;)
+
+scala&gt; res11 map {_(<span class="number">9</span>)}
+res12: List[<span class="built_in">Int</span>] = List(<span class="number">9</span>, <span class="number">18</span>, <span class="number">27</span>, <span class="number">36</span>)
+</pre></td></tr></table></figure>
+
+<p>Meet the Applicative typeclass. It lies in the Control.
+Applicative module and it defines two methods, pure and <code>&lt;*&gt;</code>.</p>
+<p>Applicative 定义</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre>trait Applicative[F[_]] extends Apply[F] { self =&gt;
+  <span class="function"><span class="keyword">def</span> <span class="title">point</span>[<span class="title">A</span>]<span class="params">(a: =&gt; A)</span>:</span> F[A]
+
+  /** alias <span class="keyword">for</span> `point` */
+  <span class="function"><span class="keyword">def</span> <span class="title">pure</span>[<span class="title">A</span>]<span class="params">(a: =&gt; A)</span>:</span> F[A] = point(a)
+  ...
+}
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre>scala&gt; <span class="number">1.</span>point[<span class="keyword">List</span>]
+res14: <span class="keyword">List</span>[Int] = <span class="keyword">List</span>(<span class="number">1</span>)
+
+scala&gt; <span class="number">1.</span>point[Option]
+res15: Option[Int] = Some(<span class="number">1</span>)
+
+scala&gt; <span class="number">1.</span>point[Option] map <span class="list">{_ + 2}</span>
+res16: Option[Int] = Some(<span class="number">3</span>)
+
+scala&gt; <span class="number">1.</span>point[<span class="keyword">List</span>] map <span class="list">{_ + 2}</span>
+res17: <span class="keyword">List</span>[Int] = <span class="keyword">List</span>(<span class="number">3</span>)
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+</pre></td><td class="code"><pre><span class="regexp">//</span> Applicative 继承了它
+trait Apply[F[_]] extends Functor[F] { self<span class="function"> =&gt;</span>
+  def ap[A,B](<span class="attribute">fa</span>:<span class="function"> =&gt;</span> F[A])(<span class="attribute">f</span>:<span class="function"> =&gt;</span> F[A<span class="function"> =&gt;</span> B]): F[B]
+}
+
+<span class="regexp">//</span> 可以这样使用
+scala&gt;  <span class="number">9.</span>some &lt;*&gt; {(<span class="attribute">_</span>: Int) + <span class="number">3</span>}.some
+<span class="attribute">res20</span>: Option[Int] = Some(<span class="number">12</span>)
+
+scala&gt; <span class="number">1.</span>some &lt;* <span class="number">2.</span>some
+<span class="attribute">res35</span>: Option[Int] = Some(<span class="number">1</span>)
+
+scala&gt; none &lt;* <span class="number">2.</span>some
+<span class="attribute">res36</span>: Option[Nothing] = None
+
+scala&gt; <span class="number">1.</span>some *&gt; <span class="number">2.</span>some
+<span class="attribute">res38</span>: Option[Int] = Some(<span class="number">2</span>)
+
+scala&gt; none *&gt; <span class="number">2.</span>some
+<span class="attribute">res39</span>: Option[Int] = None
+
+cala&gt; <span class="number">9.</span>some &lt;*&gt; {(<span class="attribute">_</span>: Int) + <span class="number">3</span>}.some
+<span class="attribute">res57</span>: Option[Int] = Some(<span class="number">12</span>)
+
+scala&gt; <span class="number">3.</span>some &lt;*&gt; { <span class="number">9.</span>some &lt;*&gt; {(<span class="attribute">_</span>: Int) + (<span class="attribute">_</span>: Int)}.curried.some }
+<span class="attribute">res58</span>: Option[Int] = Some(<span class="number">12</span>)
+
+<span class="regexp">//</span> 更加简化的写法
+scala&gt; ^(<span class="number">3.</span>some, <span class="number">5.</span>some) {_ + _}
+<span class="attribute">res59</span>: Option[Int] = Some(<span class="number">8</span>)
+
+scala&gt; ^(<span class="number">3.</span>some, none[Int]) {_ + _}
+<span class="attribute">res60</span>: Option[Int] = None
+
+<span class="regexp">//</span>还可以这样
+scala&gt; (<span class="number">3.</span>some |@| <span class="number">5.</span>some) {_ + _}
+<span class="attribute">res18</span>: Option[Int] = Some(<span class="number">8</span>)
+
+<span class="regexp">//</span> List 作为 Apply
+scala&gt; List<span class="function"><span class="params">(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>)</span> &lt;*&gt; <span class="title">List</span><span class="params">((_: Int) * <span class="number">0</span>, (_: Int) + <span class="number">100</span>, (x: Int) =&gt; x * x)</span>
+<span class="title">res61</span>: <span class="title">List</span>[<span class="title">Int</span>] = <span class="title">List</span><span class="params">(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">101</span>, <span class="number">102</span>, <span class="number">103</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">9</span>)</span>
+
+<span class="title">scala</span>&gt; <span class="title">List</span><span class="params">(<span class="number">3</span>, <span class="number">4</span>)</span> &lt;*&gt; { <span class="title">List</span><span class="params">(<span class="number">1</span>, <span class="number">2</span>)</span> &lt;*&gt; <span class="title">List</span><span class="params">({(_: Int) + (_: Int)}.curried, {(_: Int) * (_: Int)}.curried)</span> }
+<span class="title">res62</span>: <span class="title">List</span>[<span class="title">Int</span>] = <span class="title">List</span><span class="params">(<span class="number">4</span>, <span class="number">5</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">6</span>, <span class="number">8</span>)</span>
+
+<span class="title">scala</span>&gt; <span class="params">(List(<span class="string">"ha"</span>, <span class="string">"heh"</span>, <span class="string">"hmm"</span>) |@| List(<span class="string">"?"</span>, <span class="string">"!"</span>, <span class="string">"."</span>))</span> {<span class="title">_</span> + <span class="title">_</span>}
+<span class="title">res63</span>: <span class="title">List</span>[<span class="title">String</span>] = <span class="title">List</span><span class="params">(ha?, ha!, ha., heh?, heh!, heh., hmm?, hmm!, hmm.)</span></span>
+</pre></td></tr></table></figure>
+
+<h2 id="-">一些有趣用法</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="code"><pre>def sequenceA[F[_]: Applicative, A](<span class="keyword">list</span>: <span class="keyword">List</span>[F[A]]): F[<span class="keyword">List</span>[A]] = <span class="keyword">list</span> match {
+  <span class="keyword">case</span> Nil     =&gt; (Nil: <span class="keyword">List</span>[A]).point[F]
+  <span class="keyword">case</span> x :: xs =&gt; (x |@| sequenceA(xs)) {_ :: _} 
+}
+
+scala&gt; sequenceA(<span class="keyword">List</span>(<span class="number">1.</span>some, <span class="number">2.</span>some))
+res82: Option[<span class="keyword">List</span>[Int]] = Some(<span class="keyword">List</span>(<span class="number">1</span>, <span class="number">2</span>))
+
+scala&gt; sequenceA(<span class="keyword">List</span>(<span class="number">3.</span>some, none, <span class="number">1.</span>some))
+res85: Option[<span class="keyword">List</span>[Int]] = None
+
+scala&gt; sequenceA(<span class="keyword">List</span>(<span class="keyword">List</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>), <span class="keyword">List</span>(<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>)))
+res86: <span class="keyword">List</span>[<span class="keyword">List</span>[Int]] = <span class="keyword">List</span>(<span class="keyword">List</span>(<span class="number">1</span>, <span class="number">4</span>), <span class="keyword">List</span>(<span class="number">1</span>, <span class="number">5</span>), <span class="keyword">List</span>(<span class="number">1</span>, <span class="number">6</span>), <span class="keyword">List</span>(<span class="number">2</span>, <span class="number">4</span>), <span class="keyword">List</span>(<span class="number">2</span>, <span class="number">5</span>), <span class="keyword">List</span>(<span class="number">2</span>, <span class="number">6</span>), <span class="keyword">List</span>(<span class="number">3</span>, <span class="number">4</span>), <span class="keyword">List</span>(<span class="number">3</span>, <span class="number">5</span>), <span class="keyword">List</span>(<span class="number">3</span>, <span class="number">6</span>))
+</pre></td></tr></table></figure>
+
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/scala/">scala</a><a href="/tags/scalaz/">scalaz</a>
+  </div>
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://zhpooer.github.io/2014/07/29/learning-scalaz/" data-title="learning scalaz | Poe&#39;s World" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2014/07/29/learning-scalaz-进阶/" title="learning scalaz 进阶">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  learning scalaz 进阶</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2014/07/28/传智播客day63-医药集中采购平台-采购单/"  title="传智播客day63-医药集中采购平台 采购单">
+ <strong>NEXT:</strong><br/> 
+ <span>传智播客day63-医药集中采购平台 采购单
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#polymorphism"><span class="toc-number">1.</span> <span class="toc-text">polymorphism</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#parametric-polymorphism"><span class="toc-number">1.1.</span> <span class="toc-text">Parametric polymorphism</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#subtype-polymorphism"><span class="toc-number">1.2.</span> <span class="toc-text">Subtype polymorphism</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ad-hoc-polymorphism"><span class="toc-number">1.3.</span> <span class="toc-text">Ad-hoc polymorphism</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#monoid"><span class="toc-number">2.</span> <span class="toc-text">Monoid</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#foldleft"><span class="toc-number">3.</span> <span class="toc-text">FoldLeft</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#typeclass-in-scalaz"><span class="toc-number">4.</span> <span class="toc-text">Typeclass in Scalaz</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#typeclasses"><span class="toc-number">5.</span> <span class="toc-text">typeclasses</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#equal"><span class="toc-number">5.1.</span> <span class="toc-text">Equal</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#order"><span class="toc-number">5.2.</span> <span class="toc-text">Order</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#show"><span class="toc-number">5.3.</span> <span class="toc-text">Show</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#read"><span class="toc-number">5.4.</span> <span class="toc-text">Read</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#enum"><span class="toc-number">5.5.</span> <span class="toc-text">Enum</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#bounded"><span class="toc-number">5.6.</span> <span class="toc-text">Bounded</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#num"><span class="toc-number">5.7.</span> <span class="toc-text">Num</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#making-our-own-types-and-typeclasses"><span class="toc-number">6.</span> <span class="toc-text">Making Our Own Types and Typeclasses</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#yes-no-typeclass"><span class="toc-number">6.1.</span> <span class="toc-text">Yes-No typeclass</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#functor"><span class="toc-number">7.</span> <span class="toc-text">Functor</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#applicative"><span class="toc-number">8.</span> <span class="toc-text">Applicative</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">8.1.</span> <span class="toc-text">一些有趣用法</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/AJAX/" title="AJAX">AJAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+		
+			<li><a href="/tags/DOM/" title="DOM">DOM<sup>2</sup></a></li>
+		
+			<li><a href="/tags/EL表达式/" title="EL表达式">EL表达式<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Hibernate/" title="Hibernate">Hibernate<sup>2</sup></a></li>
+		
+			<li><a href="/tags/HttpSession/" title="HttpSession">HttpSession<sup>1</sup></a></li>
+		
+			<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JSP/" title="JSP">JSP<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaBean/" title="JavaBean">JavaBean<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaScript/" title="JavaScript">JavaScript<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Mybatis/" title="Mybatis">Mybatis<sup>1</sup></a></li>
+		
+			<li><a href="/tags/SAX/" title="SAX">SAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletRequest/" title="ServletRequest">ServletRequest<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletResponse/" title="ServletResponse">ServletResponse<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Spring/" title="Spring">Spring<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Spring MVC/" title="Spring MVC">Spring MVC<sup>1</sup></a></li>
+		
+			<li><a href="/tags/String/" title="String">String<sup>1</sup></a></li>
+		
+			<li><a href="/tags/StringBuffer/" title="StringBuffer">StringBuffer<sup>1</sup></a></li>
+		
+			<li><a href="/tags/activiti/" title="activiti">activiti<sup>2</sup></a></li>
+		
+			<li><a href="/tags/akka/" title="akka">akka<sup>6</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2014 
+		
+		<a href="http://zhpooer.github.io" target="_blank" title="zhpooer">zhpooer</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"zhpoooer"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>

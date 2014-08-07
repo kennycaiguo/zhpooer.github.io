@@ -1,0 +1,1691 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>learning scalaz 进阶 | Poe&#39;s World</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="zhpooer">
+    
+    <meta name="description" content="Tagged type
+1
+2
+type Tagged[U] = { type Tag = U }
+type @@[T, U] = T with Tagged[U]
+
+
+Suppose we want a way to express mass using kilogram,
+because kg ">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="Poe&#39;s World" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="Poe&#39;s World" title="Poe&#39;s World"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Poe&#39;s World">Poe&#39;s World</a></h1>
+				<h2 class="blog-motto">竹杖芒鞋轻胜马，一蓑烟雨任平生</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/english-monthly">英语角</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:zhpooer.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/07/29/learning-scalaz-进阶/" title="learning scalaz 进阶" itemprop="url">learning scalaz 进阶</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://zhpooer.github.io" title="zhpooer">zhpooer</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2014-07-29T09:17:46.000Z" itemprop="datePublished">7月 29 2014</time>
+    更新日期:<time datetime="2014-07-29T14:38:42.000Z" itemprop="dateModified">7月 29 2014</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#tagged-type"><span class="toc-number">1.</span> <span class="toc-text">Tagged type</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#monoids"><span class="toc-number">2.</span> <span class="toc-text">Monoids</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#tags-multiplication"><span class="toc-number">3.</span> <span class="toc-text">Tags.Multiplication</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#tags-disjunction-and-tags-conjunction"><span class="toc-number">3.1.</span> <span class="toc-text">Tags.Disjunction and Tags.Conjunction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ordering-as-monoid"><span class="toc-number">3.2.</span> <span class="toc-text">Ordering as Monoid</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#functor-laws"><span class="toc-number">4.</span> <span class="toc-text">Functor Laws</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#applicative-laws"><span class="toc-number">5.</span> <span class="toc-text">Applicative Laws</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#semigroup-law"><span class="toc-number">6.</span> <span class="toc-text">Semigroup Law</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#monoid-laws"><span class="toc-number">7.</span> <span class="toc-text">Monoid Laws</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#option-as-monoid"><span class="toc-number">8.</span> <span class="toc-text">Option as Monoid</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#foldable"><span class="toc-number">9.</span> <span class="toc-text">Foldable</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#monads"><span class="toc-number">10.</span> <span class="toc-text">Monads</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#bind"><span class="toc-number">10.1.</span> <span class="toc-text">Bind</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#monad"><span class="toc-number">10.2.</span> <span class="toc-text">Monad</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">10.2.1.</span> <span class="toc-text">小鸟的案例</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#for-syntax"><span class="toc-number">10.3.</span> <span class="toc-text">for syntax</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#list-monad"><span class="toc-number">10.4.</span> <span class="toc-text">List Monad</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#monadplus-and-the-guard-function"><span class="toc-number">10.5.</span> <span class="toc-text">MonadPlus and the guard function</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#a-knight-s-quest"><span class="toc-number">10.6.</span> <span class="toc-text">A knight&#39;s quest</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#writer"><span class="toc-number">10.7.</span> <span class="toc-text">Writer</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#writer-define"><span class="toc-number">10.7.1.</span> <span class="toc-text">Writer define</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#using-for-syntax-with-writer"><span class="toc-number">10.7.2.</span> <span class="toc-text">Using for syntax with Writer</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#reader"><span class="toc-number">10.8.</span> <span class="toc-text">Reader</span></a></li></ol>
+		</div>
+		
+		<h1 id="tagged-type">Tagged type</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre><span class="class"><span class="keyword">type</span> <span class="title">Tagged</span>[<span class="title">U</span>] =</span> { <span class="class"><span class="keyword">type</span> <span class="title">Tag</span> =</span> U }
+<span class="class"><span class="keyword">type</span> @@[<span class="title">T</span>, <span class="title">U</span>] =</span> T <span class="keyword">with</span> Tagged[U]
+</pre></td></tr></table></figure>
+
+<p>Suppose we want a way to express mass using kilogram,
+because kg is the international standard of unit.
+Normally we would pass in Double and call it a day,
+but we can’t distinguish that from other Double values.
+Can we use case class for this?</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="code"><pre>case class KiloGram(value: Double)
+// we have to call x.value every time we need to extract the value out of it.
+
+// Tagged type to the rescue.
+sealed trait KiloGram
+def KiloGram[<span class="link_label">A</span>](<span class="link_url">a: A</span>): A @@ KiloGram = Tag[<span class="link_label">A, KiloGram</span>](<span class="link_url">a</span>)
+val mass = KiloGram(20.0)
+
+2 * mass // res2: Double = 40.0
+</pre></td></tr></table></figure>
+
+<p>A <code>@@</code> KiloGram is an infix notation of <code>scalaz.@@[A, KiloGram]</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+</pre></td><td class="code"><pre>scala&gt; sealed trait JoulePerKiloGram
+defined trait JoulePerKiloGram
+
+scala&gt; def JoulePerKiloGram[<span class="link_label">A</span>](<span class="link_url">a: A</span>): A @@ JoulePerKiloGram = Tag[<span class="link_label">A, JoulePerKiloGram</span>](<span class="link_url">a</span>)
+JoulePerKiloGram: [<span class="link_label">A</span>](<span class="link_url">a: A</span>)scalaz.@@[A,JoulePerKiloGram]
+
+scala&gt; def energyR(m: Double @@ KiloGram): Double @@ JoulePerKiloGram =
+<span class="code">     |   JoulePerKiloGram(299792458.0 * 299792458.0 * m)</span>
+energyR: (m: scalaz.@@[Double,KiloGram])scalaz.@@[Double,JoulePerKiloGram]
+
+scala&gt; energyR(mass)
+res4: scalaz.@@[Double,JoulePerKiloGram] = 1.79751035747363533E18
+
+scala&gt; energyR(10.0)
+<span class="xml"><span class="tag">&lt;<span class="title">console</span>&gt;</span></span>:18: error: type mismatch;
+ found   : Double(10.0)
+ required: scalaz.@@[Double,KiloGram]
+<span class="code">    (which expands to)  Double with AnyRef{type Tag = KiloGram}</span>
+<span class="code">              energyR(10.0)</span>
+</pre></td></tr></table></figure>
+
+<h1 id="monoids">Monoids</h1>
+<p>Monoid defined in scalaz</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+</pre></td><td class="code"><pre>trait Monoid[A] extends Semigroup[A] { self =&gt;
+  ////
+  /** The identity element <span class="keyword">for</span> `append`. */
+  <span class="function"><span class="keyword">def</span> <span class="title">zero</span>:</span> A
+  ...
+}
+
+trait Semigroup[A]  { self =&gt;
+  <span class="function"><span class="keyword">def</span> <span class="title">append</span><span class="params">(a1: A, a2: =&gt; A)</span>:</span> A
+  ...
+}
+
+// operators
+trait SemigroupOps[A] extends Ops[A] {
+  final <span class="function"><span class="keyword">def</span> |+|<span class="params">(other: =&gt; A)</span>:</span> A = A.append(self, other)
+  final <span class="function"><span class="keyword">def</span> <span class="title">mappend</span><span class="params">(other: =&gt; A)</span>:</span> A = A.append(self, other)
+  final <span class="function"><span class="keyword">def</span> ⊹<span class="params">(other: =&gt; A)</span>:</span> A = A.append(self, other)
+}
+
+scala&gt; List(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>) |+| List(<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>)
+res26: List[Int] = List(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>)
+
+scala&gt; <span class="string">"one"</span> |+| <span class="string">"two"</span>
+res27: String = onetwo
+
+scala&gt; Monoid[List[Int]].zero
+res15: List[Int] = List()
+
+scala&gt; Monoid[String].zero
+res16: String = <span class="string">""</span>
+</pre></td></tr></table></figure>
+
+<h1 id="tags-multiplication">Tags.Multiplication</h1>
+<p>This is where Scalaz 7 uses tagged type.
+There are 8 tags for Monoids and 1 named Zip for Applicative.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre>// 乘法表示, 也可以有加法
+scala&gt; Tags<span class="preprocessor">.Multiplication</span>(<span class="number">10</span>) |+| Monoid[Int @@ Tags<span class="preprocessor">.Multiplication</span>]<span class="preprocessor">.zero</span>
+<span class="label">res21:</span> scalaz.@@[Int,scalaz<span class="preprocessor">.Tags</span><span class="preprocessor">.Multiplication</span>] = <span class="number">10</span>
+
+scala&gt; <span class="number">10</span> |+| Monoid[Int]<span class="preprocessor">.zero</span>
+<span class="label">res22:</span> Int = <span class="number">10</span>
+</pre></td></tr></table></figure>
+
+<h2 id="tags-disjunction-and-tags-conjunction">Tags.Disjunction and Tags.Conjunction</h2>
+<p>或 非</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="code"><pre>scala&gt; Tags<span class="preprocessor">.Disjunction</span>(true) |+| Tags<span class="preprocessor">.Disjunction</span>(false)
+<span class="label">res28:</span> scalaz.@@[Boolean,scalaz<span class="preprocessor">.Tags</span><span class="preprocessor">.Disjunction</span>] = true
+
+scala&gt; Monoid[Boolean @@ Tags<span class="preprocessor">.Disjunction</span>]<span class="preprocessor">.zero</span> |+| Tags<span class="preprocessor">.Disjunction</span>(true)
+<span class="label">res29:</span> scalaz.@@[Boolean,scalaz<span class="preprocessor">.Tags</span><span class="preprocessor">.Disjunction</span>] = true
+
+scala&gt; Monoid[Boolean @@ Tags<span class="preprocessor">.Disjunction</span>]<span class="preprocessor">.zero</span> |+| Monoid[Boolean @@ Tags<span class="preprocessor">.Disjunction</span>]<span class="preprocessor">.zero</span>
+<span class="label">res30:</span> scalaz.@@[Boolean,scalaz<span class="preprocessor">.Tags</span><span class="preprocessor">.Disjunction</span>] = false
+
+scala&gt; Monoid[Boolean @@ Tags<span class="preprocessor">.Conjunction</span>]<span class="preprocessor">.zero</span> |+| Tags<span class="preprocessor">.Conjunction</span>(true)
+<span class="label">res31:</span> scalaz.@@[Boolean,scalaz<span class="preprocessor">.Tags</span><span class="preprocessor">.Conjunction</span>] = true
+
+scala&gt; Monoid[Boolean @@ Tags<span class="preprocessor">.Conjunction</span>]<span class="preprocessor">.zero</span> |+| Tags<span class="preprocessor">.Conjunction</span>(false)
+<span class="label">res32:</span> scalaz.@@[Boolean,scalaz<span class="preprocessor">.Tags</span><span class="preprocessor">.Conjunction</span>] = false
+</pre></td></tr></table></figure>
+
+<h2 id="ordering-as-monoid">Ordering as Monoid</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+</pre></td><td class="code"><pre>scala&gt; <span class="keyword">Ordering</span>.LT |+| <span class="keyword">Ordering</span>.GT
+&lt;console&gt;:<span class="number">14</span>: error: value |+| is not a member of object scalaz.<span class="keyword">Ordering</span>.LT
+              <span class="keyword">Ordering</span>.LT |+| <span class="keyword">Ordering</span>.GT
+                          ^
+
+scala&gt; (<span class="keyword">Ordering</span>.LT: <span class="keyword">Ordering</span>) |+| (<span class="keyword">Ordering</span>.GT: <span class="keyword">Ordering</span>)
+res42: scalaz.<span class="keyword">Ordering</span> = LT
+
+scala&gt; (<span class="keyword">Ordering</span>.GT: <span class="keyword">Ordering</span>) |+| (<span class="keyword">Ordering</span>.LT: <span class="keyword">Ordering</span>)
+res43: scalaz.<span class="keyword">Ordering</span> = GT
+
+scala&gt; Monoid[<span class="keyword">Ordering</span>].zero |+| (<span class="keyword">Ordering</span>.LT: <span class="keyword">Ordering</span>)
+res44: scalaz.<span class="keyword">Ordering</span> = LT
+
+scala&gt; Monoid[<span class="keyword">Ordering</span>].zero |+| (<span class="keyword">Ordering</span>.GT: <span class="keyword">Ordering</span>)
+res45: scalaz.<span class="keyword">Ordering</span> = GT
+
+// 定义长度比较
+scala&gt; def lengthCompare(lhs: <span class="keyword">String</span>, rhs: <span class="keyword">String</span>): <span class="keyword">Ordering</span> =
+         (lhs.length ?|? rhs.length) |+| (lhs ?|? rhs)
+lengthCompare: (lhs: <span class="keyword">String</span>, rhs: <span class="keyword">String</span>)scalaz.<span class="keyword">Ordering</span>
+
+scala&gt; lengthCompare(<span class="string">"zen"</span>, <span class="string">"ants"</span>)
+res46: scalaz.<span class="keyword">Ordering</span> = LT
+
+scala&gt; lengthCompare(<span class="string">"zen"</span>, <span class="string">"ant"</span>)
+res47: scalaz.<span class="keyword">Ordering</span> = GT
+</pre></td></tr></table></figure>
+
+<h1 id="functor-laws">Functor Laws</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre>trait FunctorLaw {
+  /** The identity function, lifted, <span class="keyword">is</span> a no-op. */
+  <span class="function"><span class="keyword">def</span> <span class="title">identity</span>[<span class="title">A</span>]<span class="params">(fa: F[A])</span><span class="params">(implicit FA: Equal[F[A]])</span>:</span> Boolean = FA.equal(map(fa)(x =&gt; x), fa)
+
+  /**
+   * A series of maps may be freely rewritten <span class="keyword">as</span> a single map on a
+   * composed function.
+   */
+  <span class="function"><span class="keyword">def</span> <span class="title">associative</span>[<span class="title">A</span>, <span class="title">B</span>, <span class="title">C</span>]<span class="params">(fa: F[A], f1: A =&gt; B, f2: B =&gt; C)</span><span class="params">(implicit FC: Equal[F[C]])</span>:</span> Boolean =
+    FC.equal(map(map(fa)(f1))(f2), map(fa)(f2 compose f1))
+}
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+</pre></td><td class="code"><pre>scalaVersion <span class="symbol">:</span>= <span class="string">"2.11.0"</span>
+
+val scalazVersion = <span class="string">"7.0.6"</span>
+
+libraryDependencies ++= <span class="constant">Seq</span>(
+  <span class="string">"org.scalaz"</span> <span class="string">%% "scalaz-core" %</span> scalazVersion,
+  <span class="string">"org.scalaz"</span> <span class="string">%% "scalaz-effect" %</span> scalazVersion,
+  <span class="string">"org.scalaz"</span> <span class="string">%% "scalaz-typelevel" %</span> scalazVersion,
+  <span class="string">"org.scalaz"</span> <span class="string">%% "scalaz-scalacheck-binding" %</span> scalazVersion % <span class="string">"test"</span>
+)
+
+scalacOptions += <span class="string">"-feature"</span>
+
+initialCommands <span class="keyword">in</span> console <span class="symbol">:</span>= <span class="string">"import scalaz._, Scalaz._"</span>
+
+initialCommands <span class="keyword">in</span> console <span class="keyword">in</span> <span class="constant">Test</span> <span class="symbol">:</span>= <span class="string">"import scalaz._, Scalaz._, scalacheck.ScalazProperties._, scalacheck.ScalazArbitrary._,scalacheck.ScalaCheckBinding._"</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="code"><pre>$ sbt test:console
+[info] Starting scala interpreter...
+[info] 
+<span class="keyword">import</span> scalaz._
+<span class="keyword">import</span> Scalaz._
+<span class="keyword">import</span> scalacheck.ScalazProperties._
+<span class="keyword">import</span> scalacheck.ScalazArbitrary._
+<span class="keyword">import</span> scalacheck.ScalaCheckBinding._
+Welcome to Scala <span class="keyword">version</span> <span class="number">2.10</span>.3 (Java HotSpot(TM) <span class="number">64</span>-Bit Server VM, Java <span class="number">1.6</span>.0_45).
+Type <span class="keyword">in</span> expressions to have them evaluated.
+Type :help <span class="keyword">for</span> more information.
+
+scala&gt; functor.laws[List].check
+</pre></td></tr></table></figure>
+
+<p>这些规则可能会被破坏</p>
+<h1 id="applicative-laws">Applicative Laws</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="code"><pre>trait ApplicativeLaw extends FunctorLaw {
+  def identityAp[A](<span class="attribute">fa</span>: F[A])(implicit <span class="attribute">FA</span>: Equal[F[A]]): Boolean =
+    FA.equal<span class="function"><span class="params">(ap(fa)(point((a: A) =&gt; a)), fa)</span>
+    
+  <span class="title">def</span> <span class="title">composition</span>[<span class="title">A</span>, <span class="title">B</span>, <span class="title">C</span>]<span class="params">(fbc: F[B =&gt; C], fab: F[A =&gt; B], fa: F[A])(implicit FC: Equal[F[C]])</span> =
+    <span class="title">FC</span>.<span class="title">equal</span><span class="params">(ap(ap(fa)(fab))(fbc), ap(fa)(ap(fab)(ap(fbc)(point((bc: B =&gt; C) =&gt; (ab: A =&gt; B) =&gt; bc compose ab)))))</span>
+    
+  <span class="title">def</span> <span class="title">homomorphism</span>[<span class="title">A</span>, <span class="title">B</span>]<span class="params">(ab: A =&gt; B, a: A)(implicit FB: Equal[F[B]])</span>: <span class="title">Boolean</span> =
+    <span class="title">FB</span>.<span class="title">equal</span><span class="params">(ap(point(a))(point(ab)), point(ab(a)))</span>
+    
+  <span class="title">def</span> <span class="title">interchange</span>[<span class="title">A</span>, <span class="title">B</span>]<span class="params">(f: F[A =&gt; B], a: A)(implicit FB: Equal[F[B]])</span>: <span class="title">Boolean</span> =
+    <span class="title">FB</span>.<span class="title">equal</span><span class="params">(ap(point(a))(f), ap(f)(point((f: A =&gt; B) =&gt; f(a))))</span>
+}</span>
+</pre></td></tr></table></figure>
+
+<h1 id="semigroup-law">Semigroup Law</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>trait SemigroupLaw {
+  <span class="function"><span class="keyword">def</span> <span class="title">associative</span><span class="params">(f1: F, f2: F, f3: F)</span><span class="params">(implicit F: Equal[F])</span>:</span> Boolean =
+    F.equal(append(f1, append(f2, f3)), append(append(f1, f2), f3))
+}
+</pre></td></tr></table></figure>
+
+<h1 id="monoid-laws">Monoid Laws</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="class"><span class="keyword">trait</span> <span class="title">MonoidLaw</span> <span class="keyword">extends</span> <span class="title">SemigroupLaw</span> {</span>
+  <span class="keyword">def</span> leftIdentity(a: F)(implicit F: Equal[F]) = F.equal(a, append(zero, a))
+  <span class="keyword">def</span> rightIdentity(a: F)(implicit F: Equal[F]) = F.equal(a, append(a, zero))
+}
+</pre></td></tr></table></figure>
+
+<h1 id="option-as-monoid">Option as Monoid</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="code"><pre>implicit def optionMonoid[<span class="attribute">A</span>: Semigroup]: Monoid[Option[A]] = <span class="keyword">new</span> Monoid[Option[A]] {
+  def append(<span class="attribute">f1</span>: Option[A], <span class="attribute">f2</span>:<span class="function"> =&gt;</span> Option[A]) = (f1, f2) match {
+    <span class="reserved">case</span> <span class="function"><span class="params">(Some(a1), Some(a2))</span> =&gt;</span> Some(Semigroup[A].append(a1, a2))
+    <span class="reserved">case</span> <span class="function"><span class="params">(Some(a1), None)</span>     =&gt;</span> f1
+    <span class="reserved">case</span> <span class="function"><span class="params">(None, Some(a2))</span>     =&gt;</span> f2
+    <span class="reserved">case</span> <span class="function"><span class="params">(None, None)</span>         =&gt;</span> None
+  }
+  def <span class="attribute">zero</span>: Option[A] = None
+}
+
+scala&gt; (<span class="attribute">none</span>: Option[String]) |+| <span class="string">"andy"</span>.some
+<span class="attribute">res23</span>: Option[String] = Some(andy)
+
+scala&gt; (Ordering.<span class="attribute">LT</span>: Ordering).some |+| none
+<span class="attribute">res25</span>: Option[scalaz.Ordering] = Some(LT)
+</pre></td></tr></table></figure>
+
+<p>if we don’t know if the contents are monoids,
+we can’t use mappend between them, so what are we to do? Well,
+one thing we can do is to just discard the second
+value and keep the first one. For this, the First a type exists.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+</pre></td><td class="code"><pre>scala&gt; Tags<span class="preprocessor">.First</span>(<span class="string">'a'</span><span class="preprocessor">.some</span>) |+| Tags<span class="preprocessor">.First</span>(<span class="string">'b'</span><span class="preprocessor">.some</span>)
+<span class="label">res26:</span> scalaz.@@[Option[Char],scalaz<span class="preprocessor">.Tags</span><span class="preprocessor">.First</span>] = Some(a)
+
+scala&gt; Tags<span class="preprocessor">.First</span>(none: Option[Char]) |+| Tags<span class="preprocessor">.First</span>(<span class="string">'b'</span><span class="preprocessor">.some</span>)
+<span class="label">res27:</span> scalaz.@@[Option[Char],scalaz<span class="preprocessor">.Tags</span><span class="preprocessor">.First</span>] = Some(b)
+
+scala&gt; Tags<span class="preprocessor">.First</span>(<span class="string">'a'</span><span class="preprocessor">.some</span>) |+| Tags<span class="preprocessor">.First</span>(none: Option[Char])
+<span class="label">res28:</span> scalaz.@@[Option[Char],scalaz<span class="preprocessor">.Tags</span><span class="preprocessor">.First</span>] = Some(a)
+
+// 同理可得
+scala&gt; Tags<span class="preprocessor">.First</span>(<span class="string">'a'</span><span class="preprocessor">.some</span>) |+| Tags<span class="preprocessor">.First</span>(<span class="string">'b'</span><span class="preprocessor">.some</span>)
+<span class="label">res26:</span> scalaz.@@[Option[Char],scalaz<span class="preprocessor">.Tags</span><span class="preprocessor">.First</span>] = Some(a)
+
+scala&gt; Tags<span class="preprocessor">.First</span>(none: Option[Char]) |+| Tags<span class="preprocessor">.First</span>(<span class="string">'b'</span><span class="preprocessor">.some</span>)
+<span class="label">res27:</span> scalaz.@@[Option[Char],scalaz<span class="preprocessor">.Tags</span><span class="preprocessor">.First</span>] = Some(b)
+
+scala&gt; Tags<span class="preprocessor">.First</span>(<span class="string">'a'</span><span class="preprocessor">.some</span>) |+| Tags<span class="preprocessor">.First</span>(none: Option[Char])
+<span class="label">res28:</span> scalaz.@@[Option[Char],scalaz<span class="preprocessor">.Tags</span><span class="preprocessor">.First</span>] = Some(a)
+</pre></td></tr></table></figure>
+
+<h1 id="foldable">Foldable</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="code"><pre>trait Foldable[F[_]] { self =&gt;
+  /** Map each element of the structure to a [[scalaz.Monoid]], <span class="keyword">and</span> combine the results. */
+  <span class="function"><span class="keyword">def</span> <span class="title">foldMap</span>[<span class="title">A</span>,<span class="title">B</span>]<span class="params">(fa: F[A])</span><span class="params">(f: A =&gt; B)</span><span class="params">(implicit F: Monoid[B])</span>:</span> B
+
+  /**Right-associative fold of a structure. */
+  <span class="function"><span class="keyword">def</span> <span class="title">foldRight</span>[<span class="title">A</span>, <span class="title">B</span>]<span class="params">(fa: F[A], z: =&gt; B)</span><span class="params">(f: <span class="params">(A, =&gt; B)</span> =&gt; B)</span>:</span> B
+
+  ...
+}
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+</pre></td><td class="code"><pre>/** Wraps a value `self` <span class="keyword">and</span> provides methods related to `Foldable` */
+trait FoldableOps[F[_],A] extends Ops[F[A]] {
+  implicit <span class="function"><span class="keyword">def</span> <span class="title">F</span>:</span> Foldable[F]
+  ////
+  final <span class="function"><span class="keyword">def</span> <span class="title">foldMap</span>[<span class="title">B</span>:</span> Monoid](f: A =&gt; B = (a: A) =&gt; a): B = F.foldMap(self)(f)
+  final <span class="function"><span class="keyword">def</span> <span class="title">foldRight</span>[<span class="title">B</span>]<span class="params">(z: =&gt; B)</span><span class="params">(f: <span class="params">(A, =&gt; B)</span> =&gt; B)</span>:</span> B = F.foldRight(self, z)(f)
+  final <span class="function"><span class="keyword">def</span> <span class="title">foldLeft</span>[<span class="title">B</span>]<span class="params">(z: B)</span><span class="params">(f: <span class="params">(B, A)</span> =&gt; B)</span>:</span> B = F.foldLeft(self, z)(f)
+  final <span class="function"><span class="keyword">def</span> <span class="title">foldRightM</span>[<span class="title">G</span>[<span class="title">_</span>], <span class="title">B</span>]<span class="params">(z: =&gt; B)</span><span class="params">(f: <span class="params">(A, =&gt; B)</span> =&gt; G[B])</span><span class="params">(implicit M: Monad[G])</span>:</span> G[B] = F.foldRightM(self, z)(f)
+  final <span class="function"><span class="keyword">def</span> <span class="title">foldLeftM</span>[<span class="title">G</span>[<span class="title">_</span>], <span class="title">B</span>]<span class="params">(z: B)</span><span class="params">(f: <span class="params">(B, A)</span> =&gt; G[B])</span><span class="params">(implicit M: Monad[G])</span>:</span> G[B] = F.foldLeftM(self, z)(f)
+  final <span class="function"><span class="keyword">def</span> <span class="title">foldr</span>[<span class="title">B</span>]<span class="params">(z: =&gt; B)</span><span class="params">(f: A =&gt; <span class="params">(=&gt; B)</span> =&gt; B)</span>:</span> B = F.foldr(self, z)(f)
+  final <span class="function"><span class="keyword">def</span> <span class="title">foldl</span>[<span class="title">B</span>]<span class="params">(z: B)</span><span class="params">(f: B =&gt; A =&gt; B)</span>:</span> B = F.foldl(self, z)(f)
+  final <span class="function"><span class="keyword">def</span> <span class="title">foldrM</span>[<span class="title">G</span>[<span class="title">_</span>], <span class="title">B</span>]<span class="params">(z: =&gt; B)</span><span class="params">(f: A =&gt; <span class="params">( =&gt; B)</span> =&gt; G[B])</span><span class="params">(implicit M: Monad[G])</span>:</span> G[B] = F.foldrM(self, z)(f)
+  final <span class="function"><span class="keyword">def</span> <span class="title">foldlM</span>[<span class="title">G</span>[<span class="title">_</span>], <span class="title">B</span>]<span class="params">(z: B)</span><span class="params">(f: B =&gt; A =&gt; G[B])</span><span class="params">(implicit M: Monad[G])</span>:</span> G[B] = F.foldlM(self, z)(f)
+  final <span class="function"><span class="keyword">def</span> <span class="title">foldr1</span><span class="params">(f: <span class="params">(A, =&gt; A)</span> =&gt; A)</span>:</span> Option[A] = F.foldr1(self)(f)
+  final <span class="function"><span class="keyword">def</span> <span class="title">foldl1</span><span class="params">(f: <span class="params">(A, A)</span> =&gt; A)</span>:</span> Option[A] = F.foldl1(self)(f)
+  final <span class="function"><span class="keyword">def</span> <span class="title">sumr</span><span class="params">(implicit A: Monoid[A])</span>:</span> A = F.foldRight(self, A.zero)(A.append)
+  final <span class="function"><span class="keyword">def</span> <span class="title">suml</span><span class="params">(implicit A: Monoid[A])</span>:</span> A = F.foldLeft(self, A.zero)(A.append(_, _))
+  final <span class="function"><span class="keyword">def</span> <span class="title">toList</span>:</span> List[A] = F.toList(self)
+  final <span class="function"><span class="keyword">def</span> <span class="title">toIndexedSeq</span>:</span> IndexedSeq[A] = F.toIndexedSeq(self)
+  final <span class="function"><span class="keyword">def</span> <span class="title">toSet</span>:</span> Set[A] = F.toSet(self)
+  final <span class="function"><span class="keyword">def</span> <span class="title">toStream</span>:</span> Stream[A] = F.toStream(self)
+  final <span class="function"><span class="keyword">def</span> <span class="title">all</span><span class="params">(p: A =&gt; Boolean)</span>:</span> Boolean = F.all(self)(p)
+  final <span class="function"><span class="keyword">def</span> ∀<span class="params">(p: A =&gt; Boolean)</span>:</span> Boolean = F.all(self)(p)
+  final <span class="function"><span class="keyword">def</span> <span class="title">allM</span>[<span class="title">G</span>[<span class="title">_</span>]:</span> Monad](p: A =&gt; G[Boolean]): G[Boolean] = F.allM(self)(p)
+  final <span class="function"><span class="keyword">def</span> <span class="title">anyM</span>[<span class="title">G</span>[<span class="title">_</span>]:</span> Monad](p: A =&gt; G[Boolean]): G[Boolean] = F.anyM(self)(p)
+  final <span class="function"><span class="keyword">def</span> <span class="title">any</span><span class="params">(p: A =&gt; Boolean)</span>:</span> Boolean = F.any(self)(p)
+  final <span class="function"><span class="keyword">def</span> ∃<span class="params">(p: A =&gt; Boolean)</span>:</span> Boolean = F.any(self)(p)
+  final <span class="function"><span class="keyword">def</span> <span class="title">count</span>:</span> Int = F.count(self)
+  final <span class="function"><span class="keyword">def</span> <span class="title">maximum</span><span class="params">(implicit A: Order[A])</span>:</span> Option[A] = F.maximum(self)
+  final <span class="function"><span class="keyword">def</span> <span class="title">minimum</span><span class="params">(implicit A: Order[A])</span>:</span> Option[A] = F.minimum(self)
+  final <span class="function"><span class="keyword">def</span> <span class="title">longDigits</span><span class="params">(implicit d: A &lt;:&lt; Digit)</span>:</span> Long = F.longDigits(self)
+  final <span class="function"><span class="keyword">def</span> <span class="title">empty</span>:</span> Boolean = F.empty(self)
+  final <span class="function"><span class="keyword">def</span> <span class="title">element</span><span class="params">(a: A)</span><span class="params">(implicit A: Equal[A])</span>:</span> Boolean = F.element(self, a)
+  final <span class="function"><span class="keyword">def</span> <span class="title">splitWith</span><span class="params">(p: A =&gt; Boolean)</span>:</span> List[List[A]] = F.splitWith(self)(p)
+  final <span class="function"><span class="keyword">def</span> <span class="title">selectSplit</span><span class="params">(p: A =&gt; Boolean)</span>:</span> List[List[A]] = F.selectSplit(self)(p)
+  final <span class="function"><span class="keyword">def</span> <span class="title">collapse</span>[<span class="title">X</span>[<span class="title">_</span>]]<span class="params">(implicit A: ApplicativePlus[X])</span>:</span> X[A] = F.collapse(self)
+  final <span class="function"><span class="keyword">def</span> <span class="title">concatenate</span><span class="params">(implicit A: Monoid[A])</span>:</span> A = F.fold(self)
+  final <span class="function"><span class="keyword">def</span> <span class="title">traverse_</span>[<span class="title">M</span>[<span class="title">_</span>]:</span>Applicative](f: A =&gt; M[Unit]): M[Unit] = F.traverse_(self)(f)
+
+  ////
+}
+</pre></td></tr></table></figure>
+
+<p>用法如下</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code"><pre>scala&gt; <span class="keyword">List</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>).foldRight (<span class="number">1</span>) {_ * _}
+res49: Int = <span class="number">6</span>
+
+scala&gt; <span class="number">9.</span>some.foldLeft(<span class="number">2</span>) {_ + _}
+res50: Int = <span class="number">11</span>
+
+<span class="comment">// use monoid</span>
+scala&gt; <span class="keyword">List</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>) foldMap {identity}
+res53: Int = <span class="number">6</span>
+
+scala&gt; <span class="keyword">List</span>(<span class="keyword">true</span>, <span class="keyword">false</span>, <span class="keyword">true</span>, <span class="keyword">true</span>) foldMap {Tags.Disjunction}
+res56: scalaz.@@[Boolean,scalaz.Tags.Disjunction] = <span class="keyword">true</span>
+</pre></td></tr></table></figure>
+
+<h1 id="monads">Monads</h1>
+<p>Monads are a natural extension applicative functors, and they provide
+a solution to the following problem: If we have a value with context, m a,
+how do we apply it to a function that takes a normal a and returns a value with a contex</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="class"><span class="keyword">trait</span> <span class="title">Monad</span>[<span class="title">F</span>[<span class="title">_</span>]] <span class="keyword">extends</span> <span class="title">Applicative</span>[<span class="title">F</span>] <span class="keyword">with</span> <span class="title">Bind</span>[<span class="title">F</span>] {</span> self =&gt;
+  <span class="comment">////</span>
+}
+</pre></td></tr></table></figure>
+
+<h2 id="bind">Bind</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+</pre></td><td class="code"><pre>trait Bind[F[_]] extends Apply[F] { self =&gt;
+  /<span class="emphasis">** Equivalent to `join(map(fa)(f))`. *</span>/
+  def bind[<span class="link_label">A, B</span>](<span class="link_url">fa: F[A]</span>)(f: A =&gt; F[B]): F[B]
+}
+
+/<span class="emphasis">** Wraps a value `self` and provides methods related to `Bind` *</span>/
+trait BindOps[F[_],A] extends Ops[F[A]] {
+  implicit def F: Bind[F]
+  ////
+  import Liskov.<span class="xml"><span class="tag">&lt;<span class="title">~</span>&lt;
+
+  <span class="attribute">def</span> <span class="attribute">flatMap</span>[<span class="attribute">B</span>](<span class="attribute">f:</span> <span class="attribute">A</span> =&gt;</span></span> F[B]) = F.bind(self)(f)
+  def &gt;&gt;=[<span class="link_label">B</span>](<span class="link_url">f: A =&gt; F[B]</span>) = F.bind(self)(f)
+  def ∗[<span class="link_label">B</span>](<span class="link_url">f: A =&gt; F[B]</span>) = F.bind(self)(f)
+  def join[<span class="link_label">B</span>](<span class="link_url">implicit ev: A &lt;~&lt; F[B]</span>): F[B] = F.bind(self)(ev(_))
+  def μ[<span class="link_label">B</span>](<span class="link_url">implicit ev: A &lt;~&lt; F[B]</span>): F[B] = F.bind(self)(ev(_))
+  def &gt;&gt;[<span class="link_label">B</span>](<span class="link_url">b: F[B]</span>): F[B] = F.bind(self)(_ =&gt; b)
+  def ifM[<span class="link_label">B</span>](<span class="link_url">ifTrue: =&gt; F[B], ifFalse: =&gt; F[B]</span>)(implicit ev: A <span class="xml"><span class="tag">&lt;<span class="title">~</span>&lt; <span class="attribute">Boolean</span>)<span class="attribute">:</span> <span class="attribute">F</span>[<span class="attribute">B</span>] = {
+    <span class="attribute">val</span> <span class="attribute">value:</span> <span class="attribute">F</span>[<span class="attribute">Boolean</span>] = <span class="attribute">Liskov.co</span>[<span class="attribute">F</span>, <span class="attribute">A</span>, <span class="attribute">Boolean</span>](<span class="attribute">ev</span>)(<span class="attribute">self</span>)
+    <span class="attribute">F.ifM</span>(<span class="attribute">value</span>, <span class="attribute">ifTrue</span>, <span class="attribute">ifFalse</span>)
+  }
+  ////
+}</span></span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre>scala&gt; <span class="number">3.</span>some flatMap { x =&gt; (x + <span class="number">1</span>).some }
+res2: <span class="keyword">Option</span>[<span class="built_in">Int</span>] = Some(<span class="number">4</span>)
+
+scala&gt; (none: <span class="keyword">Option</span>[<span class="built_in">Int</span>]) flatMap { x =&gt; (x + <span class="number">1</span>).some }
+res3: <span class="keyword">Option</span>[<span class="built_in">Int</span>] = None
+</pre></td></tr></table></figure>
+
+<h2 id="monad">Monad</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre>scala&gt; Monad[<span class="keyword">Option</span>].point(<span class="string">"WHAT"</span>)
+res5: <span class="keyword">Option</span>[<span class="built_in">String</span>] = Some(WHAT)
+
+scala&gt; <span class="number">9.</span>some flatMap { x =&gt; Monad[<span class="keyword">Option</span>].point(x * <span class="number">10</span>) }
+res6: <span class="keyword">Option</span>[<span class="built_in">Int</span>] = Some(<span class="number">90</span>)
+
+scala&gt; (none: <span class="keyword">Option</span>[<span class="built_in">Int</span>]) flatMap { x =&gt; Monad[<span class="keyword">Option</span>].point(x * <span class="number">10</span>) }
+res7: <span class="keyword">Option</span>[<span class="built_in">Int</span>] = None
+</pre></td></tr></table></figure>
+
+<h3 id="-">小鸟的案例</h3>
+<p>小鸟在平衡杆两边停留</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="code"><pre><span class="keyword">type</span> Birds = Int
+
+<span class="class"><span class="keyword">case</span> <span class="keyword">class</span> <span class="title">Pole</span><span class="params">(left: Birds, right: Birds)</span>{</span>
+  <span class="keyword">def</span> landLeft(n: Birds): Pole = copy(left = left + n)
+  <span class="keyword">def</span> landRight(n: Birds): Pole = copy(right = right + n) 
+}
+
+<span class="comment">// 可以这样使用</span>
+Pole(<span class="number">0</span>, <span class="number">0</span>).landLeft(<span class="number">1</span>).landRight(<span class="number">1</span>).landLeft(<span class="number">2</span>)
+</pre></td></tr></table></figure>
+
+<p>version 2</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+</pre></td><td class="code"><pre><span class="keyword">case</span> class Pole(left: Birds, <span class="constant">right</span>: Birds) {
+  def landLeft(n: Birds): Option[Pole] = 
+    <span class="keyword">if</span> (math.<span class="built_in">abs</span>((left + n) - <span class="constant">right</span>) &lt; <span class="number">4</span>) copy(left = left + n).some
+    <span class="keyword">else</span> <span class="constant">none</span>
+  def landRight(n: Birds): Option[Pole] =
+    <span class="keyword">if</span> (math.<span class="built_in">abs</span>(left - (<span class="constant">right</span> + n)) &lt; <span class="number">4</span>) copy(<span class="constant">right</span> = <span class="constant">right</span> + n).some
+    <span class="keyword">else</span> <span class="constant">none</span>
+}
+<span class="comment">
+// 可以这样使用</span>
+Pole(<span class="number">0</span>, <span class="number">0</span>).landRight(<span class="number">1</span>) flatMap {_.landLeft(<span class="number">2</span>)}
+
+Monad[Option].point(Pole(<span class="number">0</span>, <span class="number">0</span>)) &gt;&gt;= {_.landRight(<span class="number">2</span>)} &gt;&gt;= {_.landLeft(<span class="number">2</span>)} &gt;&gt;= {_.landRight(<span class="number">2</span>)}
+
+<span class="comment">
+// &gt;&gt; 符号的使用</span>
+scala&gt; (<span class="constant">none</span>: Option[Int]) &gt;&gt; <span class="number">3.</span>some
+res25: Option[Int] = None
+
+scala&gt; <span class="number">3.</span>some &gt;&gt; <span class="number">4.</span>some
+res26: Option[Int] = Some(<span class="number">4</span>)
+
+scala&gt; <span class="number">3.</span>some &gt;&gt; (<span class="constant">none</span>: Option[Int])
+res27: Option[Int] = None
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="code"><pre><span class="regexp">//</span> 这里会报错是因为 = 号的优先级是最低的
+scala&gt; Monad[Option].point(Pole(<span class="number">0</span>, <span class="number">0</span>)) &gt;&gt;= {_.landLeft(<span class="number">1</span>)} &gt;&gt; (<span class="attribute">none</span>: Option[Pole]) &gt;&gt;= {_.landRight(<span class="number">1</span>)}
+&lt;<span class="built_in">console</span>&gt;:<span class="number">26</span>: <span class="attribute">error</span>: missing parameter type <span class="keyword">for</span> expanded <span class="reserved">function</span> <span class="function"><span class="params">((x$<span class="number">1</span>) =&gt; x$<span class="number">1.</span>landLeft(<span class="number">1</span>))</span>
+              <span class="title">Monad</span>[<span class="title">Option</span>].<span class="title">point</span><span class="params">(Pole(<span class="number">0</span>, <span class="number">0</span>))</span> &gt;&gt;= {<span class="title">_</span>.<span class="title">landLeft</span><span class="params">(<span class="number">1</span>)</span>} &gt;&gt; <span class="params">(none: Option[Pole])</span> &gt;&gt;= {<span class="title">_</span>.<span class="title">landRight</span><span class="params">(<span class="number">1</span>)</span>}
+
+// 要这么写
+<span class="title">Monad</span>[<span class="title">Option</span>].<span class="title">point</span><span class="params">(Pole(<span class="number">0</span>, <span class="number">0</span>))</span>.&gt;&gt;=<span class="params">({_.landLeft(<span class="number">1</span>)})</span>.&gt;&gt;<span class="params">(none: Option[Pole])</span>.&gt;&gt;=<span class="params">({_.landRight(<span class="number">1</span>)})</span>
+// 或者这么写
+<span class="params">(Monad[Option].point(Pole(<span class="number">0</span>, <span class="number">0</span>)) &gt;&gt;= {_.landLeft(<span class="number">1</span>)})</span> &gt;&gt; <span class="params">(none: Option[Pole])</span> &gt;&gt;= {<span class="title">_</span>.<span class="title">landRight</span><span class="params">(<span class="number">1</span>)</span>}</span>
+</pre></td></tr></table></figure>
+
+<h2 id="for-syntax">for syntax</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="code"><pre>scala&gt; <span class="number">3.</span>some &gt;&gt;= { x =&gt; (none: <span class="keyword">Option</span>[<span class="built_in">String</span>]) &gt;&gt;= { y =&gt; (x.shows + y).some } }
+res17: <span class="keyword">Option</span>[<span class="built_in">String</span>] = None
+
+scala&gt; (none: <span class="keyword">Option</span>[<span class="built_in">Int</span>]) &gt;&gt;= { x =&gt; <span class="string">"!"</span>.some &gt;&gt;= { y =&gt; (x.shows + y).some } }
+res16: <span class="keyword">Option</span>[<span class="built_in">String</span>] = None
+
+scala&gt; <span class="number">3.</span>some &gt;&gt;= { x =&gt; <span class="string">"!"</span>.some &gt;&gt;= { y =&gt; (none: <span class="keyword">Option</span>[<span class="built_in">String</span>]) } }
+res18: <span class="keyword">Option</span>[<span class="built_in">String</span>] = Nonescala&gt; <span class="number">3.</span>some &gt;&gt;= { x =&gt; (none: <span class="keyword">Option</span>[<span class="built_in">String</span>]) &gt;&gt;= { y =&gt; (x.shows + y).some } }
+res17: <span class="keyword">Option</span>[<span class="built_in">String</span>] = None
+
+scala&gt; (none: <span class="keyword">Option</span>[<span class="built_in">Int</span>]) &gt;&gt;= { x =&gt; <span class="string">"!"</span>.some &gt;&gt;= { y =&gt; (x.shows + y).some } }
+res16: <span class="keyword">Option</span>[<span class="built_in">String</span>] = None
+
+scala&gt; <span class="number">3.</span>some &gt;&gt;= { x =&gt; <span class="string">"!"</span>.some &gt;&gt;= { y =&gt; (none: <span class="keyword">Option</span>[<span class="built_in">String</span>]) } }
+res18: <span class="keyword">Option</span>[<span class="built_in">String</span>] = None
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+</pre></td><td class="code"><pre>scala&gt; <span class="keyword">for</span> {
+         x &lt;- <span class="number">3.</span>some
+         y &lt;- <span class="string">"!"</span>.some
+       } <span class="keyword">yield</span> (x.shows + y)
+res19: Option[String] = Some(<span class="number">3</span>!)
+
+scala&gt; <span class="function"><span class="keyword">def</span> <span class="title">routine</span>:</span> Option[Pole] =
+         <span class="keyword">for</span> {
+           start &lt;- Monad[Option].point(Pole(<span class="number">0</span>, <span class="number">0</span>))
+           first &lt;- start.landLeft(<span class="number">2</span>)
+           second &lt;- first.landRight(<span class="number">2</span>)
+           third &lt;- second.landLeft(<span class="number">1</span>)
+         } <span class="keyword">yield</span> third
+routine: Option[Pole]
+
+scala&gt; routine
+res20: Option[Pole] = Some(Pole(<span class="number">3</span>,<span class="number">2</span>))
+
+scala&gt; <span class="function"><span class="keyword">def</span> <span class="title">routine</span>:</span> Option[Pole] =
+         <span class="keyword">for</span> {
+           start &lt;- Monad[Option].point(Pole(<span class="number">0</span>, <span class="number">0</span>))
+           first &lt;- start.landLeft(<span class="number">2</span>)
+           _ &lt;- (none: Option[Pole])
+           second &lt;- first.landRight(<span class="number">2</span>)
+           third &lt;- second.landLeft(<span class="number">1</span>)
+         } <span class="keyword">yield</span> third
+routine: Option[Pole]
+
+scala&gt; routine
+res23: Option[Pole] = <span class="keyword">None</span>
+
+scala&gt; <span class="function"><span class="keyword">def</span> <span class="title">wopwop</span>:</span> Option[Char] =
+         <span class="keyword">for</span> {
+           (x :: xs) &lt;- <span class="string">""</span>.toList.some
+         } <span class="keyword">yield</span> x
+wopwop: Option[Char]
+
+scala&gt; wopwop
+res28: Option[Char] = <span class="keyword">None</span>
+</pre></td></tr></table></figure>
+
+<h2 id="list-monad">List Monad</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre>scala&gt; ^(<span class="keyword">List</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>), <span class="keyword">List</span>(<span class="number">10</span>, <span class="number">100</span>, <span class="number">100</span>)) {_ * _}
+res29: <span class="keyword">List</span>[Int] = <span class="keyword">List</span>(<span class="number">10</span>, <span class="number">100</span>, <span class="number">100</span>, <span class="number">20</span>, <span class="number">200</span>, <span class="number">200</span>, <span class="number">30</span>, <span class="number">300</span>, <span class="number">300</span>)
+
+scala&gt; <span class="keyword">List</span>(<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>) &gt;&gt;= {x =&gt; <span class="keyword">List</span>(x, -x)}
+res30: <span class="keyword">List</span>[Int] = <span class="keyword">List</span>(<span class="number">3</span>, -<span class="number">3</span>, <span class="number">4</span>, -<span class="number">4</span>, <span class="number">5</span>, -<span class="number">5</span>)
+
+scala&gt; <span class="keyword">for</span> {
+         n &lt;- <span class="keyword">List</span>(<span class="number">1</span>, <span class="number">2</span>)
+         ch &lt;- <span class="keyword">List</span>(<span class="string">'a'</span>, <span class="string">'b'</span>)
+       } <span class="keyword">yield</span> (n, ch)
+res33: <span class="keyword">List</span>[(Int, Char)] = <span class="keyword">List</span>((<span class="number">1</span>,a), (<span class="number">1</span>,b), (<span class="number">2</span>,a), (<span class="number">2</span>,b))
+</pre></td></tr></table></figure>
+
+<h2 id="monadplus-and-the-guard-function">MonadPlus and the guard function</h2>
+<p>The MonadPlus type class is for monads that can also act as monoids.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>scala&gt; <span class="keyword">for</span> {
+         x &lt;- <span class="number">1</span> |-&gt; <span class="number">50</span> <span class="keyword">if</span> x.shows contains <span class="string">'7'</span>
+       } <span class="keyword">yield</span> x
+res40: <span class="keyword">List</span>[Int] = <span class="keyword">List</span>(<span class="number">7</span>, <span class="number">17</span>, <span class="number">27</span>, <span class="number">37</span>, <span class="number">47</span>)
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+</pre></td><td class="code"><pre><span class="class"><span class="keyword">trait</span> <span class="title">MonadPlus</span>[<span class="title">F</span>[<span class="title">_</span>]] <span class="keyword">extends</span> <span class="title">Monad</span>[<span class="title">F</span>] <span class="keyword">with</span> <span class="title">ApplicativePlus</span>[<span class="title">F</span>] {</span> self =&gt;
+  ...
+}
+
+<span class="class"><span class="keyword">trait</span> <span class="title">ApplicativePlus</span>[<span class="title">F</span>[<span class="title">_</span>]] <span class="keyword">extends</span> <span class="title">Applicative</span>[<span class="title">F</span>] <span class="keyword">with</span> <span class="title">PlusEmpty</span>[<span class="title">F</span>] {</span> self =&gt;
+  ...
+}
+
+<span class="class"><span class="keyword">trait</span> <span class="title">PlusEmpty</span>[<span class="title">F</span>[<span class="title">_</span>]] <span class="keyword">extends</span> <span class="title">Plus</span>[<span class="title">F</span>] {</span> self =&gt;
+  <span class="comment">////</span>
+  <span class="keyword">def</span> empty[A]: F[A]
+}
+
+<span class="class"><span class="keyword">trait</span> <span class="title">Plus</span>[<span class="title">F</span>[<span class="title">_</span>]]  {</span> self =&gt;
+  <span class="keyword">def</span> plus[A](a: F[A], b: =&gt; F[A]): F[A]
+}
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre>scala&gt; <span class="keyword">List</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>) &lt;+&gt; <span class="keyword">List</span>(<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>)
+res43: <span class="keyword">List</span>[Int] = <span class="keyword">List</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>)
+
+scala&gt; (<span class="number">1</span> |-&gt; <span class="number">50</span>) filter { x =&gt; x.shows contains <span class="string">'7'</span> }
+res46: <span class="keyword">List</span>[Int] = <span class="keyword">List</span>(<span class="number">7</span>, <span class="number">17</span>, <span class="number">27</span>, <span class="number">37</span>, <span class="number">47</span>)
+</pre></td></tr></table></figure>
+
+<h2 id="a-knight-s-quest">A knight&#39;s quest</h2>
+<p>Say you have a chess board and only one knight piece on it.
+We want to find out if the knight can reach a certain position
+in three moves.</p>
+<p>移动三步能到达的位置</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+</pre></td><td class="code"><pre><span class="keyword">case</span> class KnightPos(c: Int, r: Int) {
+ <span class="comment"> // 移动一步能到达的位置</span>
+  def move: List[KnightPos] =
+    <span class="keyword">for</span> {
+      KnightPos(c2, r2) &lt;- List(KnightPos(c + <span class="number">2</span>, r - <span class="number">1</span>), KnightPos(c + <span class="number">2</span>, r + <span class="number">1</span>),
+        KnightPos(c - <span class="number">2</span>, r - <span class="number">1</span>), KnightPos(c - <span class="number">2</span>, r + <span class="number">1</span>),
+        KnightPos(c + <span class="number">1</span>, r - <span class="number">2</span>), KnightPos(c + <span class="number">1</span>, r + <span class="number">2</span>),
+        KnightPos(c - <span class="number">1</span>, r - <span class="number">2</span>), KnightPos(c - <span class="number">1</span>, r + <span class="number">2</span>)) <span class="keyword">if</span> (
+        ((<span class="number">1</span> |-&gt; <span class="number">8</span>) <span class="operator">contains</span> c2) && ((<span class="number">1</span> |-&gt; <span class="number">8</span>) <span class="operator">contains</span> r2))
+    } yield KnightPos(c2, r2)
+
+ <span class="comment"> // 移动三步</span>
+  def in3: List[KnightPos] =
+    <span class="keyword">for</span> {
+      <span class="keyword">first</span> &lt;- move
+      <span class="keyword">second</span> &lt;- <span class="keyword">first</span>.move
+      <span class="keyword">third</span> &lt;- <span class="keyword">second</span>.move
+    } yield <span class="keyword">third</span>
+    
+ <span class="comment"> // 移动三步是否能到达这个位置</span>
+  def canReachIn3(<span class="function"><span class="keyword">end</span>: <span class="title">KnightPos</span>): <span class="title">Boolean</span> = <span class="title">in3</span> <span class="title">contains</span> <span class="title">end</span></span>
+}
+</pre></td></tr></table></figure>
+
+<h2 id="writer">Writer</h2>
+<p>Whereas the Maybe monad is for values with an added context of 
+failure, and the list monad is for nondeterministic values, Writer
+monad is for values that have another value attached that acts as a
+sort of log value.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code"><pre>def isBigGang(x: Int): (Boolean, String) =
+  (x &gt; 9, "Compared gang size to 9.")
+
+implicit class PairOps[<span class="link_label">A</span>](<span class="link_url">pair: (A, String</span>)) {
+  def applyLog[<span class="link_label">B</span>](<span class="link_url">f: A =&gt; (B, String</span>)): (B, String) = {
+<span class="code">    val (x, log) = pair</span>
+<span class="code">    val (y, newlog) = f(x)</span>
+<span class="code">    (y, log ++ newlog)</span>
+  }
+}
+
+(3, "Smallish gang.") applyLog isBigGang  // (false,Smallish gang.Compared gang size to 9.)
+</pre></td></tr></table></figure>
+
+<p>version 2</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre>implicit class PairOps[<span class="link_label">A, B: Monoid</span>](<span class="link_url">pair: (A, B</span>)) {
+  def applyLog[<span class="link_label">C</span>](<span class="link_url">f: A =&gt; (C, B</span>)): (C, B) = {
+<span class="code">    val (x, log) = pair</span>
+<span class="code">    val (y, newlog) = f(x)</span>
+<span class="code">    (y, log |+| newlog)</span>
+  }
+}
+
+// (false,Smallish gang.Compared gang size to 9.)
+(3, "Smallish gang.") applyLog isBigGang
+</pre></td></tr></table></figure>
+
+<h3 id="writer-define">Writer define</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+</pre></td><td class="code"><pre><span class="keyword">type</span> Writer[+W, +A] = WriterT[Id, W, A]
+
+<span class="keyword">sealed</span> <span class="class"><span class="keyword">trait</span> <span class="title">WriterT</span>[<span class="title">F</span>[+<span class="title">_</span>], +<span class="title">W</span>, +<span class="title">A</span>] {</span> self =&gt;
+  <span class="keyword">val</span> run: F[(W, A)]
+
+  <span class="keyword">def</span> written(implicit F: Functor[F]): F[W] =
+    F.map(run)(_._1)
+  <span class="keyword">def</span> value(implicit F: Functor[F]): F[A] =
+    F.map(run)(_._2)
+}
+
+<span class="class"><span class="keyword">trait</span> <span class="title">WriterV</span>[<span class="title">A</span>] <span class="keyword">extends</span> <span class="title">Ops</span>[<span class="title">A</span>] {</span>
+  <span class="keyword">def</span> set[W](w: W): Writer[W, A] = WriterT.writer(w -&gt; self)
+
+  <span class="keyword">def</span> tell: Writer[A, Unit] = WriterT.tell(self)
+}
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre>scala&gt; <span class="number">3.</span><span class="keyword">set</span>(<span class="string">"something"</span>)
+<span class="label">res57:</span> scalaz<span class="preprocessor">.Writer</span>[String,Int] = scalaz<span class="preprocessor">.WriterTFunctions</span>$$anon$26<span class="localvars">@159663</span>c3
+
+scala&gt; <span class="string">"something"</span><span class="preprocessor">.tell</span>
+<span class="label">res58:</span> scalaz<span class="preprocessor">.Writer</span>[String,Unit] = scalaz<span class="preprocessor">.WriterTFunctions</span>$$anon$26<span class="localvars">@374</span>de9cf
+
+scala&gt; MonadWriter[Writer, String]
+<span class="label">res62:</span> scalaz<span class="preprocessor">.MonadWriter</span>[scalaz<span class="preprocessor">.Writer</span>,String] = scalaz<span class="preprocessor">.WriterTInstances</span>$$anon$1<span class="localvars">@6</span>b8501fa
+
+scala&gt; MonadWriter[Writer, String]<span class="preprocessor">.point</span>(<span class="number">3</span>)<span class="preprocessor">.run</span>
+<span class="label">res64:</span> (String, Int) = (<span class="string">""</span>,<span class="number">3</span>)
+</pre></td></tr></table></figure>
+
+<h3 id="using-for-syntax-with-writer">Using for syntax with Writer</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+</pre></td><td class="code"><pre>scala&gt; <span class="function"><span class="keyword">def</span> <span class="title">logNumber</span><span class="params">(x: Int)</span>:</span> Writer[List[String], Int] =
+         x.set(List(<span class="string">"Got number: "</span> + x.shows))
+logNumber: (x: Int)scalaz.Writer[List[String],Int]
+
+scala&gt; <span class="function"><span class="keyword">def</span> <span class="title">multWithLog</span>:</span> Writer[List[String], Int] = <span class="keyword">for</span> {
+         a &lt;- logNumber(<span class="number">3</span>)
+         b &lt;- logNumber(<span class="number">5</span>)
+       } <span class="keyword">yield</span> a * b
+multWithLog: scalaz.Writer[List[String],Int]
+
+scala&gt; multWithLog.run
+res67: (List[String], Int) = (List(Got number: <span class="number">3</span>, Got number: <span class="number">5</span>),<span class="number">15</span>)
+
+
+<span class="function"><span class="keyword">def</span> <span class="title">gcd</span><span class="params">(a: Int, b: Int)</span>:</span> Writer[List[String], Int] =
+  <span class="keyword">if</span> (b == <span class="number">0</span>)
+    <span class="keyword">for</span> {
+      _ &lt;- List(<span class="string">"Finished with "</span> + a.shows).tell
+    } <span class="keyword">yield</span> a
+  <span class="keyword">else</span>
+    List(a.shows + <span class="string">" mod "</span> + b.shows + <span class="string">" = "</span> + (a % b).shows).tell &gt;&gt;= { _ =&gt;
+      gcd(b, a % b)
+    }
+
+gcd(<span class="number">8</span>, <span class="number">3</span>).run
+</pre></td></tr></table></figure>
+
+<p><a href="http://docs.scala-lang.org/overviews/collections/performance-characteristics.html">What stands out for immutable collection is Vector since
+it has effective constant for all operations.</a></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre><span class="function"><span class="keyword">def</span> <span class="title">gcd</span><span class="params">(a: Int, b: Int)</span>:</span> Writer[Vector[String], Int] =
+  <span class="keyword">if</span> (b == <span class="number">0</span>) <span class="keyword">for</span> {
+      _ &lt;- Vector(<span class="string">"Finished with "</span> + a.shows).tell
+    } <span class="keyword">yield</span> a
+  <span class="keyword">else</span> <span class="keyword">for</span> {
+      result &lt;- gcd(b, a % b)
+      _ &lt;- Vector(a.shows + <span class="string">" mod "</span> + b.shows + <span class="string">" = "</span> + (a % b).shows).tell
+    } <span class="keyword">yield</span> result
+</pre></td></tr></table></figure>
+
+<p>性能比较</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+</pre></td><td class="code"><pre><span class="keyword">import</span> std.vector._
+
+<span class="function"><span class="keyword">def</span> <span class="title">vectorFinalCountDown</span><span class="params">(x: Int)</span>:</span> Writer[Vector[String], Unit] = {
+  <span class="keyword">import</span> annotation.tailrec
+  <span class="decorator">@tailrec def doFinalCountDown(x: Int, w: Writer[Vector[String], Unit]): Writer[Vector[String], Unit] = x match {</span>
+    case <span class="number">0</span> =&gt; w &gt;&gt;= { _ =&gt; Vector(<span class="string">"0"</span>).tell }
+    case x =&gt; doFinalCountDown(x - <span class="number">1</span>, w &gt;&gt;= { _ =&gt;
+      Vector(x.shows).tell
+    })
+  }
+  val t0 = System.currentTimeMillis
+  val r = doFinalCountDown(x, Vector[String]().tell)
+  val t1 = System.currentTimeMillis
+  r &gt;&gt;= { _ =&gt; Vector((t1 - t0).shows + <span class="string">" msec"</span>).tell }
+}
+
+<span class="function"><span class="keyword">def</span> <span class="title">listFinalCountDown</span><span class="params">(x: Int)</span>:</span> Writer[List[String], Unit] = {
+  <span class="keyword">import</span> annotation.tailrec
+  <span class="decorator">@tailrec def doFinalCountDown(x: Int, w: Writer[List[String], Unit]): Writer[List[String], Unit] = x match {</span>
+    case <span class="number">0</span> =&gt; w &gt;&gt;= { _ =&gt; List(<span class="string">"0"</span>).tell }
+    case x =&gt; doFinalCountDown(x - <span class="number">1</span>, w &gt;&gt;= { _ =&gt;
+      List(x.shows).tell
+    })
+  }
+  val t0 = System.currentTimeMillis
+  val r = doFinalCountDown(x, List[String]().tell)
+  val t1 = System.currentTimeMillis
+  r &gt;&gt;= { _ =&gt; List((t1 - t0).shows + <span class="string">" msec"</span>).tell }
+}
+</pre></td></tr></table></figure>
+
+<h2 id="reader">Reader</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+</pre></td><td class="code"><pre><span class="comment">// function as a functor</span>
+scala&gt; val f = (_: Int) * <span class="number">5</span>
+f: Int =&gt; Int = &lt;function1&gt;
+
+scala&gt; val g = (_: Int) + <span class="number">3</span>
+g: Int =&gt; Int = &lt;function1&gt;
+
+scala&gt; (g map f)(<span class="number">8</span>)
+res22: Int = <span class="number">55</span>
+
+<span class="comment">// function as a applicative</span>
+scala&gt; val f = ({(_: Int) * <span class="number">2</span>} |@| {(_: Int) + <span class="number">10</span>}) {_ + _}
+f: Int =&gt; Int = &lt;function1&gt;
+
+scala&gt; f(<span class="number">3</span>)
+res35: Int = <span class="number">19</span>
+
+<span class="comment">// function as a monad</span>
+scala&gt; val addStuff: Int =&gt; Int = <span class="keyword">for</span> {
+         a &lt;- (_: Int) * <span class="number">2</span>
+         b &lt;- (_: Int) + <span class="number">10</span>
+       } <span class="keyword">yield</span> a + b
+addStuff: Int =&gt; Int = &lt;function1&gt;
+
+scala&gt; addStuff(<span class="number">3</span>)
+res39: Int = <span class="number">19</span>
+</pre></td></tr></table></figure>
+
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/scala/">scala</a><a href="/tags/scalaz/">scalaz</a>
+  </div>
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://zhpooer.github.io/2014/07/29/learning-scalaz-进阶/" data-title="learning scalaz 进阶 | Poe&#39;s World" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2014/07/30/learning-scalaz-进阶2/" title="learning scalaz 进阶2">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  learning scalaz 进阶2</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2014/07/29/learning-scalaz/"  title="learning scalaz">
+ <strong>NEXT:</strong><br/> 
+ <span>learning scalaz
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#tagged-type"><span class="toc-number">1.</span> <span class="toc-text">Tagged type</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#monoids"><span class="toc-number">2.</span> <span class="toc-text">Monoids</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#tags-multiplication"><span class="toc-number">3.</span> <span class="toc-text">Tags.Multiplication</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#tags-disjunction-and-tags-conjunction"><span class="toc-number">3.1.</span> <span class="toc-text">Tags.Disjunction and Tags.Conjunction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ordering-as-monoid"><span class="toc-number">3.2.</span> <span class="toc-text">Ordering as Monoid</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#functor-laws"><span class="toc-number">4.</span> <span class="toc-text">Functor Laws</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#applicative-laws"><span class="toc-number">5.</span> <span class="toc-text">Applicative Laws</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#semigroup-law"><span class="toc-number">6.</span> <span class="toc-text">Semigroup Law</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#monoid-laws"><span class="toc-number">7.</span> <span class="toc-text">Monoid Laws</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#option-as-monoid"><span class="toc-number">8.</span> <span class="toc-text">Option as Monoid</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#foldable"><span class="toc-number">9.</span> <span class="toc-text">Foldable</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#monads"><span class="toc-number">10.</span> <span class="toc-text">Monads</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#bind"><span class="toc-number">10.1.</span> <span class="toc-text">Bind</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#monad"><span class="toc-number">10.2.</span> <span class="toc-text">Monad</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#-"><span class="toc-number">10.2.1.</span> <span class="toc-text">小鸟的案例</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#for-syntax"><span class="toc-number">10.3.</span> <span class="toc-text">for syntax</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#list-monad"><span class="toc-number">10.4.</span> <span class="toc-text">List Monad</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#monadplus-and-the-guard-function"><span class="toc-number">10.5.</span> <span class="toc-text">MonadPlus and the guard function</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#a-knight-s-quest"><span class="toc-number">10.6.</span> <span class="toc-text">A knight&#39;s quest</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#writer"><span class="toc-number">10.7.</span> <span class="toc-text">Writer</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#writer-define"><span class="toc-number">10.7.1.</span> <span class="toc-text">Writer define</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#using-for-syntax-with-writer"><span class="toc-number">10.7.2.</span> <span class="toc-text">Using for syntax with Writer</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#reader"><span class="toc-number">10.8.</span> <span class="toc-text">Reader</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/AJAX/" title="AJAX">AJAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+		
+			<li><a href="/tags/DOM/" title="DOM">DOM<sup>2</sup></a></li>
+		
+			<li><a href="/tags/EL表达式/" title="EL表达式">EL表达式<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Hibernate/" title="Hibernate">Hibernate<sup>2</sup></a></li>
+		
+			<li><a href="/tags/HttpSession/" title="HttpSession">HttpSession<sup>1</sup></a></li>
+		
+			<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JSP/" title="JSP">JSP<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaBean/" title="JavaBean">JavaBean<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaScript/" title="JavaScript">JavaScript<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Mybatis/" title="Mybatis">Mybatis<sup>1</sup></a></li>
+		
+			<li><a href="/tags/SAX/" title="SAX">SAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletRequest/" title="ServletRequest">ServletRequest<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletResponse/" title="ServletResponse">ServletResponse<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Spring/" title="Spring">Spring<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Spring MVC/" title="Spring MVC">Spring MVC<sup>1</sup></a></li>
+		
+			<li><a href="/tags/String/" title="String">String<sup>1</sup></a></li>
+		
+			<li><a href="/tags/StringBuffer/" title="StringBuffer">StringBuffer<sup>1</sup></a></li>
+		
+			<li><a href="/tags/activiti/" title="activiti">activiti<sup>2</sup></a></li>
+		
+			<li><a href="/tags/akka/" title="akka">akka<sup>6</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2014 
+		
+		<a href="http://zhpooer.github.io" target="_blank" title="zhpooer">zhpooer</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"zhpoooer"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>

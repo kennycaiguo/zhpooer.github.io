@@ -2,6 +2,86 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://zhpooer.github.io/2014/08/07/play-for-scala-getting-start/</loc>
+    <lastmod>2014-08-07T08:35:31.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://zhpooer.github.io/2014/08/06/akka-in-action-integration/</loc>
+    <lastmod>2014-08-06T06:45:54.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://zhpooer.github.io/2014/08/06/akka-in-action-working-with-transactions/</loc>
+    <lastmod>2014-08-06T01:47:35.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://zhpooer.github.io/2014/08/05/akka-in-action-message-channels/</loc>
+    <lastmod>2014-08-05T03:11:47.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://zhpooer.github.io/2014/08/04/akka-in-action-system-structure/</loc>
+    <lastmod>2014-08-04T10:47:29.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://zhpooer.github.io/2014/08/04/akka-in-action-distribute-akka-app/</loc>
+    <lastmod>2014-08-04T01:58:24.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://zhpooer.github.io/2014/08/03/akka-in-action-testing-actors/</loc>
+    <lastmod>2014-08-03T07:20:54.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://zhpooer.github.io/2014/08/03/akka-in-action-introducing/</loc>
+    <lastmod>2014-08-03T03:15:32.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://zhpooer.github.io/2014/08/02/vim-%E5%BF%AB%E6%8D%B7%E9%94%AE%E5%B0%8F%E8%AE%A1/</loc>
+    <lastmod>2014-08-02T13:31:16.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://zhpooer.github.io/about/index.html</loc>
+    <lastmod>2014-05-16T10:54:17.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://zhpooer.github.io/2014/07/30/learning-scalaz-%E8%BF%9B%E9%98%B63/</loc>
+    <lastmod>2014-07-30T06:43:47.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://zhpooer.github.io/2014/07/30/learning-scalaz-%E8%BF%9B%E9%98%B62/</loc>
+    <lastmod>2014-07-29T23:48:27.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://zhpooer.github.io/2014/07/29/learning-scalaz-%E8%BF%9B%E9%98%B6/</loc>
+    <lastmod>2014-07-29T09:17:46.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://zhpooer.github.io/2014/07/29/learning-scalaz/</loc>
+    <lastmod>2014-07-29T06:48:01.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://zhpooer.github.io/2014/07/28/functional-programming-in-scala-%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E5%85%A5%E9%97%A8/</loc>
+    <lastmod>2014-07-28T01:14:32.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://zhpooer.github.io/2014/07/28/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day63-%E5%8C%BB%E8%8D%AF%E9%9B%86%E4%B8%AD%E9%87%87%E8%B4%AD%E5%B9%B3%E5%8F%B0-%E9%87%87%E8%B4%AD%E5%8D%95/</loc>
+    <lastmod>2014-07-28T02:41:29.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://zhpooer.github.io/2014/07/25/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day63-%E5%8C%BB%E8%8D%AF%E9%9B%86%E4%B8%AD%E9%87%87%E8%B4%AD%E5%B9%B3%E5%8F%B0-%E8%8D%AF%E5%93%81%E7%9B%AE%E5%BD%95/</loc>
     <lastmod>2014-07-25T01:04:29.000Z</lastmod>
   </url>
@@ -69,11 +149,6 @@
   <url>
     <loc>http://zhpooer.github.io/2014/07/15/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2day57-mybatis/</loc>
     <lastmod>2014-07-15T01:12:17.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://zhpooer.github.io/about/index.html</loc>
-    <lastmod>2014-05-16T10:54:17.000Z</lastmod>
   </url>
   
   <url>
