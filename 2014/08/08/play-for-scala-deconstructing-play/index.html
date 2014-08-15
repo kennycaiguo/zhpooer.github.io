@@ -1,0 +1,1053 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Play for Scala-Deconstructing Play | Poe&#39;s World</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="zhpooer">
+    
+    <meta name="description" content="Drawing the architectural big picture
+When a web client sends HTTP requests to a Play application,
+the request is handled by the embedded HTTP server,">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="Poe&#39;s World" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="Poe&#39;s World" title="Poe&#39;s World"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Poe&#39;s World">Poe&#39;s World</a></h1>
+				<h2 class="blog-motto">竹杖芒鞋轻胜马，一蓑烟雨任平生</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/english-monthly">英语角</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:zhpooer.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/08/08/play-for-scala-deconstructing-play/" title="Play for Scala-Deconstructing Play" itemprop="url">Play for Scala-Deconstructing Play</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://zhpooer.github.io" title="zhpooer">zhpooer</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2014-08-08T07:53:21.000Z" itemprop="datePublished">8月 8 2014</time>
+    更新日期:<time datetime="2014-08-09T08:05:53.000Z" itemprop="dateModified">8月 9 2014</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#drawing-the-architectural-big-picture"><span class="toc-number">1.</span> <span class="toc-text">Drawing the architectural big picture</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#the-play-server"><span class="toc-number">1.1.</span> <span class="toc-text">The Play server</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mvc"><span class="toc-number">1.2.</span> <span class="toc-text">MVC</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#rest"><span class="toc-number">1.3.</span> <span class="toc-text">REST</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#application-configuration"><span class="toc-number">2.</span> <span class="toc-text">Application configuration</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#creating-the-default-configuration"><span class="toc-number">2.1.</span> <span class="toc-text">Creating the default configuration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#configuration-file-format"><span class="toc-number">2.2.</span> <span class="toc-text">Configuration file format</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#include"><span class="toc-number">2.2.1.</span> <span class="toc-text">include</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#merging-values-from-multiple-files"><span class="toc-number">2.2.2.</span> <span class="toc-text">MERGING VALUES FROM MULTIPLE FILES</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#configuration-file-overrides"><span class="toc-number">2.2.3.</span> <span class="toc-text">Configuration file overrides</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#custom-application-configuration"><span class="toc-number">2.2.4.</span> <span class="toc-text">Custom application configuration</span></a></li></ol></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#the-model-adding-data-structures-and-business-logic"><span class="toc-number">3.</span> <span class="toc-text">The model—adding data structures and business logic</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#database-centric-design"><span class="toc-number">3.1.</span> <span class="toc-text">Database-centric design</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#model-class-design"><span class="toc-number">3.2.</span> <span class="toc-text">Model class design</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#defining-case-classes"><span class="toc-number">3.3.</span> <span class="toc-text">Defining case classes</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#persistence-api-integration"><span class="toc-number">3.4.</span> <span class="toc-text">Persistence API integration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#using-slick-for-database-access"><span class="toc-number">3.5.</span> <span class="toc-text">Using Slick for database access</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#controllers-handling-http-requests-and-responses"><span class="toc-number">4.</span> <span class="toc-text">Controllers—handling HTTP requests and responses</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#url-centric-design"><span class="toc-number">4.1.</span> <span class="toc-text">URL-centric design</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#http-resources"><span class="toc-number">4.1.1.</span> <span class="toc-text">Http resources</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#resource-oriented-architecture"><span class="toc-number">4.1.2.</span> <span class="toc-text">RESOURCE-ORIENTED ARCHITECTURE</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#routing-http-requests-to-controller-action-methods"><span class="toc-number">4.2.</span> <span class="toc-text">Routing HTTP requests to controller action methods</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#binding-http-data-to-scala-objects"><span class="toc-number">4.3.</span> <span class="toc-text">Binding HTTP data to Scala objects</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#generating-different-types-of-http-response"><span class="toc-number">4.4.</span> <span class="toc-text">Generating different types of HTTP response</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#view-template-formatting-output"><span class="toc-number">5.</span> <span class="toc-text">View template—formatting output</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#ui-centric-design"><span class="toc-number">5.1.</span> <span class="toc-text">UI-centric design</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#saas-applications"><span class="toc-number">5.1.1.</span> <span class="toc-text">SAAS APPLICATIONS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mobile-applications"><span class="toc-number">5.1.2.</span> <span class="toc-text">MOBILE APPLICATIONS</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#html-first-templates"><span class="toc-number">5.2.</span> <span class="toc-text">HTML-first templates</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#user-interface-components"><span class="toc-number">5.2.1.</span> <span class="toc-text">USER-INTERFACE COMPONENTS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#html-templates"><span class="toc-number">5.2.2.</span> <span class="toc-text">HTML TEMPLATES</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#javascript-widgets"><span class="toc-number">5.2.3.</span> <span class="toc-text">JAVASCRIPT WIDGETS</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#type-safe-scala-templates"><span class="toc-number">5.3.</span> <span class="toc-text">Type-safe Scala templates</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#starting-with-a-minimal-template"><span class="toc-number">5.3.1.</span> <span class="toc-text">STARTING WITH A MINIMAL TEMPLATE</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#adding-dynamic-content"><span class="toc-number">5.3.2.</span> <span class="toc-text">ADDING DYNAMIC CONTENT</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#basic-template-syntax"><span class="toc-number">5.3.3.</span> <span class="toc-text">BASIC TEMPLATE SYNTAX</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#rendering-templates-scala-template-functions"><span class="toc-number">5.4.</span> <span class="toc-text">Rendering templates—Scala template functions</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#static-and-compiled-assets"><span class="toc-number">6.</span> <span class="toc-text">Static and compiled assets</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#serving-assets"><span class="toc-number">6.1.</span> <span class="toc-text">Serving assets</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#compiling-assets"><span class="toc-number">6.2.</span> <span class="toc-text">Compiling assets</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#jobs-starting-processes"><span class="toc-number">7.</span> <span class="toc-text">Jobs—starting processes</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#asynchronous-jobs"><span class="toc-number">7.1.</span> <span class="toc-text">Asynchronous jobs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#scheduled-jobs"><span class="toc-number">7.2.</span> <span class="toc-text">Scheduled jobs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#asynchronous-results-and-suspended-requests"><span class="toc-number">7.3.</span> <span class="toc-text">Asynchronous results and suspended requests</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#modules-structuring-your-application"><span class="toc-number">8.</span> <span class="toc-text">Modules—structuring your application</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#third-party-modules"><span class="toc-number">8.1.</span> <span class="toc-text">Third-party modules</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#extracting-custom-modules"><span class="toc-number">8.2.</span> <span class="toc-text">Extracting custom modules</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#module-first-application-architecture"><span class="toc-number">8.3.</span> <span class="toc-text">Module-first application architecture</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#deciding-whether-to-write-a-custom-module"><span class="toc-number">8.4.</span> <span class="toc-text">Deciding whether to write a custom module</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#module-architecture"><span class="toc-number">8.5.</span> <span class="toc-text">Module architecture</span></a></li></ol>
+		</div>
+		
+		<h1 id="drawing-the-architectural-big-picture">Drawing the architectural big picture</h1>
+<p>When a web client sends HTTP requests to a Play application,
+the request is handled by the embedded HTTP server,
+which provides the Play framework’s network
+interface. The server forwards the request data to the Play framework,
+which generates a response that the server sends to the client.</p>
+<h2 id="the-play-server">The Play server</h2>
+<p>Play’s HTTP server is JBoss Netty, one of several Java NIO non-blocking servers.</p>
+<p>When you use a web framework that’s based on the Java Servlet API,
+you package your web application as some kind of archive that
+you deploy to an application
+server such as Tomcat, which runs your application. </p>
+<p>With the Play framework it’s different:
+Play includes its own embedded HTTP server, so you don’t need a separate
+application server to run your application.</p>
+<h2 id="mvc">MVC</h2>
+<p>The MVC design pattern separates an application’s logic and data from the user
+interface’s presentation and interaction,
+maintaining a loose coupling between the separate components.</p>
+<p>The Play framework achieves all of this with fewer layers than traditional Java EE
+web frameworks by using the controller API to expose the HTTP directly, using HTTP
+concepts, instead of trying to provide an abstraction on top of it. </p>
+<h2 id="rest">REST</h2>
+<p>REST is an architectural style that characterizes the way HTTP
+works, featuring constraints such as stateless client-server
+interaction and a uniform interface.</p>
+<h1 id="application-configuration">Application configuration</h1>
+<p>Play creates an initial configuration file for you, and almost all of the
+many configuration parameters are optional, with sensible defaults,
+so you don’t need to set them all yourself.</p>
+<h2 id="creating-the-default-configuration">Creating the default configuration</h2>
+<p><code>conf/application.conf</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre>application<span class="preprocessor">.secret</span>=<span class="string">"l:2e&gt;xI9kj@GkHu?K9D[L5OU=Dc&lt;8i6jugIVE^[`?xSF]udB8ke"</span>
+application<span class="preprocessor">.langs</span>=<span class="string">"en"</span>
+
+logger<span class="preprocessor">.root</span>=ERROR
+logger<span class="preprocessor">.play</span>=INFO
+logger<span class="preprocessor">.application</span>=DEBUG
+</pre></td></tr></table></figure>
+
+<h2 id="configuration-file-format">Configuration file format</h2>
+<p>Play uses the Typesafe config library (<a href="https://github.com/typesafehub/config" target="_blank">https://github.com/typesafehub/config</a>).</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre>logger<span class="preprocessor">.net</span><span class="preprocessor">.sf</span><span class="preprocessor">.ehcache</span><span class="preprocessor">.Cache</span>=DEBUG
+logger<span class="preprocessor">.net</span><span class="preprocessor">.sf</span><span class="preprocessor">.ehcache</span><span class="preprocessor">.CacheManager</span>=${logger<span class="preprocessor">.net</span><span class="preprocessor">.sf</span><span class="preprocessor">.ehcache</span><span class="preprocessor">.Cache</span>}
+logger<span class="preprocessor">.net</span><span class="preprocessor">.sf</span><span class="preprocessor">.ehcache</span><span class="preprocessor">.store</span><span class="preprocessor">.MemoryStore</span>=${logger<span class="preprocessor">.net</span><span class="preprocessor">.sf</span><span class="preprocessor">.ehcache</span><span class="preprocessor">.Cache</span>}
+
+log<span class="preprocessor">.directory</span> = /var/log
+log<span class="preprocessor">.access</span> = ${log<span class="preprocessor">.directory</span>}/access<span class="preprocessor">.log</span>
+log<span class="preprocessor">.errors</span> = ${log<span class="preprocessor">.directory</span>}/errors<span class="preprocessor">.log</span>
+</pre></td></tr></table></figure>
+
+<h3 id="include">include</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre><span class="tag">db</span>: <span class="rules">{
+  <span class="rule"><span class="attribute">default</span>:<span class="value"> {
+    driver: <span class="string">"org.h2.Driver"</span>,
+    url: <span class="string">"jdbc:h2:mem:play"</span>,
+    user: <span class="string">"sa"</span>,
+    password: <span class="string">""</span>,
+  </span></span></span>}
+}
+</pre></td></tr></table></figure>
+
+<p><code>application.conf</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>include <span class="string">"db-default.conf"</span>
+<span class="preprocessor"># override user name and password</span>
+db<span class="preprocessor">.default</span><span class="preprocessor">.user</span> = products
+db<span class="preprocessor">.default</span><span class="preprocessor">.password</span> = clippy
+</pre></td></tr></table></figure>
+
+<h3 id="merging-values-from-multiple-files">MERGING VALUES FROM MULTIPLE FILES</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+</pre></td><td class="code"><pre><span class="label">db:</span> {
+  default: {
+    user: <span class="string">"products"</span>
+    password: <span class="string">"clippy must die!"</span>
+    logStatements: true
+  }
+}
+// 方式二, 加逗号
+<span class="label">db:</span> {
+  default: {
+    user: <span class="string">"products"</span>,
+    password: <span class="string">"clippy must die!"</span>,
+    logStatements: true,
+  }
+}
+// 方式三
+db<span class="preprocessor">.default</span><span class="preprocessor">.driver</span> = org<span class="preprocessor">.h</span>2<span class="preprocessor">.Driver</span>
+db<span class="preprocessor">.default</span><span class="preprocessor">.url</span> = jdbc:h2:mem:play
+db<span class="preprocessor">.default</span><span class="preprocessor">.user</span> = products
+db<span class="preprocessor">.default</span><span class="preprocessor">.password</span> = <span class="string">"clippy must die!"</span>
+db<span class="preprocessor">.default</span><span class="preprocessor">.logStatements</span> = true
+</pre></td></tr></table></figure>
+
+<p>The configuration format is specified in detail by the Human-Optimized Config
+Object Notation (HOCON )
+specification (<a href="https://github.com/typesafehub/config/blob/master/HOCON.md" target="_blank">https://github.com/typesafehub/config/blob/master/HOCON.md</a>).</p>
+<h3 id="configuration-file-overrides">Configuration file overrides</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>start -Ddb<span class="preprocessor">.default</span><span class="preprocessor">.url</span>=postgres://localhost:products@clippy/products
+
+run -Dconfig<span class="preprocessor">.file</span>=conf/production<span class="preprocessor">.conf</span>
+run -Dconfig<span class="preprocessor">.file</span>=/etc/products/production<span class="preprocessor">.conf</span>
+</pre></td></tr></table></figure>
+
+<h3 id="custom-application-configuration">Custom application configuration</h3>
+<p>For example, suppose you want to display version information in your web applica-
+tion’s page footer.
+<code>application.conf</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre><span class="attribute">application.revision </span>=<span class="string"> 42</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>@import play<span class="preprocessor">.api</span><span class="preprocessor">.Play</span><span class="preprocessor">.current</span>
+&lt;footer&gt;
+Revision @current<span class="preprocessor">.configuration</span><span class="preprocessor">.getString</span>(<span class="string">"application.revision"</span>)
+&lt;/footer&gt;
+</pre></td></tr></table></figure>
+
+<p>The getString method returns an Option[String] rather than a String, but the
+template outputs the value or an empty string, depending on whether the Option has
+a value.</p>
+<h1 id="the-model-adding-data-structures-and-business-logic">The model—adding data structures and business logic</h1>
+<p>The model contains the application’s domain-specific data and logic.</p>
+<p>This data is usually kept in persistent storage, such as a relational database,
+in which case the model handles persistence.</p>
+<p>In a layered application architecture, the domain-specific logic is usually called
+business logic and doesn’t have a dependency on any of the application’s external inter-
+faces, such as a web-based user interface.</p>
+<h2 id="database-centric-design">Database-centric design</h2>
+<p>One good way to design an application is to start with a logical data model,
+as well as an actual physical database.</p>
+<p>Database-centric design means starting with the data model: identifying entities
+and their attributes and relationships. </p>
+<p>For example, we can design a product catalog application by first designing a data-
+base for all of the data that we’ll process.</p>
+<ul>
+<li>Product—A Product is a description of a manufactured product as it might appear
+in a catalog, such as “Box of 1000 large plain paperclips,” but not an actual box
+of paperclips. Attributes include a product code, name, and description.</li>
+<li>Stock Item—A Stock Item is a certain quantity of some product at some location,
+such as 500 boxes of a certain kind of paperclip, in a particular Warehouse.
+Attributes include quantity and references to a Product and Warehouse.</li>
+<li>Warehouse—A Warehouse is a place where Stock Items are stored. Attributes
+include a name and geographic location or address.</li>
+<li>Order—An Order is a request to transfer ownership of some quantity of one or
+more Products, specified by Order Lines. Attributes include a date, seller, and
+buyer.</li>
+<li>Order Line—An Order Line specifies a certain quantity of some Product, as part
+of an Order. Attributes include a quantity and a reference to an Order and
+Product.</li>
+</ul>
+<p>The benefit of this approach is that you can use established data modeling techniques
+to come up with a data model that consistently and unambiguously describes your
+application’s domain.</p>
+<h2 id="model-class-design">Model class design</h2>
+<p>There’s more than one way to structure your model. Perhaps the most significant
+choice is whether to keep your domain-specific data and logic separate or together.</p>
+<p>Developers coming to Play and Scala from a Java EE background are likely
+to have separated data and behavior in the past, whereas other developers may have
+used a more object-oriented approach that mixes data and behavior in model classes.</p>
+<p>More generally, the domain data model is specified by classes called
+value objects that don’t contain any logic.</p>
+<p><img src="/img/play_model_layer.png" alt="Two different ways to structure"></p>
+<h2 id="defining-case-classes">Defining case classes</h2>
+<p>We need case classes to represent quantities of various
+products stored in warehouses.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="code"><pre><span class="keyword">case</span> <span class="keyword">class</span> Product(
+  id: <span class="built_in">Long</span>,
+  ean: <span class="built_in">Long</span>,
+  name: <span class="built_in">String</span>,
+  description: <span class="built_in">String</span>)
+
+<span class="keyword">case</span> <span class="keyword">class</span> Warehouse(id: <span class="built_in">Long</span>, name: <span class="built_in">String</span>)
+
+<span class="keyword">case</span> <span class="keyword">class</span> StockItem(
+  id: <span class="built_in">Long</span>,
+  productId: <span class="built_in">Long</span>,
+  warehouseId: <span class="built_in">Long</span>,
+  quantity: <span class="built_in">Long</span>)
+</pre></td></tr></table></figure>
+
+<h2 id="persistence-api-integration">Persistence API integration</h2>
+<p>You can use your case classes to persist the model using a persistence API. In a Play
+application’s architecture, this is entirely separate from the web
+tier; only the model uses (has a dependency on) the persistence API, which in turn
+uses external persistent storage, such as a relational database.</p>
+<p>Play includes the Anorm persistence API so that you can build a complete web
+application, including SQL database access, without any additional libraries. But
+you’re free to use alternative persistence libraries or approaches to persistent storage,
+such as the newer Slick library.</p>
+<h2 id="using-slick-for-database-access">Using Slick for database access</h2>
+<p>Slick is intended as a Scala-based API for relational-database access.</p>
+<p>The idea behind Slick is that you use it instead of using JDBC directly or adding
+a complex object-relational mapping framework.
+Instead, Slick uses Scala language featuresb
+to allow you to map database tables to Scala collections and to execute queries.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+</pre></td><td class="code"><pre>object Product extends Table[<span class="link_label">(Long, String, String)</span>](<span class="link_url">"products"</span>) {
+  def ean = column[<span class="link_label">Long</span>](<span class="link_url">"ean", O.PrimaryKey</span>)
+  def name = column[<span class="link_label">String</span>](<span class="link_url">"name"</span>)
+  def description = column[<span class="link_label">String</span>](<span class="link_url">"description"</span>)
+  def * = ean ~ name ~ description
+}
+
+// you define a query on the Product object:
+val products = for {
+  product <span class="xml"><span class="tag">&lt;<span class="title">-</span> <span class="attribute">Product.sortBy</span>(<span class="attribute">product</span> =&gt;</span></span> product.name.asc)
+} yield (product)
+
+// To execute the query, you can use the query object to generate a list of products,
+// in a database session:
+val url = "jdbc:postgresql://localhost/slick?user=slick&password=slick"
+Database.forURL(url, driver = "org.postgresql.Driver") withSession {
+  val productList = products.list
+}
+</pre></td></tr></table></figure>
+
+<h1 id="controllers-handling-http-requests-and-responses">Controllers—handling HTTP requests and responses</h1>
+<p>One aspect of designing your application is to design a URL scheme for HTTP
+requests, hyperlinks, HTML forms, and possibly a public API.
+In Play, you define this interface in an HTTP routes configuration and implement
+the interface in Scala controller classes.</p>
+<p>More specifically, controllers are the Scala classes that define your application’s
+HTTP interface, and your routes configuration determines which controller method a
+given HTTP request will invoke.</p>
+<p>These controller methods are called actions—Play’s
+architecture is in fact an MVC variant called action-based MVC—so
+you can also think of a controller class as a collection of action methods.</p>
+<h2 id="url-centric-design">URL-centric design</h2>
+<p>This URL-centric design is an alternative to a database-centric design that starts
+with the application’s data, or a UI-centric design that’s
+based on how users will interact with its user interface.</p>
+<p>URL-centric design isn’t better than data model–centric design or UI-centric design,
+although it might make more sense for a developer who thinks in a certain way, or for
+a certain kind of application.</p>
+<h3 id="http-resources">Http resources</h3>
+<p>URL-centric design means identifying your application’s resources, and operations on
+those resources, and creating a series of URLs that provide HTTP access to those
+resources and operations.</p>
+<p>Once you have a solid design, you can add a user-interface
+layer on top of this HTTP interface, and add a model that backs the HTTP resources.</p>
+<p>The key benefit of this approach is that you can create a consistent public API for
+your application that’s more stable than either the physical data model represented by
+its model classes, or the user interface generated by its view templates.</p>
+<p><strong>RESTful web services</strong></p>
+<p>This kind of API is often called a RESTful web service, which means that the API is a
+web service API that conforms to the architectural constraints of representational
+state transfer (REST). </p>
+<h3 id="resource-oriented-architecture">RESOURCE-ORIENTED ARCHITECTURE</h3>
+<p>Modeling HTTP resources is especially useful if the HTTP API is the basis for more
+than one external interface, in what can be called a resource-oriented architecture—a
+REST -style alternative to service-oriented architecture based on addressable resources.</p>
+<p>Resource-oriented architecture is an API-centric perspective on your application,
+in which you consider that HTTP requests won’t necessarily come from your own
+application’s web-based user interface.</p>
+<h2 id="routing-http-requests-to-controller-action-methods">Routing HTTP requests to controller action methods</h2>
+<p>For example, a URL -centric design for our product catalog might give us a URL
+scheme with the following URLs:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre><span class="keyword">GET</span> /
+
+<span class="keyword">GET</span> /products
+<span class="keyword">GET</span> /products?page=<span class="number">2</span>
+<span class="keyword">GET</span> /products?<span class="built_in">filter</span>=zinc
+
+<span class="keyword">GET</span> /product/<span class="number">5010255079763</span>
+
+<span class="keyword">GET</span> /product/<span class="number">5010255079763</span>/edit
+
+PUT /product/<span class="number">5010255079763</span>
+</pre></td></tr></table></figure>
+
+<p>You create a conf/routes file like this</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre>GET /                  controllers<span class="preprocessor">.Application</span><span class="preprocessor">.home</span>()
+GET /products          controllers<span class="preprocessor">.Products</span><span class="preprocessor">.list</span>(page: Int ?= <span class="number">1</span>)
+GET /product/:ean      controllers<span class="preprocessor">.Products</span><span class="preprocessor">.details</span>(ean: Long)
+GET /product/:ean/edit controllers<span class="preprocessor">.Products</span><span class="preprocessor">.edit</span>(ean: Long)
+PUT /product/$ean&lt;\d{<span class="number">13</span>}&gt;   controllers<span class="preprocessor">.Products</span><span class="preprocessor">.update</span>(ean: Long)
+</pre></td></tr></table></figure>
+
+<h2 id="binding-http-data-to-scala-objects">Binding HTTP data to Scala objects</h2>
+<p>Action methods often have parameters, and you also need to be
+able to map HTTP request data to those parameters.</p>
+<h2 id="generating-different-types-of-http-response">Generating different types of HTTP response</h2>
+<p>An HTTP response is not only a response body; the response also includes HTTP
+status codes and HTTP headers that provide additional information about the
+response.</p>
+<h1 id="view-template-formatting-output">View template—formatting output</h1>
+<p>A web framework’s approach to formatting output is a critical design
+choice. View templates are a big deal; HTML templates in particular.</p>
+<h2 id="ui-centric-design">UI-centric design</h2>
+<p>URL-centric design that focuses on the application’s HTTP API.</p>
+<p>UI-centric design starts with user-interface mockups and progressively adds detail
+without starting on the underlying implementation until later, when the interface
+design is established. This approach has become especially popular with the rise of
+SAAS (software as a service) applications.</p>
+<h3 id="saas-applications">SAAS APPLICATIONS</h3>
+<p>37signals popularized UI-centric design in their
+book Getting Real (<a href="http://gettingreal.37signals.com/ch09_Interface_First.php" target="_blank">http://gettingreal.37signals.com/ch09_Interface_First.php</a>),
+which describes the approach as “interface first,” meaning
+simply that you should “design the interface before you start programming.”</p>
+<p>UI-centric design works well for software that focuses on simplicity and usability,
+because functionality must literally compete for space in the UI, whereas functionality
+that you can’t see doesn’t exist.</p>
+<p>In this scenario, database-centric design may seem less
+relevant because the database design gets less attention
+than the UI design, for early versions of the software, at least.</p>
+<h3 id="mobile-applications">MOBILE APPLICATIONS</h3>
+<p>UI-centric design is also a good idea for mobile applications, because it’s better to
+address mobile devices’ design constraints from the start than to attempt to squeeze a
+desktop UI into a small screen later in the development process.</p>
+<h2 id="html-first-templates">HTML-first templates</h2>
+<p>There are two kinds of web framework templating systems, each addressing different
+developer goals: component systems and raw HTML templates.</p>
+<h3 id="user-interface-components">USER-INTERFACE COMPONENTS</h3>
+<p>One approach minimizes the amount of HTML you write, usually by providing a
+user-interface component library. </p>
+<p>The idea is that you construct your user interface
+from UI “building blocks” instead of writing HTML by hand.</p>
+<p>In principle, the benefit of this approach is that it results in a more consistent UI
+with less coding, and there are various frameworks that achieve this goal. But the risk
+is that the UI components are a leaky abstraction, and that you’ll end up having to
+debug invalid or otherwise non-working HTML and JavaScript after all.</p>
+<h3 id="html-templates">HTML TEMPLATES</h3>
+<p>A different kind of template system works by decorating HTML to make content
+dynamic, usually with syntax that provides a combination of tags
+for things like control structures and iteration, and an expression language
+for outputting dynamic values.</p>
+<p>The benefits of starting with HTML become apparent in practice, due to a combina-
+tion of factors.</p>
+<h3 id="javascript-widgets">JAVASCRIPT WIDGETS</h3>
+<p>The opportunity to use a wide selection of JavaScript widgets is the most apparent
+practical result of having control over your application’s HTML.</p>
+<p>JavaScript widgets are different from framework-specific widgets, because they can
+work with any server-side code that gives you control over your HTML and the HTTP
+interface. </p>
+<p>Being in control of the HTML your templates produce means that you have a rich choice of
+JavaScript widgets.</p>
+<h2 id="type-safe-scala-templates">Type-safe Scala templates</h2>
+<p>Play includes a template engine that’s designed to output any kind of text-based
+format, the usual examples being HTML, XML, and plain text.</p>
+<h3 id="starting-with-a-minimal-template">STARTING WITH A MINIMAL TEMPLATE</h3>
+<p>To start with, minimum interference means that all of the template syntax is optional.
+<code>app/views/minimal.scala.html</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre><span class="doctype">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;<span class="title">html</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">head</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">title</span>&gt;</span><span class="tag">&lt;/<span class="title">title</span>&gt;</span>
+  <span class="tag">&lt;/<span class="title">head</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">html</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<h3 id="adding-dynamic-content">ADDING DYNAMIC CONTENT</h3>
+<p><code>app/views/title.scala.html</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre>@(title:String)
+<span class="doctype">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;<span class="title">html</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">head</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">title</span>&gt;</span>@title<span class="tag">&lt;/<span class="title">title</span>&gt;</span>
+  <span class="tag">&lt;/<span class="title">head</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">html</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<h3 id="basic-template-syntax">BASIC TEMPLATE SYNTAX</h3>
+<p>The parameter declaration, like all template syntax,
+starts with the special <code>@</code> character,
+which is followed by a normal Scala function parameter list.</p>
+<p>In the body of a template, the <code>@</code> character can be followed by any Scala
+expression or statement, whose value is inserted into the rendered template output.</p>
+<h2 id="rendering-templates-scala-template-functions">Rendering templates—Scala template functions</h2>
+<p>To use the template in the previous example, we first need to save it in a file in the
+application, such as <code>app/views/products.scala.html</code>. Then we can render the
+template in a controller by calling the template function:
+<code>val html = views.html.title(&quot;New Arrivals&quot;)</code></p>
+<p>This results in the following compiled template—a file in
+<code>target/scala-2.10/src_managed/main/views/html/</code></p>
+<h1 id="static-and-compiled-assets">Static and compiled assets</h1>
+<p>A typical web application includes static content—images, JavaScript, stylesheets, and
+downloads. In Play, these files are called assets.</p>
+<h2 id="serving-assets">Serving assets</h2>
+<p>Play provides an assets controller whose purpose is to serve static files.
+There are two advantages to this approach: you use the usual routes configuration
+and you get additional functionality in the assets controller.</p>
+<p>Using the routes configuration for assets means that you have the same flexibility
+in mapping URLs as you do for dynamic content.</p>
+<p>On top of routing, the assets controller provides additional functionality
+that’s useful for improving performance when serving static files:</p>
+<ul>
+<li>Caching support—Generating HTTP Entity Tags (ETags) to enable caching</li>
+<li>JavaScript minification—Using Google Closure Compiler to reduce the size of
+JavaScript files</li>
+</ul>
+<h2 id="compiling-assets">Compiling assets</h2>
+<p>Play supports one of each:
+LESS and CoffeeScript, languages that improve on CSS and JavaScript, respectively.</p>
+<p>At compile time, LESS and CoffeeScript assets are compiled into CSS and
+JavaScript files. HTTP requests for these assets are handled by the assets controller.</p>
+<h1 id="jobs-starting-processes">Jobs—starting processes</h1>
+<p>Sometimes an application has to run some code outside the normal HTTP request-
+response cycle, either because it’s a long-running task that the web client doesn’t have
+to wait for, or because the task must be executed on a regular cycle, independently of
+any user or client interaction.
+Today, architectures are frequently web-centric,
+based around a web application or deployed on a cloud-based
+application hosting service. These architectures mean that we need a way
+to schedule and execute these jobs from within our web application.</p>
+<h2 id="asynchronous-jobs">Asynchronous jobs</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="code"><pre>import java<span class="preprocessor">.util</span><span class="preprocessor">.Date</span>
+import models<span class="preprocessor">.PickList</span>
+import scala<span class="preprocessor">.concurrent</span>.{ExecutionContext, future}
+
+def sendAsync(warehouse: String) = Action {
+  import ExecutionContext<span class="preprocessor">.Implicits</span><span class="preprocessor">.global</span>
+  future {
+    // Use Scala future to execute block of code asynchronously
+    val pickList = PickList<span class="preprocessor">.find</span>(warehouse)
+    send(views<span class="preprocessor">.html</span><span class="preprocessor">.pickList</span>(warehouse, pickList, new Date))
+  }
+  // Build, render, <span class="keyword">and</span> send pick list somewhere
+  Redirect(routes<span class="preprocessor">.PickLists</span><span class="preprocessor">.index</span>())
+}
+</pre></td></tr></table></figure>
+
+<p>This time, the template rendering code is wrapped in a call
+to <code>scala.concurrent.future</code>, which executes the code asynchronously. </p>
+<h2 id="scheduled-jobs">Scheduled jobs</h2>
+<p>Depending on how our warehouse works, it may be more useful to
+automatically generate a new pick list every half hour.</p>
+<p>To do this, we need a scheduled job that’s triggered automatically,
+without needing anyone to click the button in the user interface.
+Play doesn’t provide scheduling functionality directly, but instead integrates with
+Akka, a library for actor-based concurrency that’s included with Play.</p>
+<p><code>app/Global.scala</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+</pre></td><td class="code"><pre>import akka<span class="preprocessor">.actor</span>.{Actor, Props}
+import models<span class="preprocessor">.Warehouse</span>
+import play<span class="preprocessor">.api</span><span class="preprocessor">.libs</span><span class="preprocessor">.concurrent</span><span class="preprocessor">.Akka</span>
+import play<span class="preprocessor">.api</span><span class="preprocessor">.GlobalSettings</span>
+import play<span class="preprocessor">.api</span><span class="preprocessor">.templates</span><span class="preprocessor">.Html</span>
+import play<span class="preprocessor">.api</span><span class="preprocessor">.libs</span><span class="preprocessor">.concurrent</span><span class="preprocessor">.Execution</span><span class="preprocessor">.Implicits</span><span class="preprocessor">.defaultContext</span>
+
+object Global extends GlobalSettings {
+  override def onStart(application: play<span class="preprocessor">.api</span><span class="preprocessor">.Application</span>) {
+    import scala<span class="preprocessor">.concurrent</span><span class="preprocessor">.duration</span>._
+    import play<span class="preprocessor">.api</span><span class="preprocessor">.Play</span><span class="preprocessor">.current</span>
+    // Run when Play application starts
+    for (warehouse &lt;- Warehouse<span class="preprocessor">.find</span>()) {
+      val actor = Akka<span class="preprocessor">.system</span><span class="preprocessor">.actorOf</span>(
+        Props(new PickListActor(warehouse))
+      )
+      // Create actor for each warehouse
+      Akka<span class="preprocessor">.system</span><span class="preprocessor">.scheduler</span><span class="preprocessor">.schedule</span>(
+        <span class="number">0.</span>seconds, <span class="number">30.</span>minutes, actor, <span class="string">"send"</span>
+      )
+    }
+  }
+}
+</pre></td></tr></table></figure>
+
+<h2 id="asynchronous-results-and-suspended-requests">Asynchronous results and suspended requests</h2>
+<p><code>app/controllers/Dashboard.scala</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+</pre></td><td class="code"><pre><span class="keyword">package</span> controllers
+
+<span class="keyword">import</span> play.api.mvc.{Action, Controller}
+<span class="keyword">import</span> concurrent.{ExecutionContext, Future}
+
+<span class="class"><span class="keyword">object</span> <span class="title">Dashboard</span> <span class="keyword">extends</span> <span class="title">Controller</span> {</span>
+
+  <span class="keyword">def</span> backlog(warehouse: String) = Action {
+    <span class="keyword">import</span> ExecutionContext.Implicits.global
+    <span class="keyword">val</span> backlog = scala.concurrent.future {
+      models.Order.backlog(warehouse)
+    }
+    <span class="comment">// Get a promise of the order backlog without blocking</span>
+    Async {
+      backlog.map(value =&gt; Ok(value))
+    }
+  }
+}
+</pre></td></tr></table></figure>
+
+<p>This is important because it allows
+Play to release threads to a thread pool, making them available to process other HTTP
+requests, so the application can serve a large number of requests
+with a limited number of threads.</p>
+<h1 id="modules-structuring-your-application">Modules—structuring your application</h1>
+<p>A Play module is a Play application dependency—either reusable third-party code or
+an independent part of your own application. The difference between a module and
+any other library dependency is that a module depends on Play and can do the same
+things an application can do. </p>
+<h2 id="third-party-modules">Third-party modules</h2>
+<p>Modules make it possible to extend Play with functionality
+that you can use as if it were built-in,
+without bloating the core framework with features that not everyone needs.</p>
+<p>Here are a few examples of third-party modules that provide different kinds of
+functionality:</p>
+<ul>
+<li>Deadbolt—Role-based authorization that allows you to restrict access
+to controllers and views</li>
+<li>Groovy templates—An alternative template engine that uses the Play 1.x
+Groovy template syntax</li>
+<li>PDF — Adds support for PDF output based on HTML templates</li>
+<li>Redis—Integrates Redis to provide a cache implementation</li>
+<li>Sass—Adds asset file compilation for Sass stylesheet files</li>
+</ul>
+<p>For more information about these and other modules, see the Play Framework
+web site (<a href="http://www.playframework.org" target="_blank">http://www.playframework.org</a>).</p>
+<h2 id="extracting-custom-modules">Extracting custom modules</h2>
+<p>One way to approach custom modules is to think of them as a way to split your applica-
+tions into separate reusable components, which helps keep individual applications
+and modules simple.</p>
+<h2 id="module-first-application-architecture">Module-first application architecture</h2>
+<p>Another approach is to always add new application functionality in a module, when
+you can, only adding to the main application when absolutely necessary.</p>
+<p>With this approach, each application would consist of a smaller core of
+modelspecific functionality and logic, plus a constellation of
+modules that provide separate aspects of application functionality.
+Some of these modules would inevitably be shared between applications.</p>
+<h2 id="deciding-whether-to-write-a-custom-module">Deciding whether to write a custom module</h2>
+<h2 id="module-architecture">Module architecture</h2>
+<p>A module is almost the same thing as a whole application.
+It provides the same kind of things an application has: models, view templates,
+controllers, static files, or other utility
+code. The only thing a module lacks is its own configuration; only the main application’s
+configuration is used. This means that any module configuration properties must be set
+in the application’s <code>conf/application.conf</code> file.</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/scala/">scala</a><a href="/tags/play/">play</a>
+  </div>
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://zhpooer.github.io/2014/08/08/play-for-scala-deconstructing-play/" data-title="Play for Scala-Deconstructing Play | Poe&#39;s World" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2014/08/09/传智播客day64-nosql/" title="传智播客day64-NoSql">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  传智播客day64-NoSql</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2014/08/07/play-for-scala-getting-start/"  title="Play for Scala-Getting Start">
+ <strong>NEXT:</strong><br/> 
+ <span>Play for Scala-Getting Start
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#drawing-the-architectural-big-picture"><span class="toc-number">1.</span> <span class="toc-text">Drawing the architectural big picture</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#the-play-server"><span class="toc-number">1.1.</span> <span class="toc-text">The Play server</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mvc"><span class="toc-number">1.2.</span> <span class="toc-text">MVC</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#rest"><span class="toc-number">1.3.</span> <span class="toc-text">REST</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#application-configuration"><span class="toc-number">2.</span> <span class="toc-text">Application configuration</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#creating-the-default-configuration"><span class="toc-number">2.1.</span> <span class="toc-text">Creating the default configuration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#configuration-file-format"><span class="toc-number">2.2.</span> <span class="toc-text">Configuration file format</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#include"><span class="toc-number">2.2.1.</span> <span class="toc-text">include</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#merging-values-from-multiple-files"><span class="toc-number">2.2.2.</span> <span class="toc-text">MERGING VALUES FROM MULTIPLE FILES</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#configuration-file-overrides"><span class="toc-number">2.2.3.</span> <span class="toc-text">Configuration file overrides</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#custom-application-configuration"><span class="toc-number">2.2.4.</span> <span class="toc-text">Custom application configuration</span></a></li></ol></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#the-model-adding-data-structures-and-business-logic"><span class="toc-number">3.</span> <span class="toc-text">The model—adding data structures and business logic</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#database-centric-design"><span class="toc-number">3.1.</span> <span class="toc-text">Database-centric design</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#model-class-design"><span class="toc-number">3.2.</span> <span class="toc-text">Model class design</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#defining-case-classes"><span class="toc-number">3.3.</span> <span class="toc-text">Defining case classes</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#persistence-api-integration"><span class="toc-number">3.4.</span> <span class="toc-text">Persistence API integration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#using-slick-for-database-access"><span class="toc-number">3.5.</span> <span class="toc-text">Using Slick for database access</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#controllers-handling-http-requests-and-responses"><span class="toc-number">4.</span> <span class="toc-text">Controllers—handling HTTP requests and responses</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#url-centric-design"><span class="toc-number">4.1.</span> <span class="toc-text">URL-centric design</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#http-resources"><span class="toc-number">4.1.1.</span> <span class="toc-text">Http resources</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#resource-oriented-architecture"><span class="toc-number">4.1.2.</span> <span class="toc-text">RESOURCE-ORIENTED ARCHITECTURE</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#routing-http-requests-to-controller-action-methods"><span class="toc-number">4.2.</span> <span class="toc-text">Routing HTTP requests to controller action methods</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#binding-http-data-to-scala-objects"><span class="toc-number">4.3.</span> <span class="toc-text">Binding HTTP data to Scala objects</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#generating-different-types-of-http-response"><span class="toc-number">4.4.</span> <span class="toc-text">Generating different types of HTTP response</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#view-template-formatting-output"><span class="toc-number">5.</span> <span class="toc-text">View template—formatting output</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#ui-centric-design"><span class="toc-number">5.1.</span> <span class="toc-text">UI-centric design</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#saas-applications"><span class="toc-number">5.1.1.</span> <span class="toc-text">SAAS APPLICATIONS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mobile-applications"><span class="toc-number">5.1.2.</span> <span class="toc-text">MOBILE APPLICATIONS</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#html-first-templates"><span class="toc-number">5.2.</span> <span class="toc-text">HTML-first templates</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#user-interface-components"><span class="toc-number">5.2.1.</span> <span class="toc-text">USER-INTERFACE COMPONENTS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#html-templates"><span class="toc-number">5.2.2.</span> <span class="toc-text">HTML TEMPLATES</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#javascript-widgets"><span class="toc-number">5.2.3.</span> <span class="toc-text">JAVASCRIPT WIDGETS</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#type-safe-scala-templates"><span class="toc-number">5.3.</span> <span class="toc-text">Type-safe Scala templates</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#starting-with-a-minimal-template"><span class="toc-number">5.3.1.</span> <span class="toc-text">STARTING WITH A MINIMAL TEMPLATE</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#adding-dynamic-content"><span class="toc-number">5.3.2.</span> <span class="toc-text">ADDING DYNAMIC CONTENT</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#basic-template-syntax"><span class="toc-number">5.3.3.</span> <span class="toc-text">BASIC TEMPLATE SYNTAX</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#rendering-templates-scala-template-functions"><span class="toc-number">5.4.</span> <span class="toc-text">Rendering templates—Scala template functions</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#static-and-compiled-assets"><span class="toc-number">6.</span> <span class="toc-text">Static and compiled assets</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#serving-assets"><span class="toc-number">6.1.</span> <span class="toc-text">Serving assets</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#compiling-assets"><span class="toc-number">6.2.</span> <span class="toc-text">Compiling assets</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#jobs-starting-processes"><span class="toc-number">7.</span> <span class="toc-text">Jobs—starting processes</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#asynchronous-jobs"><span class="toc-number">7.1.</span> <span class="toc-text">Asynchronous jobs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#scheduled-jobs"><span class="toc-number">7.2.</span> <span class="toc-text">Scheduled jobs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#asynchronous-results-and-suspended-requests"><span class="toc-number">7.3.</span> <span class="toc-text">Asynchronous results and suspended requests</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#modules-structuring-your-application"><span class="toc-number">8.</span> <span class="toc-text">Modules—structuring your application</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#third-party-modules"><span class="toc-number">8.1.</span> <span class="toc-text">Third-party modules</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#extracting-custom-modules"><span class="toc-number">8.2.</span> <span class="toc-text">Extracting custom modules</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#module-first-application-architecture"><span class="toc-number">8.3.</span> <span class="toc-text">Module-first application architecture</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#deciding-whether-to-write-a-custom-module"><span class="toc-number">8.4.</span> <span class="toc-text">Deciding whether to write a custom module</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#module-architecture"><span class="toc-number">8.5.</span> <span class="toc-text">Module architecture</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/AJAX/" title="AJAX">AJAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+		
+			<li><a href="/tags/DOM/" title="DOM">DOM<sup>2</sup></a></li>
+		
+			<li><a href="/tags/EL表达式/" title="EL表达式">EL表达式<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Hibernate/" title="Hibernate">Hibernate<sup>2</sup></a></li>
+		
+			<li><a href="/tags/HttpSession/" title="HttpSession">HttpSession<sup>1</sup></a></li>
+		
+			<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JSP/" title="JSP">JSP<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaBean/" title="JavaBean">JavaBean<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaScript/" title="JavaScript">JavaScript<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Mybatis/" title="Mybatis">Mybatis<sup>1</sup></a></li>
+		
+			<li><a href="/tags/NoSql/" title="NoSql">NoSql<sup>1</sup></a></li>
+		
+			<li><a href="/tags/SAX/" title="SAX">SAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletRequest/" title="ServletRequest">ServletRequest<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletResponse/" title="ServletResponse">ServletResponse<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Spring/" title="Spring">Spring<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Spring MVC/" title="Spring MVC">Spring MVC<sup>1</sup></a></li>
+		
+			<li><a href="/tags/String/" title="String">String<sup>1</sup></a></li>
+		
+			<li><a href="/tags/StringBuffer/" title="StringBuffer">StringBuffer<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2014 
+		
+		<a href="http://zhpooer.github.io" target="_blank" title="zhpooer">zhpooer</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"zhpoooer"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>

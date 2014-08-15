@@ -1,0 +1,717 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>传智播客day65-Hadoop入门 | Poe&#39;s World</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="zhpooer">
+    
+    <meta name="description" content="云计算
+
+
+
+熟悉java集合类(Vector, ArrayList, LinkedList), io, 并发编程(锁 Lock, synchronized)和熟悉jvm原理及内存管理,
+对数据结构, 算法有深刻的理解
+项目简介
+作者 Doug Cuttng, 是 Lucene, Nutch, Ha">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="Poe&#39;s World" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="Poe&#39;s World" title="Poe&#39;s World"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Poe&#39;s World">Poe&#39;s World</a></h1>
+				<h2 class="blog-motto">竹杖芒鞋轻胜马，一蓑烟雨任平生</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/english-monthly">英语角</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:zhpooer.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/08/10/传智播客day65-hadoop入门/" title="传智播客day65-Hadoop入门" itemprop="url">传智播客day65-Hadoop入门</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://zhpooer.github.io" title="zhpooer">zhpooer</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2014-08-10T01:04:39.000Z" itemprop="datePublished">8月 10 2014</time>
+    更新日期:<time datetime="2014-08-10T09:18:08.000Z" itemprop="dateModified">8月 10 2014</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">云计算</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">2.</span> <span class="toc-text">项目简介</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.1.</span> <span class="toc-text">生态圈</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#hdfs-"><span class="toc-number">3.</span> <span class="toc-text">HDFS的架构</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#hadoop-"><span class="toc-number">4.</span> <span class="toc-text">hadoop版本对比</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-hadoop"><span class="toc-number">5.</span> <span class="toc-text">部署 Hadoop</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">5.1.</span> <span class="toc-text">伪分布模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">5.2.</span> <span class="toc-text">测试</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#ssh-"><span class="toc-number">6.</span> <span class="toc-text">SSH 协议</span></a></li></ol>
+		</div>
+		
+		<h1 id="-">云计算</h1>
+<!-- QQ群 316336020 -->
+<!-- about.com -->
+
+<p>熟悉java集合类(Vector, ArrayList, LinkedList), io, 并发编程(锁 Lock, synchronized)和熟悉jvm原理及内存管理,
+对数据结构, 算法有深刻的理解</p>
+<h1 id="-">项目简介</h1>
+<p>作者 Doug Cuttng, 是 Lucene, Nutch, Hadoop 等项目发起人</p>
+<p>解决问题</p>
+<ul>
+<li>海量数据的存储(HDFS)</li>
+<li>海量数据的分析(MapReduce), 分布式计算模型</li>
+<li>资源调度(YARN)</li>
+</ul>
+<p>受Google三篇论文的启发(GFS, MapReduce, BigTable)</p>
+<p>hadoop 擅长日志分析, facebook利用Hive来进行日志分析, HiveSQL进行数据分析;
+Pig可以做高级的数据处理, 推荐系统.</p>
+<p>用廉价的服务器搭建搭建集群服务器</p>
+<p>Storm + Hadoop 具有强大的优势</p>
+<p>Hadoop缺点, 只能进行离线数据</p>
+<p>Storm能进行实时数据处理</p>
+<p>核心</p>
+<ul>
+<li>HDFS(Hadoop Distributed File System), 分布式文件系统,
+通过水平扩展机器的数量来增加存放文件的能力, 将数据进行冗余存储(多分存储)</li>
+<li>YARN(Yet Another Resource Negotiator), 资源调度管理系统,
+可以运行其他的编程模型, 使实时处理出现了可能</li>
+</ul>
+<p>特点</p>
+<ul>
+<li>扩容能力强(scalable)</li>
+<li>成本低(Economical): 通过普通机器组成的服务器来分发以及处理数据</li>
+<li>高效(Efficient), 分发数据, 并行计算</li>
+<li>可靠(Reliable), 失败任务的转移</li>
+</ul>
+<h2 id="-">生态圈</h2>
+<p>TODO</p>
+<p>nutch 抓取数据, HDFS存储数据, Lucence检索分析 , Zookeeper 进行管理</p>
+<p>版本: Apache(2.4.1), Cloudera, HDP(Hortonworks Data Platform)</p>
+<h1 id="hdfs-">HDFS的架构</h1>
+<p>主从结构</p>
+<ul>
+<li>主节点, namenode</li>
+<li>从节点, 很多个: datanode</li>
+</ul>
+<p>namenode 负责管理</p>
+<ul>
+<li>接受用户操作请求</li>
+<li>维护文件系统的目录结构</li>
+<li>管理文件与block之间关系,</li>
+</ul>
+<p>datanode 负责存储文件</p>
+<ul>
+<li>存储文件</li>
+<li>文件被分成block存储在磁盘上</li>
+<li>保证安全</li>
+</ul>
+<p>如何自己设计一个分布式文件系统?</p>
+<blockquote>
+<p>客户端(Client) 查询 NameNode(记录文件存储信息), 将数据放入datanode(多个)或从中取出<br>数据在上传过程中要进行冗余保存, datanode 自行进行水平复制.<br>上传过程中, 文件会被分成8块, 每块128M, 其实是对块的冗余存储</p>
+</blockquote>
+<p>如何解决海量数据的计算?</p>
+<blockquote>
+<p>求和 1+2+3+4+5+6=?<br>map: 1+2, 3+4, 5+6<br>reduce: 3 + 7 + 11</p>
+</blockquote>
+<h1 id="hadoop-">hadoop版本对比</h1>
+<p><code>hadoop 1.0</code>: MapReduce + HDFS</p>
+<p><code>hadoop 2.0</code>: MapReduce + YARN(资源管理) + Others + HDFS</p>
+<h1 id="-hadoop">部署 Hadoop</h1>
+<p>三种模式</p>
+<ul>
+<li>本地模式</li>
+<li>伪分布式</li>
+<li>集群模式</li>
+</ul>
+<h2 id="-">伪分布模式</h2>
+<p>在centos环境下</p>
+<p>fileziler, windows下ftp工具</p>
+<p>secureCRT, windows下ssh工具</p>
+<ul>
+<li><p>修改主机名 <code>/etc/sysconfig/network</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre><span class="attribute">HOSTNAME</span>=<span class="string">itcast</span>
+</pre></td></tr></table></figure>
+</li>
+<li><p>修改 IP, <code>/etc/sysconfig/network-script/ifcfg-eth0</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="code"><pre><span class="setting">DEVICE=<span class="value"><span class="string">"eth0"</span></span></span>
+<span class="setting">BOOTABLETO=<span class="value"><span class="string">"static"</span></span></span>
+<span class="setting">HWADDR=<span class="value"><span class="string">""</span></span></span>
+<span class="setting">IPV6INIT=<span class="value"><span class="string">"yes"</span></span></span>
+<span class="setting">NM_controlled=<span class="value"><span class="string">"yes"</span></span></span>
+<span class="setting">ONBOOT=<span class="value"><span class="string">"yes"</span></span></span>
+<span class="setting">TYPE=<span class="value"><span class="string">"Ethernet"</span></span></span>
+<span class="setting">UUID=<span class="value"><span class="string">""</span></span></span>
+<span class="setting">IPADDR=<span class="value"><span class="string">"192.168.1.101"</span></span></span>
+<span class="setting">NETMASK=<span class="value"><span class="string">"255.255.255.0"</span></span></span>
+<span class="setting">GATEWAY=<span class="value"><span class="string">"192.168.1.1"</span></span></span>
+<span class="setting">NDS1=<span class="value"><span class="string">"8.8.8.8"</span></span></span>
+<span class="setting">NDS2=<span class="value"><span class="string">"4.4.4.4"</span></span></span>
+</pre></td></tr></table></figure>
+</li>
+<li><p>主机名和ip的映射关系, <code>/etc/hosts</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>192.168.1.101 itcast
+</pre></td></tr></table></figure>
+</li>
+<li><p>关闭防火墙</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre>service iptables <span class="keyword">stop</span>
+chkconfig iptables --list
+chkconfig iptables <span class="keyword">off</span>
+</pre></td></tr></table></figure>
+</li>
+<li><p>安装JDK 64位或32位</p>
+</li>
+<li><p>修改Hadoop配置文件</p>
+<ol>
+<li><p><code>hadoop-env.sh</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>export Java_Home=<span class="keyword">...</span>
+</pre></td></tr></table></figure>
+</li>
+<li><p><code>core-site.xml</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">configuration</span>&gt;</span>
+  <span class="comment">&lt;!-- namenode 地址 --&gt;</span>
+  <span class="tag">&lt;<span class="title">property</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">name</span>&gt;</span>fs.defaultFS<span class="tag">&lt;/<span class="title">name</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">value</span>&gt;</span>hdfs://itcast:9000<span class="tag">&lt;/<span class="title">value</span>&gt;</span>
+  <span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+  <span class="comment">&lt;!-- 运行时产生文件,非临时, 重要! --&gt;</span>
+  <span class="tag">&lt;<span class="title">property</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">name</span>&gt;</span>hadoop.tmp.dir<span class="tag">&lt;/<span class="title">name</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">value</span>&gt;</span>/tmp/hadoop<span class="tag">&lt;/<span class="title">value</span>&gt;</span>
+  <span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">configuration</span>&gt;</span>
+</pre></td></tr></table></figure>
+</li>
+<li><p><code>hdfs-site</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">configuration</span>&gt;</span>
+  <span class="comment">&lt;!-- hdfs副本的数量 --&gt;</span>
+  <span class="tag">&lt;<span class="title">property</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">name</span>&gt;</span>dfs.replication<span class="tag">&lt;/<span class="title">name</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">value</span>&gt;</span>1<span class="tag">&lt;/<span class="title">value</span>&gt;</span>
+  <span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">configuration</span>&gt;</span>
+</pre></td></tr></table></figure>
+</li>
+<li><p><code>mapred-site.xml.template</code> copy to <code>mapred-site.xml</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">configuration</span>&gt;</span>
+  <span class="comment">&lt;!-- mapreduce运行在yarn上 --&gt;</span>
+  <span class="tag">&lt;<span class="title">property</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">name</span>&gt;</span>mapreduce.framework.name<span class="tag">&lt;/<span class="title">name</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">value</span>&gt;</span>yarn<span class="tag">&lt;/<span class="title">value</span>&gt;</span>
+  <span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">configuration</span>&gt;</span>
+</pre></td></tr></table></figure>
+</li>
+<li><p><code>yarn-site.xml</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">configuration</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">property</span>&gt;</span>
+    <span class="comment">&lt;!-- 指定yarn的 ResourceManager 所在地址 --&gt;</span>
+    <span class="tag">&lt;<span class="title">name</span>&gt;</span>yarn.resourcemanager.hostname<span class="tag">&lt;/<span class="title">name</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">value</span>&gt;</span>itcast<span class="tag">&lt;/<span class="title">value</span>&gt;</span>
+  <span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+  <span class="comment">&lt;!-- reduce 获取数据的方式 --&gt;</span>
+  <span class="tag">&lt;<span class="title">property</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">name</span>&gt;</span>yarn.nodemanager.aux-services<span class="tag">&lt;/<span class="title">name</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">value</span>&gt;</span>mapreduce_shuffle<span class="tag">&lt;/<span class="title">value</span>&gt;</span>
+  <span class="tag">&lt;/<span class="title">property</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">configuration</span>&gt;</span>
+</pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+<li><p>初始化 Hadoop, 初始化 HDFS, <em>只需要执行一次</em></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre><span class="preprocessor">## hadoop namenode -format, 已被舍弃</span>
+hdfs namenode -<span class="built_in">format</span>
+</pre></td></tr></table></figure>
+</li>
+<li><p>启动 Hadoop</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre><span class="preprocessor"># start-all.sh, 已过时</span>
+start-dfs<span class="preprocessor">.sh</span>
+start-yarn<span class="preprocessor">.sh</span>
+
+<span class="preprocessor"># stop-all.sh 停止进程</span>
+stop-dfs<span class="preprocessor">.sh</span>
+stop-yarn<span class="preprocessor">.sh</span>
+</pre></td></tr></table></figure>
+</li>
+<li><p>执行<code>jps</code>, 查看运行进程</p>
+<pre><code>  NodeManager
+  NameNode
+  DataNode
+  ResourceManager
+  SecondaryNameNode
+</code></pre></li>
+<li>查看管理界面<ul>
+<li>hdfs <code>http://192.168.1.101:50070</code></li>
+<li>yarn <code>http://192.168.1.101:8088</code></li>
+</ul>
+</li>
+</ul>
+<p>Hadoop目录结构</p>
+<ul>
+<li><code>sbin</code>, 启动或停止hadoop相关进程的命令</li>
+<li><code>bin</code>, 操作hadoop相关模块的一些命令</li>
+<li><code>lib</code>, 动态库</li>
+<li><code>share</code>, 相关jar包</li>
+<li><code>etc</code>, 配置文件</li>
+</ul>
+<h2 id="-">测试</h2>
+<p>hdfs操作</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre><span class="preprocessor">## 上传文件命名为 jdk</span>
+hadoop fs -put /root/jdk_***.tar hdfs:<span class="comment">//itcast:9000/jdk</span>
+
+<span class="preprocessor">## 查看文件, 也可以通过 htfs管理页面查看目录</span>
+hadoop fs -ls hdfs:<span class="comment">//itcast:9000/</span>
+
+<span class="preprocessor">## 下载文件</span>
+hadoop fs -<span class="keyword">get</span> hdfs:<span class="comment">//itcast:9000/jdk /root/jdk_***.tar</span>
+</pre></td></tr></table></figure>
+
+<p>运行 mapreduce, 词频统计 <code>share/mapreduce/hadoop-example</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="code"><pre><span class="preprocessor">## 将文件放入hdfs</span>
+hadoop fs -put word-in.txt hdfs:<span class="comment">//itcast:9000/words</span>
+
+<span class="preprocessor">## 查看 hdfs</span>
+hadoop fs -cat hdfs:<span class="comment">//itcast:9000/words</span>
+
+<span class="preprocessor">## 运行 wordcount 程序, 将 words 文件进行词频统计, 输出到 hdfs://itcast:9000/words-out 文件夹</span>
+hadoop jar hadoop-mapreduce-example.jar wordcount hdfs:<span class="comment">//itcast:9000/words  hdfs://itcast:9000/words-out</span>
+
+<span class="preprocessor">## 查看 正在运行的命令</span>
+jps
+
+<span class="preprocessor">## 查看运行后的结构</span>
+hadoop fs -cat hdfs:<span class="comment">//itcast:9000/words-out/part-r-00000</span>
+</pre></td></tr></table></figure>
+
+<h1 id="ssh-">SSH 协议</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code"><pre><span class="preprocessor"># 登陆</span>
+ssh <span class="number">192.168</span><span class="number">.1</span><span class="number">.208</span>
+
+<span class="preprocessor"># 执行命令</span>
+ssh <span class="number">192.168</span><span class="number">.1</span><span class="number">.208</span> mkdir /itcast1008
+
+<span class="preprocessor"># 免密码登陆</span>
+<span class="preprocessor"># 生成私钥和公钥</span>
+ss-keygen -t rsa
+
+<span class="preprocessor"># 拷贝公钥到远程服务器</span>
+ssh-copy-id <span class="number">192.168</span><span class="number">.1</span><span class="number">.208</span>
+</pre></td></tr></table></figure>
+
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/传智播客/">传智播客</a><a href="/tags/Hadoop/">Hadoop</a>
+  </div>
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://zhpooer.github.io/2014/08/10/传智播客day65-hadoop入门/" data-title="传智播客day65-Hadoop入门 | Poe&#39;s World" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2014/08/11/play-for-scala-the-persistence-layer/" title="Play for Scala-the persistence layer">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  Play for Scala-the persistence layer</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2014/08/09/play-for-scala-define-http-interface/"  title="Play for Scala-Define Http interface">
+ <strong>NEXT:</strong><br/> 
+ <span>Play for Scala-Define Http interface
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">云计算</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">2.</span> <span class="toc-text">项目简介</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.1.</span> <span class="toc-text">生态圈</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#hdfs-"><span class="toc-number">3.</span> <span class="toc-text">HDFS的架构</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#hadoop-"><span class="toc-number">4.</span> <span class="toc-text">hadoop版本对比</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-hadoop"><span class="toc-number">5.</span> <span class="toc-text">部署 Hadoop</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">5.1.</span> <span class="toc-text">伪分布模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">5.2.</span> <span class="toc-text">测试</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#ssh-"><span class="toc-number">6.</span> <span class="toc-text">SSH 协议</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/AJAX/" title="AJAX">AJAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+		
+			<li><a href="/tags/DOM/" title="DOM">DOM<sup>2</sup></a></li>
+		
+			<li><a href="/tags/EL表达式/" title="EL表达式">EL表达式<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Hibernate/" title="Hibernate">Hibernate<sup>2</sup></a></li>
+		
+			<li><a href="/tags/HttpSession/" title="HttpSession">HttpSession<sup>1</sup></a></li>
+		
+			<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JSP/" title="JSP">JSP<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaBean/" title="JavaBean">JavaBean<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaScript/" title="JavaScript">JavaScript<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Mybatis/" title="Mybatis">Mybatis<sup>1</sup></a></li>
+		
+			<li><a href="/tags/NoSql/" title="NoSql">NoSql<sup>1</sup></a></li>
+		
+			<li><a href="/tags/SAX/" title="SAX">SAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletRequest/" title="ServletRequest">ServletRequest<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletResponse/" title="ServletResponse">ServletResponse<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Spring/" title="Spring">Spring<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Spring MVC/" title="Spring MVC">Spring MVC<sup>1</sup></a></li>
+		
+			<li><a href="/tags/String/" title="String">String<sup>1</sup></a></li>
+		
+			<li><a href="/tags/StringBuffer/" title="StringBuffer">StringBuffer<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2014 
+		
+		<a href="http://zhpooer.github.io" target="_blank" title="zhpooer">zhpooer</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"zhpoooer"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>

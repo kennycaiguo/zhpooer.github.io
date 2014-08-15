@@ -1,0 +1,1000 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Play for Scala-Define Http interface | Poe&#39;s World</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="zhpooer">
+    
+    <meta name="description" content="Benefits of good URL design
+If you don’t think changing the URL matters, then this is probably a good time to read
+Cool URIs Don’t Change, which Tim B">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="Poe&#39;s World" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="Poe&#39;s World" title="Poe&#39;s World"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Poe&#39;s World">Poe&#39;s World</a></h1>
+				<h2 class="blog-motto">竹杖芒鞋轻胜马，一蓑烟雨任平生</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/english-monthly">英语角</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:zhpooer.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/08/09/play-for-scala-define-http-interface/" title="Play for Scala-Define Http interface" itemprop="url">Play for Scala-Define Http interface</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://zhpooer.github.io" title="zhpooer">zhpooer</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2014-08-09T08:20:51.000Z" itemprop="datePublished">8月 9 2014</time>
+    更新日期:<time datetime="2014-08-10T14:14:18.000Z" itemprop="dateModified">8月 10 2014</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#benefits-of-good-url-design"><span class="toc-number">1.</span> <span class="toc-text">Benefits of good URL design</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#controllers-the-interface-between-http-and-scala"><span class="toc-number">2.</span> <span class="toc-text">Controllers—the interface between HTTP and Scala</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#controller-classes-and-action-methods"><span class="toc-number">2.1.</span> <span class="toc-text">Controller classes and action methods</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#http-and-the-controller-layer-s-scala-api"><span class="toc-number">2.2.</span> <span class="toc-text">HTTP and the controller layer’s Scala API</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#action-composition"><span class="toc-number">2.3.</span> <span class="toc-text">Action composition</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#routing-http-requests-to-controller-actions"><span class="toc-number">3.</span> <span class="toc-text">Routing HTTP requests to controller actions</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#router-configuration"><span class="toc-number">3.1.</span> <span class="toc-text">Router configuration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#matching-url-path-parameters-that-contain-forward-slashes"><span class="toc-number">3.2.</span> <span class="toc-text">Matching URL path parameters that contain forward slashes</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#constraining-url-path-parameters-with-regular-expressions"><span class="toc-number">3.3.</span> <span class="toc-text">Constraining URL path parameters with regular expressions</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#binding-http-data-to-scala-objects"><span class="toc-number">3.4.</span> <span class="toc-text">Binding HTTP data to Scala objects</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#generating-http-calls-for-actions-with-reverse-routing"><span class="toc-number">4.</span> <span class="toc-text">Generating HTTP calls for actions with reverse routing</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#hardcoded-urls"><span class="toc-number">4.1.</span> <span class="toc-text">Hardcoded URLs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#reverse-routing"><span class="toc-number">4.2.</span> <span class="toc-text">Reverse routing</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#generating-a-response"><span class="toc-number">5.</span> <span class="toc-text">Generating a response</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#debugging-http-responses"><span class="toc-number">5.1.</span> <span class="toc-text">Debugging HTTP responses</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#response-body"><span class="toc-number">5.2.</span> <span class="toc-text">Response body</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#binary-data"><span class="toc-number">5.2.1.</span> <span class="toc-text">BINARY DATA</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#http-status-codes"><span class="toc-number">5.3.</span> <span class="toc-text">HTTP status codes</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#response-headers"><span class="toc-number">5.4.</span> <span class="toc-text">Response headers</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#setting-the-content-type"><span class="toc-number">5.4.1.</span> <span class="toc-text">SETTING THE CONTENT TYPE</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#session-data"><span class="toc-number">5.4.2.</span> <span class="toc-text">SESSION DATA</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#flash-data"><span class="toc-number">5.4.3.</span> <span class="toc-text">FLASH DATA</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#setting-cookies"><span class="toc-number">5.4.4.</span> <span class="toc-text">SETTING COOKIES</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#serving-static-content"><span class="toc-number">5.5.</span> <span class="toc-text">Serving static content</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#using-the-default-configuration"><span class="toc-number">5.5.1.</span> <span class="toc-text">USING THE DEFAULT CONFIGURATION</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#using-an-asset-s-reverse-route"><span class="toc-number">5.5.2.</span> <span class="toc-text">USING AN ASSET’S REVERSE ROUTE</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#caching-and-etags"><span class="toc-number">5.5.3.</span> <span class="toc-text">CACHING AND ETAGS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#compressing-assets-with-gzip"><span class="toc-number">5.5.4.</span> <span class="toc-text">COMPRESSING ASSETS WITH GZIP</span></a></li></ol>
+		</div>
+		
+		<h1 id="benefits-of-good-url-design">Benefits of good URL design</h1>
+<p>If you don’t think changing the URL matters, then this is probably a good time to read
+Cool URIs Don’t Change, which Tim Berners-Lee wrote in
+1998 (<a href="http://www.w3.org/Provider/Style/URI.html" target="_blank">http://www.w3.org/Provider/Style/URI.html</a>),
+adding to his 1992 WWW style guide, which is an important
+part of the documentation for the web itself.</p>
+<p>ervlet API URL
+mapping is too limited to handle even our first three example URLs, because it only
+lets you match URLs exactly, by prefix or by file extension. What’s missing is a notion
+of path parameters that match variable segments of the URL, using URL templates:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre>/product/{ean}/<span class="keyword">edit</span>
+/product/(\d+)/<span class="keyword">edit</span>
+</pre></td></tr></table></figure>
+
+<p>Here are several benefits of good URL design:</p>
+<ul>
+<li>A consistent public API —The URL scheme makes your application easier to
+understand by providing an alternative machine-readable interface.</li>
+<li>The URLs don’t change—Avoiding implementation-specifics makes the URLs sta-
+ble, so they don’t change when the technology does.</li>
+<li>Short URLs—Short URLs are more usable; they’re easier to type or paste into
+other media, such as email or instant messages.</li>
+</ul>
+<h1 id="controllers-the-interface-between-http-and-scala">Controllers—the interface between HTTP and Scala</h1>
+<p>Controllers are the application components that handle HTTP requests for application
+resources identified by URLs.</p>
+<p>In Play, you use controller classes to make your application respond to HTTP
+requests for URLs, such as the product catalog URLs:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre>/products
+/product/<span class="number">5010255079763</span>
+/product/<span class="number">5010255079763</span>/<span class="keyword">edit</span>
+</pre></td></tr></table></figure>
+
+<h2 id="controller-classes-and-action-methods">Controller classes and action methods</h2>
+<p>We’ll start by defining a Products controller class, which will contain four action
+methods for handling different kinds of requests: list, details , edit, and update</p>
+<p>A controller is a Scala object that’s a subclass of <code>play.api.mvc.Controller</code> ,
+which provides various helpers for generating actions. </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+</pre></td><td class="code"><pre><span class="keyword">package</span> controllers
+
+<span class="keyword">import</span> play.api.mvc.{Action, Controller}
+<span class="class"><span class="keyword">object</span> <span class="title">Products</span> <span class="keyword">extends</span> <span class="title">Controller</span> {</span>
+  <span class="keyword">def</span> list(pageNumber: Int) = Action {
+    NotImplemented
+  }
+  <span class="keyword">def</span> detail(ean: Long) = Action {
+    NotImplemented
+  }
+  <span class="keyword">def</span> edit(ean: Long) = Action {
+    NotImplemented
+  }
+  <span class="keyword">def</span> update(ean: Long) = Action {
+    NotImplemented
+  }
+}
+</pre></td></tr></table></figure>
+
+<p><strong>GROUP CONTROLLERS BY MODEL ENTITY</strong></p>
+<p>Create one controller for each of the
+key entities in your application’s high-level data model. For example, the four
+key entities—Product, Order, Warehouse, and User—might correspond to a
+data model with more than a dozen entities. In this case, it’d probably be a
+good idea to have four controller classes: Products, Orders, Warehouses, and
+Users. </p>
+<p>In Play, each controller is a Scala object that defines one or more actions. Play uses an
+object instead of a class because the controller doesn’t have any state; the controller is
+used to group some actions.</p>
+<p><strong>DON’T DEFINE A var IN A CONTROLLER OBJECT</strong></p>
+<p>Each action is a Scala function that takes an HTTP request and returns an HTTP result.
+<code>Request[A] =&gt; Result</code></p>
+<p>The controller layer is therefore the mapping between stateless HTTP requests and
+responses and the object-oriented model. In MVC terms, controllers process events
+(HTTP requests in this case), which can result in updates to the model. Controllers are
+also responsible for rendering views. </p>
+<h2 id="http-and-the-controller-layer-s-scala-api">HTTP and the controller layer’s Scala API</h2>
+<p>Play models controllers, actions, requests, and responses as Scala traits in the
+<code>play.api.mvc</code> package—the Scala API for the controller layer.</p>
+<p>MVC API traits and classes correspond to HTTP concepts and act as
+wrappers for the corresponding HTTP data:</p>
+<ul>
+<li><code>play.api.mvc.Cookie</code> —An HTTP cookie: a small amount of data stored on the client and sent with subsequent requests</li>
+<li><code>play.api.mvc.Request</code> —An HTTP request: HTTP method, URL, headers, body, and cookies</li>
+<li><code>play.api.mvc.RequestHeader</code> —Request metadata: a name-value pair</li>
+<li><code>play.api.mvc.Response</code> —An HTTP response, with headers and a body; wraps a Play Result</li>
+<li><code>play.api.mvc.ResponseHeader</code>  —Response metadata: a name-value pair</li>
+</ul>
+<p>Play controllers use the following concepts in addition
+to HTTP concepts:</p>
+<ul>
+<li><code>play.api.mvc.Action</code> — A function that processes a client Request
+and returns a Result</li>
+<li><code>play.api.mvc.Call</code> — An HTTP request: the combination of an HTTP method
+and a URL</li>
+<li><code>play.api.mvc.Content</code> — An HTTP response body with a particular content type</li>
+<li><code>play.api.mvc.Controller</code> — A generator for Action functions</li>
+<li><code>play.api.mvc.Flash</code> — A short-lived HTTP data scope used to set data for
+the next request</li>
+<li><code>play.api.mvc.Result</code> — The result of calling an Action to process a Request,
+used to generate an HTTP response</li>
+<li><code>play.api.mvc.Session</code> — A set of string keys and values,
+stored in an HTTP cookie</li>
+</ul>
+<h2 id="action-composition">Action composition</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+</pre></td><td class="code"><pre>def <span class="keyword">list</span> = Action {
+  <span class="comment">// Check authentication.</span>
+  <span class="comment">// Check for a cached result.</span>
+  <span class="comment">// Process request...</span>
+  <span class="comment">// Update cache.</span>
+}
+
+<span class="comment">// 可以这样写</span>
+def <span class="keyword">list</span> =
+  Authenticated {
+    Cached {
+      Action {
+        <span class="comment">// Process request...</span>
+      }
+    }
+  }
+</pre></td></tr></table></figure>
+
+<p>This example uses Action to create an action function that’s passed as a parameter to
+Cached, which returns a new action function. This, in turn, is passed as a parameter to
+Authenticated, which decorates the action function again.</p>
+<h1 id="routing-http-requests-to-controller-actions">Routing HTTP requests to controller actions</h1>
+<p>Once you have controllers that contain actions, you need a way to map different
+request URLs to different action methods.</p>
+<p>In Play, mapping the combination of an HTTP method and a URL to an action
+method is called routing. </p>
+<h2 id="router-configuration">Router configuration</h2>
+<p>The great thing about this approach is that your web application’s URLs—its public
+HTTP interface—are all specified in one place, which makes it easier for you to
+maintain a consistent URL design.</p>
+<p>The routes file structure is line-based: each line is either a blank line, a comment line,
+or a route definition. A route definition has three parts on one line, separated by
+whitespace.</p>
+<p><code>conf/routes</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre>GET / controllers<span class="preprocessor">.Products</span><span class="preprocessor">.home</span>()
+
+GET /products  controllers<span class="preprocessor">.Products</span><span class="preprocessor">.list</span>()
+
+GET /products controllers<span class="preprocessor">.Products</span><span class="preprocessor">.list</span>(page: Int ?= <span class="number">1</span>) <span class="preprocessor">## Option[Int]</span>
+
+GET /products controllers<span class="preprocessor">.Products</span><span class="preprocessor">.list</span>(page: Int = <span class="number">1</span>) <span class="preprocessor">## Int</span>
+
+GET /product/:ean controllers<span class="preprocessor">.Products</span><span class="preprocessor">.details</span>(ean: Long)
+
+GET /product/:ean/edit controllers<span class="preprocessor">.Products</span><span class="preprocessor">.edit</span>(ean: Long)
+</pre></td></tr></table></figure>
+
+<p>The benefit of this format is that you can see your whole URL design in one place,
+which makes it more straightforward to manage than if the URLs were specified in
+many different files.</p>
+<h2 id="matching-url-path-parameters-that-contain-forward-slashes">Matching URL path parameters that contain forward slashes</h2>
+<pre><code>/photo/5010255079763.jpg
+/photo/customer-submissions/5010255079763/42.jpg
+/photo/customer-submissions/5010255079763/43.jpg
+</code></pre><figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="preprocessor">## 这样上面的配置不会匹配 斜杠(slash)</span>
+<span class="keyword">GET</span> /photo/:file controllers.Media.photo(file: <span class="built_in">String</span>)
+
+<span class="preprocessor">## 必须这样</span>
+<span class="keyword">GET</span> /photo/*file controllers.Media.photo(file: <span class="built_in">String</span>)
+</pre></td></tr></table></figure>
+
+<h2 id="constraining-url-path-parameters-with-regular-expressions">Constraining URL path parameters with regular expressions</h2>
+<p>为如下的url做匹配</p>
+<pre><code>/product/5010255079763
+/product/paper-clips-large-plain-1000-pack
+</code></pre><p>正则表达式要写在<code>&lt;&gt;</code>里面</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre>GET /product/$ean&lt;\d{<span class="number">13</span>}&gt; controllers<span class="preprocessor">.Products</span><span class="preprocessor">.details</span>(ean: Long)
+
+GET /product/:alias controllers<span class="preprocessor">.Products</span><span class="preprocessor">.alias</span>(alias: String)
+</pre></td></tr></table></figure>
+
+<h2 id="binding-http-data-to-scala-objects">Binding HTTP data to Scala objects</h2>
+<p>Play, along with other modern web frameworks such as Spring MVC, improves on
+treating HTTP request parameters as strings by performing type conversion before it
+attempts to call your action method. </p>
+<p>Here’s what happens when Play’s router handles the request <code>PUT /product/5010255079763</code></p>
+<ol>
+<li>The router matches the request against configured routes and selects the route:
+<code>PUT /product/:ean controllers.Products.update(ean: Long)</code></li>
+<li>The router binds the ean parameter using one of the type-specific binders—in
+this case, the Long binder converts 5010255079763 to a Scala Long object</li>
+<li>The router invokes the selected route’s Products.update action, passing
+<code>5010255079763L</code> as a parameter.</li>
+</ol>
+<p>If you send an HTTP request for <code>/product/x</code>,
+the binding will fail because x isn’t a number, and Play
+will return an HTTP response with the 400 (Bad Request)
+status code and an error page</p>
+<h1 id="generating-http-calls-for-actions-with-reverse-routing">Generating HTTP calls for actions with reverse routing</h1>
+<p>In addition to mapping incoming URL requests to controller actions,
+a Play application can do the opposite: map a particular action
+method invocation to the corresponding URL.</p>
+<h2 id="hardcoded-urls">Hardcoded URLs</h2>
+<p>The interesting part is what happens next, after the product is deleted.
+Let’s suppose that after deleting the product,
+we want to show the updated product list. We could
+render the product list page directly, but this exposes us to the double-submit
+problem: if the user “reloads” the page in a web browser,
+this could result in a second call
+to the delete action, which will fail because the specified product no longer exists.</p>
+<p>The standard solution to the double-submit problem is the redirect-after-POST pattern:
+after performing an operation that updates the application’s persistent state, the
+web application sends an HTTP response that consists of an HTTP redirect.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>def <span class="operator"><span class="keyword">delete</span>(ean: Long) = <span class="keyword">Action</span> {
+  Product.<span class="keyword">delete</span>(ean)
+  Redirect(<span class="string">"/proudcts"</span>)
+}</span>
+</pre></td></tr></table></figure>
+
+<p>This looks like it will do the job, but it doesn’t smell too nice because
+we’ve hardcoded the URL in a string.</p>
+<p>解决办法如下</p>
+<h2 id="reverse-routing">Reverse routing</h2>
+<p>You can do reverse routing by writing Scala code.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>def <span class="operator"><span class="keyword">delete</span>(ean: Long) = <span class="keyword">Action</span> {
+  Product.<span class="keyword">delete</span>(ean)
+  Redirect(routes.Products.list())
+}</span>
+</pre></td></tr></table></figure>
+
+<p>Keeping these two points in mind:</p>
+<ul>
+<li>Routing is when URLs are routed to actions—left to right in the routes file</li>
+<li>Reverse routing is when call definitions are “reversed” into URL s—right to left</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre>scala&gt; val call = controllers.routes.Products.list()
+scala&gt; val (<span class="function"><span class="keyword">method</span>, <span class="title">url</span>) = <span class="params">(call.<span class="keyword">method</span>, call.url)</span></span>
+</pre></td></tr></table></figure>
+
+<h1 id="generating-a-response">Generating a response</h1>
+<p>An HTTP response consists of an HTTP status code, optionally followed by response
+headers and a response body. Play gives you total control over all three, which lets you
+craft any kind of HTTP response you like, but it also gives you a convenient API for
+handling common cases.</p>
+<h2 id="debugging-http-responses">Debugging HTTP responses</h2>
+<p>To use cURL, use the <code>--request</code> option to specify the HTTP method and
+<code>--include</code> to include HTTP response headers in the output</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre><span class="comment">curl</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">request</span> <span class="comment">GET</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">include</span> <span class="comment">http://localhost:9000/products</span>
+</pre></td></tr></table></figure>
+
+<h2 id="response-body">Response body</h2>
+<p>The response body will consist of this representation, in some particular format.</p>
+<ul>
+<li>Plain text—Such as an error message, or a lightweight web service response</li>
+<li>HTML —A web page, including a representation of the resource as well as
+application user-interface elements, such as navigation controls</li>
+<li>JSON —A popular alternative to XML that’s better suited to Ajax applications</li>
+<li>XML —Data accessed via a web service</li>
+<li>Binary data—Typically nontext media such as a bitmap image or audio</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+</pre></td><td class="code"><pre><span class="comment">// plain text</span>
+<span class="keyword">def</span> version = Action {
+  Ok(<span class="string">"Version 2.0"</span>)
+}
+
+<span class="comment">// html</span>
+<span class="keyword">def</span> index = Action {
+  Ok(views.html.index())
+}
+
+<span class="comment">// json</span>
+<span class="keyword">def</span> json = Action {
+  <span class="keyword">import</span> play.api.libs.json.Json
+  <span class="keyword">val</span> success = Map(<span class="string">"status"</span> -&gt; <span class="string">"success"</span>)
+  <span class="keyword">val</span> json = Json.toJson(success)
+  Ok(json)
+}
+
+<span class="comment">// scala.xml.NodeSeq</span>
+<span class="keyword">def</span> xml = Action {
+  Ok(&lt;status&gt;success&lt;/status&gt;)
+}
+</pre></td></tr></table></figure>
+
+<h3 id="binary-data">BINARY DATA</h3>
+<p>In Play, returning a binary result to the
+web browser is the same as serving other formats: as with XML and JSON, pass the
+binary data to a result type. </p>
+<p>条形码生成</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre>val appDependencies = Se<span class="string">q(
+  "net.sf.barcode4j" % "barcode4j" % "2.0"
+)</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+</pre></td><td class="code"><pre>def ean13Barcode(ean: Long, mimeType: String): Array[Byte] = {
+  import java<span class="preprocessor">.io</span><span class="preprocessor">.ByteArrayOutputStream</span>
+  import java<span class="preprocessor">.awt</span><span class="preprocessor">.image</span><span class="preprocessor">.BufferedImage</span>
+  import org<span class="preprocessor">.krysalis</span><span class="preprocessor">.barcode</span>4j<span class="preprocessor">.output</span><span class="preprocessor">.bitmap</span><span class="preprocessor">.BitmapCanvasProvider</span>
+  import org<span class="preprocessor">.krysalis</span><span class="preprocessor">.barcode</span>4j<span class="preprocessor">.impl</span><span class="preprocessor">.upcean</span><span class="preprocessor">.EAN</span>13Bean
+  
+  val BarcodeResolution = <span class="number">72</span>
+  val output: ByteArrayOutputStream = new ByteArrayOutputStream
+  val canvas: BitmapCanvasProvider =
+    new BitmapCanvasProvider(output, mimeType,
+          BarcodeResolution, BufferedImage<span class="preprocessor">.TYPE</span>_BYTE_BINARY, false, <span class="number">0</span>)
+  val barcode = new EAN13Bean()
+  
+  barcode<span class="preprocessor">.generateBarcode</span>(canvas, String valueOf ean)
+  canvas<span class="preprocessor">.finish</span>
+  output<span class="preprocessor">.toByteArray</span>
+}
+
+// GET /barcode/:ean controllers<span class="preprocessor">.Products</span><span class="preprocessor">.barcode</span>(ean: Long)
+def barcode(ean: Long) = Action {
+  import java<span class="preprocessor">.lang</span><span class="preprocessor">.IllegalArgumentException</span>
+  val MimeType = <span class="string">"image/png"</span>
+  try {
+    val imageData: Array[Byte] = ean13Barcode(ean, MimeType)
+    Ok(imageData)<span class="preprocessor">.as</span>(MimeType)
+  } catch {
+    case e: IllegalArgumentException =&gt;
+      BadRequest(<span class="string">"Could not generate bar code. Error: "</span> + e<span class="preprocessor">.getMessage</span>)
+  }
+}
+</pre></td></tr></table></figure>
+
+<h2 id="http-status-codes">HTTP status codes</h2>
+<p>The simplest possible response that you might want to generate consists of only an
+HTTP status line that describes the result of processing the request. </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre>def <span class="keyword">list</span> = Action { request =&gt;
+  NotImplemented
+}
+
+<span class="comment">// 等同于</span>
+def <span class="keyword">list</span> = Action {
+  <span class="keyword">new</span> Status(<span class="number">501</span>)
+}
+</pre></td></tr></table></figure>
+
+<p><em>NotImplemented</em> is one of many HTTP status codes that are defined in the
+<code>play.api.mvc.Controller</code> class via the <code>play.api.mvc.Results</code> trait.</p>
+<h2 id="response-headers">Response headers</h2>
+<p>In addition to a status, a response may also include response headers:
+metadata that instructs HTTP clients how to handle the response</p>
+<pre><code>HTTP/1.1 501 Not Implemented
+Content-Length: 0
+</code></pre><figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>Status(FOUND)<span class="preprocessor">.withHeaders</span>(LOCATION -&gt; url)
+
+val url = routes<span class="preprocessor">.Products</span><span class="preprocessor">.details</span>(product<span class="preprocessor">.ean</span>)<span class="preprocessor">.url</span>
+Created<span class="preprocessor">.withHeaders</span>(LOCATION -&gt; url)
+</pre></td></tr></table></figure>
+
+<h3 id="setting-the-content-type">SETTING THE CONTENT TYPE</h3>
+<p>Every HTTP response that has a response body also has a Content-Type header,
+whose value is the MIME type that describes the response body format.</p>
+<p>Play automatically sets
+the content type for supported types, such as text/html when rendering an HTML
+template, or text/plain when you output a string response.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="code"><pre><span class="keyword">val</span> json = <span class="string">"""{ "status": "success" }"""</span>
+Ok(json).withHeaders(CONTENT_TYPE -&gt; <span class="string">"application/json"</span>)
+
+<span class="comment">// 也可以这样</span>
+Ok(<span class="string">"""{ "status": "success" }"""</span>).as(<span class="string">"application/json"</span>)
+
+<span class="comment">//  JSON is defined in the play.api.http.ContentTypes trait</span>
+<span class="comment">//  which Controller extends.</span>
+Ok(<span class="string">"""{ "status": "success" }"""</span>).as(JSON)
+</pre></td></tr></table></figure>
+
+<p>Play sets the content type automatically for some more types:
+Play selects <code>text/xml</code> for
+<code>scala.xml.NodeSeq</code> values, and <code>application/json</code>
+for <code>play.api.libs.json.JsValue</code> values.</p>
+<h3 id="session-data">SESSION DATA</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre>Ok(results)<span class="preprocessor">.withSession</span>(
+  request<span class="preprocessor">.session</span> + (<span class="string">"search.previous"</span> -&gt; query)
+)
+
+Ok(results)<span class="preprocessor">.withSession</span>(
+  request<span class="preprocessor">.session</span> - <span class="string">"search.previous"</span>
+)
+</pre></td></tr></table></figure>
+
+<p>The session is implemented as an HTTP session cookie, which means that
+its total size is limited to a few kilobytes.</p>
+<p><strong>DON’T CACHE DATA IN THE SESSION COOKIE</strong> Don’t try to use session data as a
+cache to improve performance by avoiding fetching data from server-side
+persistent storage. Apart from the fact that session data is limited to the 4 KB of data
+that fits in a cookie, this will increase the size of subsequent HTTP requests,
+which will include the cookie data, and may make performance worse overall.</p>
+<p>The canonical use case for session cookies is to identify the currently authenticated
+user.  You can load user-specific data from a persistent data model instead.</p>
+<p>The session Play cookie is signed using the application secret key as a salt to pre-
+vent tampering.</p>
+<h3 id="flash-data">FLASH DATA</h3>
+<p>Displaying a message when handling the next request, after a redirect, is such a
+common use case that Play provides a special session scope called flash scope.</p>
+<p>Flash scope works the same way as the session, except that any data
+that you store is only available when processing the next HTTP request,
+after which it’s automatically deleted. </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre>// 设置
+Redirect(routes<span class="preprocessor">.Products</span><span class="preprocessor">.flash</span>())<span class="preprocessor">.flashing</span>(
+  <span class="string">"info"</span> -&gt; <span class="string">"Product deleted!"</span>
+)
+
+// 获取
+val message = request<span class="preprocessor">.flash</span>(<span class="string">"info"</span>)
+</pre></td></tr></table></figure>
+
+<h3 id="setting-cookies">SETTING COOKIES</h3>
+<p>Cookies store small amounts of data in an HTTP client, such as a web browser on a
+specific computer.</p>
+<p>If you do need to use cookies, you can use the Play API to
+create cookies and add them to the response, and to read them from the request.</p>
+<p><strong>AVOID USING COOKIES</strong></p>
+<h2 id="serving-static-content">Serving static content</h2>
+<p>Not everything in a web application is dynamic content: a typical web application also
+includes static files, such as images, JavaScript files, and CSS stylesheets. Play serves
+these static files over HTTP the same way it serves dynamic responses: by routing an
+HTTP request to a controller action.</p>
+<h3 id="using-the-default-configuration">USING THE DEFAULT CONFIGURATION</h3>
+<p>Put files and folders inside your application’s <code>public/</code> folder and access
+them using the URL path <code>/assets</code>, followed by the path relative to public.</p>
+<p><code>public/images/favicon.png</code> 访问 <code>http://localhost:9000/assets/images/favicon.png</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>&lt;link href=<span class="string">"/assets/images/favicon.png"</span> rel=<span class="string">"shortcut icon"</span> <span class="keyword">type</span>=<span class="string">"image/png"</span>/&gt;
+</pre></td></tr></table></figure>
+
+<p><code>conf/routes</code> 的默认配置</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre>GET /assets/*<span class="type">file</span> controllers.Assets.<span class="keyword">at</span>(path=<span class="string">"/public"</span>, <span class="type">file</span>)
+GET /images/*<span class="type">file</span> controllers.Assets.<span class="keyword">at</span>(path=<span class="string">"/public/images"</span>, <span class="type">file</span>)
+GET /styles/*<span class="type">file</span> controllers.Assets.<span class="keyword">at</span>(path=<span class="string">"/public/styles"</span>, <span class="type">file</span>)
+</pre></td></tr></table></figure>
+
+<h3 id="using-an-asset-s-reverse-route">USING AN ASSET’S REVERSE ROUTE</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre>&lt;link href=<span class="string">"@routes.Assets.at("</span>images/favicon.png<span class="string">")"</span>
+      rel=<span class="string">"shortcut icon"</span> <span class="class"><span class="keyword">type</span>=</span><span class="string">"image/png"</span>&gt;
+
+&lt;link href=<span class="string">"@routes.Assets.at("</span>/<span class="keyword">public</span>/images<span class="string">", "</span>favicon.png<span class="string">")"</span>
+      rel=<span class="string">"shortcut icon"</span> <span class="class"><span class="keyword">type</span>=</span><span class="string">"image/png"</span>&gt;
+</pre></td></tr></table></figure>
+
+<h3 id="caching-and-etags">CACHING AND ETAGS</h3>
+<p>In addition to reverse routing, another benefit of using the assets controller
+is its builtin caching support, using an HTTP Entity Tag (ET ag).
+This allows a web client to make conditional HTTP requests for a resource
+so that the server can tell the client it can
+use a cached copy instead of returning a resource that hasn’t changed.</p>
+<p>Once it has an ET ag value, an HTTP client can make a conditional request, which
+means “only give me this resource if it hasn’t been modified since I got the version
+with this ET ag.”</p>
+<pre><code>If-None-Match: 978b71a4b1fef4051091b31e22b75321c7ff0541
+</code></pre><p>When this header is included in the request, and the favicon.png file hasn’t been
+modified (it has the same ETag value), then Play’s assets controller will return the fol-
+lowing response, which means “you can use your cached copy”:</p>
+<pre><code>HTTP/1.1 304 Not Modified
+Content-Length: 0
+</code></pre><h3 id="compressing-assets-with-gzip">COMPRESSING ASSETS WITH GZIP</h3>
+<p>HTTP compression is a feature of modern web servers and web clients that helps
+address page sizes by sending compressed versions of resources over HTTP .</p>
+<p>The way this works is that the web browser indicates that it can handle a com-
+pressed response by sending an HTTP request header such as <code>Accept-Encoding:gzip</code>
+that specifies supported compression methods. </p>
+<p>In Play, HTTP compression is transparently built into the assets controller, which can
+automatically serve a compressed version of a static file, if it’s available, and if gzip is
+supported by the HTTP client. This happens when all of the following are true:</p>
+<ul>
+<li>Play is running in prod mode (production mode is explained in chapter 9); HTTP
+compression isn’t expected to be used during development.</li>
+<li>Play receives a request that’s routed to the assets controller.</li>
+<li>The HTTP request includes an Accept-Encoding: gzip header.</li>
+<li>The request maps to a static file, and a file with the same name but with an
+additional <code>.gz</code> suffix is found.</li>
+</ul>
+<p>所以必须要先运行</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>gzip --best &lt; ui<span class="preprocessor">.js</span> &gt; ui<span class="preprocessor">.js</span><span class="preprocessor">.gz</span>
+</pre></td></tr></table></figure>
+
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/play/">play</a><a href="/tags/scala/">scala</a>
+  </div>
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://zhpooer.github.io/2014/08/09/play-for-scala-define-http-interface/" data-title="Play for Scala-Define Http interface | Poe&#39;s World" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2014/08/10/传智播客day65-hadoop入门/" title="传智播客day65-Hadoop入门">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  传智播客day65-Hadoop入门</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2014/08/09/传智播客day64-nosql/"  title="传智播客day64-NoSql">
+ <strong>NEXT:</strong><br/> 
+ <span>传智播客day64-NoSql
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#benefits-of-good-url-design"><span class="toc-number">1.</span> <span class="toc-text">Benefits of good URL design</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#controllers-the-interface-between-http-and-scala"><span class="toc-number">2.</span> <span class="toc-text">Controllers—the interface between HTTP and Scala</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#controller-classes-and-action-methods"><span class="toc-number">2.1.</span> <span class="toc-text">Controller classes and action methods</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#http-and-the-controller-layer-s-scala-api"><span class="toc-number">2.2.</span> <span class="toc-text">HTTP and the controller layer’s Scala API</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#action-composition"><span class="toc-number">2.3.</span> <span class="toc-text">Action composition</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#routing-http-requests-to-controller-actions"><span class="toc-number">3.</span> <span class="toc-text">Routing HTTP requests to controller actions</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#router-configuration"><span class="toc-number">3.1.</span> <span class="toc-text">Router configuration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#matching-url-path-parameters-that-contain-forward-slashes"><span class="toc-number">3.2.</span> <span class="toc-text">Matching URL path parameters that contain forward slashes</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#constraining-url-path-parameters-with-regular-expressions"><span class="toc-number">3.3.</span> <span class="toc-text">Constraining URL path parameters with regular expressions</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#binding-http-data-to-scala-objects"><span class="toc-number">3.4.</span> <span class="toc-text">Binding HTTP data to Scala objects</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#generating-http-calls-for-actions-with-reverse-routing"><span class="toc-number">4.</span> <span class="toc-text">Generating HTTP calls for actions with reverse routing</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#hardcoded-urls"><span class="toc-number">4.1.</span> <span class="toc-text">Hardcoded URLs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#reverse-routing"><span class="toc-number">4.2.</span> <span class="toc-text">Reverse routing</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#generating-a-response"><span class="toc-number">5.</span> <span class="toc-text">Generating a response</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#debugging-http-responses"><span class="toc-number">5.1.</span> <span class="toc-text">Debugging HTTP responses</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#response-body"><span class="toc-number">5.2.</span> <span class="toc-text">Response body</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#binary-data"><span class="toc-number">5.2.1.</span> <span class="toc-text">BINARY DATA</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#http-status-codes"><span class="toc-number">5.3.</span> <span class="toc-text">HTTP status codes</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#response-headers"><span class="toc-number">5.4.</span> <span class="toc-text">Response headers</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#setting-the-content-type"><span class="toc-number">5.4.1.</span> <span class="toc-text">SETTING THE CONTENT TYPE</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#session-data"><span class="toc-number">5.4.2.</span> <span class="toc-text">SESSION DATA</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#flash-data"><span class="toc-number">5.4.3.</span> <span class="toc-text">FLASH DATA</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#setting-cookies"><span class="toc-number">5.4.4.</span> <span class="toc-text">SETTING COOKIES</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#serving-static-content"><span class="toc-number">5.5.</span> <span class="toc-text">Serving static content</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#using-the-default-configuration"><span class="toc-number">5.5.1.</span> <span class="toc-text">USING THE DEFAULT CONFIGURATION</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#using-an-asset-s-reverse-route"><span class="toc-number">5.5.2.</span> <span class="toc-text">USING AN ASSET’S REVERSE ROUTE</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#caching-and-etags"><span class="toc-number">5.5.3.</span> <span class="toc-text">CACHING AND ETAGS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#compressing-assets-with-gzip"><span class="toc-number">5.5.4.</span> <span class="toc-text">COMPRESSING ASSETS WITH GZIP</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/AJAX/" title="AJAX">AJAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+		
+			<li><a href="/tags/DOM/" title="DOM">DOM<sup>2</sup></a></li>
+		
+			<li><a href="/tags/EL表达式/" title="EL表达式">EL表达式<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Hibernate/" title="Hibernate">Hibernate<sup>2</sup></a></li>
+		
+			<li><a href="/tags/HttpSession/" title="HttpSession">HttpSession<sup>1</sup></a></li>
+		
+			<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JSP/" title="JSP">JSP<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaBean/" title="JavaBean">JavaBean<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaScript/" title="JavaScript">JavaScript<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Mybatis/" title="Mybatis">Mybatis<sup>1</sup></a></li>
+		
+			<li><a href="/tags/NoSql/" title="NoSql">NoSql<sup>1</sup></a></li>
+		
+			<li><a href="/tags/SAX/" title="SAX">SAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletRequest/" title="ServletRequest">ServletRequest<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletResponse/" title="ServletResponse">ServletResponse<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Spring/" title="Spring">Spring<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Spring MVC/" title="Spring MVC">Spring MVC<sup>1</sup></a></li>
+		
+			<li><a href="/tags/String/" title="String">String<sup>1</sup></a></li>
+		
+			<li><a href="/tags/StringBuffer/" title="StringBuffer">StringBuffer<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2014 
+		
+		<a href="http://zhpooer.github.io" target="_blank" title="zhpooer">zhpooer</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"zhpoooer"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>

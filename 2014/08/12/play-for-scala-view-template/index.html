@@ -1,0 +1,995 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Play for Scala-View Template | Poe&#39;s World</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="zhpooer">
+    
+    <meta name="description" content="The why of a template engine
+Templates allow you to reuse pieces of your HTML when you need them, such as a
+header and a footer section that are the s">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="Poe&#39;s World" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="Poe&#39;s World" title="Poe&#39;s World"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Poe&#39;s World">Poe&#39;s World</a></h1>
+				<h2 class="blog-motto">竹杖芒鞋轻胜马，一蓑烟雨任平生</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/english-monthly">英语角</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:zhpooer.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/08/12/play-for-scala-view-template/" title="Play for Scala-View Template" itemprop="url">Play for Scala-View Template</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://zhpooer.github.io" title="zhpooer">zhpooer</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2014-08-12T03:36:59.000Z" itemprop="datePublished">8月 12 2014</time>
+    更新日期:<time datetime="2014-08-12T08:21:41.000Z" itemprop="dateModified">8月 12 2014</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#the-why-of-a-template-engine"><span class="toc-number">1.</span> <span class="toc-text">The why of a template engine</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#type-safety-of-a-template-engine"><span class="toc-number">2.</span> <span class="toc-text">Type safety of a template engine</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#a-type-safe-template-engine"><span class="toc-number">2.1.</span> <span class="toc-text">A type-safe template engine</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#template-basics-and-common-structures"><span class="toc-number">3.</span> <span class="toc-text">Template basics and common structures</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">3.1.</span> <span class="toc-text">特殊字符 @</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">3.2.</span> <span class="toc-text">表达式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#displaying-collections"><span class="toc-number">3.3.</span> <span class="toc-text">Displaying collections</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#adding-the-index-of-the-element"><span class="toc-number">3.3.1.</span> <span class="toc-text">ADDING THE INDEX OF THE ELEMENT</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#security-and-escaping"><span class="toc-number">3.4.</span> <span class="toc-text">Security and escaping</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#cross-site-scripting-vulnerabilities"><span class="toc-number">3.4.1.</span> <span class="toc-text">CROSS-SITE SCRIPTING VULNERABILITIES</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#escaping"><span class="toc-number">3.4.2.</span> <span class="toc-text">ESCAPING</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#using-plain-scala"><span class="toc-number">3.5.</span> <span class="toc-text">Using plain Scala</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#structuring-pages-template-composition"><span class="toc-number">4.</span> <span class="toc-text">Structuring pages: template composition</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#layouts"><span class="toc-number">4.1.</span> <span class="toc-text">Layouts</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#tags"><span class="toc-number">4.2.</span> <span class="toc-text">Tags</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#reducing-repetition-with-implicit-parameters"><span class="toc-number">5.</span> <span class="toc-text">Reducing repetition with implicit parameters</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#using-less-and-coffeescript-the-asset-pipeline"><span class="toc-number">6.</span> <span class="toc-text">Using LESS and CoffeeScript: the asset pipeline</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#less"><span class="toc-number">6.1.</span> <span class="toc-text">LESS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#coffeescript"><span class="toc-number">6.2.</span> <span class="toc-text">CoffeeScript</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#the-asset-pipeline"><span class="toc-number">6.3.</span> <span class="toc-text">The asset pipeline</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#internationalization"><span class="toc-number">7.</span> <span class="toc-text">Internationalization</span></a></li></ol>
+		</div>
+		
+		<h1 id="the-why-of-a-template-engine">The why of a template engine</h1>
+<p>Templates allow you to reuse pieces of your HTML when you need them, such as a
+header and a footer section that are the same or similar on every page. </p>
+<p>Another reason to use templates is because they help you to separate business logic
+from presentation logic; separating these two concerns has several advantages.</p>
+<h1 id="type-safety-of-a-template-engine">Type safety of a template engine</h1>
+<p>Play Scala templates are HTML files containing snippets of Scala code,
+which are compiled into plain Scala code before your application is started. </p>
+<p>As an example, we’ll build a catalog application. The main page will be a list of all
+the articles in the catalog, and every article on this page will have a hyperlink to a
+details page for that article, where more information about that article is shown. </p>
+<h2 id="a-type-safe-template-engine">A type-safe template engine</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code"><pre><span class="at_rule">@<span class="keyword">(articles:</span> Seq[models.Article])
+&lt;hi&gt;Articles&lt;/hi&gt;
+&lt;ul&gt;
+@<span class="function">for(article &lt;- articles)</span> </span>{
+  &lt;<span class="tag">li</span>&gt;
+    <span class="at_rule">@<span class="keyword">article.name</span> -
+    &lt;a href=<span class="string">"@controllers.routes.Aritcles.show(article.id)"</span>&gt;
+      details
+    &lt;/a&gt;
+  &lt;/li&gt;
+}
+&lt;/ul&gt;</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code"><pre><span class="class"><span class="keyword">object</span> <span class="title">Articles</span> <span class="keyword">extends</span> <span class="title">Controller</span> {</span>
+  <span class="keyword">def</span> index = Action {
+    <span class="keyword">val</span> articles = Article.findAll()
+    Ok(views.html.articles.index(articles))
+  }
+  <span class="keyword">def</span> show(id:Long) = Action {
+    Articles.findById(id) <span class="keyword">match</span> {
+      <span class="keyword">case</span> None =&gt; NotFound
+      <span class="keyword">case</span> Some(article) =&gt; Ok(views.html.articles.show(article))
+    }
+  }
+}
+</pre></td></tr></table></figure>
+
+<p>Play’s type-safe template engine will help you build a more robust application. Both
+your IDE and Play itself will warn you when a refactoring causes type errors, even
+before you render the template.</p>
+<h1 id="template-basics-and-common-structures">Template basics and common structures</h1>
+<p>In Scala templates, the <code>@</code> character marks the start of a Scala expression.</p>
+<h2 id="-">特殊字符 @</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="code"><pre>Hello <span class="decorator">@name!</span>
+Your age <span class="keyword">is</span> <span class="decorator">@user.age.</span>
+Next year, your age will be <span class="decorator">@(user.age + 1)</span>
+
+<span class="decorator">@* 这样是错误的 *@</span>
+Next year, your age will be <span class="decorator">@user.age + 1</span>
+
+Next year, your age will be
+<span class="decorator">@{val ageNextYear = user.age + 1; ageNextYear}</span>
+
+<span class="decorator">@* 输出 @ 符号 *@</span>
+username<span class="decorator">@@example.com</span>
+
+<span class="decorator">@* 这是注释 *@</span>
+</pre></td></tr></table></figure>
+
+<h2 id="-">表达式</h2>
+<p>Play also imports various things into the scope of your templates. The following are
+automatically imported by Play:</p>
+<ul>
+<li><code>models._</code></li>
+<li><code>controllers._</code></li>
+<li><code>play.api.i18n._</code></li>
+<li><code>play.api.mvc._</code>, makes MVC components available.</li>
+<li><code>play.api.data._</code>, contains tools for dealing with forms and validation. </li>
+<li><code>views.%format%._</code>,  is replaced by the template format that you’re using.</li>
+</ul>
+<h2 id="displaying-collections">Displaying collections</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+</pre></td><td class="code"><pre>&lt;ul&gt;
+<span class="keyword">@articles</span>.map { article =&gt;
+  &lt;li&gt;<span class="keyword">@article</span>.name&lt;/li&gt;
+}
+&lt;/ul&gt;
+
+@* The <span class="keyword">template</span> compiler automatically adds the yield keyword *@
+&lt;ul&gt;
+<span class="keyword">@for</span>(article &lt;- articles) {
+  &lt;li&gt;<span class="keyword">@article</span>.name&lt;/li&gt;
+}
+&lt;/ul&gt;
+
+<span class="keyword">@for</span>(article &lt;- articles) {
+  Article name: <span class="keyword">@article</span>.name
+}
+</pre></td></tr></table></figure>
+
+<p>If you’re interested in the details of the template engine,
+you can take a look at the file <code>ScalaTemplateCompiler.scala</code> in the Play
+framework source. </p>
+<h3 id="adding-the-index-of-the-element">ADDING THE INDEX OF THE ELEMENT</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="code"><pre>&lt;ul&gt;
+<span class="variable">@for</span>((article, <span class="keyword">index</span>) &lt;- articles.zipWithIndex) {
+  &lt;li&gt;Best seller number <span class="variable">@(</span><span class="keyword">index</span> + <span class="number">1</span>): <span class="variable">@article</span>.name&lt;<span class="regexp">/li&gt;
+}
+&lt;/ul</span>&gt;
+
+&lt;ul&gt;
+<span class="variable">@for</span>((article, <span class="keyword">index</span>) &lt;- articles.zipWithIndex) {
+  &lt;li class=<span class="string">"<span class="variable">@if</span>(index == 0){first}
+    <span class="variable">@if</span>(index == articles.length - 1){last}"</span>&gt;
+  Best seller number <span class="variable">@(</span><span class="keyword">index</span> + <span class="number">1</span>): <span class="variable">@article</span>.name&lt;<span class="regexp">/li&gt;
+}
+&lt;/ul</span>&gt;
+</pre></td></tr></table></figure>
+
+<h2 id="security-and-escaping">Security and escaping</h2>
+<p>An application developer must always keep security in mind, and when dealing with
+templates, avoiding cross-site scripting vulnerabilities is especially relevant. </p>
+<h3 id="cross-site-scripting-vulnerabilities">CROSS-SITE SCRIPTING VULNERABILITIES</h3>
+<p>HTML injection could lead to minor annoyances, like broken markup and invalid
+HTML documents, but much more serious problems arise when a malicious user
+inserts scripts in your web page. These scripts could, for example, steal other visitors’
+cookies when they use your application, and send these cookies to a server under the
+attacker’s control.</p>
+<h3 id="escaping">ESCAPING</h3>
+<p>Everything that you write literally in a template is considered HTML by Play, and is
+output unescaped. This HTML is always written by the template author, so it’s consid-
+ered safe. </p>
+<p>But all Scala expressions are escaped.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre>@* embedCode 在这里被当成 没有特殊字符的文本, 不会被转义 *@
+<span class="property">@article</span>.embeddedVideo.map { embedCode<span class="function"> =&gt;</span>
+  &lt;h3&gt;Product video&lt;/h3&gt;
+  <span class="property">@Html</span>(embedCode)
+}
+</pre></td></tr></table></figure>
+
+<h2 id="using-plain-scala">Using plain Scala</h2>
+<p>As shown earlier, you can use plain Scala if you
+create a block with <code>@()</code> or <code>@{}</code>.</p>
+<p>By default, the output is escaped. If you want to prevent this, wrap the result in an Html.</p>
+<p>Any scala.xml.NodeSeq is also rendered unescaped, so you
+can use the following code:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre>@{
+  <span class="tag">&lt;<span class="title">b</span>&gt;</span>hello<span class="tag">&lt;/<span class="title">b</span>&gt;</span>
+}
+</pre></td></tr></table></figure>
+
+<p>只调用 <code>article.countReview()</code> 一次, 值映射到 total</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="property">@defining</span>(article.countReview()) { total<span class="function"> =&gt;</span>
+  &lt;h3&gt;This article has been reviewed <span class="property">@total</span> times&lt;/h3&gt;
+  &lt;p&gt;@(article.countPositiveReviews()) out <span class="keyword">of</span> these
+  <span class="property">@total</span> reviews were positive!&lt;/p&gt;
+}
+</pre></td></tr></table></figure>
+
+<h1 id="structuring-pages-template-composition">Structuring pages: template composition</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>def catalog() = Action {
+  val products = ProductDAO<span class="preprocessor">.list</span>
+  Ok(views<span class="preprocessor">.html</span><span class="preprocessor">.shop</span><span class="preprocessor">.catalog</span>(products))
+}
+</pre></td></tr></table></figure>
+
+<p><code>views/navigation.scala.html</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre>@()
+<span class="tag">&lt;<span class="title">div</span> <span class="attribute">id</span>=<span class="value">"navigation"</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">ul</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">li</span>&gt;</span><span class="tag">&lt;<span class="title">a</span> <span class="attribute">href</span>=<span class="value">"@routes.Application.home"</span>&gt;</span>Home<span class="tag">&lt;/<span class="title">a</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">li</span>&gt;</span><span class="tag">&lt;<span class="title">a</span> <span class="attribute">href</span>=<span class="value">"@routes.Shop.catalog"</span>&gt;</span>Catalog<span class="tag">&lt;/<span class="title">a</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">li</span>&gt;</span><span class="tag">&lt;<span class="title">a</span> <span class="attribute">href</span>=<span class="value">"@routes.Application.contact"</span>&gt;</span>Contact<span class="tag">&lt;/<span class="title">a</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+  <span class="tag">&lt;/<span class="title">ul</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<p><code>views/catalog.scala.html</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- other code --&gt;</span>
+<span class="comment">&lt;!-- 导入 navigation 模板 --&gt;</span>
+  @navigation()
+<span class="comment">&lt;!-- other code --&gt;</span>
+</pre></td></tr></table></figure>
+
+<h2 id="layouts">Layouts</h2>
+<p><code>app/views/main.scala.html</code>, with a single parameter named content of type <code>Html</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+</pre></td><td class="code"><pre>@(content: Html)
+<span class="doctype">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;<span class="title">html</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">head</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">title</span>&gt;</span>paperclips.example.com<span class="tag">&lt;/<span class="title">title</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">link</span> <span class="attribute">href</span>=<span class="value">"@routes.Assets.at("</span><span class="value">stylesheets</span>/<span class="attribute">main.css</span>")"
+          <span class="attribute">rel</span>=<span class="value">"stylesheet"</span>&gt;</span>
+  <span class="tag">&lt;/<span class="title">head</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">body</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">div</span> <span class="attribute">id</span>=<span class="value">"header"</span>&gt;</span>
+      <span class="tag">&lt;<span class="title">h1</span>&gt;</span>Products<span class="tag">&lt;/<span class="title">h1</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+    @navigation
+    <span class="tag">&lt;<span class="title">div</span> <span class="attribute">id</span>=<span class="value">"content"</span>&gt;</span>
+      @content
+    <span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">footer</span>&gt;</span>
+      <span class="tag">&lt;<span class="title">p</span>&gt;</span>Copyright paperclips.example.com<span class="tag">&lt;/<span class="title">p</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">footer</span>&gt;</span>
+  <span class="tag">&lt;/<span class="title">body</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">html</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<p>可以这样使用</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code"><pre>@(products: Seq[Product])
+<span class="keyword">@main</span> {
+  &lt;h2&gt;Products&lt;/h2&gt;
+  &lt;ul <span class="keyword">class</span>=<span class="string">"products"</span>&gt;
+  <span class="keyword">@for</span>(product &lt;- products) {
+    &lt;li&gt;
+      &lt;h3&gt;<span class="keyword">@product</span>.name&lt;/h3&gt;
+      &lt;p <span class="keyword">class</span>=<span class="string">"description"</span>&gt;<span class="keyword">@product</span>.description&lt;/p&gt;
+    &lt;/li&gt;
+  }
+  &lt;/ul&gt;
+}
+</pre></td></tr></table></figure>
+
+<p>可以这样定义</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre>@* @(title="paperclips.example.com")(content: Html) 或这样*@
+@(title: String)(content: Html)
+<span class="tag">&lt;<span class="title">html</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">head</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">title</span>&gt;</span>@title<span class="tag">&lt;/<span class="title">title</span>&gt;</span>
+  <span class="comment">&lt;!-- any --&gt;</span>
+</pre></td></tr></table></figure>
+
+<p>这样使用</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="at_rule">@<span class="function">main(<span class="string">"Products"</span>)</span> {</span>
+  <span class="comment">// content here</span>
+}
+</pre></td></tr></table></figure>
+
+<h2 id="tags">Tags</h2>
+<p><code>views/products/tags/productlist.scala.html</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="code"><pre><span class="variable">@(</span>products: Se<span class="string">q[Product]</span>)
+&lt;ul class=<span class="string">"products"</span>&gt;
+<span class="variable">@for</span>(product &lt;- products) {
+  &lt;li&gt;
+    &lt;h3&gt;<span class="variable">@product</span>.name&lt;<span class="regexp">/h3&gt;
+    &lt;p class="description"&gt;@product.description&lt;/p</span>&gt;
+  &lt;<span class="regexp">/li&gt;
+}
+&lt;/ul</span>&gt;
+</pre></td></tr></table></figure>
+
+<p><code>catalog.scala.html</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="variable">@(</span>products: Se<span class="string">q[Product]</span>)
+<span class="variable">@main</span> {
+  &lt;h2&gt;Products&lt;<span class="regexp">/h2&gt;
+  @views.html.products.tags.productlist(products)
+}</span>
+</pre></td></tr></table></figure>
+
+<h1 id="reducing-repetition-with-implicit-parameters">Reducing repetition with implicit parameters</h1>
+<p>Let’s continue with our web shop example. This time we’ll assume that we want to
+maintain a shopping cart on the website, and in the top-right corner of every page we
+want to show the number of items the visitor has in their shopping cart.</p>
+<p><code>main.scala.html</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre>@(cart: Cart)(content: Html)
+<span class="tag">&lt;<span class="title">html</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">head</span>&gt;</span><span class="tag">&lt;/<span class="title">head</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">body</span>&gt;</span><span class="tag">&lt;/<span class="title">body</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">html</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<p>Now that the main template needs a Cart parameter, we’ll have to pass one to it,
+which means adapting our catalog template. But this template doesn’t have a refer-
+ence to a Cart object, so it’ll need to take one as a parameter as well:</p>
+<p><code>cart.scala.html</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="variable">@(</span>products: Se<span class="string">q[Product]</span>, cart: Cart)
+<span class="variable">@main</span>(cart) {
+  &lt;h2&gt;Catalog&lt;<span class="regexp">/h2&gt;
+  @views.html.products.tags.productlist(products)
+}</span>
+</pre></td></tr></table></figure>
+
+<p>We’ll also have to pass a Cart from the action:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre><span class="keyword">def</span> catalog() = Action { request =&gt;
+  <span class="keyword">val</span> products = ProductDAO.list
+  Ok(views.html.shop.catalog(products, cart(request)))
+}
+
+<span class="keyword">def</span> cart(request: Request) = {
+  <span class="comment">// Get cart from session</span>
+}
+</pre></td></tr></table></figure>
+
+<p>可以这样:</p>
+<p>We can use an implicit parameter to change the method signature of our catalog
+template as follows:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre><span class="variable">@(</span>products: Se<span class="string">q[Product]</span>)(implicit cart: Cart)
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre>def catalog() = Action { <span class="keyword">implicit</span> request =&gt;
+  val products = ProductDAO.list
+  Ok(views.html.shop.catalog(products))
+}
+
+<span class="keyword">implicit</span> def cart(<span class="keyword">implicit</span> request: RequestHeader) = {
+  <span class="comment">// Get cart from session</span>
+}
+</pre></td></tr></table></figure>
+
+<p>We can make our newly created cart method reusable, by moving it into a trait:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="class"><span class="keyword">trait</span> <span class="title">WithCart</span> {</span>
+  implicit <span class="keyword">def</span> cart(implicit request: RequestHeader) = {
+    <span class="comment">// Get cart from session</span>
+  }
+}
+</pre></td></tr></table></figure>
+
+<p>If you have an implicit Request in
+scope in your controller, you also have an implicit RequestHeader, Session,
+Flash, and Lang in scope, because the Controller trait defines
+implicit conversions for these types.</p>
+<h1 id="using-less-and-coffeescript-the-asset-pipeline">Using LESS and CoffeeScript: the asset pipeline</h1>
+<p>LESS is a stylesheet language that’s
+transformed to CSS by a LESS interpreter or compiler,
+whereas CoffeeScript is a scripting language that’s transformed into
+JavaScript by a CoffeeScript compiler.</p>
+<h2 id="less">LESS</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="code"><pre><span class="class">.header</span> <span class="rules">{
+  <span class="rule"><span class="attribute">background-color</span>:<span class="value"> <span class="hexcolor">#0b5c20</span></span></span>;
+<span class="rule">}</span></span>
+<span class="class">.footer</span> <span class="rules">{
+  <span class="rule"><span class="attribute">background-color</span>:<span class="value"><span class="hexcolor">#0b5c20</span></span></span>;
+<span class="rule">}</span></span>
+<span class="class">.footer</span> <span class="tag">a</span> <span class="rules">{
+  <span class="rule"><span class="attribute">font-weight</span>:<span class="value"> bold</span></span>;
+<span class="rule">}</span></span>
+</pre></td></tr></table></figure>
+
+<p>LESS:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre><span class="at_rule">@green: <span class="hexcolor">#0b5c20</span>;</span>
+<span class="class">.header</span> {
+  <span class="attribute">background-color</span><span class="value">:@green;</span>
+}
+
+<span class="class">.footer</span> {
+  <span class="attribute">background-color</span><span class="value">:@green;</span>
+  <span class="tag">a</span> {
+    <span class="attribute">font-weight</span><span class="value">:bold;</span>
+  }
+}
+</pre></td></tr></table></figure>
+
+<h2 id="coffeescript">CoffeeScript</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>math =
+  <span class="attribute">root</span>: Math.sqrt
+  <span class="attribute">square</span>: square
+  <span class="attribute">cube</span>: <span class="function"><span class="params">(x)</span> -&gt;</span> x * square x
+</pre></td></tr></table></figure>
+
+<h2 id="the-asset-pipeline">The asset pipeline</h2>
+<p>Play supports automatic build-time CoffeeScript and LESS compilation, and it
+shows compilation errors in the familiar Play error page.</p>
+<p>For example, if you place a CoffeeScript file in
+<code>app/assets/javascripts/application.coffee</code>,
+you can reference it from a template like this:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">script</span> <span class="attribute">src</span>=<span class="value">"@routes.Assets.at("</span><span class="value">javascripts</span>/<span class="attribute">application.js</span>")"&gt;</span><span class="javascript"></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<p>You can also use an automatically generated minified version of
+your JavaScript file by changing <code>application.js</code> to <code>application.min.js</code> .</p>
+<h1 id="internationalization">Internationalization</h1>
+<p>Internationalization is a refactoring to remove locale-specific code from
+your application. Localization is making a locale-specific version of an application. In
+an internationalized web application, this means having one or more selectable
+locale-specific versions.</p>
+<p><code>application.conf</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>application<span class="preprocessor">.langs</span>=<span class="string">"en,en-US,nl"</span>
+</pre></td></tr></table></figure>
+
+<p><code>conf/messages</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre>welcome = Welcome!
+users.login = Log <span class="keyword">in</span>
+shop.thanks = Thank you <span class="keyword">for</span> your <span class="keyword">order</span>
+</pre></td></tr></table></figure>
+
+<p>Play provides an implicit conversion from a Request to a Lang, which is more useful.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre><span class="function">Messages(<span class="string">"users.login"</span>)</span>(<span class="function">Lang(<span class="string">"en"</span>)</span>)
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre><span class="at_rule">@<span class="keyword">(implicit</span> request: Request)
+&lt;h1&gt;@<span class="function">Messages(<span class="string">"welcome"</span>)</span>&lt;/h1&gt;</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre><span class="attribute">validation.required</span>=<span class="string">{0} is required</span>
+</pre></td></tr></table></figure>
+
+<p>You can substitute these by specifying more parameters to the call to Messages:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre><span class="keyword">Messages</span>(<span class="string">"validation.required"</span>, <span class="string">"email"</span>)
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre>shop.basketcount=Your cart {<span class="number">0</span>,choice,<span class="number">0</span><span class="array">#is empty</span>|<span class="number">1</span><span class="array">#has one item</span>
+  |<span class="number">1</span>&lt; has {<span class="number">0</span>} items}.
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">p</span>&gt;</span>@Messages("shop.basketcount", 0)<span class="tag">&lt;/<span class="title">p</span>&gt;</span>
+<span class="tag">&lt;<span class="title">p</span>&gt;</span>@Messages("shop.basketcount", 1)<span class="tag">&lt;/<span class="title">p</span>&gt;</span>
+<span class="tag">&lt;<span class="title">p</span>&gt;</span>@Messages("shop.basketcount", 10)<span class="tag">&lt;/<span class="title">p</span>&gt;</span>
+<span class="comment">&lt;!-- 输出 --&gt;</span>
+<span class="comment">&lt;!-- Your cart is empty. --&gt;</span>
+<span class="comment">&lt;!-- Your cart has one item. --&gt;</span>
+<span class="comment">&lt;!-- Your cart has 10 items. --&gt;</span>
+</pre></td></tr></table></figure>
+
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/scala/">scala</a><a href="/tags/play/">play</a>
+  </div>
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://zhpooer.github.io/2014/08/12/play-for-scala-view-template/" data-title="Play for Scala-View Template | Poe&#39;s World" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2014/08/12/play-for-scala-input-with-forms/" title="Play for Scala-Input with forms">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  Play for Scala-Input with forms</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2014/08/11/传智播客day66-hadoop-hdfs/"  title="传智播客day66-Hadoop HDFS">
+ <strong>NEXT:</strong><br/> 
+ <span>传智播客day66-Hadoop HDFS
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#the-why-of-a-template-engine"><span class="toc-number">1.</span> <span class="toc-text">The why of a template engine</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#type-safety-of-a-template-engine"><span class="toc-number">2.</span> <span class="toc-text">Type safety of a template engine</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#a-type-safe-template-engine"><span class="toc-number">2.1.</span> <span class="toc-text">A type-safe template engine</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#template-basics-and-common-structures"><span class="toc-number">3.</span> <span class="toc-text">Template basics and common structures</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">3.1.</span> <span class="toc-text">特殊字符 @</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">3.2.</span> <span class="toc-text">表达式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#displaying-collections"><span class="toc-number">3.3.</span> <span class="toc-text">Displaying collections</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#adding-the-index-of-the-element"><span class="toc-number">3.3.1.</span> <span class="toc-text">ADDING THE INDEX OF THE ELEMENT</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#security-and-escaping"><span class="toc-number">3.4.</span> <span class="toc-text">Security and escaping</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#cross-site-scripting-vulnerabilities"><span class="toc-number">3.4.1.</span> <span class="toc-text">CROSS-SITE SCRIPTING VULNERABILITIES</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#escaping"><span class="toc-number">3.4.2.</span> <span class="toc-text">ESCAPING</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#using-plain-scala"><span class="toc-number">3.5.</span> <span class="toc-text">Using plain Scala</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#structuring-pages-template-composition"><span class="toc-number">4.</span> <span class="toc-text">Structuring pages: template composition</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#layouts"><span class="toc-number">4.1.</span> <span class="toc-text">Layouts</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#tags"><span class="toc-number">4.2.</span> <span class="toc-text">Tags</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#reducing-repetition-with-implicit-parameters"><span class="toc-number">5.</span> <span class="toc-text">Reducing repetition with implicit parameters</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#using-less-and-coffeescript-the-asset-pipeline"><span class="toc-number">6.</span> <span class="toc-text">Using LESS and CoffeeScript: the asset pipeline</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#less"><span class="toc-number">6.1.</span> <span class="toc-text">LESS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#coffeescript"><span class="toc-number">6.2.</span> <span class="toc-text">CoffeeScript</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#the-asset-pipeline"><span class="toc-number">6.3.</span> <span class="toc-text">The asset pipeline</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#internationalization"><span class="toc-number">7.</span> <span class="toc-text">Internationalization</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/AJAX/" title="AJAX">AJAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+		
+			<li><a href="/tags/DOM/" title="DOM">DOM<sup>2</sup></a></li>
+		
+			<li><a href="/tags/EL表达式/" title="EL表达式">EL表达式<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Hibernate/" title="Hibernate">Hibernate<sup>2</sup></a></li>
+		
+			<li><a href="/tags/HttpSession/" title="HttpSession">HttpSession<sup>1</sup></a></li>
+		
+			<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JSP/" title="JSP">JSP<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaBean/" title="JavaBean">JavaBean<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaScript/" title="JavaScript">JavaScript<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Mybatis/" title="Mybatis">Mybatis<sup>1</sup></a></li>
+		
+			<li><a href="/tags/NoSql/" title="NoSql">NoSql<sup>1</sup></a></li>
+		
+			<li><a href="/tags/SAX/" title="SAX">SAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletRequest/" title="ServletRequest">ServletRequest<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletResponse/" title="ServletResponse">ServletResponse<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Spring/" title="Spring">Spring<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Spring MVC/" title="Spring MVC">Spring MVC<sup>1</sup></a></li>
+		
+			<li><a href="/tags/String/" title="String">String<sup>1</sup></a></li>
+		
+			<li><a href="/tags/StringBuffer/" title="StringBuffer">StringBuffer<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2014 
+		
+		<a href="http://zhpooer.github.io" target="_blank" title="zhpooer">zhpooer</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"zhpoooer"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>
