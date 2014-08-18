@@ -1,0 +1,1540 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Play for Scala-JSON | Poe&#39;s World</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="zhpooer">
+    
+    <meta name="description" content="Creating the single-page Play application
+In this section, we’ll add dynamic data from the server to our web page: a table of
+products that shows each">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="Poe&#39;s World" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="Poe&#39;s World" title="Poe&#39;s World"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Poe&#39;s World">Poe&#39;s World</a></h1>
+				<h2 class="blog-motto">竹杖芒鞋轻胜马，一蓑烟雨任平生</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/english-monthly">英语角</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:zhpooer.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/08/18/play-for-scala-json/" title="Play for Scala-JSON" itemprop="url">Play for Scala-JSON</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://zhpooer.github.io" title="zhpooer">zhpooer</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2014-08-18T02:39:36.000Z" itemprop="datePublished">8月 18 2014</time>
+    更新日期:<time datetime="2014-08-18T12:42:14.000Z" itemprop="dateModified">8月 18 2014</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#creating-the-single-page-play-application"><span class="toc-number">1.</span> <span class="toc-text">Creating the single-page Play application</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#constructing-json-data-value-objects"><span class="toc-number">1.1.</span> <span class="toc-text">Constructing JSON data value objects</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#working-with-the-json-objects"><span class="toc-number">1.1.1.</span> <span class="toc-text">WORKING WITH THE JSON OBJECTS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#generating-strings-from-json-values"><span class="toc-number">1.1.2.</span> <span class="toc-text">GENERATING STRINGS FROM JSON VALUES</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fetching-json-data-from-the-client"><span class="toc-number">1.1.3.</span> <span class="toc-text">FETCHING JSON DATA FROM THE CLIENT</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#converting-model-objects-to-json-objects"><span class="toc-number">1.2.</span> <span class="toc-text">Converting model objects to JSON objects</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#json-formatters"><span class="toc-number">1.2.1.</span> <span class="toc-text">JSON FORMATTERS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#using-a-custom-formatter"><span class="toc-number">1.2.2.</span> <span class="toc-text">USING A CUSTOM FORMATTER</span></a></li></ol></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#sending-json-data-to-the-server"><span class="toc-number">2.</span> <span class="toc-text">Sending JSON data to the server</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#editing-and-sending-client-data"><span class="toc-number">2.1.</span> <span class="toc-text">Editing and sending client data</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#consuming-json"><span class="toc-number">2.2.</span> <span class="toc-text">Consuming JSON</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#consuming-json-in-more-detail"><span class="toc-number">2.3.</span> <span class="toc-text">Consuming JSON in more detail</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#reusable-consumers"><span class="toc-number">2.4.</span> <span class="toc-text">Reusable consumers</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#combining-json-formatters-and-consumers"><span class="toc-number">2.5.</span> <span class="toc-text">Combining JSON formatters and consumers</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#validating-json"><span class="toc-number">3.</span> <span class="toc-text">Validating JSON</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#mapping-the-json-structure-to-a-model"><span class="toc-number">3.1.</span> <span class="toc-text">Mapping the JSON structure to a model</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#handling-empty-values"><span class="toc-number">3.2.</span> <span class="toc-text">Handling “empty” values</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#adding-validation-rules-and-validating-input"><span class="toc-number">3.3.</span> <span class="toc-text">Adding validation rules and validating input</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#returning-json-validation-errors"><span class="toc-number">3.4.</span> <span class="toc-text">Returning JSON validation errors</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#authenticating-json-web-service-requests"><span class="toc-number">4.</span> <span class="toc-text">Authenticating JSON web service requests</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#adding-authentication-to-action-methods"><span class="toc-number">4.1.</span> <span class="toc-text">Adding authentication to action methods</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#composing-actions-to-add-behavior"><span class="toc-number">4.1.1.</span> <span class="toc-text">COMPOSING ACTIONS TO ADD BEHAVIOR</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#extracting-credentials-from-the-request"><span class="toc-number">4.1.2.</span> <span class="toc-text">EXTRACTING CREDENTIALS FROM THE REQUEST</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#using-basic-authentication"><span class="toc-number">4.2.</span> <span class="toc-text">Using basic authentication</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#other-authentication-methods"><span class="toc-number">4.3.</span> <span class="toc-text">Other authentication methods</span></a></li></ol>
+		</div>
+		
+		<h1 id="creating-the-single-page-play-application">Creating the single-page Play application</h1>
+<p>In this section, we’ll add dynamic data from the server to our web page: a table of
+products that shows each product’s EAN code</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+</pre></td><td class="code"><pre><span class="keyword">package</span> models
+<span class="class"><span class="keyword">case</span> <span class="keyword">class</span> <span class="title">Product</span><span class="params">(ean: Long, name: String, description: String)</span></span>
+<span class="class"><span class="keyword">object</span> <span class="title">Product</span> {</span>
+  <span class="keyword">var</span> products = Set(
+    Product(<span class="number">5010255079763</span>L, <span class="string">"Paperclips Large"</span>,
+      <span class="string">"Large Plain Pack of 1000"</span>),
+    Product(<span class="number">5018206244666</span>L, <span class="string">"Giant Paperclips"</span>,
+      <span class="string">"Giant Plain 51mm 100 pack"</span>),
+    Product(<span class="number">5018306332812</span>L, <span class="string">"Paperclip Giant Plain"</span>,
+      <span class="string">"Giant Plain Pack of 10000"</span>),
+    Product(<span class="number">5018306312913</span>L, <span class="string">"No Tear Paper Clip"</span>,
+      <span class="string">"No Tear Extra Large Pack of 1000"</span>),
+    Product(<span class="number">5018206244611</span>L, <span class="string">"Zebra Paperclips"</span>,
+      <span class="string">"Zebra Length 28mm Assorted 150 Pack"</span>)
+  )
+
+  <span class="keyword">def</span> findAll = <span class="keyword">this</span>.products.toList.sortBy(_.ean)
+  <span class="keyword">def</span> findByEan(ean: Long) = <span class="keyword">this</span>.products.find(_.ean == ean)
+  <span class="keyword">def</span> save(product: Product) = {
+    findByEan(product.ean).map( oldProduct =&gt;
+      <span class="keyword">this</span>.products = <span class="keyword">this</span>.products - oldProduct + product
+    ).getOrElse(
+      <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Product not found"</span>)
+    )
+  }
+}
+</pre></td></tr></table></figure>
+
+<p>Page template</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+</pre></td><td class="code"><pre><span class="doctype">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;<span class="title">html</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">head</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">title</span>&gt;</span>Products<span class="tag">&lt;/<span class="title">title</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">link</span> <span class="attribute">rel</span>=<span class="value">'stylesheet'</span> <span class="attribute">type</span>=<span class="value">'text/css'</span>
+          <span class="attribute">href</span>=<span class="value">'@routes.Assets.at("stylesheets/bootstrap.css")'</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">link</span> <span class="attribute">rel</span>=<span class="value">'stylesheet'</span> <span class="attribute">type</span>=<span class="value">'text/css'</span>
+          <span class="attribute">href</span>=<span class="value">"@routes.Assets.at("</span><span class="value">stylesheets</span>/<span class="attribute">main.css</span>")"&gt;</span>
+    <span class="tag">&lt;<span class="title">script</span> <span class="attribute">src</span>=<span class="value">"@routes.Assets.at("</span><span class="value">javascripts</span>/<span class="attribute">jquery-1.9.0.min.js</span>")"
+            <span class="attribute">type</span>=<span class="value">"text/javascript"</span>&gt;</span><span class="javascript"></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">script</span> <span class="attribute">src</span>=<span class="value">'@routes.Assets.at("javascripts/products.js")'</span>
+            <span class="attribute">type</span>=<span class="value">'text/javascript'</span>&gt;</span><span class="javascript"></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
+  <span class="tag">&lt;/<span class="title">head</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">body</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">div</span> <span class="attribute">class</span>=<span class="value">"screenshot"</span>&gt;</span>
+      <span class="tag">&lt;<span class="title">div</span> <span class="attribute">class</span>=<span class="value">"navbar navbar-fixed-top"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">div</span> <span class="attribute">class</span>=<span class="value">"navbar-inner"</span>&gt;</span>
+          <span class="tag">&lt;<span class="title">div</span> <span class="attribute">class</span>=<span class="value">"container"</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">a</span> <span class="attribute">class</span>=<span class="value">"brand"</span> <span class="attribute">href</span>=<span class="value">"@routes.Application.index()"</span>&gt;</span>
+            <span class="tag">&lt;/<span class="title">a</span>&gt;</span>
+            <span class="tag">&lt;<span class="title">ul</span> <span class="attribute">class</span>=<span class="value">"nav"</span>&gt;</span><span class="tag">&lt;/<span class="title">ul</span>&gt;</span>
+          <span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+      <span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+      <span class="tag">&lt;<span class="title">div</span> <span class="attribute">class</span>=<span class="value">"container"</span>&gt;</span>
+      <span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+  <span class="tag">&lt;/<span class="title">body</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">html</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<h2 id="constructing-json-data-value-objects">Constructing JSON data value objects</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code"><pre><span class="keyword">package</span> controllers
+<span class="keyword">import</span> play.api.mvc.{Action, Controller}
+<span class="keyword">import</span> models.Product
+<span class="keyword">import</span> play.api.libs.json.Json
+
+<span class="class"><span class="keyword">object</span> <span class="title">Products</span> <span class="keyword">extends</span> <span class="title">Controller</span> {</span>
+  <span class="keyword">def</span> list = Action {
+    <span class="keyword">val</span> productCodes = Product.findAll.map(_.ean)
+    <span class="comment">//  automatically add a Content-Type: application/json HTTP response header</span>
+    Ok(Json.toJoson(productCodes))
+  }
+}
+</pre></td></tr></table></figure>
+
+<p><code>conf/routes</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre>GET / controllers.Application.index
+GET /products controllers.Products.<span class="type">list</span>
+GET /assets/*<span class="type">file</span> controllers.Assets.<span class="keyword">at</span>(path=<span class="string">"/public"</span>, <span class="type">file</span>)
+</pre></td></tr></table></figure>
+
+<p>可以通过<code>curl --include http://localhost:9000/products</code>, 测试</p>
+<h3 id="working-with-the-json-objects">WORKING WITH THE JSON OBJECTS</h3>
+<p>The <code>play.api.libs.json.JsValue</code> type represents any kind of JSON value.</p>
+<p>Play’s JSON library is located in <code>play.api.libs.json</code>, and it contains case classes
+for each of JSON’s types:</p>
+<ul>
+<li>JsString,  takes a String as a parameter </li>
+<li>JsNumber, takes a BigDecimal</li>
+<li>JsBoolean,  can be constructed from a sequence of key/value tuples: <code>Seq[(String, JsValue)]</code>.</li>
+<li>JsObject</li>
+<li>JsArray, takes a Seq[JsValue]</li>
+<li>JsNull</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+</pre></td><td class="code"><pre><span class="reserved">import</span> play.api.libs.json._
+val category = JsString(<span class="string">"paperclips"</span>)
+val quantity = JsNumber(<span class="number">42</span>)
+
+val product = Json.obj(
+  <span class="string">"name"</span><span class="function"> -&gt;</span> JsString(<span class="string">"Blue Paper clips"</span>),
+  <span class="string">"ean"</span><span class="function"> -&gt;</span> JsString(<span class="string">"12345432123"</span>),
+  <span class="string">"description"</span><span class="function"> -&gt;</span> JsString(<span class="string">"Big box of paper clips"</span>),
+  <span class="string">"pieces"</span><span class="function"> -&gt;</span> JsNumber(<span class="number">500</span>),
+  <span class="string">"manufacturer"</span><span class="function"> -&gt;</span> Json.obj(
+    <span class="string">"name"</span><span class="function"> -&gt;</span> JsString(<span class="string">"Paperclipfactory Inc."</span>),
+    <span class="string">"contact_details"</span><span class="function"> -&gt;</span> Json.obj(
+      <span class="string">"email"</span><span class="function"> -&gt;</span> JsString(<span class="string">"contact@paperclipfactory.example.com"</span>),
+      <span class="string">"fax"</span><span class="function"> -&gt;</span> JsNull,
+      <span class="string">"phone"</span><span class="function"> -&gt;</span> JsString(<span class="string">"+12345654321"</span>)
+    )
+  ),
+  <span class="string">"tags"</span><span class="function"> -&gt;</span> Json.arr(
+    JsString(<span class="string">"paperclip"</span>),
+    JsString(<span class="string">"coated"</span>)
+  ),
+  <span class="string">"active"</span><span class="function"> -&gt;</span> JsBoolean(<span class="literal">true</span>)
+)
+</pre></td></tr></table></figure>
+
+<h3 id="generating-strings-from-json-values">GENERATING STRINGS FROM JSON VALUES</h3>
+<p>When you return JSON from a controller action,
+you pass the JsValue to the result directly.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre><span class="attribute">val productJsonString </span>=<span class="string"> Json.stringify(product)</span>
+</pre></td></tr></table></figure>
+
+<h3 id="fetching-json-data-from-the-client">FETCHING JSON DATA FROM THE CLIENT</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">div</span> <span class="attribute">class</span>=<span class="value">"container"</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">table</span> <span class="attribute">data-list</span>=<span class="value">"@routes.Products.list"</span>&gt;</span>
+  <span class="tag">&lt;/<span class="title">table</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<p><code>app/assets/javascripts/products.coffee</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre>jQuery (<span class="variable">$)</span> -&gt;
+  <span class="variable">$table</span> = <span class="variable">$(</span><span class="string">'.container table'</span>)
+  productListUrl = <span class="variable">$table</span>.data(<span class="string">'list'</span>)
+
+  <span class="variable">$.</span>get productListUrl, (products) -&gt;
+    <span class="variable">$.</span>each products, (index, eanCode) -&gt;
+      row = <span class="variable">$(</span><span class="string">'&lt;tr/&gt;'</span>).append <span class="variable">$(</span><span class="string">'&lt;td/&gt;'</span>).<span class="keyword">text</span>(eanCode)
+      <span class="variable">$table</span>.append row
+</pre></td></tr></table></figure>
+
+<h2 id="converting-model-objects-to-json-objects">Converting model objects to JSON objects</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre><span class="keyword">GET</span> /products/:ean controllers.Products.details(ean: <span class="built_in">Long</span>)
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre>def details(ean: Long) = Action {
+  Product<span class="preprocessor">.findByEan</span>(ean)<span class="preprocessor">.map</span> { product =&gt;
+    Ok(Json<span class="preprocessor">.toJson</span>(product))
+  }<span class="preprocessor">.getOrElse</span>(NotFound)
+}
+</pre></td></tr></table></figure>
+
+<h3 id="json-formatters">JSON FORMATTERS</h3>
+<p>The type signature of the toJson method looks like this:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre><span class="keyword">def</span> toJson[T](<span class="keyword">object</span>: T)(implicit writes: Writes[T]): JsValue
+
+<span class="comment">// writes implementations</span>
+implicit <span class="class"><span class="keyword">object</span> <span class="title">StringWrites</span> <span class="keyword">extends</span> <span class="title">Writes</span>[<span class="title">String</span>] {</span>
+  <span class="keyword">def</span> writes(o: String) = JsString(o)
+}
+</pre></td></tr></table></figure>
+
+<p>Play also provides implicit conversions from <code>Writes[T]</code> to <code>Writes[List[T]]</code>,
+<code>Writes[Set[T]]</code>, and <code>Writes[Map[String, T]]</code>.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+</pre></td><td class="code"><pre>case class Product(ean: Long, name: String, description: String)
+
+import play<span class="preprocessor">.api</span><span class="preprocessor">.libs</span><span class="preprocessor">.json</span>._
+implicit object ProductWrites extends Writes[Product] {
+  def writes(p: Product) = Json<span class="preprocessor">.obj</span>(
+    <span class="string">"ean"</span> -&gt; Json<span class="preprocessor">.toJson</span>(p<span class="preprocessor">.ean</span>),
+    <span class="string">"name"</span> -&gt; Json<span class="preprocessor">.toJson</span>(p<span class="preprocessor">.name</span>),
+    <span class="string">"description"</span> -&gt; Json<span class="preprocessor">.toJson</span>(p<span class="preprocessor">.description</span>)
+  )
+}
+
+// 更简介的方法
+import play<span class="preprocessor">.api</span><span class="preprocessor">.libs</span><span class="preprocessor">.json</span>._
+import play<span class="preprocessor">.api</span><span class="preprocessor">.libs</span><span class="preprocessor">.functional</span><span class="preprocessor">.syntax</span>._
+implicit val productWrites: Writes[Product] = (
+  (JsPath \ <span class="string">"ean"</span>)<span class="preprocessor">.write</span>[Long] <span class="keyword">and</span>
+  (JsPath \ <span class="string">"name"</span>)<span class="preprocessor">.write</span>[String] <span class="keyword">and</span>
+  (JsPath \ <span class="string">"description"</span>)<span class="preprocessor">.write</span>[String]
+)(unlift(Product<span class="preprocessor">.unapply</span>))
+
+// we can use a helper function that defines a default case
+// class formatter at runtime, which gives
+// the same output as the previous example:
+import play<span class="preprocessor">.api</span><span class="preprocessor">.libs</span><span class="preprocessor">.json</span>._
+import play<span class="preprocessor">.api</span><span class="preprocessor">.libs</span><span class="preprocessor">.functional</span><span class="preprocessor">.syntax</span>._
+implicit val productWrites = Json<span class="preprocessor">.writes</span>[Product]
+</pre></td></tr></table></figure>
+
+<p><code>Writes[Product]</code> for the administrative interface</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre>import play<span class="preprocessor">.api</span><span class="preprocessor">.libs</span><span class="preprocessor">.json</span>._
+import play<span class="preprocessor">.api</span><span class="preprocessor">.libs</span><span class="preprocessor">.functional</span><span class="preprocessor">.syntax</span>._
+val adminProductWrites: Writes[Product] = (
+  (JsPath \ <span class="string">"ean"</span>)<span class="preprocessor">.write</span>[Long] <span class="keyword">and</span>
+  (JsPath \ <span class="string">"name"</span>)<span class="preprocessor">.write</span>[String] <span class="keyword">and</span>
+  (JsPath \ <span class="string">"description"</span>)<span class="preprocessor">.write</span>[String] <span class="keyword">and</span>
+  (JsPath \ <span class="string">"price"</span>)<span class="preprocessor">.write</span>[BigDecimal]
+)(unlift(Product<span class="preprocessor">.unapply</span>))
+
+val json = Json<span class="preprocessor">.toJson</span>(product)(AdminProductWrites)
+</pre></td></tr></table></figure>
+
+<h3 id="using-a-custom-formatter">USING A CUSTOM FORMATTER</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="subst">&lt;</span>table <span class="built_in">data</span><span class="attribute">-list</span><span class="subst">=</span><span class="string">"@routes.Products.list"</span>
+       <span class="built_in">data</span><span class="attribute">-details</span><span class="subst">=</span><span class="string">"@routes.Products.details(0)"</span><span class="subst">&gt;</span>
+<span class="subst">&lt;</span>/table<span class="subst">&gt;</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+</pre></td><td class="code"><pre>jQuery <span class="function"><span class="params">($)</span> -&gt;</span>
+  $table = $(<span class="string">'.container table'</span>)
+  productListUrl = $table.data(<span class="string">'list'</span>)
+
+  <span class="function"><span class="title">loadProductTable</span> = -&gt;</span>
+    $.get productListUrl, <span class="function"><span class="params">(product)</span> -&gt;</span>
+      $.each products, <span class="function"><span class="params">(index, eanCode)</span> -&gt;</span>
+        row = $(<span class="string">'&lt;tr/&gt;'</span>).append $(<span class="string">'&lt;td/&gt;'</span>).text(eanCode)
+        $table.append row
+        loadProductDetail row
+
+  <span class="function"><span class="title">productDetailUrl</span> = <span class="params">(eanCode)</span> -&gt;</span>
+    $talbe.data(<span class="string">'details'</span>).replace <span class="string">'0'</span>, eanCode
+
+  <span class="function"><span class="title">loadProductDetails</span> = <span class="params">(tableRow)</span> -&gt;</span>
+    eanCode = tableRow.text()
+
+    $.get productDetailUrl <span class="function"><span class="params">(eanCode)</span>, <span class="params">(product)</span> -&gt;</span>
+      tableRow.append $(<span class="string">'&lt;td/&gt;'</span>).text(product.name)
+      tableRow.append $(<span class="string">'&lt;td/&gt;'</span>).text(product.description)
+      
+  loadProductTable()
+</pre></td></tr></table></figure>
+
+<h1 id="sending-json-data-to-the-server">Sending JSON data to the server</h1>
+<p>We’re going to cheat by using the HTML5 contenteditable attribute to
+make the table cells directly editable.</p>
+<h2 id="editing-and-sending-client-data">Editing and sending client data</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+</pre></td><td class="code"><pre>saveRow = (<span class="variable">$row</span>) -&gt;
+  [ean, name, description] = <span class="variable">$row</span>.children().map -&gt; <span class="variable">$(</span>this).<span class="keyword">text</span>()
+  product =
+    ean: parseInt(ean)
+    name: name
+    description: description
+  jqxhr = <span class="variable">$.</span>ajax
+    type: <span class="string">"PUT"</span>
+    url: productDetailsUrl(ean)
+    contentType: <span class="string">"application/json"</span>
+    data: JSON.stringify product
+
+  jqxhr.done (response) -&gt;
+    <span class="variable">$label</span> = <span class="variable">$(</span><span class="string">'&lt;span/&gt;'</span>).addClass(<span class="string">'label label-success'</span>)
+    <span class="variable">$row</span>.children().last().append <span class="variable">$label</span>.<span class="keyword">text</span>(response)
+    <span class="variable">$label</span>.delay(<span class="number">3000</span>).fadeout()
+  jqxhr.fail (data) -&gt;
+    <span class="variable">$label</span> = <span class="variable">$(</span><span class="string">'&lt;span/&gt;'</span>).addClass(<span class="string">'label label-important'</span>)
+    message = data.responseText || data.statusText
+    <span class="variable">$row</span>.children().last().append <span class="variable">$label</span>.<span class="keyword">text</span>(message)
+    
+<span class="variable">$table</span>.on <span class="string">'focusout'</span>, <span class="string">'tr'</span>, () -&gt;
+  saveRow <span class="variable">$(</span>this)
+</pre></td></tr></table></figure>
+
+<h2 id="consuming-json">Consuming JSON</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>PUT /products/:ean controllers<span class="preprocessor">.Products</span><span class="preprocessor">.save</span>(ean: Long)
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+</pre></td><td class="code"><pre>def save(ean: Long) = Action(parse<span class="preprocessor">.json</span>) { request =&gt;
+  val productJson = request<span class="preprocessor">.body</span>
+  val product = productJson<span class="preprocessor">.as</span>[Product]
+
+  try {
+    Product<span class="preprocessor">.save</span>(product)
+    Ok(<span class="string">"Saved"</span>)
+  } catch {
+    case e: IllegalArgumentException =&gt;
+      BadRequest(<span class="string">"Product not found"</span>)
+  }
+}
+
+import play<span class="preprocessor">.api</span><span class="preprocessor">.libs</span><span class="preprocessor">.functional</span><span class="preprocessor">.syntax</span>._
+implicit val productReads: Reads[Product] = (
+  (JsPath \ <span class="string">"ean"</span>)<span class="preprocessor">.read</span>[Long] <span class="keyword">and</span>
+  (JsPath \ <span class="string">"name"</span>)<span class="preprocessor">.read</span>[String] <span class="keyword">and</span>
+  (JsPath \ <span class="string">"description"</span>)<span class="preprocessor">.read</span>[String]
+)(Product<span class="preprocessor">.apply</span> _)
+
+def save(product: Product) = {
+  findByEan(product<span class="preprocessor">.ean</span>)<span class="preprocessor">.map</span>( oldProduct =&gt;
+    this<span class="preprocessor">.products</span> = this<span class="preprocessor">.products</span> - oldProduct + product
+  )<span class="preprocessor">.getOrElse</span>(
+    throw new IllegalArgumentException(<span class="string">"Product not found"</span>)
+  )
+}
+</pre></td></tr></table></figure>
+
+<h2 id="consuming-json-in-more-detail">Consuming JSON in more detail</h2>
+<p>Consuming JSON is a two-step process. The first step is going from a JSON string to JsValue objects.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre><span class="keyword">import</span> play.api.libs.json._
+<span class="keyword">val</span> jsValue: JsValue = Json.parse(<span class="string">"""{ "name" : "Johnny" }"""</span>)
+</pre></td></tr></table></figure>
+
+<p>Often, you don’t even need to manually perform this step.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre>def postProduct() = Action { request =&gt;
+  val jsValueOption = request.body.asJson
+  jsValueOption.map { json =&gt;
+    <span class="comment">// Do something with the JSON</span>
+  }.getOrElse {
+    <span class="comment">// Not a JSON body</span>
+  }
+}
+</pre></td></tr></table></figure>
+
+<p>If you’re only willing to accept JSON for an action, which is common,
+you can use the <code>parse.json</code> body parser:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre>// <span class="keyword">it</span>’ll <span class="constant">return</span> <span class="operator">an</span> HTTP status <span class="operator">of</span> <span class="number">400</span> Bad Request <span class="keyword">if</span> <span class="operator">the</span> content type is wrong.
+def postProduct2() = Action(parse.json) { request =&gt;
+  val jsValue = request.body
+ <span class="comment"> // Do something with the JSON</span>
+}
+</pre></td></tr></table></figure>
+
+<p>Sometimes you have to deal with misbehaving clients that send JSON without
+proper Content-Type headers. In that case, you can use the <code>parse.tolerantJson</code>
+body parser, which doesn’t check the header, but just tries to parse the body as JSON.</p>
+<p>JsValue has the <code>as[T]</code> and <code>asOpt[T]</code> methods,</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="code"><pre><span class="keyword">val</span> jsValue = JsString(<span class="string">"Johnny"</span>)
+<span class="keyword">val</span> name = jsValue.<span class="keyword">as</span>[String]
+
+<span class="keyword">val</span> age = jsValue.<span class="keyword">as</span>[Int] <span class="comment">// Throws play.api.libs.json.JsResultException</span>
+<span class="keyword">val</span> age: Option[Int] = jsValue.asOpt[Int] <span class="comment">// == None</span>
+<span class="keyword">val</span> name: Option[String] = jsValue.asOpt[String] <span class="comment">// == Some("Johnny")</span>
+
+<span class="keyword">val</span> age = jsValue.validate[Int] <span class="comment">// == JsError</span>
+<span class="keyword">val</span> name = jsValue.validate[String] <span class="comment">// == JsSuccess(Johnny,)</span>
+</pre></td></tr></table></figure>
+
+<p>Of course, often you’ll be dealing with more complex JSON structures. There are
+three methods for traversing a <code>JsValue</code> tree:</p>
+<ul>
+<li><code>\</code>—Selects an element in a <code>JsObject</code>, returning a <code>JsValue</code></li>
+<li><code>\\</code>—Selects an element in the entire tree, returning a <code>Seq[JsValue]</code></li>
+<li><code>apply</code>—Selects an element in a <code>JsArray</code> , returning a <code>JsValue</code><figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+</pre></td><td class="code"><pre><span class="reserved">import</span> Json._
+val <span class="attribute">json</span>: JsValue = toJson(Map(
+  <span class="string">"name"</span><span class="function"> -&gt;</span> toJson(<span class="string">"Johnny"</span>),
+  <span class="string">"age"</span><span class="function"> -&gt;</span> toJson(<span class="number">42</span>),
+  <span class="string">"tags"</span><span class="function"> -&gt;</span> toJson(List(<span class="string">"constructor"</span>, <span class="string">"builder"</span>)),
+  <span class="string">"company"</span><span class="function"> -&gt;</span> toJson(Map(
+    <span class="string">"name"</span><span class="function"> -&gt;</span> toJson(<span class="string">"Constructors Inc."</span>)))))
+
+val name = (json \ <span class="string">"name"</span>).as[Strnig]
+val age = (json \ <span class="string">"age"</span>).asOpt[Int]
+val companyName = (json \ <span class="string">"company"</span> \ <span class="string">"name"</span>).as[String]
+val firstTag = (json \ <span class="string">"tags"</span>)(<span class="number">0</span>).as[String]
+val allNames = (json \\ <span class="string">"name"</span>).map(_as[String])
+
+(json \ <span class="string">"name"</span>) match {
+  <span class="reserved">case</span> JsString<span class="function"><span class="params">(name)</span> =&gt;</span> println(name)
+  <span class="reserved">case</span> JsUndefined<span class="function"><span class="params">(error)</span> =&gt;</span> println(error)
+  <span class="reserved">case</span> _<span class="function"> =&gt;</span> println(<span class="string">"Invalid type!"</span>)
+}
+</pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2 id="reusable-consumers">Reusable consumers</h2>
+<p>The <code>Reads[T]</code> trait has a single method, <code>reads(json: JsValue): JsResult[T]</code>,
+which deserializes JSON into a <code>JsSuccess</code> that wraps an object of type T or a <code>JsError</code>
+that gives you access to JSON parsing errors, following the pattern of Scala’s
+<code>Either[Error, T]</code>.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre>jsValue.as[String]
+jsValue.as[<span class="link_label">String</span>](<span class="link_url">play.api.libs.json.Reads.StringReads</span>)
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+</pre></td><td class="code"><pre><span class="class"><span class="keyword">case</span> <span class="keyword">class</span> <span class="title">PricedProduct</span><span class="params">(
+  name: String,
+  description: Option[String],
+  purchasePrice: BigDecimal,
+  sellingPrice: BigDecimal)</span></span>
+
+<span class="keyword">val</span> productJsonString = <span class="string">"""{
+  "name": "Sample name",
+  "description": "Sample description",
+  "purchase_price" : 20,
+  "selling_price": 35
+}"""</span>
+
+<span class="keyword">import</span> play.api.libs.json._
+<span class="keyword">import</span> play.api.libs.functional.syntax._
+implicit <span class="keyword">val</span> productReads: Reads[PricedProduct] = (
+  (JsPath \ <span class="string">"name"</span>).read[String] and
+  (JsPath \ <span class="string">"description"</span>).readNullable[String] and
+  (JsPath \ <span class="string">"purchase_price"</span>).read[BigDecimal] and
+  (JsPath \ <span class="string">"selling_price"</span>).read[BigDecimal]
+)(PricedProduct.apply _)
+
+<span class="keyword">val</span> productJsValue = Json.parse(productJsonString)
+<span class="keyword">val</span> product = productJsValue.as[PricedProduct]
+</pre></td></tr></table></figure>
+
+<h2 id="combining-json-formatters-and-consumers">Combining JSON formatters and consumers</h2>
+<p>The trait <code>Format[T]</code> extends both <code>Reads[T]</code> and <code>Writes[T]</code></p>
+<p>We can define a <code>Format[PricedProduct]</code> implementation,
+using JsPath’s format and <code>formatNullable</code> methods, as shown in the following listing.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="code"><pre>import play<span class="preprocessor">.api</span><span class="preprocessor">.libs</span><span class="preprocessor">.json</span>._
+import play<span class="preprocessor">.api</span><span class="preprocessor">.libs</span><span class="preprocessor">.functional</span><span class="preprocessor">.syntax</span>._
+implicit val productFormat = (
+  (JsPath \ <span class="string">"name"</span>)<span class="preprocessor">.format</span>[String] <span class="keyword">and</span>
+  (JsPath \ <span class="string">"description"</span>)<span class="preprocessor">.formatNullable</span>[String] <span class="keyword">and</span>
+  (JsPath \ <span class="string">"purchase_price"</span>)<span class="preprocessor">.format</span>[BigDecimal] <span class="keyword">and</span>
+  (JsPath \ <span class="string">"selling_price"</span>)<span class="preprocessor">.format</span>[BigDecimal]
+)(PricedProduct<span class="preprocessor">.apply</span>, unlift(PricedProduct<span class="preprocessor">.unapply</span>))
+
+// 也可以这样
+implicit val productFormat = Format(productReads, productWrites)
+
+import play<span class="preprocessor">.api</span><span class="preprocessor">.libs</span><span class="preprocessor">.json</span>._
+implicit val productReads = Json<span class="preprocessor">.reads</span>[PricedProduct]
+implicit val productWrites = Json<span class="preprocessor">.writes</span>[PricedProduct]
+</pre></td></tr></table></figure>
+
+<h1 id="validating-json">Validating JSON</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+</pre></td><td class="code"><pre>{
+  "<span class="attribute">name</span>": <span class="value"><span class="string">"Blue Paper clips"</span></span>,
+  "<span class="attribute">ean</span>": <span class="value"><span class="string">"12345432123"</span></span>,
+  "<span class="attribute">description</span>": <span class="value"><span class="string">"Big box of paper clips"</span></span>,
+  "<span class="attribute">pieces</span>": <span class="value"><span class="number">500</span></span>,
+  "<span class="attribute">manufacturer</span>": <span class="value">{
+    "<span class="attribute">name</span>": <span class="value"><span class="string">"Paperclipfactory Inc."</span></span>,
+    "<span class="attribute">contact_details</span>": <span class="value">{
+      "<span class="attribute">email</span>": <span class="value"><span class="string">"contact@paperclipfactory.example.com"</span></span>,
+      "<span class="attribute">fax</span>": <span class="value"><span class="literal">null</span></span>,
+      "<span class="attribute">phone</span>": <span class="value"><span class="string">"+12345654321"</span>
+    </span>}
+  </span>}</span>,
+  "<span class="attribute">tags</span>": <span class="value">[
+    <span class="string">"paperclip"</span>,
+    <span class="string">"coated"</span>
+  ]</span>,
+  "<span class="attribute">active</span>": <span class="value"><span class="literal">true</span>
+</span>}
+</pre></td></tr></table></figure>
+
+<h2 id="mapping-the-json-structure-to-a-model">Mapping the JSON structure to a model</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+</pre></td><td class="code"><pre><span class="keyword">case</span> <span class="keyword">class</span> Contact(email: <span class="keyword">Option</span>[<span class="built_in">String</span>], fax: <span class="keyword">Option</span>[<span class="built_in">String</span>],
+    phone: <span class="keyword">Option</span>[<span class="built_in">String</span>])
+<span class="keyword">case</span> <span class="keyword">class</span> Company(name: <span class="built_in">String</span>, contactDetails: Contact)
+<span class="keyword">case</span> <span class="keyword">class</span> Product(ean: <span class="built_in">Long</span>, name: <span class="built_in">String</span>,
+    description: <span class="keyword">Option</span>[<span class="built_in">String</span>], pieces: <span class="keyword">Option</span>[Int],
+    manufacturer: Company, tags: List[<span class="built_in">String</span>], active: <span class="built_in">Boolean</span>)
+
+implicit val companyReads: Reads[Company] = (
+  (JsPath \ <span class="string">"name"</span>).read[<span class="built_in">String</span>] <span class="keyword">and</span>
+  (JsPath \ <span class="string">"contact_details"</span>).read(
+  (
+    (JsPath \ <span class="string">"email"</span>).readNullable[<span class="built_in">String</span>] <span class="keyword">and</span>
+    (JsPath \ <span class="string">"fax"</span>).readNullable[<span class="built_in">String</span>] <span class="keyword">and</span>
+    (JsPath \ <span class="string">"phone"</span>).readNullable[<span class="built_in">String</span>]
+  )(Contact.apply _))
+)(Company.apply _)
+
+implicit val productReads: Reads[Product] = (
+  (JsPath \ <span class="string">"ean"</span>).read[<span class="built_in">Long</span>] <span class="keyword">and</span>
+  (JsPath \ <span class="string">"name"</span>).read[<span class="built_in">String</span>] <span class="keyword">and</span>
+  (JsPath \ <span class="string">"description"</span>).readNullable[<span class="built_in">String</span>] <span class="keyword">and</span>
+  (JsPath \ <span class="string">"pieces"</span>).readNullable[Int] <span class="keyword">and</span>
+  (JsPath \ <span class="string">"manufacturer"</span>).read[Company] <span class="keyword">and</span>
+  (JsPath \ <span class="string">"tags"</span>).read[List[<span class="built_in">String</span>]] <span class="keyword">and</span>
+  (JsPath \ <span class="string">"active"</span>).read[<span class="built_in">Boolean</span>]
+)(Product.apply _)
+</pre></td></tr></table></figure>
+
+<h2 id="handling-empty-values">Handling “empty” values</h2>
+<p>The JSON API uses a nullable[T] to handle the JsNull case, such as our example’s
+description: Option[String] property. </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre><span class="function"><span class="keyword">def</span> <span class="title">nullable</span>[<span class="title">T</span>]<span class="params">(implicit rds: Reads[T])</span>:</span> Reads[Option[T]] = Reads(js =&gt;
+  js match {
+    case JsNull =&gt; JsSuccess(<span class="keyword">None</span>)
+    case js =&gt; rds.reads(js).map(Some(_))
+  }
+)
+</pre></td></tr></table></figure>
+
+<h2 id="adding-validation-rules-and-validating-input">Adding validation rules and validating input</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+</pre></td><td class="code"><pre>implicit val companyReads: Reads[Company] = (
+  (JsPath \ <span class="string">"name"</span>)<span class="preprocessor">.read</span>[String] <span class="keyword">and</span>
+  (JsPath \ <span class="string">"contact_details"</span>)<span class="preprocessor">.read</span>(
+  (
+    (JsPath \ <span class="string">"email"</span>)<span class="preprocessor">.readNullable</span>[String](email) <span class="keyword">and</span>
+    (JsPath \ <span class="string">"fax"</span>)<span class="preprocessor">.readNullable</span>[String](minLength[String](<span class="number">10</span>)) <span class="keyword">and</span>
+    (JsPath \ <span class="string">"phone"</span>)<span class="preprocessor">.readNullable</span>[String](minLength[String](<span class="number">10</span>))
+  )(Contact<span class="preprocessor">.apply</span> _))
+)(Company<span class="preprocessor">.apply</span> _)
+
+implicit val productReads: Reads[Product] = (
+  (JsPath \ <span class="string">"ean"</span>)<span class="preprocessor">.read</span>[Long] <span class="keyword">and</span>
+  (JsPath \ <span class="string">"name"</span>)<span class="preprocessor">.read</span>[String](minLength[String](<span class="number">5</span>)) <span class="keyword">and</span>
+  (JsPath \ <span class="string">"description"</span>)<span class="preprocessor">.readNullable</span>[String] <span class="keyword">and</span>
+  (JsPath \ <span class="string">"pieces"</span>)<span class="preprocessor">.readNullable</span>[Int] <span class="keyword">and</span>
+  (JsPath \ <span class="string">"manufacturer"</span>)<span class="preprocessor">.read</span>[Company] <span class="keyword">and</span>
+  (JsPath \ <span class="string">"tags"</span>)<span class="preprocessor">.read</span>[List[String]] <span class="keyword">and</span>
+  (JsPath \ <span class="string">"active"</span>)<span class="preprocessor">.read</span>[Boolean]
+)(Product<span class="preprocessor">.apply</span> _)
+
+def save = Action(parse<span class="preprocessor">.json</span>) { implicit request =&gt;
+  val json = request<span class="preprocessor">.body</span>
+  json<span class="preprocessor">.validate</span>[Product]<span class="preprocessor">.fold</span>(
+    valid = { product =&gt;
+      Product<span class="preprocessor">.save</span>(product)
+      Ok(<span class="string">"Save"</span>)
+    },
+    invalid = {
+      error =&gt; BadRequest(JsError<span class="preprocessor">.toFlatJson</span>(errors))
+    }
+  )
+}
+</pre></td></tr></table></figure>
+
+<h2 id="returning-json-validation-errors">Returning JSON validation errors</h2>
+<p>This fails validation with the following JSON result, which is generated by the
+<code>JsError.toFlatJson</code> helper.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+</pre></td><td class="code"><pre>{
+  <span class="string">"obj.manufacturer.contact_details.email"</span> : [
+    { <span class="string">"msg"</span> : <span class="string">"validate.error.email"</span>, <span class="string">"args"</span> : [] }
+  ],
+  <span class="string">"obj.name"</span> : [
+    {<span class="string">"msg"</span> : <span class="string">"validate.error.minlength"</span>, <span class="string">"args"</span> : [<span class="number">5</span>] }
+  ],
+  <span class="string">"obj.tags"</span> : [
+    {<span class="string">"msg"</span> : <span class="string">"validate.error.missing-path"</span>, <span class="string">"args"</span> : [] }
+  ]
+}
+
+// You may requires errors in a particular simplified JSON <span class="keyword">format</span>
+[
+  {
+    <span class="string">"path"</span> : <span class="string">"/manufacturer/contact_details/email"</span>,
+    <span class="string">"errors"</span>: [<span class="string">"validate.error.email"</span>]
+  },
+  { <span class="string">"path"</span> : <span class="string">"/name"</span>, <span class="string">"errors"</span> : [<span class="string">"validate.error.minlength"</span>] },
+  { <span class="string">"path"</span> : <span class="string">"/tags"</span>, <span class="string">"errors"</span> : [<span class="string">"validate.error.missing-path"</span>] }
+]
+
+// <span class="keyword">format</span> a path as a string
+implicit val JsPathWrites =
+  Writes[JsPath](<span class="string">p =&gt;</span> JsString(p.toString))
+
+// <span class="keyword">format</span> an error as a string
+implicit val ValicateionErrorWrites =
+  Writes[ValidationError](<span class="string">e =&gt;</span> JsString(e.message))
+
+implicit val jsonValidateErrorWrites = (
+  (JsPath \ <span class="string">"path"</span>).<span class="keyword">write</span>[JsPath] <span class="keyword">and</span>
+  (JsPath \ <span class="string">"errors"</span>).<span class="keyword">write</span>[Se<span class="string">q[ValidationError]</span>]
+  tupled
+)
+</pre></td></tr></table></figure>
+
+<p>One such library is Jerkson; it’s possible to use Jerkson directly, or
+you can use any other JSON library that you like.</p>
+<h1 id="authenticating-json-web-service-requests">Authenticating JSON web service requests</h1>
+<p>Authentication means identifying the “user” who’s sending the request,
+by requiring and checking valid credentials, usually username and password.</p>
+<p>In a conventional web application, authentication is usually implemented by using
+an HTML login form to submit credentials to a server application, which then
+maintains a session state that future requests from the same user are
+associated with. In our JSON web service architecture, there are no HTML forms,
+so we use different methods to associate authentication credentials with requests.</p>
+<h2 id="adding-authentication-to-action-methods">Adding authentication to action methods</h2>
+<p>The simplest approach is to perform authentication for every HTTP request, before
+returning the usual response or an HTTP error that indicates that the client isn’t
+authorized to access the requested resource.</p>
+<h3 id="composing-actions-to-add-behavior">COMPOSING ACTIONS TO ADD BEHAVIOR</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="code"><pre>def index = AuthenticatedAction { <span class="built_in">request</span> =&gt;
+  Ok(<span class="string">"Authenticated response..."</span>)
+}
+
+def AuthenticatedAction(f: <span class="built_in">Request</span>[AnyContent] =&gt; Result):
+    Action[AnyContent] = {
+  Action { <span class="built_in">request</span> =&gt;
+    <span class="keyword">if</span> (authenticate(<span class="built_in">request</span>)) {
+      f(<span class="built_in">request</span>)
+    } <span class="keyword">else</span> {
+      Unauthorized
+    }
+  }
+}
+</pre></td></tr></table></figure>
+
+<h3 id="extracting-credentials-from-the-request">EXTRACTING CREDENTIALS FROM THE REQUEST</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+</pre></td><td class="code"><pre>// Helper function to extract credentials <span class="keyword">from</span> a request query string
+<span class="function"><span class="keyword">def</span> <span class="title">readQueryString</span><span class="params">(request: Request[_])</span>:</span>
+    Option[Either[Result, (String, String)]] = {
+  request.queryString.get(<span class="string">"user"</span>).map{ user =&gt;
+    request.queryStirng.get(<span class="string">"password"</span>).map { password =&gt;
+      Right((user.head, password.head))
+    }.getOrElse {
+      Left(BadRequest(<span class="string">"Password not specified"</span>))
+    }
+  }
+}
+
+// Updated action helper that extracts credentials before authentication
+<span class="function"><span class="keyword">def</span> <span class="title">AuthenticatedAction</span><span class="params">(f: Request[AnyContent] =&gt; Result)</span>:</span>
+    Action[AnyContent] = {
+  Action { request =&gt;
+    val maybeCredentials = readQueryString(request)
+    maybeCredentials.map { resultOrCredentials =&gt;
+      resultOrCredentials match {
+        case Left(errorResult) =&gt; errorResult
+        case Right(credentials) =&gt; {
+          val (user, password) = credentials
+          <span class="keyword">if</span> (authenticate(user, password)) {
+            f(request)
+          } <span class="keyword">else</span> {
+            Unauthorized(<span class="string">"Invalid user name or password"</span>)
+          }
+        }
+      }
+    }.getOrElse {
+      Unauthorized(<span class="string">"No user name and password provided"</span>)
+    }
+  }    
+}
+</pre></td></tr></table></figure>
+
+<h2 id="using-basic-authentication">Using basic authentication</h2>
+<p>A more standard way to send authentication credentials with an HTTP request is to use
+HTTP basic authentication, which sends credentials in an HTTP header.</p>
+<p>A server requests basic authentication by sending an HTTP 401 Unauthorized
+response with an additional <code>WWW-Authenticate</code> header. The header has a value like
+<code>Basic realm=&quot;Product catalog&quot;</code>. This specifies the required authentication type
+and names the protected resource.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+</pre></td><td class="code"><pre>def readBasicAuthentication(<span class="attribute">headers</span>: Headers):
+    Option[Either[Result, (String, String)]] = {
+  headers.get(Http.HeaderNames.AUTHORIZATION).map { header<span class="function"> =&gt;</span>
+    val BasicHeader = <span class="string">"Basic (.*)"</span>.r
+    header match {
+      <span class="reserved">case</span> BasicHeader<span class="function"><span class="params">(base64)</span> =&gt;</span> {
+        <span class="keyword">try</span> {
+          <span class="reserved">import</span> org.apache.commons.codec.binary.base64
+          val decodedBytes = base64.decodeBase64(base64.getBytes)
+          val credentials = <span class="keyword">new</span> String(decodedBytes).split(<span class="string">":"</span>, <span class="number">2</span>)
+          credentials match {
+            <span class="reserved">case</span> Array<span class="function"><span class="params">(username, password)</span> =&gt;</span>
+              Right(username<span class="function"> -&gt;</span> password)
+            <span class="reserved">case</span> _<span class="function"> =&gt;</span> Left(<span class="string">"Invalid basic authentication"</span>)
+          }
+        }
+      }
+      <span class="reserved">case</span> _<span class="function"> =&gt;</span> Left(BadRequest(<span class="string">"Bad Authorization header"</span>))
+    }
+  }
+}
+val maybeCredentials = readQueryString(request) orElse
+  readBasicAuthentication(request.headers)
+<span class="regexp">//</span> curl --include --user <span class="attribute">peter</span>:secret <span class="attribute">http</span>:<span class="regexp">//</span><span class="attribute">localhost</span>:<span class="number">9000</span>/
+</pre></td></tr></table></figure>
+
+<h2 id="other-authentication-methods">Other authentication methods</h2>
+<p>Web services often use one of two alternatives:</p>
+<ul>
+<li>Token-based authentication—Providing a signed API key that clients can send with
+requests, either in a custom HTTP header or query string parameter</li>
+<li>Session-based authentication—Using one method to authenticate, and then
+providing a session identifier that clients can send, either in an HTTP cookie or an
+HTTP header</li>
+</ul>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/play/">play</a><a href="/tags/scala/">scala</a>
+  </div>
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://zhpooer.github.io/2014/08/18/play-for-scala-json/" data-title="Play for Scala-JSON | Poe&#39;s World" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2014/08/18/play-for-scala-modules-&-plugins/" title="Play for Scala-Modules &amp; Plugins">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  Play for Scala-Modules &amp; Plugins</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2014/08/17/传智播客day70-hive数据挖掘/"  title="传智播客day70-Hive数据挖掘">
+ <strong>NEXT:</strong><br/> 
+ <span>传智播客day70-Hive数据挖掘
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#creating-the-single-page-play-application"><span class="toc-number">1.</span> <span class="toc-text">Creating the single-page Play application</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#constructing-json-data-value-objects"><span class="toc-number">1.1.</span> <span class="toc-text">Constructing JSON data value objects</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#working-with-the-json-objects"><span class="toc-number">1.1.1.</span> <span class="toc-text">WORKING WITH THE JSON OBJECTS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#generating-strings-from-json-values"><span class="toc-number">1.1.2.</span> <span class="toc-text">GENERATING STRINGS FROM JSON VALUES</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fetching-json-data-from-the-client"><span class="toc-number">1.1.3.</span> <span class="toc-text">FETCHING JSON DATA FROM THE CLIENT</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#converting-model-objects-to-json-objects"><span class="toc-number">1.2.</span> <span class="toc-text">Converting model objects to JSON objects</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#json-formatters"><span class="toc-number">1.2.1.</span> <span class="toc-text">JSON FORMATTERS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#using-a-custom-formatter"><span class="toc-number">1.2.2.</span> <span class="toc-text">USING A CUSTOM FORMATTER</span></a></li></ol></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#sending-json-data-to-the-server"><span class="toc-number">2.</span> <span class="toc-text">Sending JSON data to the server</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#editing-and-sending-client-data"><span class="toc-number">2.1.</span> <span class="toc-text">Editing and sending client data</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#consuming-json"><span class="toc-number">2.2.</span> <span class="toc-text">Consuming JSON</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#consuming-json-in-more-detail"><span class="toc-number">2.3.</span> <span class="toc-text">Consuming JSON in more detail</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#reusable-consumers"><span class="toc-number">2.4.</span> <span class="toc-text">Reusable consumers</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#combining-json-formatters-and-consumers"><span class="toc-number">2.5.</span> <span class="toc-text">Combining JSON formatters and consumers</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#validating-json"><span class="toc-number">3.</span> <span class="toc-text">Validating JSON</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#mapping-the-json-structure-to-a-model"><span class="toc-number">3.1.</span> <span class="toc-text">Mapping the JSON structure to a model</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#handling-empty-values"><span class="toc-number">3.2.</span> <span class="toc-text">Handling “empty” values</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#adding-validation-rules-and-validating-input"><span class="toc-number">3.3.</span> <span class="toc-text">Adding validation rules and validating input</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#returning-json-validation-errors"><span class="toc-number">3.4.</span> <span class="toc-text">Returning JSON validation errors</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#authenticating-json-web-service-requests"><span class="toc-number">4.</span> <span class="toc-text">Authenticating JSON web service requests</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#adding-authentication-to-action-methods"><span class="toc-number">4.1.</span> <span class="toc-text">Adding authentication to action methods</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#composing-actions-to-add-behavior"><span class="toc-number">4.1.1.</span> <span class="toc-text">COMPOSING ACTIONS TO ADD BEHAVIOR</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#extracting-credentials-from-the-request"><span class="toc-number">4.1.2.</span> <span class="toc-text">EXTRACTING CREDENTIALS FROM THE REQUEST</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#using-basic-authentication"><span class="toc-number">4.2.</span> <span class="toc-text">Using basic authentication</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#other-authentication-methods"><span class="toc-number">4.3.</span> <span class="toc-text">Other authentication methods</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/AJAX/" title="AJAX">AJAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+		
+			<li><a href="/tags/DOM/" title="DOM">DOM<sup>2</sup></a></li>
+		
+			<li><a href="/tags/EL表达式/" title="EL表达式">EL表达式<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Hibernate/" title="Hibernate">Hibernate<sup>2</sup></a></li>
+		
+			<li><a href="/tags/HttpSession/" title="HttpSession">HttpSession<sup>1</sup></a></li>
+		
+			<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JSP/" title="JSP">JSP<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaBean/" title="JavaBean">JavaBean<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaScript/" title="JavaScript">JavaScript<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Mybatis/" title="Mybatis">Mybatis<sup>1</sup></a></li>
+		
+			<li><a href="/tags/NoSql/" title="NoSql">NoSql<sup>1</sup></a></li>
+		
+			<li><a href="/tags/SAX/" title="SAX">SAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletRequest/" title="ServletRequest">ServletRequest<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletResponse/" title="ServletResponse">ServletResponse<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Spring/" title="Spring">Spring<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Spring MVC/" title="Spring MVC">Spring MVC<sup>1</sup></a></li>
+		
+			<li><a href="/tags/String/" title="String">String<sup>1</sup></a></li>
+		
+			<li><a href="/tags/StringBuffer/" title="StringBuffer">StringBuffer<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2014 
+		
+		<a href="http://zhpooer.github.io" target="_blank" title="zhpooer">zhpooer</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"zhpoooer"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>

@@ -85,7 +85,7 @@ MR由两个项目阶段组成: Map和Reduce, 用户只需要实现 map()和reduc
     </p>
   <p class="article-time">
     <time datetime="2014-08-13T01:04:09.000Z" itemprop="datePublished">8月 13 2014</time>
-    更新日期:<time datetime="2014-08-13T09:02:22.000Z" itemprop="dateModified">8月 13 2014</time>
+    更新日期:<time datetime="2014-08-14T01:35:54.000Z" itemprop="dateModified">8月 14 2014</time>
     
   </p>
 </header>
@@ -504,11 +504,15 @@ public <span class="class"><span class="keyword">class</span> <span class="title
 <p>如果想要在集群上运行, 安装 hadoop 插件</p>
 <h1 id="-">源码分析</h1>
 <ol>
-<li>获取服务端代理对象</li>
-<li>通过ResourceManager 获取 jar包路径, 和jobId</li>
-<li>提交jar包</li>
-<li>提交信息, jar包路径, jobId</li>
+<li>初始化DistributeFS, 获取 HDFS 代理对象(DFSClient)</li>
+<li>启动Job, 获取 ResourceManager 代理对象(Cluster), 通过ResourceManager 获取 jar包路径, 和jobId</li>
+<li>提交jar包, 默认10份</li>
+<li>提交信息给 ResourceManager, jar包路径, jobId</li>
+<li>NodeManager 通过心跳来申请任务</li>
+<li>启动 YarnChild, 下载Jar包</li>
+<li>启动任务</li>
 </ol>
+<p>一个 Reducer 对应一个结果文件, 可以通过配置来设置 Reducer 个数. Mapper不能设置个数.</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -532,6 +536,14 @@ public <span class="class"><span class="keyword">class</span> <span class="title
 	
 <nav class="article-nav clearfix">
  
+ <div class="prev" >
+ <a href="/2014/08/14/传智播客day68-hadoop高级编程/" title="传智播客day68-Hadoop高级编程">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  传智播客day68-Hadoop高级编程</span>
+</a>
+</div>
+
 
 <div class="next">
 <a href="/2014/08/12/mit-algorithm-算法分析/"  title="MIT Algorithm-算法分析">
