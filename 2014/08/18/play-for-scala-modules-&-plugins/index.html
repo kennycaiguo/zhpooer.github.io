@@ -9,6 +9,11 @@
     
     <meta name="author" content="zhpooer">
     
+    <meta name="description" content="Modules
+Currently available modules for Play 2 provide anything from alternate template
+engines to NoSQL database layers.
+This section will explain ho">
+    
     
     
     
@@ -78,7 +83,7 @@
     </p>
   <p class="article-time">
     <time datetime="2014-08-18T12:56:34.000Z" itemprop="datePublished">8月 18 2014</time>
-    更新日期:<time datetime="2014-08-18T12:56:48.000Z" itemprop="dateModified">8月 18 2014</time>
+    更新日期:<time datetime="2014-08-20T03:21:49.000Z" itemprop="dateModified">8月 20 2014</time>
     
   </p>
 </header>
@@ -87,10 +92,716 @@
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#modules"><span class="toc-number">1.</span> <span class="toc-text">Modules</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#using-modules"><span class="toc-number">1.1.</span> <span class="toc-text">Using Modules</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#creating-modules"><span class="toc-number">1.2.</span> <span class="toc-text">Creating modules</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#publish"><span class="toc-number">1.2.1.</span> <span class="toc-text">Publish</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#testing-your-module"><span class="toc-number">1.2.2.</span> <span class="toc-text">TESTING YOUR MODULE</span></a></li></ol></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#plugins"><span class="toc-number">2.</span> <span class="toc-text">Plugins</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#deploying-to-production"><span class="toc-number">3.</span> <span class="toc-text">Deploying to production</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#working-with-multiple-configurations"><span class="toc-number">3.1.</span> <span class="toc-text">Working with multiple configurations</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#creating-native-packages-for-a-package-manager"><span class="toc-number">3.2.</span> <span class="toc-text">Creating native packages for a package manager</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#setting-up-a-front-end-proxy"><span class="toc-number">3.3.</span> <span class="toc-text">Setting up a front-end proxy</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#using-ssl"><span class="toc-number">3.4.</span> <span class="toc-text">Using SSL</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#deploying-to-an-application-server"><span class="toc-number">3.5.</span> <span class="toc-text">Deploying to an application server</span></a></li></ol>
 		</div>
 		
-		  
+		<h1 id="modules">Modules</h1>
+<p>Currently available modules for Play 2 provide anything from alternate template
+engines to NoSQL database layers.
+This section will explain how to use a common module and, later on, how
+to build a module yourself.</p>
+<h2 id="using-modules">Using Modules</h2>
+<p>Play modules are, like any other library, a collection of files in a JAR. This means that
+you add a module to your project the same way you add any other library: you add it to
+appDependencies in <code>project/Build.scala</code> .</p>
+<p>www.playframework.com/documentation/2.1.x/Modules</p>
+<p>Let’s get started: make a copy of the sample project in chapter 2, and add the
+dependency and resolver.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+</pre></td><td class="code"><pre><span class="keyword">import</span> sbt._
+<span class="keyword">import</span> Keys._
+<span class="keyword">import</span> PlayProject._
+
+<span class="class"><span class="keyword">object</span> <span class="title">ApplicationBuild</span> <span class="keyword">extends</span> <span class="title">Build</span> {</span>
+  <span class="keyword">val</span> appName = <span class="string">"product-details"</span>
+  <span class="keyword">val</span> appVersion = <span class="string">"1.0-SNAPSHOT"</span>
+  <span class="keyword">val</span> appDependencies = Seq(
+    <span class="string">"net.sf.barcode4j"</span> % <span class="string">"barcode4j"</span> % <span class="string">"2.0"</span>,
+    <span class="string">"securesocial"</span> %% <span class="string">"securesocial"</span> % <span class="string">"2.1.0"</span>
+  )
+
+  <span class="keyword">val</span> main = PlayProject(appName, appVersion,
+    appDependencies, mainLang = SCALA ).settings(
+      resolvers +=
+        Resolver.url(
+          <span class="string">"SecureSocial Repository"</span>, url(<span class="string">"http://repo.scala-sbt.org/scalasbt/sbt-plugin-releases/"</span>)
+        )(Resolver.ivyStylePatterns)
+    )
+}
+</pre></td></tr></table></figure>
+
+<p>According to the documentation, SecureSocial provides a replacement
+for Action called SecuredAction. This method acts the same way as Action,
+except that it first checks whether the user is
+logged in and redirects to a login page if necessary.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+</pre></td><td class="code"><pre><span class="keyword">def</span> list = SecuredAction { implicit request =&gt;
+  <span class="keyword">val</span> products = Product.findAll
+  Ok(views.html.products.list(products))
+}
+
+<span class="class"><span class="keyword">class</span> <span class="title">SimpleUserService</span><span class="params">(val app: Application)</span> <span class="keyword">extends</span> <span class="title">UserService</span></span>
+    <span class="keyword">with</span> Plugin {
+    
+  <span class="keyword">var</span> users: Map[UserId, SocialUser] = Map()
+  <span class="comment">// stores login tokens</span>
+  <span class="keyword">var</span> tokens: Map[String, Token] = Map()
+
+  <span class="keyword">def</span> find(id: UserId): Option[SocialUser] = {
+    users.get(id)
+  }
+
+  <span class="keyword">def</span> findByEmailAndProvider(email: String, providerId: String) = {
+    users.values.find { user =&gt;
+      user.id.providerId == providerId &&
+      user.email == Some(email)
+    }
+  }
+
+  <span class="keyword">def</span> save(user: Identity): Identity = {
+    <span class="keyword">val</span> socialUser: SocialUser = SocialUser(user)
+    users = users + (user.id -&gt; socialUser)
+    socialUser
+  }
+  <span class="comment">// savetoken</span>
+  <span class="keyword">def</span> save(token: Token) {
+    tokens = tokens + (token.uuid -&gt; token)
+  }
+
+  <span class="keyword">def</span> findToken(token: String) = {
+   <span class="comment">// Looks up a token</span>
+    tokens.get(token)
+  }
+
+  <span class="keyword">def</span> deleteToken(uuid: String) {
+    tokens = tokens - uuid
+  }
+
+  <span class="keyword">def</span> deleteExpiredTokens() {
+    tokens = tokens.filter{ !_._2.isExpired }
+  }
+}
+</pre></td></tr></table></figure>
+
+<p><code>conf/securesocial.conf</code>, If you prefer to keep it in
+<code>conf/application.conf</code>, that’s fine too.
+<code>conf/application.conf</code> should contains <code>include &quot;securesocial.conf&quot;</code>.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+</pre></td><td class="code"><pre>userpass {
+  withUserNameSupport=<span class="literal">false</span>
+  sendWelcomeEmail=<span class="literal">false</span>
+  enableGravatarSupport=<span class="literal">false</span>
+  tokenDuration=<span class="number">60</span>
+  tokenDeleteInterval=<span class="number">5</span>
+  minimumPasswordLength=<span class="number">8</span>
+  enableTokenJob=<span class="literal">true</span>
+  hasher=bcrypt
+}
+securesocial {
+  onLoginGoTo=/
+  onLogoutGoTo=/login
+  ssl=<span class="literal">false</span>
+  sessionTimeOut=<span class="number">60</span>
+  assetsController=controllers.ReverseMyCustomAssetsController
+}
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre>GET /login securesocial<span class="preprocessor">.controllers</span><span class="preprocessor">.LoginPage</span><span class="preprocessor">.login</span>
+GET /logout securesocial<span class="preprocessor">.controllers</span><span class="preprocessor">.LoginPage</span><span class="preprocessor">.logout</span>
+</pre></td></tr></table></figure>
+
+<h2 id="creating-modules">Creating modules</h2>
+<p>Creating a Play module is as easy as making a Play application. In fact, that’s how you
+start with a new module—you create a new Play application as the starting point.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>play <span class="keyword">new</span> ean
+rm app<span class="regexp">/public/</span>*
+rm app<span class="regexp">/views/</span>*
+rm conf/application.conf
+</pre></td></tr></table></figure>
+
+<p><code>app/controller/Barcodes.scala</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+</pre></td><td class="code"><pre><span class="keyword">package</span> com.github.playforscala.barcodes
+<span class="keyword">import</span> play.api.mvc.{Action, Controller}
+<span class="keyword">import</span> org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider
+<span class="keyword">import</span> org.krysalis.barcode4j.impl.upcean.EAN13Bean
+<span class="keyword">import</span> util.{Failure, Success, Try}
+
+<span class="class"><span class="keyword">object</span> <span class="title">Barcodes</span> <span class="keyword">extends</span> <span class="title">Controller</span> {</span>
+  <span class="keyword">val</span> ImageResolution = <span class="number">144</span>
+  
+  <span class="keyword">def</span> barcode(ean: Long) = Action {
+    <span class="keyword">val</span> MimeType = <span class="string">"image/png"</span>
+    Try(ean13BarCode(ean, MimeType)) <span class="keyword">match</span> {
+      <span class="keyword">case</span> Success(imageData) =&gt; Ok(imageData).as(MimeType)
+      <span class="keyword">case</span> Failure(e) =&gt;
+        BadRequest(<span class="string">"Couldn’t generate bar code. Error: "</span> +e.getMessage)
+    }
+  }
+
+  <span class="keyword">def</span> ean13BarCode(ean: Long, mimeType: String): Array[Byte] = {
+    <span class="keyword">import</span> java.io.ByteArrayOutputStream
+    <span class="keyword">import</span> java.awt.image.BufferedImage
+    <span class="keyword">val</span> output = <span class="keyword">new</span> ByteArrayOutputStream
+    <span class="keyword">val</span> canvas =
+      <span class="keyword">new</span> BitmapCanvasProvider(output, mimeType, ImageResolution,
+        BufferedImage.TYPE_BYTE_BINARY, <span class="keyword">false</span>, <span class="number">0</span>)
+
+    <span class="keyword">val</span> barCode = <span class="keyword">new</span> EAN13Bean
+    barCode.generateBarcode(canvas, String valueOf ean)
+    canvas.finish()
+    output.toByteArray
+  }
+}
+</pre></td></tr></table></figure>
+
+<p>We’ll explain that in the “Testing your module” section. The
+route will therefore look like this:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>GET /:ean <span class="keyword">com</span><span class="preprocessor">.github</span><span class="preprocessor">.playforscala</span><span class="preprocessor">.barcodes</span><span class="preprocessor">.Barcodes</span><span class="preprocessor">.barcode</span>(ean: Long)
+</pre></td></tr></table></figure>
+
+<h3 id="publish">Publish</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre>
+val main = play<span class="preprocessor">.Project</span>(appName, appVersion, appDependencies)<span class="preprocessor">.settings</span>(
+  publishTo := Some(<span class="string">"My Maven repository"</span> at <span class="string">"http://maven.example.com/releases"</span>),
+  credentials += Credentials(Path<span class="preprocessor">.userHome</span> / <span class="string">".repo-credentials"</span>)
+)
+</pre></td></tr></table></figure>
+
+<h3 id="testing-your-module">TESTING YOUR MODULE</h3>
+<p><code>play new module-test</code></p>
+<p><code>project/Build.scala</code>:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="keyword">...</span>
+val appDependencies = Seq(
+  <span class="string">"playforscala"</span> %% <span class="string">"ean-module"</span> % <span class="string">"1.0-SNAPSHOT"</span>
+)
+<span class="keyword">...</span>
+</pre></td></tr></table></figure>
+
+<p><code>app/views/index.scala.html</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="at_rule">@<span class="keyword">(message:</span> String)
+@<span class="function">main(<span class="string">"Welcome to Play 2.0"</span>)</span> </span>{
+  <span class="at_rule">@<span class="keyword">tags.barcode(1234567890128l)</span>
+}</span>
+</pre></td></tr></table></figure>
+
+<h1 id="plugins">Plugins</h1>
+<p>Play provides a <code>play.api.Plugin trait</code>, specifically
+for modules to initialize themselves.</p>
+<p>Note that Plugin is only really useful for modules, because a <code>Global</code> object in
+a Play application can do anything a <code>Plugin</code> can do.</p>
+<p>The Plugin trait has three methods: onStart, onStop, and enabled. The first two are
+called on application startup and shutdown, respectively, but only if the plugin is
+enabled.</p>
+<p>You can “enable” your plugin in your module’s play.plugins file and
+provide the user with a more convenient way to really enable the plugin,
+in application.conf, for instance.</p>
+<p>Let’s say we want to cache our generated bar
+codes, and for some reason we don’t want to use Play’s built-in cache.</p>
+<ul>
+<li>Concurrent calls should be handled concurrently</li>
+<li>Multiple calls for the same bar code should cause no more than one cache miss</li>
+</ul>
+<p>In order to satisfy those requirements, we’ll use an actor.
+It would only be able to render one bar code at a time if we did that.
+The easiest solution is to have the future’s onComplete send the
+rendered image to the client.</p>
+<p><code>app/com/github/playforscala/barcodes/BarcodeCache.scala</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+</pre></td><td class="code"><pre><span class="keyword">package</span> com.github.playforscala.barcodes
+
+<span class="keyword">import</span> akka.actor.Actor
+<span class="keyword">import</span> concurrent._
+<span class="keyword">import</span> org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider
+<span class="keyword">import</span> org.krysalis.barcode4j.impl.upcean.EAN13Bean
+<span class="keyword">import</span> scala.util.Try
+<span class="keyword">import</span> play.api.libs.concurrent.Execution.Implicits._
+
+<span class="class"><span class="keyword">case</span> <span class="keyword">class</span> <span class="title">RenderImage</span><span class="params">(ean: Long)</span></span>
+<span class="class"><span class="keyword">case</span> <span class="keyword">class</span> <span class="title">RenderResult</span><span class="params">(image: Try[Array[Byte]])</span></span>
+
+<span class="class"><span class="keyword">class</span> <span class="title">BarcodeCache</span> <span class="keyword">extends</span> <span class="title">Actor</span> {</span>
+  <span class="keyword">var</span> imageCache = Map[Long, Future[Array[Byte]]]()
+  <span class="keyword">def</span> receive = {
+    <span class="keyword">case</span> RenderImage(ean) =&gt; {
+      <span class="keyword">val</span> futureImage = imageCache.get(ean) <span class="keyword">match</span> {
+        <span class="keyword">case</span> Some(futureImage) =&gt; futureImage
+        <span class="keyword">case</span> None =&gt;
+          <span class="keyword">val</span> futureImage = future { ean13BarCode(ean, <span class="string">"image/png"</span>) }
+          imageCache += (ean -&gt; futureImage)
+          futureImage
+      }
+      <span class="keyword">val</span> client = sender
+      futureImage.onComplete {
+        client ! RenderResult(_)
+      }
+    }
+  }
+
+  <span class="keyword">def</span> ean13BarCode(ean: Long, mimeType: String): Array[Byte] = {
+    <span class="keyword">import</span> java.io.ByteArrayOutputStream
+    <span class="keyword">import</span> java.awt.imageBufferedImage
+    <span class="keyword">val</span> output = <span class="keyword">new</span> ByteArrayOutputStream
+    <span class="keyword">val</span> canvas = <span class="keyword">new</span> BitmapCanvasProvider(output, mimeType,
+      Barcodes.imageResolution, BufferedImage.TYPE_BYTE_BINARY,
+      <span class="keyword">false</span>, <span class="number">0</span>)
+    <span class="keyword">val</span> barCode = <span class="keyword">new</span> EAN13Bean
+    barCode.generateBarcode(canvas, String valueOf ean)
+    canvas.finish()
+
+    output.toByteArray
+  }
+}
+</pre></td></tr></table></figure>
+
+<p><code>app/com/github/playforscala/barcodes/Barcodes.scala</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+</pre></td><td class="code"><pre>package <span class="keyword">com</span><span class="preprocessor">.github</span><span class="preprocessor">.playforscala</span><span class="preprocessor">.barcodes</span>
+
+import akka<span class="preprocessor">.actor</span><span class="preprocessor">.ActorRef</span>
+import akka<span class="preprocessor">.pattern</span><span class="preprocessor">.ask</span>
+import util<span class="preprocessor">.Try</span>
+import scala<span class="preprocessor">.concurrent</span><span class="preprocessor">.Future</span>
+import play<span class="preprocessor">.api</span><span class="preprocessor">.libs</span><span class="preprocessor">.concurrent</span><span class="preprocessor">.Execution</span><span class="preprocessor">.Implicits</span>._
+import scala<span class="preprocessor">.concurrent</span><span class="preprocessor">.duration</span>._
+import akka<span class="preprocessor">.util</span><span class="preprocessor">.Timeout</span>
+
+object Barcodes {
+  var barcodeCache: ActorRef = _
+  val mimeType = <span class="string">"image/png"</span>
+  val imageResolution = <span class="number">144</span>
+
+  def renderImage(ean: Long): Future[Try[Array[Byte]]] = {
+    implicit val timeout = Timeout(<span class="number">20.</span>seconds)
+    barcodeCache ? RenderImage(ean) map {
+      case RenderResult(result) =&gt; result
+    }
+  }
+}
+</pre></td></tr></table></figure>
+
+<p><code>app/com/github/playforscala/barcodes/</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+</pre></td><td class="code"><pre><span class="keyword">package</span> com.github.playforscala.barcodes
+<span class="keyword">import</span> play.api.mvc.{Action, Controller}
+<span class="keyword">import</span> util.{Failure, Success}
+<span class="keyword">import</span> play.api.libs.concurrent.Execution.Implicits._
+
+<span class="class"><span class="keyword">object</span> <span class="title">BarcodesController</span> <span class="keyword">extends</span> <span class="title">Controller</span> {</span>
+  <span class="keyword">def</span> barcode(ean: Long) = Action {
+    Async {
+      Barcodes.renderImage(ean) map {
+        <span class="keyword">case</span> Success(image) =&gt; Ok(image).as(Barcodes.mimeType)
+        <span class="keyword">case</span> Failure(e) =&gt;
+          BadRequest(<span class="string">"Couldn’t generate bar code. Error: "</span> + e.getMessage)
+      }
+    }
+  }
+}
+</pre></td></tr></table></figure>
+
+<p><code>.../playforscala/barcodes/BarcodesPlugin.scala</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+</pre></td><td class="code"><pre><span class="keyword">package</span> com.github.playforscala.barcodes
+
+<span class="keyword">import</span> play.api.{Application, Logger, Plugin}
+<span class="keyword">import</span> play.api.libs.concurrent.Akka
+<span class="keyword">import</span> play.api.Play.current
+<span class="keyword">import</span> akka.actor.Props
+
+<span class="class"><span class="keyword">class</span> <span class="title">BarcodesPlugin</span><span class="params">(val app: Application)</span> <span class="keyword">extends</span> <span class="title">Plugin</span> {</span>
+  <span class="keyword">override</span> <span class="keyword">def</span> onStart(){
+    Logger.info(<span class="string">"initializing cace"</span>)
+    Barcodes.barcodeCache = Akka.system.actorOf(Props[BarcodeCache])
+  }
+  
+  <span class="keyword">override</span> <span class="keyword">def</span> onStop() {
+    Logger.info(<span class="string">"stopping application"</span>)
+  }
+  <span class="comment">// if this method returns false, none of the others are ever called</span>
+  <span class="keyword">override</span> <span class="keyword">def</span> enable = <span class="keyword">true</span>;
+}
+</pre></td></tr></table></figure>
+
+<p>There’s one more thing to do to make the plugin work.
+It must be configured in a file called <code>conf/play.plugins</code></p>
+<p>The priority determines the order in which the plugins are initialized,
+with lower numbers being first.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre><span class="number">1000</span>:<span class="keyword">com</span><span class="preprocessor">.github</span><span class="preprocessor">.playforscala</span><span class="preprocessor">.barcodes</span><span class="preprocessor">.BarcodesPlugin</span>
+</pre></td></tr></table></figure>
+
+<p>If your application is going to get hit with a lot of requests for different
+bar codes simultaneously, you’re going to fill up the default thread pool—which might
+slow things down in the rest of the application. You might want to use a separate
+thread pool for your bar code Future objects. If your application runs on multiple
+servers for performance reasons, you might want to use Akka’s distributed features to
+run one instance of the BarcodeCache actor that all application instances will talk to.</p>
+<h1 id="deploying-to-production">Deploying to production</h1>
+<p>As a better alternative, you can use play start. This will start Play in production
+mode. In this mode, a new JVM is forked for your application, and
+it’s running separately from the play command.</p>
+<p>The play process will terminate but leave your application running.
+Your application’s process ID is written to a file RUNNING_PID.</p>
+<p>You can stop this application with play stop. This will send the SIGTERM signal to
+your application’s process. </p>
+<p>Play provides the <code>stage</code> and <code>dist</code> tasks. When running play
+stage, Play compiles your application to a JAR file, and—together with all the
+dependency JARs—puts it in the <code>target/staged</code> directory.
+It also creates a start script in <code>target/start</code>.</p>
+<p>After running <code>play dist</code>, you get a directory dist that contains a zip file
+with your application. You might need to make the start script
+executable first with <code>chmod +x</code> start.</p>
+<h2 id="working-with-multiple-configurations">Working with multiple configurations</h2>
+<p>Don’t use the same credentials for your production database</p>
+<p><code>conf/application.conf</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>mail<span class="preprocessor">.override</span><span class="preprocessor">.enabled</span> = true
+mail<span class="preprocessor">.override</span><span class="preprocessor">.address</span> = <span class="string">"info@example.org"</span>
+
+include <span class="string">"development.conf"</span>
+</pre></td></tr></table></figure>
+
+<p>The first two lines of this configuration override email recipient addresses, making the
+application send all notifications to one address, <code>info@example.org</code></p>
+<p>The last line includes settings from another configuration file in the same
+directory called development.conf. This allows each developer to create their
+own <code>conf/development.conf</code> and override the default test configuration.</p>
+<p>Be sure to add this file to .gitignore or your source control system’s equivalent.</p>
+<p>A nice thing about the configuration library is that the configuration doesn’t break
+if the <code>development.conf</code> file doesn’t exist; the library just silently ignores it.</p>
+<p>For production, then, we can use a separate /etc/paperclips/production.conf
+configuration file:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre>include classpath(<span class="string">"application.conf"</span>)
+email.<span class="keyword">override</span>.enabled=<span class="keyword">false</span>
+</pre></td></tr></table></figure>
+
+<p>To use the production configuration instead of the default configuration,
+specify the file as a system property when starting the application:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre><span class="keyword">play</span> <span class="string">"start -Dconfig.file=/etc/paperclips/production.conf"</span>
+</pre></td></tr></table></figure>
+
+<h2 id="creating-native-packages-for-a-package-manager">Creating native packages for a package manager</h2>
+<p>The sbt plugin sbt-native-packager helps you create these deb and rpm
+packages as well as Homebrew packages that can be used on Mac OS X,
+and MSI packages for Windows.</p>
+<p>The play2-native-packager plugin builds deb packages for Debian or Ubuntu,
+and the play2-ubuntu-package plugin builds lightweight deb packages
+designed specifically for recent versions of Ubuntu.</p>
+<h2 id="setting-up-a-front-end-proxy">Setting up a front-end proxy</h2>
+<p>It also gives you the ability to do upgrades without downtime. If you have a front-end
+proxy doing load balancing between two application instances, you can take one
+instance down, upgrade it, and bring it back up, all without downtime.</p>
+<p>HAProxy is a powerful and reliable proxy that has a plethora of advanced options,
+but is still easy to get started with.</p>
+<p>Suppose we want to set up HAProxy to listen on port 80, and redirect traffic to two
+instances of our Play application. We’ll also use WebSockets in this application,
+so we must make sure that these connections are properly proxied as well.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+</pre></td><td class="code"><pre>global
+  daemon
+  maxconn <span class="number">256</span>
+  
+defaults
+  mode http
+  timeout connect <span class="number">5</span>s
+  timeout client <span class="number">50</span>s
+  timeout <span class="built_in">server</span> <span class="number">50</span>s
+  <span class="keyword">option</span> forwardfor
+  <span class="keyword">option</span> http-<span class="built_in">server</span>-close
+  
+frontend http-<span class="keyword">in</span>
+  bind *:<span class="number">80</span>
+  default_backend playapp
+  
+backend playapp
+  <span class="built_in">server</span> s1 <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">9000</span> maxconn <span class="number">32</span> check
+  <span class="built_in">server</span> s2 <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">9001</span> maxconn <span class="number">32</span> check
+</pre></td></tr></table></figure>
+
+<p>If you set the pidfile.path to <code>/dev/null</code>, no PID file will be created.</p>
+<h2 id="using-ssl">Using SSL</h2>
+<p>Play can automatically generate a key store for you with a self-signed certificate,
+which is useful in development mode. All you need to start experimenting with SSL is
+to set the <code>https.port</code> system property:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre><span class="attribute">play -Dhttps.port</span>=<span class="string">9001 run</span>
+</pre></td></tr></table></figure>
+
+<p>The generated key store is saved in <code>conf/generated.keystore</code>, and Play will reuse
+it if you restart your application so you don’t get the certificate warning again and again.</p>
+<p>Once you have a key store file with your key and certificates, you need to point Play
+to it. Set <code>https.keyStore</code> to point to your key store and <code>https.keyStorePassword</code> to
+your password:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre>play -Dhttps<span class="preprocessor">.port</span>=<span class="number">9001</span> -Dhttps<span class="preprocessor">.keyStore</span>=mykeystore<span class="preprocessor">.jks</span>
+  -Dhttp<span class="preprocessor">.keyStorePassword</span>=mypassword run
+</pre></td></tr></table></figure>
+
+<p>Even though Play supports SSL, the recommended way to use SSL with Play in produc-
+tion is to let the front end—like HAProxy or Apache—handle it.</p>
+<h2 id="deploying-to-an-application-server">Deploying to an application server</h2>
+<p>e Play doesn’t use the Servlet API, which makes it
+impossible to run on an application server that expects web applications to use it.
+Luckily, there’s a plugin for Play 2, the <code>play2-war-plugin</code>, that can package your
+application as a WAR. It provides a layer between the Servlet API and your Play application.</p>
+<p>Some of the more advanced features of Play, like WebSockets, don’t work with all
+Servlet API versions.</p>
+  
 	</div>
 		<footer class="article-footer clearfix">
 
@@ -113,6 +824,14 @@
 	
 <nav class="article-nav clearfix">
  
+ <div class="prev" >
+ <a href="/2014/08/20/play-for-scala-web-services-&-iteratees-&-websockets/" title="Play for Scala-Web services &amp; iteratees &amp; WebSockets">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  Play for Scala-Web services &amp; iteratees &amp; WebSockets</span>
+</a>
+</div>
+
 
 <div class="next">
 <a href="/2014/08/18/play-for-scala-json/"  title="Play for Scala-JSON">
@@ -134,7 +853,7 @@
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#modules"><span class="toc-number">1.</span> <span class="toc-text">Modules</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#using-modules"><span class="toc-number">1.1.</span> <span class="toc-text">Using Modules</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#creating-modules"><span class="toc-number">1.2.</span> <span class="toc-text">Creating modules</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#publish"><span class="toc-number">1.2.1.</span> <span class="toc-text">Publish</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#testing-your-module"><span class="toc-number">1.2.2.</span> <span class="toc-text">TESTING YOUR MODULE</span></a></li></ol></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#plugins"><span class="toc-number">2.</span> <span class="toc-text">Plugins</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#deploying-to-production"><span class="toc-number">3.</span> <span class="toc-text">Deploying to production</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#working-with-multiple-configurations"><span class="toc-number">3.1.</span> <span class="toc-text">Working with multiple configurations</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#creating-native-packages-for-a-package-manager"><span class="toc-number">3.2.</span> <span class="toc-text">Creating native packages for a package manager</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#setting-up-a-front-end-proxy"><span class="toc-number">3.3.</span> <span class="toc-text">Setting up a front-end proxy</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#using-ssl"><span class="toc-number">3.4.</span> <span class="toc-text">Using SSL</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#deploying-to-an-application-server"><span class="toc-number">3.5.</span> <span class="toc-text">Deploying to an application server</span></a></li></ol>
   </div>
 
 <div id="asidepart">

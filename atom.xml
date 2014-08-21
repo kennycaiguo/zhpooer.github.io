@@ -4,7 +4,7 @@
   <subtitle><![CDATA[竹杖芒鞋轻胜马，一蓑烟雨任平生]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://zhpooer.github.io/"/>
-  <updated>2014-08-18T13:41:16.088Z</updated>
+  <updated>2014-08-21T06:05:42.792Z</updated>
   <id>http://zhpooer.github.io/</id>
   
   <author>
@@ -15,12 +15,1564 @@
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
   
   <entry>
+    <title><![CDATA[Play for Scala-Web services & iteratees & WebSockets]]></title>
+    <link href="http://zhpooer.github.io/2014/08/20/play-for-scala-web-services-&-iteratees-&-websockets/"/>
+    <id>http://zhpooer.github.io/2014/08/20/play-for-scala-web-services-&-iteratees-&-websockets/</id>
+    <published>2014-08-20T03:22:40.000Z</published>
+    <updated>2014-08-21T02:37:30.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="accessing-web-services">Accessing web services</h1>
+<p>In this section, we’ll look at how to use Play’s Web Service API to
+connect our application to remote web services.</p>
+<h2 id="basic-requests">Basic requests</h2>
+<p>Twitter exposes a REST API that allows you to search for tweets. This search API lives at
+<a href="http://search.twitter.com/search.json" target="_blank">http://search.twitter.com/search.json</a> and returns a JSON data structure containing
+tweets.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+</pre></td><td class="code"><pre>case class Tweet(from: String, text: String)
+
+implicit val tweetReads = (
+  (JsPath \ <span class="string">"from_user_name"</span>)<span class="preprocessor">.read</span>[String] ~
+  (JsPath \ <span class="string">"text"</span>)<span class="preprocessor">.read</span>[String])(Tweet<span class="preprocessor">.apply</span> _)
+
+def tweetList() = Action {
+  val results = <span class="number">3</span>
+  val query = <span class="string">""</span><span class="string">"paperclip OR "</span>paper clip<span class="string">""</span><span class="string">""</span>
+  val responseFuture =
+    WS<span class="preprocessor">.url</span>(<span class="string">"http://search.twitter.com/search.json"</span>)
+      <span class="preprocessor">.withQueryString</span>(<span class="string">"q"</span> -&gt; query, <span class="string">"rpp"</span> -&gt; results<span class="preprocessor">.toString</span>)
+      <span class="preprocessor">.get</span>
+  val response = Await<span class="preprocessor">.result</span>(responseFuture, <span class="number">10</span> seconds)
+  val tweets = (Json<span class="preprocessor">.parse</span>(response<span class="preprocessor">.body</span>) \ <span class="string">"result"</span>)<span class="preprocessor">.as</span>[Seq[Tweet]]
+  Ok(views<span class="preprocessor">.html</span><span class="preprocessor">.twitterrest</span><span class="preprocessor">.tweetlist</span>(tweets))
+}
+</pre></td></tr></table></figure>
+
+<p>Tweetlist template</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre>@(tweets: Seq[Tweet])
+
+@main("Tweets") {
+  <span class="tag">&lt;<span class="title">h1</span>&gt;</span>Tweets<span class="tag">&lt;/<span class="title">h1</span>&gt;</span>
+  @tweets.map { tweet =&gt;
+    <span class="tag">&lt;<span class="title">ul</span>&gt;</span>
+      <span class="tag">&lt;<span class="title">li</span>&gt;</span><span class="tag">&lt;<span class="title">span</span>&gt;</span>@tweet.from<span class="tag">&lt;/<span class="title">span</span>&gt;</span>: @tweet.text<span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">ul</span>&gt;</span>
+  }
+}
+</pre></td></tr></table></figure>
+
+<h2 id="handling-responses-asynchronously">Handling responses asynchronously</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+</pre></td><td class="code"><pre>val resultFuture: Future[Result] = responseFuture<span class="preprocessor">.map</span> { response =&gt;
+  val tweets = Json<span class="preprocessor">.parse</span>(response<span class="preprocessor">.body</span>).\(<span class="string">"results"</span>)<span class="preprocessor">.as</span>[Seq[Tweet]]
+  Ok(views<span class="preprocessor">.html</span><span class="preprocessor">.twitterrest</span><span class="preprocessor">.tweetlist</span>(tweets))
+}
+
+def tweetList() = Action {
+  Async {
+    val results = <span class="number">3</span>
+    val query = <span class="string">""</span><span class="string">"paperclip OR "</span>paper clip<span class="string">""</span><span class="string">""</span>
+    val responseFuture =
+    WS<span class="preprocessor">.url</span>(<span class="string">"http://search.twitter.com/search.json"</span>)
+      <span class="preprocessor">.withQueryString</span>(<span class="string">"q"</span> -&gt; query, <span class="string">"rpp"</span> -&gt; results<span class="preprocessor">.toString</span>)<span class="preprocessor">.get</span>
+    responseFuture<span class="preprocessor">.map</span> { response =&gt;
+      val tweets = Json<span class="preprocessor">.parse</span>(response<span class="preprocessor">.body</span>).\(<span class="string">"results"</span>)<span class="preprocessor">.as</span>[Seq[Tweet]]
+      Ok(views<span class="preprocessor">.html</span><span class="preprocessor">.twitterrest</span><span class="preprocessor">.tweetlist</span>(tweets))
+    }
+  }
+}
+</pre></td></tr></table></figure>
+
+<h2 id="using-the-cache">Using the cache</h2>
+<p>For all cache methods, you need an <code>implicit play.api.Application</code> in scope. You
+can get one by importing <code>play.api.Play.current</code>.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre>//  it’ll compute Product.getBestSeller() <span class="keyword">and</span>
+// cache it <span class="keyword">for</span> <span class="number">1800</span> seconds <span class="keyword">as</span> well <span class="keyword">as</span> <span class="keyword">return</span> it
+val bestSellerProduct: Product =
+  Cache.getOrElse(<span class="string">"product-bestseller"</span>, <span class="number">1800</span>){
+    Product.getBestSeller()
+  }
+</pre></td></tr></table></figure>
+
+<p>Caching an entire action</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+</pre></td><td class="code"><pre>def tweetList() = Cached(<span class="string">"action-tweets"</span>, <span class="number">120</span>) {
+  Action {
+    Async {
+      val results = <span class="number">3</span>
+      val query = <span class="string">""</span><span class="string">"paperclip OR "</span>paper clip<span class="string">""</span><span class="string">""</span>
+      val responseFuture =
+        WS<span class="preprocessor">.url</span>(<span class="string">"http://search.twitter.com/search.json"</span>)
+          <span class="preprocessor">.withQueryString</span>(<span class="string">"q"</span> -&gt; query, <span class="string">"rpp"</span> -&gt; results<span class="preprocessor">.toString</span>)<span class="preprocessor">.get</span>
+      responseFuture<span class="preprocessor">.map</span> { response =&gt;
+        val tweets =
+        Json<span class="preprocessor">.parse</span>(response<span class="preprocessor">.body</span>).\(<span class="string">"results"</span>)<span class="preprocessor">.as</span>[Seq[Tweet]]
+        Ok(views<span class="preprocessor">.html</span><span class="preprocessor">.twitterrest</span><span class="preprocessor">.tweetlist</span>(tweets))
+      }
+    }
+  }
+}
+</pre></td></tr></table></figure>
+
+<p>You can use this to cache a recommendations page for each user ID:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre>def userIdCacheKey(prefix: String) = { (header: RequestHeader) =&gt;
+  prefix + header<span class="preprocessor">.session</span><span class="preprocessor">.get</span>(<span class="string">"userId"</span>)<span class="preprocessor">.getOrElse</span>(<span class="string">"anonymous"</span>)
+}
+def recommendations() = Cached(userIdCacheKey(<span class="string">"recommendations-"</span>), <span class="number">120</span>) {
+  Action { request =&gt;
+    val recommendedProducts =
+      RecommendationsEngine<span class="preprocessor">.recommendedProductsForUser</span>(request<span class="preprocessor">.session</span><span class="preprocessor">.get</span>(<span class="string">"userId"</span>))
+    Ok(views<span class="preprocessor">.html</span><span class="preprocessor">.products</span><span class="preprocessor">.recommendations</span>(recommendedProducts))
+  }
+}
+</pre></td></tr></table></figure>
+
+<h2 id="other-request-methods-and-headers">Other request methods and headers</h2>
+<p>As well as GET requests, you can of course use the WS library to send PUT , POST , DELETE,
+and HEAD requests.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre>val newUser = Json<span class="preprocessor">.toJson</span>(Map(
+  <span class="string">"name"</span> -&gt; <span class="string">"John Doe"</span>,
+  <span class="string">"email"</span> -&gt; <span class="string">"j.doe@example.com"</span>))
+val responseFuture =
+  WS<span class="preprocessor">.url</span>(<span class="string">"http://api.example.com/users"</span>)<span class="preprocessor">.post</span>(newUser)
+
+WS<span class="preprocessor">.url</span>(<span class="string">"http://example.com"</span>)<span class="preprocessor">.withHeaders</span>(HeaderNames<span class="preprocessor">.ACCEPT</span> -&gt; <span class="string">"application/json"</span>)
+</pre></td></tr></table></figure>
+
+<h2 id="authentication-mechanisms">Authentication mechanisms</h2>
+<p>OAuth requests are authenticated using a signature that’s added to each request,
+and this signature is calculated using secret keys that are shared between the
+server that offers OAuth protected resources and a third party that OAuth calls
+the consumer. Also, OAuth defines a standard to acquire some of the required keys
+and the flow that allows end users to grant access to protected resources.</p>
+<p>The OAuthCalculator can calculate signatures given a consumer key,
+a consumer secret wrapped in a ConsumerKey , and an access token and
+token secret wrapped in a RequestToken.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+</pre></td><td class="code"><pre>val consumerKey = ConsumerKey(
+  <span class="string">"52xEY4sGbPlO1FCQRaiAg"</span>,
+  <span class="string">"KpnmEeDM6XDwS59FDcAmVMQbui8mcceNASj7xFJc5WY"</span>)
+
+val accessToken = RequestToken(
+  <span class="string">"16905598-cIPuAsWUI47Fk78guCRTa7QX49G0nOQdwv2SA6Rjz"</span>,
+  <span class="string">"yEKoKqqOjo4gtSQ6FSsQ9tbxQqQZNq7LB5NGsbyKU"</span>)
+
+def postTweet() = Action {
+  val message = <span class="string">"Hi! This is an automated tweet!"</span>
+  val data = Map(
+    <span class="string">"status"</span> -&gt; Se<span class="string">q(message)</span>)
+  val responseFuture =
+    WS.url(<span class="string">"http://api.twitter.com/1/statuses/update.json"</span>)
+      .sign(OAuthCalculator(consumerKey, accessToken)).post(data)
+  Async(responseFuture.<span class="keyword">map</span>(<span class="string">response =&gt;</span> Ok(response.body)))
+}
+</pre></td></tr></table></figure>
+
+<h1 id="dealing-with-streams-using-the-iteratee-library">Dealing with streams using the iteratee library</h1>
+<p>Play’s iteratee library is in the <code>play.api.libs.iteratee</code> package.
+This library is considered a cornerstone of Play’s reactive programming model.
+It contains an abstraction for performing IO operations, called an iteratee.</p>
+<p>Twitter not only offers the REST API that we saw in the previous section,
+but also a streaming API.</p>
+<p>You start out using this API much like the regular API:
+you construct an HTTP request with some parameters that
+specify which tweets you want to retrieve. Twitter will then
+start returning tweets. But unlike the REST API, this streaming API will
+never stop serving the response. It’ll keep
+the HTTP connection open and will continue sending new tweets over it.</p>
+<h2 id="processing-large-web-services-responses-with-an-iteratee">Processing large web services responses with an iteratee</h2>
+<p>If the web service sends the response in chunks, the WS library buffers these
+chunks until it has the complete HTTP response. 
+The buffering strategy breaks down when trying to use the Twitter API. </p>
+<p>We need another approach, where we can start using parts of the response as soon
+as they arrive in our application, without needing to wait for the entire response.
+And this is exactly what an iteratee can do. An iteratee is an object that receives
+each individual chunk of data and can do something with that data.</p>
+<p>When dealing with the Twitter streaming API, we’d want to use an iteratee that
+converts the HTTP response chunks into tweet objects, and send them to another
+part of our application, perhaps to be stored in a database.</p>
+<p>Iteratees are instances of the Iteratee class, and they can most easily be con-
+structed using methods on the Iteratee object.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code"><pre><span class="regexp">//</span> The foreach[A] method <span class="literal">on</span> the Iteratee object takes a single parameter, a <span class="reserved">function</span>
+<span class="regexp">//</span> that takes a chunk <span class="keyword">of</span> type A <span class="keyword">and</span> returns an Iteratee[A, Unit]
+<span class="regexp">//</span> For each chunk that’s received, a string <span class="keyword">is</span> constructed <span class="keyword">and</span> printed.
+<span class="regexp">//</span>  The first indicates the Scala type <span class="keyword">for</span> the chunks that the iteratee accepts. 
+val loggingIteratee = Iteratee.foreach[Array[Byte]] { chunk<span class="function"> =&gt;</span>
+  val chunkString = <span class="keyword">new</span> String(chunk, <span class="string">"UTF-8"</span>)
+  println(chunkString)
+}
+
+WS.url(<span class="string">"https://stream.twitter.com/1/statuses/sample.json"</span>)
+  .sign(OAuthCalculator(consumerKey, accessToken))
+  .get(_<span class="function"> =&gt;</span> loggingIteratee)
+</pre></td></tr></table></figure>
+
+<h2 id="creating-other-iteratees-and-feeding-them-data">Creating other iteratees and feeding them data</h2>
+<p>The Iteratee object exposes more methods that we can use to create iteratees.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="regexp">//</span> accepts Int chunks, <span class="keyword">and</span> sums these chunks.
+val summingIteratee = Iteratee.fold<span class="function"><span class="params">(<span class="number">0</span>)</span>{ <span class="params">(sum: Int, chunk: Int)</span> =&gt;</span>
+  sum + chunk
+}
+</pre></td></tr></table></figure>
+
+<p>It turns out that the Iteratee class has a counterpart: Enumerator .
+An enumerator is a producer of chunks.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre>val intEnumerator = Enumerator(<span class="number">1</span>,<span class="number">6</span>,<span class="number">3</span>,<span class="number">7</span>,<span class="number">3</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">9</span>)
+// it’ll <span class="keyword">return</span> <span class="literal">a</span> future of <span class="literal">a</span> new iteratee
+<span class="label">val newIterateeFuture:</span> Future[Iteratee[Int, Int]] =
+  intEnumerator(summingIteratee)
+// With <span class="literal">a</span> regular map , we’d get <span class="literal">a</span> Future[Future[Int]], but with flatMap, we get <span class="literal">a</span> Future[Int]  
+<span class="label">val resultFuture:</span> Future[Int] = newIterateeFuture.flatMap(_.run)
+resultFuture.onComplete(sum =&gt; println(<span class="string">"The sum is %d"</span> format sum))
+</pre></td></tr></table></figure>
+
+<h2 id="iteratees-and-immutability">Iteratees and immutability</h2>
+<p>As mentioned before, the iteratee library is designed to be immutable: operations
+don’t change the iteratee that you perform it on, but they return a new iteratee. </p>
+<p>You can apply it to different enumerators as often as you like without problems.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="code"><pre>//  here are both an immutable and a mutable iteratee that do the same thing: sum integers:
+
+val immutableSumIteratee = Iteratee.fold(0){ (sum: Int, chunk: Int) =&gt;
+  sum + chunk
+}
+val mutableSumIteratee = {
+  var sum = 0
+  Iteratee.foreach[<span class="link_label">Int</span>](<span class="link_url">sum += _</span>).mapDone(_ =&gt; sum)
+}
+</pre></td></tr></table></figure>
+
+<h1 id="websockets-bidirectional-communication-with-the-browser">WebSockets: Bidirectional communication with the browser</h1>
+<p>The most basic approach is polling:
+the browser sends a request to the server to ask for new data every second or so.</p>
+<p>When polling, the browser sends a request to the server at a regular interval
+requesting new messages. Often, the server will have nothing.</p>
+<p>A more advanced workaround is Comet, which is a technique to allow the server to
+push data to a client. With Comet, the browser starts a request and the server keeps
+the connection open until it has something to send.</p>
+<h2 id="a-real-time-status-page-using-websockets">A real-time status page using WebSockets</h2>
+<p>From the application’s perspective, a WebSocket connection is essentially two
+independent streams of data: one stream of data incoming from the client
+and a second stream of data to be sent to the client.</p>
+<p>To handle the incoming stream of data, you need to provide an iteratee. You also
+provide an enumerator that’s used to send data to the client. With an iteratee and an
+enumerator, you can construct a WebSocket, which comes in the place of an Action.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code"><pre>@(implicit request: RequestHeader)
+@main("Server Status") {
+  <span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/javascript"</span>&gt;</span><span class="javascript">
+    $(<span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+      <span class="keyword">var</span> ws = <span class="keyword">new</span> WebSocket(<span class="string">"@route.WebSockets.statusFeed.webSocketUrL()"</span>)
+      ws.onmessage = <span class="function"><span class="keyword">function</span><span class="params">(msg)</span> {</span>
+        $(<span class="string">'#load-average'</span>).text(msg.data)
+      }
+    });
+  </span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">h1</span>&gt;</span>System load average: <span class="tag">&lt;<span class="title">span</span> <span class="attribute">id</span>=<span class="value">"load-average"</span>&gt;</span><span class="tag">&lt;/<span class="title">span</span>&gt;</span><span class="tag">&lt;/<span class="title">h1</span>&gt;</span>
+}
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre>def statusFeed() = WebSocket<span class="preprocessor">.using</span>[String] { implicit request =&gt;
+  // iterratee ignoring incoming message
+  val <span class="keyword">in</span> = Iteratee<span class="preprocessor">.ignore</span>[String]
+  val <span class="keyword">out</span> = Enumerator<span class="preprocessor">.repeatM</span> {
+    Promise<span class="preprocessor">.timeout</span>(getLoadAverage), <span class="number">3</span> seconds)
+  }
+  (<span class="keyword">in</span>, <span class="keyword">out</span>)
+}
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>GET /WebSockets/statusFeed controllers<span class="preprocessor">.WebSockets</span><span class="preprocessor">.statusFeed</span>()
+</pre></td></tr></table></figure>
+
+<h2 id="a-simple-chat-application">A simple chat application</h2>
+<p>Play allows you to make such an enumerator with <code>Concurrent.broadcast</code> .
+This method returns a tuple with an enumerator and a Channel.
+This channel is tied to the enumerator and allows you to
+push chunks into the enumerator:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="function"><span class="title">val</span> <span class="params">(enumerator, channel)</span> = C<span class="title">oncurrent</span>.<span class="title">broadcast</span>[S<span class="title">tring</span>]
+<span class="title">channel</span>.<span class="title">push</span><span class="params">(<span class="string">"Hello"</span>)</span>
+<span class="title">channel</span>.<span class="title">push</span><span class="params">(<span class="string">"World"</span>)</span></span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+</pre></td><td class="code"><pre><span class="class"><span class="keyword">case</span> <span class="keyword">class</span> <span class="title">Join</span><span class="params">(nick: String)</span></span>
+<span class="class"><span class="keyword">case</span> <span class="keyword">class</span> <span class="title">Leave</span><span class="params">(nick: String)</span></span>
+<span class="class"><span class="keyword">case</span> <span class="keyword">class</span> <span class="title">Broadcast</span><span class="params">(message: String)</span></span>
+
+<span class="class"><span class="keyword">class</span> <span class="title">ChatRoom</span> <span class="keyword">extends</span> <span class="title">Actor</span> {</span>
+  <span class="keyword">var</span> users = Set[String]()
+  <span class="keyword">var</span> (enumerator, channle) = Concurrent.broadcast[String]
+  <span class="keyword">def</span> receive = {
+    <span class="keyword">case</span> Join(nick) =&gt; {
+      <span class="keyword">if</span>(!users.contains(nick)) {
+        <span class="keyword">val</span> iteratee = Iteratee.foreach[String] { message =&gt;
+          self ! broadcast(<span class="string">"%s: %s"</span> format (nick, message))
+        }.mapDone { _ =&gt;
+          self ! Leave(nick)
+        }
+        users += nick
+        channel.push(<span class="string">"User %s has joined the room, now %s users"</span>
+          format(nick, users.size))
+        sender ! (iteratee, enumerator)
+      } <span class="keyword">else</span> {
+        <span class="keyword">val</span> enumerator = Enumerator(<span class="string">"Nickname %s is already in use."</span> format nick)
+        <span class="keyword">val</span> iteratee = Iteratee.ignore
+        sender ! (iteratee, enumerator)
+      }
+    }
+    <span class="keyword">case</span> Leave(nick) =&gt; {
+      users -= nick
+      channel.push(<span class="string">"User %s has left the room, %s users left"</span> format(nick, users.size))
+    }
+    <span class="keyword">case</span> Broadcast(msg: String) =&gt; channel.push(msg)
+  }
+}
+
+<span class="comment">// Chat controller</span>
+<span class="class"><span class="keyword">object</span> <span class="title">Chat</span> <span class="keyword">extends</span> <span class="title">Controller</span> {</span>
+  impplicit <span class="keyword">val</span> timeout = Timeout(<span class="number">1</span> seconds)
+  <span class="keyword">val</span> room = Akka.system.actorOf(Props[ChatRoom])
+
+  <span class="keyword">def</span> showRoom(nick: String) = Action {implicit request =&gt;
+    Ok(views.html.chat.showRoom(nick))
+  }
+  
+  <span class="keyword">def</span> chatSocket(nick: String) = WebSocket.async { request =&gt;
+    <span class="keyword">val</span> channelsFuture = room ? Join(nick)
+    channlesFuture.mapTo[(Iteratee[String, _], Enumerator[String])]
+  }
+ 
+}
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre>GET /room/:nick controllers<span class="preprocessor">.Chat</span><span class="preprocessor">.room</span>(nick)
+GET /room/socket/:nick controllers<span class="preprocessor">.Chat</span><span class="preprocessor">.chatSocket</span>(nick)
+</pre></td></tr></table></figure>
+
+<h1 id="using-body-parsers-to-deal-with-http-request-bodies">Using body parsers to deal with HTTP request bodies</h1>
+<p>HTTP requests are normally processed when they’ve been fully received by the server.
+An action is only invoked when the request is complete, and when the body parser is
+done parsing the body of the request.</p>
+<p>In this section, we’ll show how body
+parsers work, how you can use and compose existing body parsers, and finally how you
+can build your own body parsers from scratch.</p>
+<h2 id="structure-of-a-body-parser">Structure of a body parser</h2>
+<p>A body parser is an object that knows what to make of an HTTP request body. A JSON
+body parser, for example, knows how to construct a JsValue from the body of an
+HTTP request that contains JSON data.</p>
+<p>A body parser can also choose to return an error Result; for example, when the
+user exceeds the storage quota, or when the HTTP request body doesn’t conform to
+what the body parser expects, like a non-JSON body for a JSON body parser.</p>
+<p>A BodyParser is a function with a RequestHeader parameter
+returning an iteratee. The iteratee consumes chunks of type Array[Byte] and
+eventually produces either a play.api.mvc.Result or an A, which can be anything.</p>
+<p>An Action in Play not only defines the method that constructs a Result from a
+<code>Request[A]</code>, but it also contains the body parser that must be used for requests that
+are routed to this action. </p>
+<p>the following two Action definitions construct the same Action:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre>Action { <span class="comment">// block }</span>
+<span class="comment">//  The anyContent body parser is of type BodyParser[AnyContent],</span>
+<span class="comment">// so your action will receive a Request[AnyContent]</span>
+<span class="comment">//  AnyContent is a convenient one; it has the methods asJson, asText, asXml, and so on,</span>
+<span class="function">Action(BodyParsers.parse.anyContent)</span> { <span class="comment">// block }</span>
+</pre></td></tr></table></figure>
+
+<p>the BodyParsers.parse.json body parser will result in a <code>Request[JsValue]</code>,
+and then the body field of the Request is of type JsValue.
+With the json body parser, a BadRequest response is sent back to the client
+automatically when the body doesn’t contain valid JSON.</p>
+<p><img src="/img/play_body_parse.png" alt="Body parser in the request lifecycle"></p>
+<h2 id="using-built-in-body-parsers">Using built-in body parsers</h2>
+<p>Play has many more body parsers, all available on the <code>Bodyparsers.parse</code> object.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre>// This action will <span class="constant">return</span> <span class="operator">an</span> EntityTooLarge HTTP response<span class="comment">
+// when the body is larger than 10,000 bytes.</span>
+def myAction = Action(parse.json(<span class="number">10000</span>)) {
+ <span class="comment"> // foo</span>
+}
+</pre></td></tr></table></figure>
+
+<p>If you don’t specify a maximum length, the text, JSON, XML, and
+URL-encoded body parsers default to a limit of 512 kilobytes. This can be changed in
+<code>application.conf</code>: <code>parsers.text.maxLength = 1m</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre>// To store uploaded file, you can use the temporaryFile body parser.
+def upload = Action(parse<span class="preprocessor">.temporaryFile</span>) { request =&gt;
+  val destinationFile = Play<span class="preprocessor">.getFile</span>(<span class="string">"uploads/myfile"</span>)
+  request<span class="preprocessor">.body</span><span class="preprocessor">.moveTo</span>(destinationFile)
+  Ok(<span class="string">"File successfully uploaded!"</span>)
+}
+</pre></td></tr></table></figure>
+
+<h2 id="composing-body-parsers">Composing body parsers</h2>
+<p>The built-in body parsers are fairly basic. It’s possible to compose these basic
+body parsers into more complex ones that have more complex behavior if you need that.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>// Play also has <span class="operator">a</span> <span class="built_in">file</span> body parser that takes <span class="operator">a</span> java.io.File <span class="keyword">as</span> <span class="operator">a</span> parameter:
+def store(filename: String) = Action(parse.<span class="built_in">file</span>(Play.getFile(filename))) { request =&gt;
+  Ok(<span class="string">"Your file is saved!"</span>)
+}
+</pre></td></tr></table></figure>
+
+<p>Suppose we want to make a body parser that works like the file body parser, but
+only saves the file if the content type is some given value.</p>
+<p>We can use the <code>BodyParsers.parse.when</code> method to construct a
+new body parser from a predicate, an existing body parser,
+and a function constructing a failure result:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code"><pre>def fileWithContentType(filname:<span class="built_in">String</span>, contentType: <span class="built_in">String</span>) =
+  parse.when(
+    requestHeader =&gt; requestHeader.contentType == contentType,
+    parse.file(Play.getFile(filename)),
+    requestHeader =&gt; BadRequest(  <span class="comment">// Existing body parser</span>
+      <span class="string">"Expected a '%s' content type, but found %s"</span>.
+        format(contentType, requestHeader.contentType)))
+
+<span class="comment">// We can use this body parser as follows:</span>
+def savePdf(filename: <span class="built_in">String</span>) = Action(fileWithContentType(filename, <span class="string">"application/pdf"</span>)) { request =&gt;
+  Ok(<span class="string">"Your file is saved!"</span>)
+}
+</pre></td></tr></table></figure>
+
+<p>We can start with the temporaryFile body parser to store the file on
+disk and then upload it to MongoDB.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code"><pre>def mongoDbStorageBodyParser(dbName: String) =
+  parse<span class="preprocessor">.temporaryFile</span><span class="preprocessor">.map</span> { temporaryFile =&gt;
+  // Here some code to store the file <span class="keyword">in</span> MongoDB
+  // <span class="keyword">and</span> get an objectId
+  objectId
+}
+val dbName = Play<span class="preprocessor">.configuration</span><span class="preprocessor">.getString</span>(<span class="string">"mongoDbName"</span>)<span class="preprocessor">.getOrElse</span>(<span class="string">"mydb"</span>)
+
+def saveInMongo = Action(mongoDbStorageBodyParser(dbName)) {
+  request =&gt;
+    Ok(<span class="string">"Your file was saved with id %s"</span> format request<span class="preprocessor">.body</span>)
+}
+</pre></td></tr></table></figure>
+
+<h2 id="building-a-new-body-parser">Building a new body parser</h2>
+<p>In this section, we’ll build another body parser that allows a user to upload a file.
+This time, though, it won’t be stored on disk or in MongoDB, but on Amazon’s Simple
+Storage Service, better known as S3.</p>
+<p>The underlying library that Play uses, Async HTTP Client (AHC), does support
+pushing chunks of data into a request body</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+</pre></td><td class="code"><pre>private lazy val client = {
+  val playConfig = WS<span class="preprocessor">.client</span><span class="preprocessor">.getConfig</span>
+  new AsyncHttpClient(new GrizzlyAsyncHttpProvider(playConfig), playConfig)
+}
+
+// Amazon requires requests to be signed. 
+def sign(method: String, path: String,
+         secretKey: String,
+         date: String,
+         contentType: Option[String] = None,
+         aclHeader: Option[String] = None) = {
+  val message = List(method, <span class="string">""</span>,
+    contentType<span class="preprocessor">.getOrElse</span>(<span class="string">""</span>),
+    date, aclHeader<span class="preprocessor">.map</span>(<span class="string">"x-amz-acl:"</span> + _)<span class="preprocessor">.getOrElse</span>(<span class="string">""</span>), path)<span class="preprocessor">.mkString</span>(<span class="string">"\n"</span>)
+  // Play’s Crypto<span class="preprocessor">.sign</span> method returns a Hex string,
+  // instead of Base64, so we do hashing ourselves.
+  val mac = Mac<span class="preprocessor">.getInstance</span>(<span class="string">"HmacSHA1"</span>)
+  mac<span class="preprocessor">.init</span>(new SecretKeySpec(secretKey<span class="preprocessor">.getBytes</span>(<span class="string">"UTF-8"</span>), <span class="string">"HmacSHA1"</span>))
+  val codec = new Base64()
+  new String(codec<span class="preprocessor">.encode</span>(mac<span class="preprocessor">.doFinal</span>(message<span class="preprocessor">.getBytes</span>(<span class="string">"UTF-8"</span>))))
+}
+
+def buildRequest(bucket: String, objectId: String, key: String,
+    secret: String, requestHeader: RequestHeader): (Request, FeedableBodyGenerator) = {
+  val expires = dateFormat<span class="preprocessor">.format</span>(new Date())
+  val path = <span class="string">"/%s/%s"</span> format (bucket, objectId)
+  val acl = <span class="string">"public-read"</span>
+  val contentType = requestHeader<span class="preprocessor">.headers</span><span class="preprocessor">.get</span>(HeaderNames<span class="preprocessor">.CONTENT</span>_TYPE)
+                                         <span class="preprocessor">.getOrElse</span>(<span class="string">"binary/octet-stream"</span>)
+  val auth = <span class="string">"AWS %s:%s"</span> format (key, sign(<span class="string">"PUT"</span>, path, secret,
+    expires, Some(contentType), Some(acl)))
+  val url = <span class="string">"https://%s.s3.amazonaws.com/%s"</span> format (bucket, objectId)
+  val bodyGenerator = new FeedableBodyGenerator()
+  val request = new RequestBuilder(<span class="string">"PUT"</span>)
+    <span class="preprocessor">.setUrl</span>(url)
+    <span class="preprocessor">.setHeader</span>(<span class="string">"Date"</span>, expires)
+    <span class="preprocessor">.setHeader</span>(<span class="string">"x-amz-acl"</span>, acl)
+    <span class="preprocessor">.setHeader</span>(<span class="string">"Content-Type"</span>, contentType)
+    <span class="preprocessor">.setHeader</span>(<span class="string">"Authorization"</span>, auth)
+    <span class="preprocessor">.setContentLength</span>(requestHeader<span class="preprocessor">.headers</span>
+    <span class="preprocessor">.get</span>(HeaderNames<span class="preprocessor">.CONTENT</span>_LENGTH)<span class="preprocessor">.get</span><span class="preprocessor">.toInt</span>)
+    <span class="preprocessor">.setBody</span>(bodyGenerator)
+    <span class="preprocessor">.build</span>()
+  (request, bodyGenerator)
+}
+</pre></td></tr></table></figure>
+
+<p>Amazon S3 body parser</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+</pre></td><td class="code"><pre><span class="keyword">def</span> S3Upload(bucket: String, objectId: String) = BodyParser {
+    requestHeader =&gt;
+  <span class="keyword">val</span> awsSecret = Play.configuration.getString(<span class="string">"aws.secret"</span>).get
+  <span class="keyword">val</span> awsKey = Play.configuration.getString(<span class="string">"aws.key"</span>).get
+  <span class="keyword">val</span> (request, bodyGenerator) =
+    buildRequest(bucket, objectId, awsKey, awsSecret, requestHeader)
+  S3Writer(objectId, request, bodyGenerator)
+}
+
+<span class="keyword">def</span> S3Writer(objectId: String, request: Request,
+    bodyGenerator: FeedableBodyGenerator):Iteratee[Array[Byte], Either[Result, String]] = {
+  <span class="comment">// We execute the request, but we can send body chunks afterwards.</span>
+  <span class="keyword">val</span> responseFuture = client.executeRequest(request)
+  Iteratee.fold[Array[Byte], FeedableBodyGenerator](bodyGenerator) {
+  (generator, bytes) =&gt;
+    <span class="keyword">val</span> isLast = <span class="keyword">false</span>
+    generator.feed(<span class="keyword">new</span> ByteBufferWrapper(ByteBuffer.wrap(bytes)), isLast)
+    generator
+  } mapDone { generator =&gt;
+    <span class="keyword">val</span> isLast = <span class="keyword">true</span>
+    <span class="keyword">val</span> emptyBuffer = <span class="keyword">new</span> ByteBufferWrapper(ByteBuffer.wrap(Array[Byte]()))
+    generator.feed(emptyBuffer, isLast)
+    <span class="keyword">val</span> response = responseFuture.get
+    response.getStatusCode <span class="keyword">match</span> {
+      <span class="keyword">case</span> <span class="number">200</span> =&gt; Right(objectId)
+      <span class="keyword">case</span> _ =&gt; Left(Forbidden(response.getResponseBody))
+    }
+  }
+}
+</pre></td></tr></table></figure>
+
+<p>Enumeratees can sit between enumerators and iteratees
+and modify the stream. Elements of the stream can be removed, changed, or grouped.</p>
+]]></content>
+    
+    
+      <category term="play" scheme="http://zhpooer.github.io/tags/play/"/>
+    
+      <category term="scala" scheme="http://zhpooer.github.io/tags/scala/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[Play for Scala-Modules & Plugins]]></title>
     <link href="http://zhpooer.github.io/2014/08/18/play-for-scala-modules-&-plugins/"/>
     <id>http://zhpooer.github.io/2014/08/18/play-for-scala-modules-&-plugins/</id>
     <published>2014-08-18T12:56:34.000Z</published>
-    <updated>2014-08-18T12:56:48.000Z</updated>
-    <content type="html"><![CDATA[]]></content>
+    <updated>2014-08-20T03:21:49.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="modules">Modules</h1>
+<p>Currently available modules for Play 2 provide anything from alternate template
+engines to NoSQL database layers.
+This section will explain how to use a common module and, later on, how
+to build a module yourself.</p>
+<h2 id="using-modules">Using Modules</h2>
+<p>Play modules are, like any other library, a collection of files in a JAR. This means that
+you add a module to your project the same way you add any other library: you add it to
+appDependencies in <code>project/Build.scala</code> .</p>
+<p>www.playframework.com/documentation/2.1.x/Modules</p>
+<p>Let’s get started: make a copy of the sample project in chapter 2, and add the
+dependency and resolver.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+</pre></td><td class="code"><pre><span class="keyword">import</span> sbt._
+<span class="keyword">import</span> Keys._
+<span class="keyword">import</span> PlayProject._
+
+<span class="class"><span class="keyword">object</span> <span class="title">ApplicationBuild</span> <span class="keyword">extends</span> <span class="title">Build</span> {</span>
+  <span class="keyword">val</span> appName = <span class="string">"product-details"</span>
+  <span class="keyword">val</span> appVersion = <span class="string">"1.0-SNAPSHOT"</span>
+  <span class="keyword">val</span> appDependencies = Seq(
+    <span class="string">"net.sf.barcode4j"</span> % <span class="string">"barcode4j"</span> % <span class="string">"2.0"</span>,
+    <span class="string">"securesocial"</span> %% <span class="string">"securesocial"</span> % <span class="string">"2.1.0"</span>
+  )
+
+  <span class="keyword">val</span> main = PlayProject(appName, appVersion,
+    appDependencies, mainLang = SCALA ).settings(
+      resolvers +=
+        Resolver.url(
+          <span class="string">"SecureSocial Repository"</span>, url(<span class="string">"http://repo.scala-sbt.org/scalasbt/sbt-plugin-releases/"</span>)
+        )(Resolver.ivyStylePatterns)
+    )
+}
+</pre></td></tr></table></figure>
+
+<p>According to the documentation, SecureSocial provides a replacement
+for Action called SecuredAction. This method acts the same way as Action,
+except that it first checks whether the user is
+logged in and redirects to a login page if necessary.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+</pre></td><td class="code"><pre><span class="keyword">def</span> list = SecuredAction { implicit request =&gt;
+  <span class="keyword">val</span> products = Product.findAll
+  Ok(views.html.products.list(products))
+}
+
+<span class="class"><span class="keyword">class</span> <span class="title">SimpleUserService</span><span class="params">(val app: Application)</span> <span class="keyword">extends</span> <span class="title">UserService</span></span>
+    <span class="keyword">with</span> Plugin {
+    
+  <span class="keyword">var</span> users: Map[UserId, SocialUser] = Map()
+  <span class="comment">// stores login tokens</span>
+  <span class="keyword">var</span> tokens: Map[String, Token] = Map()
+
+  <span class="keyword">def</span> find(id: UserId): Option[SocialUser] = {
+    users.get(id)
+  }
+
+  <span class="keyword">def</span> findByEmailAndProvider(email: String, providerId: String) = {
+    users.values.find { user =&gt;
+      user.id.providerId == providerId &&
+      user.email == Some(email)
+    }
+  }
+
+  <span class="keyword">def</span> save(user: Identity): Identity = {
+    <span class="keyword">val</span> socialUser: SocialUser = SocialUser(user)
+    users = users + (user.id -&gt; socialUser)
+    socialUser
+  }
+  <span class="comment">// savetoken</span>
+  <span class="keyword">def</span> save(token: Token) {
+    tokens = tokens + (token.uuid -&gt; token)
+  }
+
+  <span class="keyword">def</span> findToken(token: String) = {
+   <span class="comment">// Looks up a token</span>
+    tokens.get(token)
+  }
+
+  <span class="keyword">def</span> deleteToken(uuid: String) {
+    tokens = tokens - uuid
+  }
+
+  <span class="keyword">def</span> deleteExpiredTokens() {
+    tokens = tokens.filter{ !_._2.isExpired }
+  }
+}
+</pre></td></tr></table></figure>
+
+<p><code>conf/securesocial.conf</code>, If you prefer to keep it in
+<code>conf/application.conf</code>, that’s fine too.
+<code>conf/application.conf</code> should contains <code>include &quot;securesocial.conf&quot;</code>.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+</pre></td><td class="code"><pre>userpass {
+  withUserNameSupport=<span class="literal">false</span>
+  sendWelcomeEmail=<span class="literal">false</span>
+  enableGravatarSupport=<span class="literal">false</span>
+  tokenDuration=<span class="number">60</span>
+  tokenDeleteInterval=<span class="number">5</span>
+  minimumPasswordLength=<span class="number">8</span>
+  enableTokenJob=<span class="literal">true</span>
+  hasher=bcrypt
+}
+securesocial {
+  onLoginGoTo=/
+  onLogoutGoTo=/login
+  ssl=<span class="literal">false</span>
+  sessionTimeOut=<span class="number">60</span>
+  assetsController=controllers.ReverseMyCustomAssetsController
+}
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre>GET /login securesocial<span class="preprocessor">.controllers</span><span class="preprocessor">.LoginPage</span><span class="preprocessor">.login</span>
+GET /logout securesocial<span class="preprocessor">.controllers</span><span class="preprocessor">.LoginPage</span><span class="preprocessor">.logout</span>
+</pre></td></tr></table></figure>
+
+<h2 id="creating-modules">Creating modules</h2>
+<p>Creating a Play module is as easy as making a Play application. In fact, that’s how you
+start with a new module—you create a new Play application as the starting point.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>play <span class="keyword">new</span> ean
+rm app<span class="regexp">/public/</span>*
+rm app<span class="regexp">/views/</span>*
+rm conf/application.conf
+</pre></td></tr></table></figure>
+
+<p><code>app/controller/Barcodes.scala</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+</pre></td><td class="code"><pre><span class="keyword">package</span> com.github.playforscala.barcodes
+<span class="keyword">import</span> play.api.mvc.{Action, Controller}
+<span class="keyword">import</span> org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider
+<span class="keyword">import</span> org.krysalis.barcode4j.impl.upcean.EAN13Bean
+<span class="keyword">import</span> util.{Failure, Success, Try}
+
+<span class="class"><span class="keyword">object</span> <span class="title">Barcodes</span> <span class="keyword">extends</span> <span class="title">Controller</span> {</span>
+  <span class="keyword">val</span> ImageResolution = <span class="number">144</span>
+  
+  <span class="keyword">def</span> barcode(ean: Long) = Action {
+    <span class="keyword">val</span> MimeType = <span class="string">"image/png"</span>
+    Try(ean13BarCode(ean, MimeType)) <span class="keyword">match</span> {
+      <span class="keyword">case</span> Success(imageData) =&gt; Ok(imageData).as(MimeType)
+      <span class="keyword">case</span> Failure(e) =&gt;
+        BadRequest(<span class="string">"Couldn’t generate bar code. Error: "</span> +e.getMessage)
+    }
+  }
+
+  <span class="keyword">def</span> ean13BarCode(ean: Long, mimeType: String): Array[Byte] = {
+    <span class="keyword">import</span> java.io.ByteArrayOutputStream
+    <span class="keyword">import</span> java.awt.image.BufferedImage
+    <span class="keyword">val</span> output = <span class="keyword">new</span> ByteArrayOutputStream
+    <span class="keyword">val</span> canvas =
+      <span class="keyword">new</span> BitmapCanvasProvider(output, mimeType, ImageResolution,
+        BufferedImage.TYPE_BYTE_BINARY, <span class="keyword">false</span>, <span class="number">0</span>)
+
+    <span class="keyword">val</span> barCode = <span class="keyword">new</span> EAN13Bean
+    barCode.generateBarcode(canvas, String valueOf ean)
+    canvas.finish()
+    output.toByteArray
+  }
+}
+</pre></td></tr></table></figure>
+
+<p>We’ll explain that in the “Testing your module” section. The
+route will therefore look like this:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>GET /:ean <span class="keyword">com</span><span class="preprocessor">.github</span><span class="preprocessor">.playforscala</span><span class="preprocessor">.barcodes</span><span class="preprocessor">.Barcodes</span><span class="preprocessor">.barcode</span>(ean: Long)
+</pre></td></tr></table></figure>
+
+<h3 id="publish">Publish</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre>
+val main = play<span class="preprocessor">.Project</span>(appName, appVersion, appDependencies)<span class="preprocessor">.settings</span>(
+  publishTo := Some(<span class="string">"My Maven repository"</span> at <span class="string">"http://maven.example.com/releases"</span>),
+  credentials += Credentials(Path<span class="preprocessor">.userHome</span> / <span class="string">".repo-credentials"</span>)
+)
+</pre></td></tr></table></figure>
+
+<h3 id="testing-your-module">TESTING YOUR MODULE</h3>
+<p><code>play new module-test</code></p>
+<p><code>project/Build.scala</code>:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="keyword">...</span>
+val appDependencies = Seq(
+  <span class="string">"playforscala"</span> %% <span class="string">"ean-module"</span> % <span class="string">"1.0-SNAPSHOT"</span>
+)
+<span class="keyword">...</span>
+</pre></td></tr></table></figure>
+
+<p><code>app/views/index.scala.html</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="at_rule">@<span class="keyword">(message:</span> String)
+@<span class="function">main(<span class="string">"Welcome to Play 2.0"</span>)</span> </span>{
+  <span class="at_rule">@<span class="keyword">tags.barcode(1234567890128l)</span>
+}</span>
+</pre></td></tr></table></figure>
+
+<h1 id="plugins">Plugins</h1>
+<p>Play provides a <code>play.api.Plugin trait</code>, specifically
+for modules to initialize themselves.</p>
+<p>Note that Plugin is only really useful for modules, because a <code>Global</code> object in
+a Play application can do anything a <code>Plugin</code> can do.</p>
+<p>The Plugin trait has three methods: onStart, onStop, and enabled. The first two are
+called on application startup and shutdown, respectively, but only if the plugin is
+enabled.</p>
+<p>You can “enable” your plugin in your module’s play.plugins file and
+provide the user with a more convenient way to really enable the plugin,
+in application.conf, for instance.</p>
+<p>Let’s say we want to cache our generated bar
+codes, and for some reason we don’t want to use Play’s built-in cache.</p>
+<ul>
+<li>Concurrent calls should be handled concurrently</li>
+<li>Multiple calls for the same bar code should cause no more than one cache miss</li>
+</ul>
+<p>In order to satisfy those requirements, we’ll use an actor.
+It would only be able to render one bar code at a time if we did that.
+The easiest solution is to have the future’s onComplete send the
+rendered image to the client.</p>
+<p><code>app/com/github/playforscala/barcodes/BarcodeCache.scala</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+</pre></td><td class="code"><pre><span class="keyword">package</span> com.github.playforscala.barcodes
+
+<span class="keyword">import</span> akka.actor.Actor
+<span class="keyword">import</span> concurrent._
+<span class="keyword">import</span> org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider
+<span class="keyword">import</span> org.krysalis.barcode4j.impl.upcean.EAN13Bean
+<span class="keyword">import</span> scala.util.Try
+<span class="keyword">import</span> play.api.libs.concurrent.Execution.Implicits._
+
+<span class="class"><span class="keyword">case</span> <span class="keyword">class</span> <span class="title">RenderImage</span><span class="params">(ean: Long)</span></span>
+<span class="class"><span class="keyword">case</span> <span class="keyword">class</span> <span class="title">RenderResult</span><span class="params">(image: Try[Array[Byte]])</span></span>
+
+<span class="class"><span class="keyword">class</span> <span class="title">BarcodeCache</span> <span class="keyword">extends</span> <span class="title">Actor</span> {</span>
+  <span class="keyword">var</span> imageCache = Map[Long, Future[Array[Byte]]]()
+  <span class="keyword">def</span> receive = {
+    <span class="keyword">case</span> RenderImage(ean) =&gt; {
+      <span class="keyword">val</span> futureImage = imageCache.get(ean) <span class="keyword">match</span> {
+        <span class="keyword">case</span> Some(futureImage) =&gt; futureImage
+        <span class="keyword">case</span> None =&gt;
+          <span class="keyword">val</span> futureImage = future { ean13BarCode(ean, <span class="string">"image/png"</span>) }
+          imageCache += (ean -&gt; futureImage)
+          futureImage
+      }
+      <span class="keyword">val</span> client = sender
+      futureImage.onComplete {
+        client ! RenderResult(_)
+      }
+    }
+  }
+
+  <span class="keyword">def</span> ean13BarCode(ean: Long, mimeType: String): Array[Byte] = {
+    <span class="keyword">import</span> java.io.ByteArrayOutputStream
+    <span class="keyword">import</span> java.awt.imageBufferedImage
+    <span class="keyword">val</span> output = <span class="keyword">new</span> ByteArrayOutputStream
+    <span class="keyword">val</span> canvas = <span class="keyword">new</span> BitmapCanvasProvider(output, mimeType,
+      Barcodes.imageResolution, BufferedImage.TYPE_BYTE_BINARY,
+      <span class="keyword">false</span>, <span class="number">0</span>)
+    <span class="keyword">val</span> barCode = <span class="keyword">new</span> EAN13Bean
+    barCode.generateBarcode(canvas, String valueOf ean)
+    canvas.finish()
+
+    output.toByteArray
+  }
+}
+</pre></td></tr></table></figure>
+
+<p><code>app/com/github/playforscala/barcodes/Barcodes.scala</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+</pre></td><td class="code"><pre>package <span class="keyword">com</span><span class="preprocessor">.github</span><span class="preprocessor">.playforscala</span><span class="preprocessor">.barcodes</span>
+
+import akka<span class="preprocessor">.actor</span><span class="preprocessor">.ActorRef</span>
+import akka<span class="preprocessor">.pattern</span><span class="preprocessor">.ask</span>
+import util<span class="preprocessor">.Try</span>
+import scala<span class="preprocessor">.concurrent</span><span class="preprocessor">.Future</span>
+import play<span class="preprocessor">.api</span><span class="preprocessor">.libs</span><span class="preprocessor">.concurrent</span><span class="preprocessor">.Execution</span><span class="preprocessor">.Implicits</span>._
+import scala<span class="preprocessor">.concurrent</span><span class="preprocessor">.duration</span>._
+import akka<span class="preprocessor">.util</span><span class="preprocessor">.Timeout</span>
+
+object Barcodes {
+  var barcodeCache: ActorRef = _
+  val mimeType = <span class="string">"image/png"</span>
+  val imageResolution = <span class="number">144</span>
+
+  def renderImage(ean: Long): Future[Try[Array[Byte]]] = {
+    implicit val timeout = Timeout(<span class="number">20.</span>seconds)
+    barcodeCache ? RenderImage(ean) map {
+      case RenderResult(result) =&gt; result
+    }
+  }
+}
+</pre></td></tr></table></figure>
+
+<p><code>app/com/github/playforscala/barcodes/</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+</pre></td><td class="code"><pre><span class="keyword">package</span> com.github.playforscala.barcodes
+<span class="keyword">import</span> play.api.mvc.{Action, Controller}
+<span class="keyword">import</span> util.{Failure, Success}
+<span class="keyword">import</span> play.api.libs.concurrent.Execution.Implicits._
+
+<span class="class"><span class="keyword">object</span> <span class="title">BarcodesController</span> <span class="keyword">extends</span> <span class="title">Controller</span> {</span>
+  <span class="keyword">def</span> barcode(ean: Long) = Action {
+    Async {
+      Barcodes.renderImage(ean) map {
+        <span class="keyword">case</span> Success(image) =&gt; Ok(image).as(Barcodes.mimeType)
+        <span class="keyword">case</span> Failure(e) =&gt;
+          BadRequest(<span class="string">"Couldn’t generate bar code. Error: "</span> + e.getMessage)
+      }
+    }
+  }
+}
+</pre></td></tr></table></figure>
+
+<p><code>.../playforscala/barcodes/BarcodesPlugin.scala</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+</pre></td><td class="code"><pre><span class="keyword">package</span> com.github.playforscala.barcodes
+
+<span class="keyword">import</span> play.api.{Application, Logger, Plugin}
+<span class="keyword">import</span> play.api.libs.concurrent.Akka
+<span class="keyword">import</span> play.api.Play.current
+<span class="keyword">import</span> akka.actor.Props
+
+<span class="class"><span class="keyword">class</span> <span class="title">BarcodesPlugin</span><span class="params">(val app: Application)</span> <span class="keyword">extends</span> <span class="title">Plugin</span> {</span>
+  <span class="keyword">override</span> <span class="keyword">def</span> onStart(){
+    Logger.info(<span class="string">"initializing cace"</span>)
+    Barcodes.barcodeCache = Akka.system.actorOf(Props[BarcodeCache])
+  }
+  
+  <span class="keyword">override</span> <span class="keyword">def</span> onStop() {
+    Logger.info(<span class="string">"stopping application"</span>)
+  }
+  <span class="comment">// if this method returns false, none of the others are ever called</span>
+  <span class="keyword">override</span> <span class="keyword">def</span> enable = <span class="keyword">true</span>;
+}
+</pre></td></tr></table></figure>
+
+<p>There’s one more thing to do to make the plugin work.
+It must be configured in a file called <code>conf/play.plugins</code></p>
+<p>The priority determines the order in which the plugins are initialized,
+with lower numbers being first.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre><span class="number">1000</span>:<span class="keyword">com</span><span class="preprocessor">.github</span><span class="preprocessor">.playforscala</span><span class="preprocessor">.barcodes</span><span class="preprocessor">.BarcodesPlugin</span>
+</pre></td></tr></table></figure>
+
+<p>If your application is going to get hit with a lot of requests for different
+bar codes simultaneously, you’re going to fill up the default thread pool—which might
+slow things down in the rest of the application. You might want to use a separate
+thread pool for your bar code Future objects. If your application runs on multiple
+servers for performance reasons, you might want to use Akka’s distributed features to
+run one instance of the BarcodeCache actor that all application instances will talk to.</p>
+<h1 id="deploying-to-production">Deploying to production</h1>
+<p>As a better alternative, you can use play start. This will start Play in production
+mode. In this mode, a new JVM is forked for your application, and
+it’s running separately from the play command.</p>
+<p>The play process will terminate but leave your application running.
+Your application’s process ID is written to a file RUNNING_PID.</p>
+<p>You can stop this application with play stop. This will send the SIGTERM signal to
+your application’s process. </p>
+<p>Play provides the <code>stage</code> and <code>dist</code> tasks. When running play
+stage, Play compiles your application to a JAR file, and—together with all the
+dependency JARs—puts it in the <code>target/staged</code> directory.
+It also creates a start script in <code>target/start</code>.</p>
+<p>After running <code>play dist</code>, you get a directory dist that contains a zip file
+with your application. You might need to make the start script
+executable first with <code>chmod +x</code> start.</p>
+<h2 id="working-with-multiple-configurations">Working with multiple configurations</h2>
+<p>Don’t use the same credentials for your production database</p>
+<p><code>conf/application.conf</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>mail<span class="preprocessor">.override</span><span class="preprocessor">.enabled</span> = true
+mail<span class="preprocessor">.override</span><span class="preprocessor">.address</span> = <span class="string">"info@example.org"</span>
+
+include <span class="string">"development.conf"</span>
+</pre></td></tr></table></figure>
+
+<p>The first two lines of this configuration override email recipient addresses, making the
+application send all notifications to one address, <code>info@example.org</code></p>
+<p>The last line includes settings from another configuration file in the same
+directory called development.conf. This allows each developer to create their
+own <code>conf/development.conf</code> and override the default test configuration.</p>
+<p>Be sure to add this file to .gitignore or your source control system’s equivalent.</p>
+<p>A nice thing about the configuration library is that the configuration doesn’t break
+if the <code>development.conf</code> file doesn’t exist; the library just silently ignores it.</p>
+<p>For production, then, we can use a separate /etc/paperclips/production.conf
+configuration file:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre>include classpath(<span class="string">"application.conf"</span>)
+email.<span class="keyword">override</span>.enabled=<span class="keyword">false</span>
+</pre></td></tr></table></figure>
+
+<p>To use the production configuration instead of the default configuration,
+specify the file as a system property when starting the application:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre><span class="keyword">play</span> <span class="string">"start -Dconfig.file=/etc/paperclips/production.conf"</span>
+</pre></td></tr></table></figure>
+
+<h2 id="creating-native-packages-for-a-package-manager">Creating native packages for a package manager</h2>
+<p>The sbt plugin sbt-native-packager helps you create these deb and rpm
+packages as well as Homebrew packages that can be used on Mac OS X,
+and MSI packages for Windows.</p>
+<p>The play2-native-packager plugin builds deb packages for Debian or Ubuntu,
+and the play2-ubuntu-package plugin builds lightweight deb packages
+designed specifically for recent versions of Ubuntu.</p>
+<h2 id="setting-up-a-front-end-proxy">Setting up a front-end proxy</h2>
+<p>It also gives you the ability to do upgrades without downtime. If you have a front-end
+proxy doing load balancing between two application instances, you can take one
+instance down, upgrade it, and bring it back up, all without downtime.</p>
+<p>HAProxy is a powerful and reliable proxy that has a plethora of advanced options,
+but is still easy to get started with.</p>
+<p>Suppose we want to set up HAProxy to listen on port 80, and redirect traffic to two
+instances of our Play application. We’ll also use WebSockets in this application,
+so we must make sure that these connections are properly proxied as well.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+</pre></td><td class="code"><pre>global
+  daemon
+  maxconn <span class="number">256</span>
+  
+defaults
+  mode http
+  timeout connect <span class="number">5</span>s
+  timeout client <span class="number">50</span>s
+  timeout <span class="built_in">server</span> <span class="number">50</span>s
+  <span class="keyword">option</span> forwardfor
+  <span class="keyword">option</span> http-<span class="built_in">server</span>-close
+  
+frontend http-<span class="keyword">in</span>
+  bind *:<span class="number">80</span>
+  default_backend playapp
+  
+backend playapp
+  <span class="built_in">server</span> s1 <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">9000</span> maxconn <span class="number">32</span> check
+  <span class="built_in">server</span> s2 <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">9001</span> maxconn <span class="number">32</span> check
+</pre></td></tr></table></figure>
+
+<p>If you set the pidfile.path to <code>/dev/null</code>, no PID file will be created.</p>
+<h2 id="using-ssl">Using SSL</h2>
+<p>Play can automatically generate a key store for you with a self-signed certificate,
+which is useful in development mode. All you need to start experimenting with SSL is
+to set the <code>https.port</code> system property:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre><span class="attribute">play -Dhttps.port</span>=<span class="string">9001 run</span>
+</pre></td></tr></table></figure>
+
+<p>The generated key store is saved in <code>conf/generated.keystore</code>, and Play will reuse
+it if you restart your application so you don’t get the certificate warning again and again.</p>
+<p>Once you have a key store file with your key and certificates, you need to point Play
+to it. Set <code>https.keyStore</code> to point to your key store and <code>https.keyStorePassword</code> to
+your password:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre>play -Dhttps<span class="preprocessor">.port</span>=<span class="number">9001</span> -Dhttps<span class="preprocessor">.keyStore</span>=mykeystore<span class="preprocessor">.jks</span>
+  -Dhttp<span class="preprocessor">.keyStorePassword</span>=mypassword run
+</pre></td></tr></table></figure>
+
+<p>Even though Play supports SSL, the recommended way to use SSL with Play in produc-
+tion is to let the front end—like HAProxy or Apache—handle it.</p>
+<h2 id="deploying-to-an-application-server">Deploying to an application server</h2>
+<p>e Play doesn’t use the Servlet API, which makes it
+impossible to run on an application server that expects web applications to use it.
+Luckily, there’s a plugin for Play 2, the <code>play2-war-plugin</code>, that can package your
+application as a WAR. It provides a layer between the Servlet API and your Play application.</p>
+<p>Some of the more advanced features of Play, like WebSockets, don’t work with all
+Servlet API versions.</p>
+]]></content>
     
     
       <category term="scala" scheme="http://zhpooer.github.io/tags/scala/"/>
@@ -8721,17 +10273,17 @@ for a particular language</li>
 9
 10
 11
-</pre></td><td class="code"><pre>&lt;!-- The implicit Lang parameter <span class="keyword">is</span> used <span class="keyword">for</span> the localized message --&gt;
-&lt;!-- lookup performed by the Messages object. --&gt;
+</pre></td><td class="code"><pre><span class="xml"><span class="tag">&lt;!<span class="attribute">--</span> <span class="attribute">The</span> <span class="attribute">implicit</span> <span class="attribute">Lang</span> <span class="attribute">parameter</span> <span class="attribute">is</span> <span class="attribute">used</span> <span class="attribute">for</span> <span class="attribute">the</span> <span class="attribute">localized</span> <span class="attribute">message</span> <span class="attribute">--</span>&gt;</span>
+<span class="comment">&lt;!-- lookup performed by the Messages object. --&gt;</span>
 @(products: List[Product])(implicit lang: Lang)
-<span class="keyword">@main</span>(Messages(<span class="string">"application.name"</span>)) {
-  &lt;dl <span class="keyword">class</span>=<span class="string">"products"</span>&gt;
-  <span class="keyword">@for</span>(product &lt;- products) {
-    &lt;dt&gt;<span class="keyword">@product</span>.name&lt;/dt&gt;
-    &lt;dd&gt;<span class="keyword">@product</span>.description&lt;/dd&gt;
+@main(Messages("application.name")) {
+  <span class="tag">&lt;<span class="title">dl</span> <span class="attribute">class</span>=<span class="value">"products"</span>&gt;</span>
+  @for(product <span class="tag">&lt;<span class="title">-</span> <span class="attribute">products</span>) {
+    &lt;<span class="attribute">dt</span>&gt;</span>@product.name<span class="tag">&lt;/<span class="title">dt</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">dd</span>&gt;</span>@product.description<span class="tag">&lt;/<span class="title">dd</span>&gt;</span>
   }
-  &lt;/dl&gt;
-}
+  <span class="tag">&lt;/<span class="title">dl</span>&gt;</span>
+}</span>
 </pre></td></tr></table></figure>
 
 <h3 id="layout-template">Layout template</h3>
@@ -11567,1079 +13119,6 @@ val agent1 = Agent(<span class="number">3</span>)
 val agent2 = agent1 map (_ + <span class="number">1</span>)
 </pre></td></tr></table></figure>
 
-]]></content>
-    
-    
-      <category term="akka" scheme="http://zhpooer.github.io/tags/akka/"/>
-    
-      <category term="scala" scheme="http://zhpooer.github.io/tags/scala/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[Akka in Action-System Structure & Routing Messages]]></title>
-    <link href="http://zhpooer.github.io/2014/08/04/akka-in-action-system-structure/"/>
-    <id>http://zhpooer.github.io/2014/08/04/akka-in-action-system-structure/</id>
-    <published>2014-08-04T10:47:29.000Z</published>
-    <updated>2014-08-05T03:10:01.000Z</updated>
-    <content type="html"><![CDATA[<p>One of the immediate implications of Actor based programming is how do we
-model code that requires collaborators to work together if each unit of work is done
-in parallel?</p>
-<p>Akka allows us to use these design approaches while still making use of its
-inherent concurrency.</p>
-<ul>
-<li>integration tools and platforms</li>
-<li>messaging systems</li>
-<li>WSO2, and SOA and Web-service based solutions</li>
-</ul>
-<h1 id="pipes-and-filters">Pipes and Filters</h1>
-<p>The concept of piping refers to the ability for one process or thread to pump its
-results to another processor for additional processing.</p>
-<p>In many systems a single event will trigger a sequence of tasks.</p>
-<p>It receives the photo and before the event is sent to central
-processing, a number of checks are done. When no license plate is found in the
-photo, the system is unable to process the message any further and therefore, it will
-be discarded.  In this example we also discard the message when the speed is below
-the maximum speed. Which means that only messages that contain the license
-plate of a speeding vehicle end up getting to the central processor.</p>
-<p>Each Filter consists of three parts, the inbound pipe where the message is
-received, the processor of the message, and finally the outbound pipe where the
-result of the processing is published.</p>
-<p>An important restriction is that each filter must accept and
-send the same messages, because the outbound pipe of a filter can be the inbound
-pipe of any other filter in the pattern. </p>
-<p>A Pipe with Two Filters Example</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-</pre></td><td class="code"><pre><span class="class"><span class="keyword">case</span> <span class="keyword">class</span> <span class="title">Photo</span><span class="params">(license: String, speed: Int)</span></span>
-
-<span class="class"><span class="keyword">class</span> <span class="title">SpeedFilter</span><span class="params">(minSpeed: Int, pipe: ActorRef)</span> <span class="keyword">extends</span> <span class="title">Actor</span> {</span>
-
-  <span class="comment">// Filter all Photos which have a speed lower than the minimal speed</span>
-  <span class="keyword">def</span> receive = {
-    <span class="keyword">case</span> msg: Photo =&gt;
-      <span class="keyword">if</span> (msg.speed &gt; minSpeed) pipe ! msg
-  }
-}
-
-<span class="comment">// Filter all Photos which have an empty license</span>
-<span class="class"><span class="keyword">class</span> <span class="title">LicenseFilter</span><span class="params">(pipe: ActorRef)</span> <span class="keyword">extends</span> <span class="title">Actor</span> {</span>
-  <span class="keyword">def</span> receive = {
-    <span class="keyword">case</span> msg: Photo =&gt;
-      <span class="keyword">if</span> (!msg.license.isEmpty) pipe ! msg
-  }
-}
-
-
-<span class="comment">// Pipe and filter test</span>
-
-<span class="keyword">val</span> endProbe = TestProbe()
-<span class="keyword">val</span> speedFilterRef = system.actorOf( Props(<span class="keyword">new</span> SpeedFilter(<span class="number">50</span>, endProbe.ref)))
-
-<span class="keyword">val</span> licenseFilterRef = system.actorOf(Props(<span class="keyword">new</span> LicenseFilter(speedFilterRef)))
-<span class="keyword">val</span> msg = <span class="keyword">new</span> Photo(<span class="string">"123xyz"</span>, <span class="number">60</span>)
-
-licenseFilterRef ! msg
-endProbe.expectMsg(msg)
-licenseFilterRef ! <span class="keyword">new</span> Photo(<span class="string">""</span>, <span class="number">60</span>)
-
-endProbe.expectNoMsg(<span class="number">1</span> second)
-licenseFilterRef ! <span class="keyword">new</span> Photo(<span class="string">"123xyz"</span>, <span class="number">49</span>)
-endProbe.expectNoMsg(<span class="number">1</span> second)
-</pre></td></tr></table></figure>
-
-<h1 id="scatter-gather-pattern">Scatter-Gather Pattern</h1>
-<p>The first case is when the
-tasks are functionally the same, but only one is passed through to the gather
-component as the chosen result. The second scenario is when work is divided for
-parallel processing and each processor submits its results which are then combined
-into a result set by the aggregator. </p>
-<h2 id="competing-tasks">Competing Tasks</h2>
-<p>A client buys a product, let&#39;s say a book at a
-web shop, but the shop doesn&#39;t have the requested book in stock, so it has to buy
-the book from a supplier. But the shop is doing business with three different
-suppliers and wants to pay the lowest price.</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
-51
-52
-53
-54
-55
-56
-57
-58
-59
-60
-61
-62
-63
-64
-65
-66
-67
-68
-69
-70
-71
-72
-73
-74
-75
-76
-77
-78
-79
-</pre></td><td class="code"><pre><span class="class"><span class="keyword">case</span> <span class="keyword">class</span> <span class="title">PhotoMessage</span><span class="params">(id: String,
-    photo: String,
-    creationTime: Option[Date] = None,
-    speed: Option[Int] = None)</span></span>
-    
-<span class="comment">// task  handler</span>
-<span class="class"><span class="keyword">class</span> <span class="title">GetSpeed</span><span class="params">(pipe:ActorRef)</span> <span class="keyword">extends</span> <span class="title">Actor</span> {</span>
-  <span class="keyword">def</span> receive = {
-    <span class="keyword">case</span> msg:PhotoMessage =&gt; {
-      pipe ! msp.copy(speed = ImageProcessing.getSpeed(msg.photo))
-    }
-  }
-}
-<span class="class"><span class="keyword">class</span> <span class="title">GetTime</span><span class="params">(pipe: ActorRef)</span> <span class="keyword">extends</span> <span class="title">Actor</span> {</span>
-  <span class="keyword">def</span> receive = {
-    <span class="keyword">case</span> msg: PhotoMessage =&gt; {
-      pipe ! msg.copy(creationTime = ImageProcessing.getTime(msg.photo))
-    }
-  }
-}
-
-<span class="comment">// distribute received message to all processing tasks</span>
-<span class="class"><span class="keyword">class</span> <span class="title">RecipientList</span><span class="params">(recipientList:Seq[ActorRef])</span> <span class="keyword">extends</span> <span class="title">Actor</span> {</span>
-  <span class="keyword">def</span> receive = {
-    <span class="keyword">case</span> msg: AnyRef =&gt; recipientList.foreach( _ ! msg)
-  }
-}
-
-<span class="class"><span class="keyword">case</span> <span class="keyword">class</span> <span class="title">TimeoutMessage</span><span class="params">(msg:PhotoMessage)</span></span>
-
-<span class="comment">// 聚合, 等待两个actor消息, 当一个消息回来时, 接着等待另一个, 加上了定时功能</span>
-<span class="class"><span class="keyword">class</span> <span class="title">Aggregator</span><span class="params">(timeout:Duration, pipe:ActorRef)</span> <span class="keyword">extends</span> <span class="title">Actor</span> {</span>
-  <span class="keyword">val</span> messages = <span class="keyword">new</span> ListBuffer[PhotoMessage]
-  implicit <span class="keyword">val</span> ec = context.system.dispatcher
-  <span class="comment">// Send all the received messages to our own mailbox</span>
-
-  <span class="keyword">override</span> <span class="keyword">def</span> preRestart(reason: Throwable, message: Option[Any]) {
-    <span class="keyword">super</span>.preRestart(reason, message)
-    messages.foreach(self ! _)
-    messages.clear()
-  }
-  
-  <span class="comment">// The first thing when receiving a message,</span>
-  <span class="comment">// is to check if it is the first message or the second. </span>
-  <span class="keyword">def</span> receive = {
-    <span class="keyword">case</span> rcvMsg: PhotoMessage =&gt; {
-      messages.find(_.id == rcvMsg.id) <span class="keyword">match</span> {
-        <span class="keyword">case</span> Some(alreadyRcvMsg) =&gt; {
-        
-          <span class="keyword">val</span> newCombinedMsg = <span class="keyword">new</span> PhotoMessage(
-            rcvMsg.id,
-            rcvMsg.photo,
-            rcvMsg.creationTime.orElse(alreadyRcvMsg.creationTime),
-            rcvMsg.speed.orElse(alreadyRcvMsg.speed) )
-            
-          pipe ! newCombinedMsg
-          <span class="comment">//cleanup message</span>
-          messages -= alreadyRcvMsg
-        }
-        <span class="keyword">case</span> None =&gt;{
-          messages += rcvMsg
-          <span class="comment">// 如果在规定的时间内没有收到信息</span>
-          context.system.scheduler.scheduleOnce(
-            timeout,
-            self,
-            <span class="keyword">new</span> TimeoutMessage(rcvMsg))
-        }
-    }
-    <span class="keyword">case</span> TimeoutMessage(rcvMsg) =&gt; {
-      messages.find(_.id == rcvMsg.id) <span class="keyword">match</span> {
-        <span class="keyword">case</span> Some(alreadyRcvMsg) =&gt; {
-          pipe ! alreadyRcvMsg
-          messages -= alreadyRcvMsg
-        }
-        <span class="keyword">case</span> None =&gt; <span class="comment">//message is already processed</span>
-    }
-    <span class="keyword">case</span> ex: Exception =&gt; <span class="keyword">throw</span> ex
-  }
-}
-</pre></td></tr></table></figure>
-
-<p>Test Aggregator missing a message</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-</pre></td><td class="code"><pre><span class="keyword">val</span> endProbe = TestProbe()
-<span class="keyword">val</span> actorRef = system.actorOf(Props(<span class="keyword">new</span> Aggregator(<span class="number">1</span> second, endProbe.<span class="keyword">ref</span>)))
-<span class="keyword">val</span> photoStr = ImageProcessing.createPhotoString(<span class="keyword">new</span> Date(), <span class="number">60</span>)
-<span class="keyword">val</span> msg1 = PhotoMessage(<span class="string">"id1"</span>, photoStr, Some(<span class="keyword">new</span> Date()), None)
-actorRef ! msg1
-actorRef ! <span class="keyword">new</span> IllegalStateException(<span class="string">"restart"</span>)
-<span class="keyword">val</span> msg2 = PhotoMessage(<span class="string">"id1"</span>,photoStr, None, Some(<span class="number">60</span>))
-actorRef ! msg2
-
-<span class="keyword">val</span> combinedMsg = PhotoMessage(<span class="string">"id1"</span>, photoStr, msg1.creationTime, msg2.speed)
-endProbe.expectMsg(combinedMsg)
-</pre></td></tr></table></figure>
-
-<h1 id="routing-messages">Routing Messages</h1>
-<p>Akka’s routing feature lets you alter a message’s path from
-sender to receiver.</p>
-<p>Akka provides a set of standard routers that implement routing patterns that
-frequently show up in those everyday problems.</p>
-<h2 id="roundrobinrouter">RoundRobinRouter</h2>
-<p>The RoundRobinRouter sends messages to the Actors for which it fronts in
-a round-robin fashion.</p>
-<h2 id="smallestmailboxrouter">SmallestMailboxRouter</h2>
-<p>When a message comes into the Router, it decides to route the message to
-the composed Actor whose Mailbox is the smallest.</p>
-<p>The SmallestMailboxRouter is a pretty good choice when it comes to
-balancing load among your composed Actors. </p>
-<h2 id="configuring-a-router">Configuring a Router</h2>
-<p>The configurations are specified in the akka.actor.deployment block. Be-
-low is a simple configuration of a RoundRobinRouter, which would appear
-in your application.conf file:</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-</pre></td><td class="code"><pre>akka {
-  actor {
-    deployment {
-      /DatabaseConnectionRouter {
-        router <span class="subst">=</span> <span class="string">"round-robin"</span>
-        nr<span class="attribute">-of</span><span class="attribute">-instances</span> <span class="subst">=</span> <span class="number">20</span>
-      }
-    }
-  }
-}
-</pre></td></tr></table></figure>
-
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-</pre></td><td class="code"><pre><span class="keyword">import</span> akka.routing.FromConfig
-<span class="class"><span class="keyword">class</span> <span class="title">DBConnection</span> <span class="keyword">extends</span> <span class="title">Actor</span> {</span> ...
-}
-<span class="keyword">val</span> dbRouter = system.actorOf(Props[DBConnection].withRouter(FromConfig(),
-                              <span class="string">"DatabaseConnectionRouter"</span>), <span class="string">"DBRouter"</span>)
-</pre></td></tr></table></figure>
-
-<p>The dbRouter will be an instance of a RoundRobinRouter that will rep-
-resent the database connection, and it will also be the parent of 20 instances
-of the DBConnection Actor.</p>
-<h2 id="routers-and-children">Routers and Children</h2>
-<p>Routers route to routees. You can create those routees dynamically by the
-Router, or you can assign them to it from an already created set. </p>
-<p>These two different methods of assigning routees have an impact
-on the relationship and supervision of those routees.</p>
-<h2 id="letting-the-router-create-the-routees">Letting the Router Create the Routees</h2>
-<p>Advantages</p>
-<ul>
-<li>The Router handles the Supervision.</li>
-<li>It works well with configuration.</li>
-</ul>
-<p>Disadvantages</p>
-<ul>
-<li>You’ll have a difficult time constructing anything but a single type of
-Actor.</li>
-<li>You can’t name them the way you might like.</li>
-</ul>
-<h2 id="passing-the-router-pre-created-actors">Passing the Router Pre-Created Actors</h2>
-<ul>
-<li>You have to have parents for them.</li>
-<li>It’s not as flexible from a configuration perspective. </li>
-</ul>
-<h2 id="the-router-and-its-children-s-life-cycles">The Router and Its Children’s Life Cycles</h2>
-<p>When the Router creates the routees, they are its children, which means that
-the Router must manage their life cycles. The Router will assign a
-supervisorStrategy that always escalates the decision to its parent.</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-</pre></td><td class="code"><pre>val dbRouter = system<span class="preprocessor">.actorOf</span>(Props<span class="preprocessor">.empty</span><span class="preprocessor">.withRouter</span>(RoundRobinRouter(
-    nrOfInstances = <span class="number">5</span>,
-    supervisorStrategy = OneForOneStrategy {
-    // define your Decider here
-    }), <span class="string">"DBRouter"</span>)
-
-// you can assign that easily enough:
-val dbRouter = system<span class="preprocessor">.actorOf</span>(Props<span class="preprocessor">.empty</span><span class="preprocessor">.withRouter</span>(RoundRobinRouter(
-    nrOfInstances = <span class="number">5</span>,
-    supervisorStrategy = SupervisorStrategy<span class="preprocessor">.defaultStrategy</span>
-    ), <span class="string">"DBRouter"</span>)
-</pre></td></tr></table></figure>
-
-<h2 id="routers-on-a-plane">Routers on a Plane</h2>
-<p>A BroadcastRouter would make the perfect component for allowing the passengers
-to receive important information, such as “Fasten Seat Belts,”.</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-</pre></td><td class="code"><pre>zzz<span class="preprocessor">.akka</span><span class="preprocessor">.avionics</span> {
-  passengers = [
-    [ <span class="string">"Kelly Franqui"</span>, <span class="string">"01"</span>, <span class="string">"A"</span> ],
-    [ <span class="string">"Tyrone Dotts"</span>, <span class="string">"02"</span>, <span class="string">"B"</span> ],
-    [ <span class="string">"Malinda Class"</span>, <span class="string">"03"</span>, <span class="string">"C"</span> ],
-    [ <span class="string">"Kenya Jolicoeur"</span>, <span class="string">"04"</span>, <span class="string">"A"</span> ],
-    [ <span class="string">"Christian Piche"</span>, <span class="string">"10"</span>, <span class="string">"B"</span> ],
-    [ <span class="string">"Neva Delapena"</span>, <span class="string">"11"</span>, <span class="string">"C"</span> ],
-    [ <span class="string">"Alana Berrier"</span>, <span class="string">"12"</span>, <span class="string">"A"</span> ],
-    [ <span class="string">"Malinda Heister"</span>, <span class="string">"13"</span>, <span class="string">"B"</span> ],
-    [ <span class="string">"Carlene Heiney"</span>, <span class="string">"14"</span>, <span class="string">"C"</span> ],
-    [ <span class="string">"Erik Dannenberg"</span>, <span class="string">"15"</span>, <span class="string">"A"</span> ],
-    [ <span class="string">"Jamie Karlin"</span>, <span class="string">"20"</span>, <span class="string">"B"</span> ],
-    [ <span class="string">"Julianne Schroth"</span>, <span class="string">"21"</span>, <span class="string">"C"</span> ],
-    [ <span class="string">"Elinor Boris"</span>, <span class="string">"22"</span>, <span class="string">"A"</span> ],
-    [ <span class="string">"Louisa Mikels"</span>, <span class="string">"30"</span>, <span class="string">"B"</span> ],
-    [ <span class="string">"Jessie Pillar"</span>, <span class="string">"31"</span>, <span class="string">"C"</span> ],
-    [ <span class="string">"Darcy Goudreau"</span>, <span class="string">"32"</span>, <span class="string">"A"</span> ],
-    [ <span class="string">"Harriett Isenhour"</span>, <span class="string">"33"</span>, <span class="string">"B"</span> ],
-    [ <span class="string">"Odessa Maury"</span>, <span class="string">"34"</span>, <span class="string">"C"</span> ],
-    [ <span class="string">"Malinda Hiett"</span>, <span class="string">"40"</span>, <span class="string">"A"</span> ],
-    [ <span class="string">"Darcy Syed"</span>, <span class="string">"41"</span>, <span class="string">"B"</span> ],
-    [ <span class="string">"Julio Dismukes"</span>, <span class="string">"42"</span>, <span class="string">"C"</span> ],
-    [ <span class="string">"Jessie Altschuler"</span>, <span class="string">"43"</span>, <span class="string">"A"</span> ],
-    [ <span class="string">"Tyrone Ericsson"</span>, <span class="string">"44"</span>, <span class="string">"B"</span> ],
-    [ <span class="string">"Mallory Dedrick"</span>, <span class="string">"50"</span>, <span class="string">"C"</span> ],
-    [ <span class="string">"Javier Broder"</span>, <span class="string">"51"</span>, <span class="string">"A"</span> ],
-    [ <span class="string">"Alejandra Fritzler"</span>, <span class="string">"52"</span>, <span class="string">"B"</span> ],
-    [ <span class="string">"Rae Mcaleer"</span>, <span class="string">"53"</span>, <span class="string">"C"</span> ]
-  ]
-}
-</pre></td></tr></table></figure>
-
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-</pre></td><td class="code"><pre><span class="class"><span class="keyword">object</span> <span class="title">Passenger</span> {</span>
-  <span class="comment">// These are notifications that tell the Passenger</span>
-  <span class="comment">// to fasten or unfasten their seat belts</span>
-  <span class="keyword">case</span> <span class="class"><span class="keyword">object</span> <span class="title">FastenSeatbelts</span></span>
-  <span class="keyword">case</span> <span class="class"><span class="keyword">object</span> <span class="title">UnfastenSeatbelts</span></span>
-  <span class="comment">// Regular expression to extract Name-Row-Seat tuple</span>
-  <span class="keyword">val</span> SeatAssignment = <span class="string">"""([\w\s_]+)-(\d+)-([A-Z])"""</span>.r
-}
-
-<span class="comment">// The DrinkRequestProbability trait defines some</span>
-<span class="comment">// thresholds that we can modify in tests to</span>
-<span class="comment">// speed things up.</span>
-<span class="class"><span class="keyword">trait</span> <span class="title">DrinkRequestProbability</span> {</span>
-  <span class="comment">// Limits the decision on whether the passenger</span>
-  <span class="comment">// actually asks for a drink</span>
-  <span class="keyword">val</span> askThreshold = <span class="number">0.9</span>f
-  
-  <span class="comment">// The minimum time between drink requests</span>
-  <span class="keyword">val</span> requestMin = <span class="number">20.</span>minutes
-  
-  <span class="comment">// Some portion of this (0 to 100</span>
-  <span class="comment">// to requestMin</span>
-  <span class="keyword">val</span> requestUpper = <span class="number">30.</span>minutes
-  <span class="comment">// Gives us a 'random' time within the previous</span>
-  <span class="comment">// two bounds</span>
-  <span class="keyword">def</span> randomishTime(): Duration = {
-    requestMin + scala.util.Random.nextInt(requestUpper.toMillis.toInt).millis
-  }
-}
-
-<span class="comment">// The idea behind the PassengerProvider is old news at this point.</span>
-<span class="comment">// We can use it in other classes to give us the ability to slide</span>
-<span class="comment">// in different Actor types to ease testing.</span>
-<span class="class"><span class="keyword">trait</span> <span class="title">PassengerProvider</span> {</span>
-  <span class="keyword">def</span> newPassenger(callButton: ActorRef): Actor =
-    <span class="keyword">new</span> Passenger(callButton) <span class="keyword">with</span> DrinkRequestProbability
-}
-</pre></td></tr></table></figure>
-
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
-51
-52
-53
-54
-55
-56
-57
-58
-59
-60
-</pre></td><td class="code"><pre><span class="class"><span class="keyword">class</span> <span class="title">Passenger</span><span class="params">(callButton: ActorRef)</span> <span class="keyword">extends</span> <span class="title">Actor</span> <span class="keyword">with</span> <span class="title">ActorLogging</span> {</span>
-  <span class="keyword">this</span>: DrinkRequestProbability =&gt;
-  <span class="keyword">import</span> Passenger._
-  <span class="keyword">import</span> FlightAttendant.{GetDrink, Drink}
-  <span class="keyword">import</span> scala.collection.JavaConverters._
-  
-  <span class="comment">// We'll be adding some randomness to our Passenger,</span>
-  <span class="comment">// and this shortcut will make things a little more</span>
-  <span class="comment">// readable.</span>
-  <span class="keyword">val</span> r = scala.util.Random
-  
-  <span class="comment">// It's about time that someone actually asked for a</span>
-  <span class="comment">// drink since our Flight Attendants have been coded</span>
-  <span class="comment">// to serve them up</span>
-  <span class="keyword">case</span> <span class="class"><span class="keyword">object</span> <span class="title">CallForDrink</span></span>
-  
-  <span class="comment">// The name of the Passenger can't have spaces in it,</span>
-  <span class="comment">// since that's not a valid character in the URI</span>
-  <span class="comment">// spec. We know the name will have underscores in</span>
-  <span class="comment">// place of spaces, and we'll convert those back</span>
-  <span class="comment">// here.</span>
-  <span class="keyword">val</span> SeatAssignment(myname, _, _) =
-    self.path.name.replaceAllLiterally(<span class="string">"_"</span>, <span class="string">" "</span>)
-    
-  <span class="comment">// We'll be pulling some drink names from the</span>
-  <span class="comment">// configuration file as well</span>
-  <span class="keyword">val</span> drinks = context.system.settings.config.getStringList(<span class="string">"zzz.akka.avionics.drinks"</span>).asScala.toIndexedSeq
-  
-  <span class="comment">// A shortcut for the scheduler to make things look</span>
-  <span class="comment">// nicer later</span>
-  <span class="keyword">val</span> scheduler = context.system.scheduler
-  
-  <span class="comment">// We've just sat down, so it's time to get a drink</span>
-  <span class="keyword">override</span> <span class="keyword">def</span> preStart() {
-    self ! CallForDrink
-  }
-
-  <span class="comment">// This method will decide whether or not we actually</span>
-  <span class="comment">// want to get a drink using some randomness to</span>
-  <span class="comment">// decide</span>
-  <span class="keyword">def</span> maybeSendDrinkRequest(): Unit = {
-    <span class="keyword">if</span> (r.nextFloat() &gt; askThreshold) {
-      <span class="keyword">val</span> drinkname = drinks(r.nextInt(drinks.length))
-      callButton ! GetDrink(drinkname)
-    }
-    scheduler.scheduleOnce(randomishTime(), self, CallForDrink)
-  }
-
-  <span class="comment">// Standard message handler</span>
-  <span class="keyword">def</span> receive = {
-    <span class="keyword">case</span> CallForDrink =&gt;
-      maybeSendDrinkRequest()
-    <span class="keyword">case</span> Drink(drinkname) =&gt;
-      log.info(<span class="string">"{} received a {} - Yum"</span>, myname, drinkname)
-    <span class="keyword">case</span> FastenSeatbelts =&gt;
-      log.info(<span class="string">"{} fastening seatbelt"</span>, myname)
-    <span class="keyword">case</span> UnfastenSeatbelts =&gt;
-      log.info(<span class="string">"{} UNfastening seatbelt"</span>, myname)
-  }
-}
-</pre></td></tr></table></figure>
-
-<p>Testing and the Event Stream</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-</pre></td><td class="code"><pre><span class="class"><span class="keyword">trait</span> <span class="title">TestDrinkRequestProbability</span> <span class="keyword">extends</span> <span class="title">DrinkRequestProbability</span> {</span>
-  <span class="keyword">override</span> <span class="keyword">val</span> askThreshold = <span class="number">0</span>f
-  <span class="keyword">override</span> <span class="keyword">val</span> requestMin = <span class="number">0.</span>milliseconds
-  <span class="keyword">override</span> <span class="keyword">val</span> requestUpper = <span class="number">2.</span>milliseconds
-}
-
-<span class="class"><span class="keyword">class</span> <span class="title">PassengersSpec</span> <span class="keyword">extends</span> <span class="title">TestKit</span><span class="params">(ActorSystem()</span>) <span class="keyword">with</span> <span class="title">ImplicitSender</span> {</span>
-  <span class="keyword">import</span> akka.event.Logging.Info
-  <span class="keyword">import</span> akka.testkit.TestProbe
-  <span class="keyword">var</span> seatNumber = <span class="number">9</span>
-  
-  <span class="keyword">def</span> newPassenger(): ActorRef = {
-    seatNumber += <span class="number">1</span>
-    system.actorOf(Props(<span class="keyword">new</span> Passenger(testActor) <span class="keyword">with</span> TestDrinkRequestProbability), s<span class="string">"Pat_Metheny-$seatNumber-B"</span>)
-  }
-  
-  <span class="string">"Passengers"</span> should {
-    <span class="string">"fasten seatbelts when asked"</span> in {
-      <span class="keyword">val</span> a = newPassenger()
-      <span class="keyword">val</span> p = TestProbe()
-      <span class="comment">// This says that we want the TestProbe’s ActorRef (p.ref) to be the handle</span>
-      <span class="comment">// to the subscribed Actor, and that we want it to receive events that match the</span>
-      <span class="comment">// class akka.event.Logger.Info. </span>
-      system.eventStream.subscribe(p.ref, classOf[Info])
-      
-      a ! FastenSeatbelts
-      p.expectMsgPF() {
-        <span class="keyword">case</span> Info(_, _, m) =&gt;
-          m.toString must include (<span class="string">"fastening seatbelt"</span>)
-      }
-    }
-  }
-}
-</pre></td></tr></table></figure>
-
-<h3 id="the-passenger-router">The Passenger Router</h3>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
-51
-52
-53
-54
-55
-56
-57
-58
-59
-60
-61
-62
-63
-64
-65
-66
-67
-68
-69
-70
-71
-72
-73
-74
-75
-76
-77
-78
-79
-</pre></td><td class="code"><pre><span class="class"><span class="keyword">object</span> <span class="title">PassengerSupervisor</span> {</span>
-  <span class="comment">// Allows someone to request the BroadcastRouter</span>
-  <span class="keyword">case</span> <span class="class"><span class="keyword">object</span> <span class="title">GetPassengerBroadcaster</span></span>
-  <span class="comment">// Returns the BroadcastRouter to the requestor</span>
-  <span class="class"><span class="keyword">case</span> <span class="keyword">class</span> <span class="title">PassengerBroadcaster</span><span class="params">(broadcaster: ActorRef)</span></span>
-  <span class="comment">// Factory method for easy construction</span>
-  <span class="keyword">def</span> apply(callButton: ActorRef) = <span class="keyword">new</span> PassengerSupervisor(callButton)
-        <span class="keyword">with</span> PassengerProvider
-}
-
-<span class="class"><span class="keyword">class</span> <span class="title">PassengerSupervisor</span><span class="params">(callButton: ActorRef)</span> <span class="keyword">extends</span> <span class="title">Actor</span> {</span>
-  <span class="keyword">this</span>: PassengerProvider =&gt;
-  <span class="keyword">import</span> PassengerSupervisor._
-  <span class="comment">// We'll resume our immediate children instead of restarting them</span>
-  <span class="comment">// on an Exception</span>
-  <span class="keyword">override</span> <span class="keyword">val</span> supervisorStrategy = OneForOneStrategy() {
-    <span class="keyword">case</span> _: ActorKilledException =&gt; Escalate
-    <span class="keyword">case</span> _: ActorInitializationException =&gt; Escalate
-    <span class="keyword">case</span> _ =&gt; Resume
-  }
-  
-  <span class="comment">// Internal messages we use to communicate between this Actor</span>
-  <span class="comment">// and its subordinate IsolatedStopSupervisor</span>
-  <span class="class"><span class="keyword">case</span> <span class="keyword">class</span> <span class="title">GetChildren</span><span class="params">(forSomeone: ActorRef)</span></span>
-
-  <span class="class"><span class="keyword">case</span> <span class="keyword">class</span> <span class="title">Children</span><span class="params">(children: Iterable[ActorRef], childrenFor: ActorRef)</span></span>
-  
-  <span class="comment">// We use preStart() to create our IsolatedStopSupervisor</span>
-  <span class="keyword">override</span> <span class="keyword">def</span> preStart() {
-    context.actorOf(Props(<span class="keyword">new</span> Actor {
-      <span class="keyword">val</span> config = context.system.settings.config
-      
-      <span class="keyword">override</span> <span class="keyword">val</span> supervisorStrategy = OneForOneStrategy() {
-        <span class="keyword">case</span> _: ActorKilledException =&gt; Escalate
-        <span class="keyword">case</span> _: ActorInitializationException =&gt; Escalate
-        <span class="keyword">case</span> _ =&gt; Stop
-      }
-      <span class="keyword">override</span> <span class="keyword">def</span> preStart() {
-        <span class="keyword">import</span> scala.collection.JavaConverters._
-        <span class="keyword">import</span> com.typesafe.config.ConfigList
-        <span class="comment">// Get our passenger names from the configuration</span>
-        <span class="keyword">val</span> passengers = config.getList(<span class="string">"zzz.akka.avionics.passengers"</span>)
-        
-        <span class="comment">// Iterate through them to create the passenger children</span>
-        passengers.asScala.foreach { nameWithSeat =&gt;
-          <span class="keyword">val</span> id = nameWithSeat.asInstanceOf[ConfigList].unwrapped().asScala.mkString(<span class="string">"-"</span>).replaceAllLiterally(<span class="string">" "</span>, <span class="string">"_"</span>)
-          <span class="comment">// Convert spaces to underscores to comply with URI standard</span>
-          context.actorOf(Props(newPassenger(callButton)), id)
-        }
-      }
-    
-      <span class="keyword">override</span> <span class="keyword">def</span> receive = {
-        <span class="keyword">case</span> GetChildren(forSomeone: ActorRef) =&gt;
-          sender ! Children(context.children, forSomeone)
-      }
-    }), <span class="string">"PassengersSupervisor"</span>)
-  }
-
-  <span class="keyword">def</span> receive = noRouter
-
-  <span class="comment">// TODO: This noRouter method could be made simpler by using a Future.</span>
-  <span class="comment">// We'll have to refactor this later.</span>
-  <span class="keyword">def</span> noRouter: Receive = {
-    <span class="keyword">case</span> GetPassengerBroadcaster =&gt;
-      context.actorFor(<span class="string">"PassengersSupervisor"</span>) ! GetChildren(sender)
-    <span class="keyword">case</span> Children(passengers, destinedFor) =&gt;
-      <span class="keyword">val</span> router = context.actorOf(Props().withRouter(
-        BroadcastRouter(passengers.toSeq)), <span class="string">"Passengers"</span>)
-        
-      destinedFor ! PassengerBroadcaster(router)
-      context.become(withRouter(router))
-  }
-  
-  <span class="keyword">def</span> withRouter(router: ActorRef): Receive = {
-    <span class="keyword">case</span> GetPassengerBroadcaster =&gt;
-      sender ! PassengerBroadcaster(router)
-  }
-
-}
-</pre></td></tr></table></figure>
-
-<h3 id="using-the-passenger-router">Using the Passenger Router</h3>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
-51
-52
-53
-54
-55
-56
-57
-58
-59
-60
-61
-62
-63
-64
-65
-66
-67
-68
-69
-70
-71
-72
-73
-74
-75
-76
-77
-78
-79
-80
-</pre></td><td class="code"><pre><span class="keyword">package</span> zzz.akka.avionics
-
-<span class="keyword">import</span> akka.actor.{ActorSystem, Actor, ActorRef, Props}
-<span class="keyword">import</span> akka.testkit.{TestKit, ImplicitSender}
-<span class="keyword">import</span> scala.concurrent.util.duration._
-<span class="keyword">import</span> com.typesafe.config.ConfigFactory
-<span class="keyword">import</span> org.scalatest.{WordSpec, BeforeAndAfterAll}
-<span class="keyword">import</span> org.scalatest.matchers.MustMatchers
-
-
-<span class="comment">// ActorSystem so we have a known quantity we can test with</span>
-<span class="class"><span class="keyword">object</span> <span class="title">PassengerSupervisorSpec</span> {</span>
-  <span class="keyword">val</span> config = ConfigFactory.parseString(<span class="string">"""
-    zzz.akka.avionics.passengers = [
-      [ "Kelly Franqui", "23", "A" ],
-      [ "Tyrone Dotts", "23", "B" ],
-      [ "Malinda Class", "23", "C" ],
-      [ "Kenya Jolicoeur", "24", "A" ],
-      [ "Christian Piche", "24", "B" ]
-    ]
-  """</span>)
-}
-
-<span class="comment">// We don't want to work with "real" passengers.</span>
- This mock
-<span class="comment">// passenger will be much easier to verify things with</span>
-<span class="class"><span class="keyword">trait</span> <span class="title">TestPassengerProvider</span> <span class="keyword">extends</span> <span class="title">PassengerProvider</span> {</span>
-  <span class="keyword">override</span> <span class="keyword">def</span> newPassenger(callButton: ActorRef): Actor =
-    <span class="keyword">new</span> Actor {
-      <span class="keyword">def</span> receive = {
-        <span class="keyword">case</span> m =&gt; callButton ! m
-      }
-    }
-}
-
-<span class="comment">// The Test class injects the configuration into the</span>
-<span class="comment">// ActorSystem</span>
-<span class="class"><span class="keyword">class</span> <span class="title">PassengerSupervisorSpec</span> <span class="keyword">extends</span></span>
-    TestKit(ActorSystem(<span class="string">"PassengerSupervisorSpec"</span>, PassengerSupervisorSpec.config))
-        <span class="keyword">with</span> ImplicitSender
-        <span class="keyword">with</span> WordSpec
-        <span class="keyword">with</span> BeforeAndAfterAll
-        <span class="keyword">with</span> MustMatchers {
-  <span class="keyword">import</span> PassengerSupervisor._
-  <span class="comment">// Clean up the system when all the tests are done</span>
-  <span class="keyword">override</span> <span class="keyword">def</span> afterAll() {
-    system.shutdown()
-  }
-
-  <span class="string">"PassengerSupervisor"</span> should {
-    <span class="string">"work"</span> in {
-      <span class="comment">// Get our SUT</span>
-      <span class="keyword">val</span> a = system.actorOf(Props(<span class="keyword">new</span> PassengerSupervisor(testActor) <span class="keyword">with</span> TestPassengerProvider))
-      
-      <span class="comment">// Grab the BroadcastRouter</span>
-      a ! GetPassengerBroadcaster
-      <span class="keyword">val</span> broadcaster = expectMsgPF() {
-        <span class="keyword">case</span> PassengerBroadcaster(b) =&gt;
-          <span class="comment">// Exercise the BroadcastRouter</span>
-          b ! <span class="string">"Hithere"</span>
-          
-          <span class="comment">// All 5 passengers should say "Hithere"</span>
-          expectMsg(<span class="string">"Hithere"</span>)
-          expectMsg(<span class="string">"Hithere"</span>)
-          expectMsg(<span class="string">"Hithere"</span>)
-          expectMsg(<span class="string">"Hithere"</span>)
-          expectMsg(<span class="string">"Hithere"</span>)
-          
-          <span class="comment">// And then nothing else!</span>
-          expectNoMsg(<span class="number">100.</span>milliseconds)
-          <span class="comment">// Return the BroadcastRouter</span>
-          b
-      }
-      
-      <span class="comment">// Ensure that the cache works</span>
-      a ! GetPassengerBroadcaster
-      expectMsg(PassengerBroadcaster(`broadcaster`))
-    }
-  }
-}
-</pre></td></tr></table></figure>
-
-<p>TODO</p>
 ]]></content>
     
     

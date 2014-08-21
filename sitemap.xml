@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://zhpooer.github.io/2014/08/20/play-for-scala-web-services-&-iteratees-&-websockets/</loc>
+    <lastmod>2014-08-20T03:22:40.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://zhpooer.github.io/2014/08/18/play-for-scala-modules-&-plugins/</loc>
     <lastmod>2014-08-18T12:56:34.000Z</lastmod>
   </url>
