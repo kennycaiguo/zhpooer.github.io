@@ -4,21 +4,25 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>photoshope入门 选区 | Poe&#39;s World</title>
+    <title>photoshope-2-选区 | Poe&#39;s World</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="zhpooer">
     
     <meta name="description" content="选区
 作用：针对选区进行编辑
-可以在创建选区的工具属性栏上找到布尔运算
+可以在创建选区的工具属性栏上找到布尔运算, 针对已经存在的选区进行布尔运算
 
-新选区: 移动选区, 取消选择
-加    : shift
-减    : alt
-相交  : shift + alt
+新选区
+在选区内拖拽, 移动选区MM
+在画面任意位置单击, 取消选择
 
-更改图层顺序：ctrl + [ 向上移动, ctrl + [ 向下移动, ctrl + shift + [ ">
+
+加   : shift
+减   : alt
+相交 : shift + alt
+
+在选区工具下, 要确保选择的是第一项新">
     
     
     
@@ -81,15 +85,15 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2014/06/09/photoshope入门-选区/" title="photoshope入门 选区" itemprop="url">photoshope入门 选区</a>
+      <a href="/2014/09/20/photoshope0-2-选区/" title="photoshope-2-选区" itemprop="url">photoshope-2-选区</a>
   </h1>
   <p class="article-author">By
     
       <a href="http://zhpooer.github.io" title="zhpooer">zhpooer</a>
     </p>
   <p class="article-time">
-    <time datetime="2014-06-09T07:41:13.000Z" itemprop="datePublished">6月 9 2014</time>
-    更新日期:<time datetime="2014-06-10T11:45:07.000Z" itemprop="dateModified">6月 10 2014</time>
+    <time datetime="2014-09-20T07:41:13.000Z" itemprop="datePublished">9月 20 2014</time>
+    更新日期:<time datetime="2014-09-21T03:18:23.000Z" itemprop="dateModified">9月 21 2014</time>
     
   </p>
 </header>
@@ -98,23 +102,104 @@
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">选区</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">2.</span> <span class="toc-text">图片处理方式</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.1.</span> <span class="toc-text">使用羽化版</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">制作气泡</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">4.</span> <span class="toc-text">复制方法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">5.</span> <span class="toc-text">套索工具</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">6.</span> <span class="toc-text">文字输入</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">7.</span> <span class="toc-text">制作百货公司标牌</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">8.</span> <span class="toc-text">魔术棒工具</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">9.</span> <span class="toc-text">图层样式面板</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#tip"><span class="toc-number">10.</span> <span class="toc-text">Tip</span></a></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">选区</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">2.</span> <span class="toc-text">撤销</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">自由变换</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">4.</span> <span class="toc-text">复制方法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">5.</span> <span class="toc-text">对齐和分布</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">6.</span> <span class="toc-text">文字输入</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">7.</span> <span class="toc-text">合并图层</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-ui"><span class="toc-number">8.</span> <span class="toc-text">练习制作 UI</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">9.</span> <span class="toc-text">图片处理方式</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">9.1.</span> <span class="toc-text">使用羽化版</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">10.</span> <span class="toc-text">制作气泡</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">11.</span> <span class="toc-text">套索工具</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">12.</span> <span class="toc-text">制作百货公司标牌</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">13.</span> <span class="toc-text">魔术棒工具</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">14.</span> <span class="toc-text">图层样式面板</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#tip"><span class="toc-number">15.</span> <span class="toc-text">Tip</span></a></li></ol>
 		</div>
 		
 		<h1 id="-">选区</h1>
 <p>作用：针对选区进行编辑</p>
-<p>可以在创建选区的工具属性栏上找到布尔运算</p>
+<p>可以在创建选区的工具属性栏上找到布尔运算, 针对已经存在的选区进行布尔运算</p>
 <ul>
-<li>新选区: 移动选区, 取消选择</li>
-<li>加    : shift</li>
-<li>减    : alt</li>
-<li>相交  : shift + alt</li>
+<li>新选区<ul>
+<li>在选区内拖拽, 移动选区MM</li>
+<li>在画面任意位置单击, 取消选择</li>
 </ul>
-<p>更改图层顺序：<code>ctrl + [</code> 向上移动, <code>ctrl + [</code> 向下移动, <code>ctrl + shift + [</code> 到最底层, <code>ctrl + shift + ]</code> 到最顶层</p>
+</li>
+<li>加   : shift</li>
+<li>减   : alt</li>
+<li>相交 : shift + alt</li>
+</ul>
+<p>在选区工具下, 要确保选择的是第一项新选区</p>
+<p>更改图层顺序：<code>ctrl + [</code> 向上移动, <code>ctrl + [</code> 向下移动,
+<code>ctrl + shift + [</code> 到最底层, <code>ctrl + shift + ]</code> 到最顶层</p>
+<p>视图对齐, 确保有吸附功能</p>
+<h1 id="-">撤销</h1>
+<ul>
+<li>最后两步之间撤销, <code>ctrl + Z</code></li>
+<li>一直往回后退, <code>ctrl + alt + Z</code></li>
+<li>重做, <code>ctrl + shift + Z</code></li>
+</ul>
+<h1 id="-">自由变换</h1>
+<p>切换快捷方式, <code>Ctrl + T</code></p>
+<p>可控制点</p>
+<ul>
+<li>边角点</li>
+<li>中心点</li>
+</ul>
+<p>使用技巧</p>
+<ul>
+<li>等比缩放 <code>Shift</code> + 拖拽边角点</li>
+<li>控制中心点不动, 按住 <code>Alt</code></li>
+<li>按住<code>Alt</code> + 拖拽中心点, 两边对称同时缩放</li>
+<li>旋转, 移动中心点, 在外边拖动<ul>
+<li><code>shift</code> 约束15度</li>
+<li>如果图像太小, 拾取不到中心点时, 按住 <code>Alt</code> 识别中心点</li>
+</ul>
+</li>
+</ul>
+<h1 id="-">复制方法</h1>
+<p>位移复制, 在V移动工具下, 按住<code>alt</code>, 鼠标左键拖拽</p>
+<p>原位复制</p>
+<ol>
+<li>拖拽图层到新建图层</li>
+<li><code>ctrl + j</code>, 如果带有选区, 会复制选区内的像素到新的图层</li>
+</ol>
+<p>使用情景: 制作编辑的副本, 快速恢复</p>
+<p>恢复到画面初识打开的状态: <code>F12</code></p>
+<h1 id="-">对齐和分布</h1>
+<p>在V移动工具下使用</p>
+<p>对齐, 控制物件距离</p>
+<p>分布, 控制物件距离</p>
+<ul>
+<li>按顶分布</li>
+<li>按左分布</li>
+</ul>
+<p>缺点, 不同间距的不同变不能进行分布设置
+<!-- 在AI中, 分布控制面板, 由设置分布间距的方法 --></p>
+<h1 id="-">文字输入</h1>
+<p>切换文字输入工具 <code>T</code>, 可以填充前景色或背景色</p>
+<p>结束文字输入, <code>ctrl + 回车</code>, <code>esc</code>取消本次输入</p>
+<p>调节文字大小, <code>ctrl + T</code> 或直接更改字体大小</p>
+<p>更改文字颜色, 针对文本层直接填充前背景色</p>
+<p>修改文字内容, 选择要修改的文字内容, 设置属性</p>
+<p>双击文本图层, 调出字符面板</p>
+<ul>
+<li>标准文本配置 100, 100, 0, 0, 0</li>
+<li>调节间距 <code>alt + 左右</code>, 调节行距 <code>alt + 上下</code></li>
+</ul>
+<p>段落选项: 修改避头尾法则和段落格式</p>
+<p>windows 安装字体, <code>c://windows/fonts</code></p>
+<h1 id="-">合并图层</h1>
+<p><code>ctrl + E</code></p>
+<ul>
+<li>选择一个图层, 向下合并</li>
+<li>选择多个图层, 合并所选图层</li>
+</ul>
+<p>图层转选择: <code>CTRL</code> + 单击图层预览</p>
+<h1 id="-ui">练习制作 UI</h1>
+<p>从底部到上逐层制作</p>
+<p>所有跟屏幕相关的以像素为单位</p>
+<ol>
+<li>新建画布, 640*920, IPone4 手机屏幕大小, 填充颜色</li>
+<li>使用参考线上下分屏, 定位同心圆点(使用方形选框辅助)</li>
+<li>根据同心圆点, 画圆环, 调节图层不透明度(0-9, 连敲调节)</li>
+<li>插入小松鼠元素, 变换大小(自由变换 <code>Ctrl+T</code>)</li>
+<li>制作颜色块, 使用图层转选择, 自由变换</li>
+<li>制作光影效果, 使用单行选择框, 上灰下白, 表现凹下效果 (上白下灰, 表现凸起效果)</li>
+</ol>
 <h1 id="-">图片处理方式</h1>
 <p>三种处理方式</p>
 <ul>
-<li>脚版 源图片</li>
+<li>脚本 源图片</li>
 <li>挖版</li>
 <li>羽化版</li>
 </ul>
@@ -149,15 +234,6 @@
 <li>用该选区, 针对之前填充得到的白色圆, 进行删除</li>
 <li>使用画笔工具添加高光部分</li>
 </ol>
-<h1 id="-">复制方法</h1>
-<p>位移复制, 在V移动工具下, 按住鼠标左键拖拽</p>
-<p>原位复制</p>
-<ol>
-<li>拖拽图层到新建图层</li>
-<li><code>ctrl + j</code>, 如果带有选区, 会复制选区内的像素到新的图层</li>
-</ol>
-<p>使用情景: 制作编辑的副本, 快速恢复</p>
-<p>恢复到画面初识打开的状态: <code>F12</code></p>
 <h1 id="-">套索工具</h1>
 <p>切换到套索工具 <code>L</code></p>
 <p>不规则形状, 选框</p>
@@ -168,17 +244,6 @@
 <li>磁性套索工具</li>
 </ol>
 <p>小技巧, 绘制过程中同时需要直线和曲线, 在绘制过程中, <code>ALT</code>键暂时切换</p>
-<p>合并选中图层: <code>ctrl + T</code></p>
-<h1 id="-">文字输入</h1>
-<p>切换文字输入工具 <code>T</code>, 可以填充前景色或背景色</p>
-<p><code>ctrl + 回车</code> 结束文字输入, <code>esc</code>取消本次输入</p>
-<p>调节文字大小, <code>ctrl + T</code>或直接更改字体大小</p>
-<p>双击文本图层, 调出字符面板</p>
-<ul>
-<li>标准文本配置 100, 100, 0, 0, 0</li>
-<li>调节间距 <code>alt + 左右</code>, 调节行距 <code>alt + 上下</code></li>
-</ul>
-<p>段落选项: 修改避头尾法则和段落格式</p>
 <h1 id="-">制作百货公司标牌</h1>
 <ol>
 <li>新建画布 650mm*150mm, 或通过赋值模板来新建画布</li>
@@ -228,13 +293,16 @@
 </ol>
 <h1 id="tip">Tip</h1>
 <p>常有面板: 图层 + 通道 + 路径 + 历史记录</p>
+<p>背景色可以不用新建图层, 可以直接填充到背景层上</p>
+<p>切换吸管工具 <code>I</code></p>
+<p>photoshop缺点: 会<em>放大失真</em>, 但是画面细腻色彩丰富</p>
   
 	</div>
 		<footer class="article-footer clearfix">
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/photoshop/">photoshop</a>
+  <span></span> <a href="/tags/photoshop/">photoshop</a><a href="/tags/传智播客/">传智播客</a>
   </div>
 
 
@@ -242,7 +310,7 @@
 
 <div class="article-share" id="share">
 
-  <div data-url="http://zhpooer.github.io/2014/06/09/photoshope入门-选区/" data-title="photoshope入门 选区 | Poe&#39;s World" data-tsina="null" class="share clearfix">
+  <div data-url="http://zhpooer.github.io/2014/09/20/photoshope0-2-选区/" data-title="photoshope-2-选区 | Poe&#39;s World" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -252,18 +320,18 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2014/06/10/传智播客day45-svn/" title="传智播客day45 SVN">
+ <a href="/2014/09/21/photoshop-3/" title="photoshop-3-套索&amp;魔术棒">
   <strong>PREVIOUS:</strong><br/>
   <span>
-  传智播客day45 SVN</span>
+  photoshop-3-套索&amp;魔术棒</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2014/06/09/传智播客day44-maven/"  title="传智播客day44-maven">
+<a href="/2014/09/19/hbase-入门/"  title="HBase-入门">
  <strong>NEXT:</strong><br/> 
- <span>传智播客day44-maven
+ <span>HBase-入门
 </span>
 </a>
 </div>
@@ -280,7 +348,7 @@
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">选区</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">2.</span> <span class="toc-text">图片处理方式</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.1.</span> <span class="toc-text">使用羽化版</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">制作气泡</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">4.</span> <span class="toc-text">复制方法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">5.</span> <span class="toc-text">套索工具</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">6.</span> <span class="toc-text">文字输入</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">7.</span> <span class="toc-text">制作百货公司标牌</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">8.</span> <span class="toc-text">魔术棒工具</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">9.</span> <span class="toc-text">图层样式面板</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#tip"><span class="toc-number">10.</span> <span class="toc-text">Tip</span></a></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">选区</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">2.</span> <span class="toc-text">撤销</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">自由变换</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">4.</span> <span class="toc-text">复制方法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">5.</span> <span class="toc-text">对齐和分布</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">6.</span> <span class="toc-text">文字输入</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">7.</span> <span class="toc-text">合并图层</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-ui"><span class="toc-number">8.</span> <span class="toc-text">练习制作 UI</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">9.</span> <span class="toc-text">图片处理方式</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">9.1.</span> <span class="toc-text">使用羽化版</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">10.</span> <span class="toc-text">制作气泡</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">11.</span> <span class="toc-text">套索工具</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">12.</span> <span class="toc-text">制作百货公司标牌</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">13.</span> <span class="toc-text">魔术棒工具</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">14.</span> <span class="toc-text">图层样式面板</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#tip"><span class="toc-number">15.</span> <span class="toc-text">Tip</span></a></li></ol>
   </div>
 
 <div id="asidepart">
@@ -298,9 +366,13 @@
 		
 			<li><a href="/tags/Akka/" title="Akka">Akka<sup>1</sup></a></li>
 		
+			<li><a href="/tags/Android/" title="Android">Android<sup>1</sup></a></li>
+		
 			<li><a href="/tags/DOM/" title="DOM">DOM<sup>2</sup></a></li>
 		
 			<li><a href="/tags/EL表达式/" title="EL表达式">EL表达式<sup>1</sup></a></li>
+		
+			<li><a href="/tags/HBase/" title="HBase">HBase<sup>1</sup></a></li>
 		
 			<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>1</sup></a></li>
 		
@@ -309,6 +381,8 @@
 			<li><a href="/tags/HttpSession/" title="HttpSession">HttpSession<sup>1</sup></a></li>
 		
 			<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Illustrator/" title="Illustrator">Illustrator<sup>3</sup></a></li>
 		
 			<li><a href="/tags/JSP/" title="JSP">JSP<sup>1</sup></a></li>
 		
@@ -327,12 +401,6 @@
 			<li><a href="/tags/ServletResponse/" title="ServletResponse">ServletResponse<sup>1</sup></a></li>
 		
 			<li><a href="/tags/Spring/" title="Spring">Spring<sup>1</sup></a></li>
-		
-			<li><a href="/tags/Spring MVC/" title="Spring MVC">Spring MVC<sup>1</sup></a></li>
-		
-			<li><a href="/tags/String/" title="String">String<sup>1</sup></a></li>
-		
-			<li><a href="/tags/StringBuffer/" title="StringBuffer">StringBuffer<sup>1</sup></a></li>
 		
 		</ul>
 </div>

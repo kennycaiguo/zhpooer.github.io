@@ -69,297 +69,32 @@
 
   <section class="post" itemscope itemprop="blogPost">
   
-    <a href="/2014/07/28/functional-programming-in-scala-函数式编程入门/" title="Functional Programming in Scala-函数式编程入门" itemprop="url">
+    <a href="/2014/08/16/传智播客day69-搭建hadoop集群/" title="传智播客day69-搭建Hadoop集群" itemprop="url">
   
-    <h1 itemprop="name">Functional Programming in Scala-函数式编程入门</h1>
+    <h1 itemprop="name">传智播客day69-搭建Hadoop集群</h1>
     
      
-           <p itemprop="description" >What is Functional Programming
-In other words, functions that have no side effects.
-Performing any of the following actions directly would i</p>
+           <p itemprop="description" >ZooKeeper
+ZooKeeper 是 Google 的 Chubby 的一个开源实现, Hadoop的分布式协调服务
+负载均衡, 分布式锁, 协调服务, 数据同步, 数据发布与订阅
+为了保证服务安全, 可以将 ZooKeeper 布置位一个集群,
+一个 Leader Ser</p>
         
     
-    <time datetime="2014-07-28T01:14:32.000Z" itemprop="datePublished">7月 28 2014</time>
+    <time datetime="2014-08-16T01:17:30.000Z" itemprop="datePublished">8月 16 2014</time>
   </a>
 </section>
 
   <section class="post" itemscope itemprop="blogPost">
   
-    <a href="/2014/07/26/scala-in-action-application-usnig-scala/" title="Scala in Action-applications using Akka" itemprop="url">
+    <a href="/2014/08/14/传智播客day68-hadoop高级编程/" title="传智播客day68-Hadoop高级编程" itemprop="url">
   
-    <h1 itemprop="name">Scala in Action-applications using Akka</h1>
+    <h1 itemprop="name">传智播客day68-Hadoop高级编程</h1>
     
      
-           <p itemprop="description" >The philosophy behind Akka
-The philosophy behind Akka is simple:
-make it easier for developers to build correct,
-concurrent, scalable, and f</p>
-        
-    
-    <time datetime="2014-07-25T23:35:04.000Z" itemprop="datePublished">7月 26 2014</time>
-  </a>
-</section>
-
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2014/07/25/scala-in-action-java-integration/" title="Scala in Action-Java integration" itemprop="url">
-  
-    <h1 itemprop="name">Scala in Action-Java integration</h1>
-    
-     
-           <p itemprop="description" >Using Java classes in Scala
+           <p itemprop="description" >Partitioner
+MapReduce 通过 Partitioner 来进行分区, 如按 月份, 地区进行分区
 1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-import org.joda.time.DateTime;
-import org.joda.time.Days;
-import java.util.Date;
-
-public</p>
-        
-    
-    <time datetime="2014-07-25T12:51:27.000Z" itemprop="datePublished">7月 25 2014</time>
-  </a>
-</section>
-
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2014/07/25/传智播客day63-医药集中采购平台-药品目录/" title="传智播客day63-医药集中采购平台 药品目录" itemprop="url">
-  
-    <h1 itemprop="name">传智播客day63-医药集中采购平台 药品目录</h1>
-    
-     
-           <p itemprop="description" >数据字典
-系统中定义的类型数据, 在数据字典表定义.
-数据字典明细表 (dictinfo)
-
-info
-typecode 外键关联
-
-数据字典类型表 (dicttype)
-
-typecode primary key
-dictcode
-
-1
-2
--- 选择药品
-select * f</p>
-        
-    
-    <time datetime="2014-07-25T01:04:29.000Z" itemprop="datePublished">7月 25 2014</time>
-  </a>
-</section>
-
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2014/07/24/scala-in-action-scalatest/" title="Scala in Action-ScalaTest" itemprop="url">
-  
-    <h1 itemprop="name">Scala in Action-ScalaTest</h1>
-    
-     
-           <p itemprop="description" >There are two kinds of automated tests: ones you write (the most common)
-and ones you generate for your code.
-If you’re a Java developer and</p>
-        
-    
-    <time datetime="2014-07-24T02:11:32.000Z" itemprop="datePublished">7月 24 2014</time>
-  </a>
-</section>
-
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2014/07/23/scala-in-action-concurrency-programming/" title="Scala in Action-Concurrency programming" itemprop="url">
-  
-    <h1 itemprop="name">Scala in Action-Concurrency programming</h1>
-    
-     
-           <p itemprop="description" >Think of an actor as an object that processes a message (your request) and
-encapsulates state (state is not shared with other actors).
-The a</p>
-        
-    
-    <time datetime="2014-07-23T12:17:00.000Z" itemprop="datePublished">7月 23 2014</time>
-  </a>
-</section>
-
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2014/07/22/传智播客day62-医药集中采购平台-系统管理/" title="传智播客day62-医药集中采购平台 用户管理" itemprop="url">
-  
-    <h1 itemprop="name">传智播客day62-医药集中采购平台 用户管理</h1>
-    
-     
-           <p itemprop="description" >模型
-单位信息
-系统中所有业务关联都是关联的单位信息表的id
-卫生局管理卫生院, 卫生院管理医院, 行政管理
-医院信息表(useryy)
-
-id
-DQ, 地区, 村
-
-监督单位(userjd)
-
-DQ, 市或乡
-
-监督供应商(usergys)
-供货商供货区域
-
-供货商id
-地区
-</p>
-        
-    
-    <time datetime="2014-07-22T06:22:07.000Z" itemprop="datePublished">7月 22 2014</time>
-  </a>
-</section>
-
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2014/07/21/传智播客day61-医药集中采购平台-框架搭建/" title="传智播客day61-医药集中采购平台 框架搭建" itemprop="url">
-  
-    <h1 itemprop="name">传智播客day61-医药集中采购平台 框架搭建</h1>
-    
-     
-           <p itemprop="description" >项目背景
-用户角色
-监管单位: 卫生局, 卫生院
-
-控制
-监视
-
-医院: 卫生室
-TODO
-供货商: 供货商
-系统管理员
-业务流程
-角色的活动
-功能模块
-细化业务流程, 功能模块划分,
-需求分析在项目当中, 要不断提炼, 维护
-采购单管理
-
-创建采购单
-采购单维护
-采购单递交
-采</p>
-        
-    
-    <time datetime="2014-07-21T01:13:07.000Z" itemprop="datePublished">7月 21 2014</time>
-  </a>
-</section>
-
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2014/07/19/scala-in-action-type-system/" title="Scala in Action-type system" itemprop="url">
-  
-    <h1 itemprop="name">Scala in Action-type system</h1>
-    
-     
-           <p itemprop="description" >入门
-It provides the following features:
-
-Error detection—Think of the compiler as a suite of test cases that can detect
-common type and other</p>
-        
-    
-    <time datetime="2014-07-19T08:46:35.000Z" itemprop="datePublished">7月 19 2014</time>
-  </a>
-</section>
-
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2014/07/19/传智播客day60-cxf/" title="传智播客day60-CXF" itemprop="url">
-  
-    <h1 itemprop="name">传智播客day60-CXF</h1>
-    
-     
-           <p itemprop="description" >入门
-Apache CXF = Celtix + Xfire, 开源 web Service 框架, 支持多种协议,
-soap1.2,1.1, XML/HTTP, RESTful, CORBA
-Cxf基于SOA总线结果, 依靠 spring 完成模块的集成
-demo
-服务端
-1
-</p>
-        
-    
-    <time datetime="2014-07-19T01:41:34.000Z" itemprop="datePublished">7月 19 2014</time>
-  </a>
-</section>
-
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2014/07/18/传智播客day59-Webservice/" title="传智播客day59-Webservice" itemprop="url">
-  
-    <h1 itemprop="name">传智播客day59-Webservice</h1>
-    
-     
-           <p itemprop="description" >Socket
-模拟天气查询 API
-服务端
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-// 启动端口监听, 端口号建议在1万以后
-ServerSocket serverSocket = new ServerSocket(</p>
-        
-    
-    <time datetime="2014-07-18T01:08:54.000Z" itemprop="datePublished">7月 18 2014</time>
-  </a>
-</section>
-
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2014/07/17/scala-in-action-working-with-scala/" title="Scala in Action-working with scala" itemprop="url">
-  
-    <h1 itemprop="name">Scala in Action-working with scala</h1>
-    
-     
-           <p itemprop="description" >Building web application
-用户故事
-You can move one more story from the ready phase to the
-dev phase. A pair of developers looking for new work c</p>
-        
-    
-    <time datetime="2014-07-17T03:35:34.000Z" itemprop="datePublished">7月 17 2014</time>
-  </a>
-</section>
-
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2014/07/16/传智播客day58-mybatis提高/" title="传智播客day58-Mybatis提高" itemprop="url">
-  
-    <h1 itemprop="name">传智播客day58-Mybatis提高</h1>
-    
-     
-           <p itemprop="description" >1
 2
 3
 4
@@ -388,71 +123,244 @@ dev phase. A pair of developers looking for new work c</p>
 27
 28
 29
-public class User{
-    id: Int;
-    username: String;
-    birt</p>
+30
+3</p>
         
     
-    <time datetime="2014-07-16T01:09:13.000Z" itemprop="datePublished">7月 16 2014</time>
+    <time datetime="2014-08-14T00:52:42.000Z" itemprop="datePublished">8月 14 2014</time>
   </a>
 </section>
 
   <section class="post" itemscope itemprop="blogPost">
   
-    <a href="/2014/07/15/scala-in-action-functional-programming-in-scala/" title="Scala in Action-Functional Programming in Scala" itemprop="url">
+    <a href="/2014/08/13/传智播客day67-MapReduce/" title="传智播客day67-MapReduce" itemprop="url">
   
-    <h1 itemprop="name">Scala in Action-Functional Programming in Scala</h1>
+    <h1 itemprop="name">传智播客day67-MapReduce</h1>
     
      
-           <p itemprop="description" >类型参数化
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-sealed abstract class Maybe[+A] {
-  def isEmpty: Boolean
-  def get: A
-}
-final case class Just[A](value: A) </p>
+           <p itemprop="description" >MapReduce
+MapReduce 计算海量数据, 将一个任务切分成多个小任务, 分给多个进程计算
+
+MapReduce 是一种分布式计算模型, 用户搜索领域, 解决海量数据计算的问题
+MR由两个项目阶段组成: Map和Reduce, 用户只需要实现 map()和reduce</p>
         
     
-    <time datetime="2014-07-15T03:35:59.000Z" itemprop="datePublished">7月 15 2014</time>
+    <time datetime="2014-08-13T01:04:09.000Z" itemprop="datePublished">8月 13 2014</time>
   </a>
 </section>
 
   <section class="post" itemscope itemprop="blogPost">
   
-    <a href="/2014/07/15/传智播客day57-mybatis/" title="传智播客day57-Mybatis" itemprop="url">
+    <a href="/2014/08/12/mit-algorithm-算法分析/" title="MIT Algorithm-算法分析" itemprop="url">
   
-    <h1 itemprop="name">传智播客day57-Mybatis</h1>
+    <h1 itemprop="name">MIT Algorithm-算法分析</h1>
     
      
-           <p itemprop="description" >概况
+           <p itemprop="description" >算法分析
+关于计算机性能的研究 和 资源的利用
+What&#39; more important than performance?
 
-mybatis配置
+User-friendly
+Security
+健壮性
+简洁性
 
-SqlMapConfig.xml，此文件作为mybatis的全局配置文件，配置了mybatis的运行环境等信息。
-mapper.xml文件即sql映射文件，文件中配置了操作数据库的sql语句。
-此文件需要在SqlMapConfig.xml中加载。
-通</p>
+为什么研究算法和性能?
+
+有时候用户友好和性能是正相关的
+性能关系到 行和不行,</p>
         
     
-    <time datetime="2014-07-15T01:12:17.000Z" itemprop="datePublished">7月 15 2014</time>
+    <time datetime="2014-08-12T13:40:09.000Z" itemprop="datePublished">8月 12 2014</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2014/08/12/play-for-scala-input-with-forms/" title="Play for Scala-Input with forms" itemprop="url">
+  
+    <h1 itemprop="name">Play for Scala-Input with forms</h1>
+    
+     
+           <p itemprop="description" >Forms—the concept
+Play provides the so-called forms API. The term form isn’t just about HTML forms in
+a Play application; it’s a more genera</p>
+        
+    
+    <time datetime="2014-08-12T08:22:42.000Z" itemprop="datePublished">8月 12 2014</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2014/08/12/play-for-scala-view-template/" title="Play for Scala-View Template" itemprop="url">
+  
+    <h1 itemprop="name">Play for Scala-View Template</h1>
+    
+     
+           <p itemprop="description" >The why of a template engine
+Templates allow you to reuse pieces of your HTML when you need them, such as a
+header and a footer section that</p>
+        
+    
+    <time datetime="2014-08-12T03:36:59.000Z" itemprop="datePublished">8月 12 2014</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2014/08/11/传智播客day66-hadoop-hdfs/" title="传智播客day66-Hadoop HDFS" itemprop="url">
+  
+    <h1 itemprop="name">传智播客day66-Hadoop HDFS</h1>
+    
+     
+           <p itemprop="description" >分布式文件系统与HDFS
+客户端(Client) 查询 NameNode(记录文件存储信息), 将数据放入datanode(多个)或从中取出数据在上传过程中要进行冗余保存, datanode 自行进行水平复制.(流水线复制)上传过程中, 文件会被分块, 每块128M, 其实是对块</p>
+        
+    
+    <time datetime="2014-08-11T00:54:29.000Z" itemprop="datePublished">8月 11 2014</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2014/08/11/play-for-scala-the-persistence-layer/" title="Play for Scala-the persistence layer" itemprop="url">
+  
+    <h1 itemprop="name">Play for Scala-the persistence layer</h1>
+    
+     
+           <p itemprop="description" >What are Anorm and Squeryl?
+In order to talk to the database, you’ll have to create SQL at some point.
+A modern object-relation mapper (ORM)</p>
+        
+    
+    <time datetime="2014-08-11T00:00:25.000Z" itemprop="datePublished">8月 11 2014</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2014/08/10/传智播客day65-hadoop入门/" title="传智播客day65-Hadoop入门" itemprop="url">
+  
+    <h1 itemprop="name">传智播客day65-Hadoop入门</h1>
+    
+     
+           <p itemprop="description" >云计算
+
+
+
+熟悉java集合类(Vector, ArrayList, LinkedList), io, 并发编程(锁 Lock, synchronized)和熟悉jvm原理及内存管理,
+对数据结构, 算法有深刻的理解
+项目简介
+作者 Doug Cuttng, 是 Lucene,</p>
+        
+    
+    <time datetime="2014-08-10T01:04:39.000Z" itemprop="datePublished">8月 10 2014</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2014/08/09/play-for-scala-define-http-interface/" title="Play for Scala-Define Http interface" itemprop="url">
+  
+    <h1 itemprop="name">Play for Scala-Define Http interface</h1>
+    
+     
+           <p itemprop="description" >Benefits of good URL design
+If you don’t think changing the URL matters, then this is probably a good time to read
+Cool URIs Don’t Change, w</p>
+        
+    
+    <time datetime="2014-08-09T08:20:51.000Z" itemprop="datePublished">8月 9 2014</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2014/08/09/传智播客day64-nosql/" title="传智播客day64-NoSql" itemprop="url">
+  
+    <h1 itemprop="name">传智播客day64-NoSql</h1>
+    
+     
+           <p itemprop="description" >NoSql 简介
+Not Only SQL, 一系列非关系型数据库的总称
+关系型数据库中的表存储一些格式化数据结构,
+每条记录的字段的组成都一样, 即使不是每条记录都需要所有字段
+非关系型数据库以键值对存储, 结构不固定, 每一条记录可以有不一样的键,
+每条记录可以根据需要增加一</p>
+        
+    
+    <time datetime="2014-08-09T01:01:04.000Z" itemprop="datePublished">8月 9 2014</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2014/08/08/play-for-scala-deconstructing-play/" title="Play for Scala-Deconstructing Play" itemprop="url">
+  
+    <h1 itemprop="name">Play for Scala-Deconstructing Play</h1>
+    
+     
+           <p itemprop="description" >Drawing the architectural big picture
+When a web client sends HTTP requests to a Play application,
+the request is handled by the embedded HT</p>
+        
+    
+    <time datetime="2014-08-08T07:53:21.000Z" itemprop="datePublished">8月 8 2014</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2014/08/07/play-for-scala-getting-start/" title="Play for Scala-Getting Start" itemprop="url">
+  
+    <h1 itemprop="name">Play for Scala-Getting Start</h1>
+    
+     
+           <p itemprop="description" >What Play is
+Play makes you more productive. Play is also a web framework whose HTTP interface is
+simple, convenient, flexible, and powerful</p>
+        
+    
+    <time datetime="2014-08-07T08:35:31.000Z" itemprop="datePublished">8月 7 2014</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2014/08/06/akka-in-action-integration/" title="Akka in Action-Integration" itemprop="url">
+  
+    <h1 itemprop="name">Akka in Action-Integration</h1>
+    
+     
+           <p itemprop="description" >Message endpoints
+The implementation of an interface between two systems isn&#39;t always
+easy, because the interface contains two areas: th</p>
+        
+    
+    <time datetime="2014-08-06T06:45:54.000Z" itemprop="datePublished">8月 6 2014</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2014/08/06/akka-in-action-working-with-transactions/" title="Akka in Action-Working with Transactions" itemprop="url">
+  
+    <h1 itemprop="name">Akka in Action-Working with Transactions</h1>
+    
+     
+           <p itemprop="description" >Software Transactional Memory
+We have an event and we have a number of seats that multiple
+threads want to lay claim to. Our shared data is </p>
+        
+    
+    <time datetime="2014-08-06T01:47:35.000Z" itemprop="datePublished">8月 6 2014</time>
   </a>
 </section>
 
 
   <nav id="page-nav" class="clearfix">
-    <a class="extend prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" href="/page/4/">Next &raquo;</a>
+    <a class="extend prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" href="/page/4/">Next &raquo;</a>
   </nav>
 
 </div>
@@ -473,9 +381,13 @@ mapper.xml文件即sql映射文件，文件中配置了操作数据库的sql语�
 		
 			<li><a href="/tags/Akka/" title="Akka">Akka<sup>1</sup></a></li>
 		
+			<li><a href="/tags/Android/" title="Android">Android<sup>1</sup></a></li>
+		
 			<li><a href="/tags/DOM/" title="DOM">DOM<sup>2</sup></a></li>
 		
 			<li><a href="/tags/EL表达式/" title="EL表达式">EL表达式<sup>1</sup></a></li>
+		
+			<li><a href="/tags/HBase/" title="HBase">HBase<sup>1</sup></a></li>
 		
 			<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>1</sup></a></li>
 		
@@ -484,6 +396,8 @@ mapper.xml文件即sql映射文件，文件中配置了操作数据库的sql语�
 			<li><a href="/tags/HttpSession/" title="HttpSession">HttpSession<sup>1</sup></a></li>
 		
 			<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Illustrator/" title="Illustrator">Illustrator<sup>3</sup></a></li>
 		
 			<li><a href="/tags/JSP/" title="JSP">JSP<sup>1</sup></a></li>
 		
@@ -502,12 +416,6 @@ mapper.xml文件即sql映射文件，文件中配置了操作数据库的sql语�
 			<li><a href="/tags/ServletResponse/" title="ServletResponse">ServletResponse<sup>1</sup></a></li>
 		
 			<li><a href="/tags/Spring/" title="Spring">Spring<sup>1</sup></a></li>
-		
-			<li><a href="/tags/Spring MVC/" title="Spring MVC">Spring MVC<sup>1</sup></a></li>
-		
-			<li><a href="/tags/String/" title="String">String<sup>1</sup></a></li>
-		
-			<li><a href="/tags/StringBuffer/" title="StringBuffer">StringBuffer<sup>1</sup></a></li>
 		
 		</ul>
 </div>

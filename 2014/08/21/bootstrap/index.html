@@ -1,0 +1,682 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Bootstrap-Introduce | Poe&#39;s World</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="zhpooer">
+    
+    <meta name="description" content="Bootstrap template
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;Bootstrap 101 Template&lt;/title&gt;
+   ">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="Poe&#39;s World" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="Poe&#39;s World" title="Poe&#39;s World"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Poe&#39;s World">Poe&#39;s World</a></h1>
+				<h2 class="blog-motto">竹杖芒鞋轻胜马，一蓑烟雨任平生</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/english-monthly">英语角</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:zhpooer.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/08/21/bootstrap/" title="Bootstrap-Introduce" itemprop="url">Bootstrap-Introduce</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://zhpooer.github.io" title="zhpooer">zhpooer</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2014-08-21T11:47:34.000Z" itemprop="datePublished">8月 21 2014</time>
+    更新日期:<time datetime="2014-08-21T12:57:19.000Z" itemprop="dateModified">8月 21 2014</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#bootstrap-template"><span class="toc-number">1.</span> <span class="toc-text">Bootstrap template</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#global-styles"><span class="toc-number">2.</span> <span class="toc-text">Global Styles</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#default-grid-system"><span class="toc-number">3.</span> <span class="toc-text">Default Grid System</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#basic-grid-html"><span class="toc-number">3.1.</span> <span class="toc-text">Basic Grid HTML</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#offsetting-columns"><span class="toc-number">3.2.</span> <span class="toc-text">Offsetting Columns</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#nesting-columns"><span class="toc-number">3.3.</span> <span class="toc-text">Nesting Columns</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#fluid-grid-system"><span class="toc-number">4.</span> <span class="toc-text">Fluid Grid System</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#container-layouts"><span class="toc-number">5.</span> <span class="toc-text">Container Layouts</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#responsive-design"><span class="toc-number">6.</span> <span class="toc-text">Responsive Design</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#helper-classes"><span class="toc-number">6.1.</span> <span class="toc-text">Helper classes</span></a></li></ol>
+		</div>
+		
+		<h1 id="bootstrap-template">Bootstrap template</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre><span class="doctype">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;<span class="title">html</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">head</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">title</span>&gt;</span>Bootstrap 101 Template<span class="tag">&lt;/<span class="title">title</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">link</span> <span class="attribute">href</span>=<span class="value">"css/bootstrap.min.css"</span> <span class="attribute">rel</span>=<span class="value">"stylesheet"</span>&gt;</span>
+  <span class="tag">&lt;/<span class="title">head</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">body</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">h1</span>&gt;</span>Hello, world!<span class="tag">&lt;/<span class="title">h1</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">script</span> <span class="attribute">src</span>=<span class="value">"js/bootstrap.min.js"</span>&gt;</span><span class="javascript"></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
+  <span class="tag">&lt;/<span class="title">body</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">html</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<h1 id="global-styles">Global Styles</h1>
+<p>In particular, the following default styles give special treatment
+to typography and links:</p>
+<ul>
+<li>margin has been removed from the body, and content will snug up to the edges of
+the browser window.</li>
+<li>background-color: white; is applied to the body.</li>
+<li>Bootstrap is using the @baseFontFamily, @baseFontSize, and @baseLineHeight
+attributes as our typographic base.</li>
+<li>Bootstrap sets the global link color via @linkColor and applies link underlines only
+on :hover.</li>
+</ul>
+<p>Remember, if you don’t like the colors or want to change a default, this
+can be done by changing the globals in any of the .less files. To do this,
+update the scaffolding.less file or overwrite colors in your own stylesheet.</p>
+<h1 id="default-grid-system">Default Grid System</h1>
+<p>The default Bootstrap grid system utilizes 12 columns, making for a
+940px-wide container without responsive features enabled. </p>
+<p>With the responsive CSS file added, the grid adapts to be 724px or
+1170px wide, depending on your viewport.</p>
+<p>Below 767px viewports, such as the ones on tablets and smaller devices, the columns
+become fluid and stack vertically. At the default width, each column is 60 pixels wide
+and offset 20 pixels to the left.</p>
+<p><img src="/img/bootstrap_default_grid.png" alt=" Default grid"></p>
+<h2 id="basic-grid-html">Basic Grid HTML</h2>
+<p>To create a simple layout, create a container with a <code>&lt;div&gt;</code> that has a class of
+<code>.row</code> and add the appropriate amount of <code>.span*</code> columns.
+Since we have a 12-column grid, we just need the amount of .span* columns to equal 12.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>&lt;div class=<span class="string">"row"</span>&gt;
+  &lt;div class=<span class="string">"span8"</span>&gt;<span class="keyword">...</span>&lt;/div&gt;
+  &lt;div class=<span class="string">"span4"</span>&gt;<span class="keyword">...</span>&lt;/div&gt;
+&lt;/div&gt;
+</pre></td></tr></table></figure>
+
+<h2 id="offsetting-columns">Offsetting Columns</h2>
+<p>You can move columns to the right using the <code>.offset*</code> class.
+Each class moves the span over that width.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>&lt;div class=<span class="string">"row"</span>&gt;
+  &lt;div class=<span class="string">"span2"</span>&gt;<span class="keyword">...</span>&lt;/div&gt;
+  &lt;div class=<span class="string">"span7 offset2"</span>&gt;<span class="keyword">...</span>&lt;/div&gt;
+&lt;/div&gt;
+</pre></td></tr></table></figure>
+
+<h2 id="nesting-columns">Nesting Columns</h2>
+<p>To nest your content with the default grid, inside of a <code>.span*</code>, simply add a
+new <code>.row</code> with enough <code>.span*</code> that it equals the number of spans of the parent container.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="code"><pre>&lt;<span class="keyword">div</span> <span class="type">class</span>=<span class="string">"row"</span>&gt;
+  &lt;<span class="keyword">div</span> <span class="type">class</span>=<span class="string">"span9"</span>&gt;
+    Level <span class="number">1</span> <span class="keyword">of</span> column
+    &lt;<span class="keyword">div</span> <span class="type">class</span>=<span class="string">"row"</span>&gt;
+      &lt;<span class="keyword">div</span> <span class="type">class</span>=<span class="string">"span6"</span>&gt;Level <span class="number">2</span>&lt;/<span class="keyword">div</span>&gt;
+      &lt;<span class="keyword">div</span> <span class="type">class</span>=<span class="string">"span3"</span>&gt;Level <span class="number">2</span>&lt;/<span class="keyword">div</span>&gt;
+    &lt;/<span class="keyword">div</span>&gt;
+  &lt;/<span class="keyword">div</span>&gt;
+&lt;/<span class="keyword">div</span>&gt;
+</pre></td></tr></table></figure>
+
+<h1 id="fluid-grid-system">Fluid Grid System</h1>
+<p>The fluid grid system uses percentages instead of pixels for column widths.
+It has the same responsive capabilities as our fixed grid system,
+ensuring proper proportions for key screen resolutions and devices.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre>&lt;div class=<span class="string">"row-fluid"</span>&gt;
+  &lt;div class=<span class="string">"span4"</span>&gt;<span class="keyword">...</span>&lt;/div&gt;
+  &lt;div class=<span class="string">"span8"</span>&gt;<span class="keyword">...</span>&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=<span class="string">"row-fluid"</span>&gt;
+  &lt;div class=<span class="string">"span4"</span>&gt;<span class="keyword">...</span>&lt;/div&gt;
+  &lt;div class=<span class="string">"span4 offset2"</span>&gt;<span class="keyword">...</span>&lt;/div&gt;
+&lt;/div&gt;
+</pre></td></tr></table></figure>
+
+<p>Nesting a fluid grid is a little different.
+Since we are using percentages, each <code>.row</code> resets the column count to 12.</p>
+<p>For example, if you were inside a <code>.span8</code>, instead of
+two <code>.span4</code> elements to divide the content in half, you would use two <code>.span6</code> divs</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre>&lt;div class=<span class="string">"row-fluid"</span>&gt;
+  &lt;div class=<span class="string">"span8"</span>&gt;
+    &lt;div class=<span class="string">"row"</span>&gt;
+      &lt;div class=<span class="string">"span6"</span>&gt;<span class="keyword">...</span>&lt;/div&gt;
+      &lt;div class=<span class="string">"span6"</span>&gt;<span class="keyword">...</span>&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</pre></td></tr></table></figure>
+
+<h1 id="container-layouts">Container Layouts</h1>
+<p>To add a fixed-width, centered layout to your page, simply wrap the content in
+<code>&lt;div class=&quot;container&quot;&gt;...&lt;/div&gt;</code>.
+If you would like to use a fluid layout but want to wrap
+everything in a container, use the following: <code>&lt;div class=&quot;container-fluid&quot;&gt;...&lt;/div&gt;</code>.</p>
+<p>Using a fluid layout is great when you are building applications, administration
+screens, and other related projects.</p>
+<h1 id="responsive-design">Responsive Design</h1>
+<p>To turn on the responsive features of Bootstrap, you need to
+add a <code>&lt;meta&gt;</code> tag to the <code>&lt;head&gt;</code> of your web page.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">head</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">title</span>&gt;</span>My amazing Bootstrap site!<span class="tag">&lt;/<span class="title">title</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">meta</span> <span class="attribute">name</span>=<span class="value">"viewport"</span> <span class="attribute">content</span>=<span class="value">"width=device-width, initial-scale=1.0"</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">link</span> <span class="attribute">href</span>=<span class="value">"/css/bootstrap.css"</span> <span class="attribute">rel</span>=<span class="value">"stylesheet"</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">link</span> <span class="attribute">href</span>=<span class="value">"/css/bootstrap-responsive.css"</span> <span class="attribute">rel</span>=<span class="value">"stylesheet"</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">head</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<p>Responsive design is a method for taking all of the existing content that is on the page
+and optimizing it for the device that is viewing it.</p>
+<p>To target these different widths, Bootstrap uses CSS media queries to measure
+the width of the browser viewport
+and then, using conditionals, changes which parts of the stylesheets are loaded. </p>
+<p>At the core, Bootstrap supports five different layouts, each relying on CSS media queries.</p>
+<table>
+<thead>
+<tr>
+<th>Label</th>
+<th>Layout width</th>
+<th>Column width</th>
+<th>Gutter width</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Large display</td>
+<td>1200px and up</td>
+<td>70px</td>
+<td>30px</td>
+</tr>
+<tr>
+<td>Default</td>
+<td>980px and up</td>
+<td>60px</td>
+<td>20px</td>
+</tr>
+<tr>
+<td>Portrait tablets</td>
+<td>768px and up</td>
+<td>42px</td>
+<td>20px</td>
+</tr>
+<tr>
+<td>Phones to tablets</td>
+<td>767px and below</td>
+<td>Fluid columns, no fixed widths</td>
+</tr>
+<tr>
+<td>Phones</td>
+<td>480px and below</td>
+<td>Fluid columns, no fixed widths</td>
+</tr>
+</tbody>
+</table>
+<p>To add custom CSS based on the media query, you can either include all rules in one
+CSS file via the media queries below, or use entirely different CSS files:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre>/* Large desktop */
+@media (min-width: 1200px) { <span class="keyword">...</span> }
+
+/* Portrait tablet to landscape and desktop */
+@media (min-width: 768px) and (max-width: 979px) { <span class="keyword">...</span> }
+
+/* Landscape phone to portrait tablet */
+@media (max-width: 767px) { <span class="keyword">...</span> }
+
+/* Landscape phones and down */
+@media (max-width: 480px) { <span class="keyword">...</span> }
+</pre></td></tr></table></figure>
+
+<p>If you are using LESS to compile the CSS, you can have
+them all processed into one file:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">link</span> <span class="attribute">rel</span>=<span class="value">"stylesheet"</span> <span class="attribute">href</span>=<span class="value">"base.css"</span> /&gt;</span>
+<span class="tag">&lt;<span class="title">link</span> <span class="attribute">rel</span>=<span class="value">"stylesheet"</span> <span class="attribute">media</span>=<span class="value">"(min-width: 1200px)"</span> <span class="attribute">href</span>=<span class="value">"large.css"</span> /&gt;</span>
+<span class="tag">&lt;<span class="title">link</span> <span class="attribute">rel</span>=<span class="value">"stylesheet"</span> <span class="attribute">media</span>=<span class="value">"(min-width: 768px) and (max-width: 979px)"</span>
+      <span class="attribute">href</span>=<span class="value">"tablet.css"</span> /&gt;</span>
+<span class="tag">&lt;<span class="title">link</span> <span class="attribute">rel</span>=<span class="value">"stylesheet"</span> <span class="attribute">media</span>=<span class="value">"(max-width: 767px)"</span> <span class="attribute">href</span>=<span class="value">"tablet.css"</span> /&gt;</span>
+<span class="tag">&lt;<span class="title">link</span> <span class="attribute">rel</span>=<span class="value">"stylesheet"</span> <span class="attribute">media</span>=<span class="value">"(max-width: 480px)"</span> <span class="attribute">href</span>=<span class="value">"phone.css"</span> /&gt;</span>
+</pre></td></tr></table></figure>
+
+<h2 id="helper-classes">Helper classes</h2>
+<p>Bootstrap also includes a handful of helper classes for
+doing responsive development.</p>
+<table>
+<thead>
+<tr>
+<th>Class</th>
+<th>Phones</th>
+<th>Tablets</th>
+<th>Desktops</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>.visible-phone</td>
+<td>Visible</td>
+<td>Hidden</td>
+<td>Hidden</td>
+</tr>
+<tr>
+<td>.visible-tablet</td>
+<td>Hidden</td>
+<td>Visible</td>
+<td>Hidden</td>
+</tr>
+<tr>
+<td>.visible-desktop</td>
+<td>Hidden</td>
+<td>Hidden</td>
+<td>Visible</td>
+</tr>
+<tr>
+<td>.hidden-phone</td>
+<td>Hidden</td>
+<td>Visible</td>
+<td>Visible</td>
+</tr>
+<tr>
+<td>.hidden-tablet</td>
+<td>Visible</td>
+<td>Hidden</td>
+<td>Visible</td>
+</tr>
+<tr>
+<td>.hidden-desktop</td>
+<td>Visible</td>
+<td>Visible</td>
+<td>Hidden</td>
+</tr>
+</tbody>
+</table>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/bootstrap/">bootstrap</a>
+  </div>
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://zhpooer.github.io/2014/08/21/bootstrap/" data-title="Bootstrap-Introduce | Poe&#39;s World" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2014/08/21/bootstrap-css/" title="Bootstrap-CSS">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  Bootstrap-CSS</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2014/08/20/play-for-scala-web-services-&-iteratees-&-websockets/"  title="Play for Scala-Web services &amp; iteratees &amp; WebSockets">
+ <strong>NEXT:</strong><br/> 
+ <span>Play for Scala-Web services &amp; iteratees &amp; WebSockets
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#bootstrap-template"><span class="toc-number">1.</span> <span class="toc-text">Bootstrap template</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#global-styles"><span class="toc-number">2.</span> <span class="toc-text">Global Styles</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#default-grid-system"><span class="toc-number">3.</span> <span class="toc-text">Default Grid System</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#basic-grid-html"><span class="toc-number">3.1.</span> <span class="toc-text">Basic Grid HTML</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#offsetting-columns"><span class="toc-number">3.2.</span> <span class="toc-text">Offsetting Columns</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#nesting-columns"><span class="toc-number">3.3.</span> <span class="toc-text">Nesting Columns</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#fluid-grid-system"><span class="toc-number">4.</span> <span class="toc-text">Fluid Grid System</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#container-layouts"><span class="toc-number">5.</span> <span class="toc-text">Container Layouts</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#responsive-design"><span class="toc-number">6.</span> <span class="toc-text">Responsive Design</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#helper-classes"><span class="toc-number">6.1.</span> <span class="toc-text">Helper classes</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/AJAX/" title="AJAX">AJAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Android/" title="Android">Android<sup>1</sup></a></li>
+		
+			<li><a href="/tags/DOM/" title="DOM">DOM<sup>2</sup></a></li>
+		
+			<li><a href="/tags/EL表达式/" title="EL表达式">EL表达式<sup>1</sup></a></li>
+		
+			<li><a href="/tags/HBase/" title="HBase">HBase<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Hibernate/" title="Hibernate">Hibernate<sup>2</sup></a></li>
+		
+			<li><a href="/tags/HttpSession/" title="HttpSession">HttpSession<sup>1</sup></a></li>
+		
+			<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Illustrator/" title="Illustrator">Illustrator<sup>3</sup></a></li>
+		
+			<li><a href="/tags/JSP/" title="JSP">JSP<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaBean/" title="JavaBean">JavaBean<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaScript/" title="JavaScript">JavaScript<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Mybatis/" title="Mybatis">Mybatis<sup>1</sup></a></li>
+		
+			<li><a href="/tags/NoSql/" title="NoSql">NoSql<sup>1</sup></a></li>
+		
+			<li><a href="/tags/SAX/" title="SAX">SAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletRequest/" title="ServletRequest">ServletRequest<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletResponse/" title="ServletResponse">ServletResponse<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Spring/" title="Spring">Spring<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2014 
+		
+		<a href="http://zhpooer.github.io" target="_blank" title="zhpooer">zhpooer</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"zhpoooer"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>

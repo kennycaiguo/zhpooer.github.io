@@ -1,0 +1,615 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Poe&#39;s World</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="zhpooer">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="Poe&#39;s World" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="Poe&#39;s World" title="Poe&#39;s World"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Poe&#39;s World">Poe&#39;s World</a></h1>
+				<h2 class="blog-motto">竹杖芒鞋轻胜马，一蓑烟雨任平生</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/english-monthly">英语角</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:zhpooer.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main">
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2014/04/13/io技术学习/" title="IO技术学习" itemprop="url">
+  
+    <h1 itemprop="name">IO技术学习</h1>
+    
+     
+           <p itemprop="description" >IO初识
+流按数据类型分类:
+
+字符流, 字节流读取文字自己数据后,
+不直接操作而是先查指定的编码表, 获取指定的文字.
+就是 字节流+编码表
+字节流
+
+流按操作方式分类:
+
+输入流, 将外设中的数据读取到内存中
+输出流, 将内存中的数据写到外设中
+
+字符流
+字符流的两个顶层父类</p>
+        
+    
+    <time datetime="2014-04-13T10:47:16.000Z" itemprop="datePublished">4月 13 2014</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2014/04/13/传智播客day11-cookie/" title="传智播客day11-cookie" itemprop="url">
+  
+    <h1 itemprop="name">传智播客day11-cookie</h1>
+    
+     
+           <p itemprop="description" >会话概述
+在一次会话中, 浏览器可以发出多次请求和收到多次服务器响应
+服务器为客户保存操作产生的数据, 比如购物网站的购物车
+解决方案: Cookie(客户端技术), Session(服务端技术)
+
+服务器发送 Set-Cookie: name=any
+客户端访问 cookie:</p>
+        
+    
+    <time datetime="2014-04-13T01:23:18.000Z" itemprop="datePublished">4月 13 2014</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2014/04/12/java对象工具api/" title="java对象工具API" itemprop="url">
+  
+    <h1 itemprop="name">java对象工具API</h1>
+    
+     
+           <p itemprop="description" >System
+1
+2
+3
+4
+5
+System.long currentTimeMillis();  // 当前毫秒值
+System.exit();                // 退出
+System.getProperties(); 
+System.getProperty(</p>
+        
+    
+    <time datetime="2014-04-12T11:38:05.000Z" itemprop="datePublished">4月 12 2014</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2014/04/12/专题-内省/" title="专题-内省" itemprop="url">
+  
+    <h1 itemprop="name">专题-内省</h1>
+    
+     
+           <p itemprop="description" >内省
+
+JavaBean和属性的概念
+ javaBean的特点
+
+必须由默认的构造方法
+字段都是私有的
+提供针对字段的 getter 或 setter 方法(属性)1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+public class Person {
+   private Stri</p>
+        
+    
+    <time datetime="2014-04-12T06:29:13.000Z" itemprop="datePublished">4月 12 2014</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2014/04/12/传智播客day10-reqeust&response/" title="传智播客day10-reqeust&amp;response" itemprop="url">
+  
+    <h1 itemprop="name">传智播客day10-reqeust&amp;response</h1>
+    
+     
+           <p itemprop="description" >HttpServletResponse
+
+给客户处发出信息
+由容器创建
+response.getOutputStream 和 response.getWriter 如果没有手动关 系统会自动关
+
+1
+2
+3
+setStatus(int stauts); // 输出响应码
+addH</p>
+        
+    
+    <time datetime="2014-04-12T01:26:31.000Z" itemprop="datePublished">4月 12 2014</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2014/04/11/java泛型/" title="java泛型" itemprop="url">
+  
+    <h1 itemprop="name">java泛型</h1>
+    
+     
+           <p itemprop="description" >泛型入门
+Jdk1.5 出现安全机制.
+好处:
+
+将运行时期的问题 ClasscastException 到了编译时期
+避免了强制类型转换的麻烦
+
+什么时候用&lt;&gt;, 当操作的引用数据类型不确定的时候.就使用&lt;&gt;.
+他表示一个用于接受具体引用数据类型的参数范</p>
+        
+    
+    <time datetime="2014-04-11T12:28:59.000Z" itemprop="datePublished">4月 11 2014</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2014/04/11/java集合框架/" title="java集合框架" itemprop="url">
+  
+    <h1 itemprop="name">java集合框架</h1>
+    
+     
+           <p itemprop="description" >集合初识
+集合类的由来:
+
+对象用于封装特有的数据, 对象多了需要存储, 如果对象不确定.
+存储就使用集合容器进行
+
+集合特点:
+
+用于存储对象的容器
+集合长度是可变的
+集合不可存储基本数据类型
+
+集合体系的共同父类 java.util.Collection
+1
+2
+3
+4
+5
+</p>
+        
+    
+    <time datetime="2014-04-11T08:38:52.000Z" itemprop="datePublished">4月 11 2014</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2014/04/11/java基本数据类型学习/" title="java基本数据类型学习" itemprop="url">
+  
+    <h1 itemprop="name">java基本数据类型学习</h1>
+    
+     
+           <p itemprop="description" >基本数据类型对象包装类
+为了方便操作基本数据类型, 将其封装成了对象,
+在对象中定义了属性和行为丰富了数据的操作.
+用于描述该对象的类就称为基本数据包装类型.
+
+
+
+数据类型
+包装类
+
+
+
+
+byte
+Byte
+
+
+short
+Short
+
+
+int
+Integer
+
+
+long</p>
+        
+    
+    <time datetime="2014-04-11T08:09:58.000Z" itemprop="datePublished">4月 11 2014</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2014/04/11/string类学习/" title="string类学习" itemprop="url">
+  
+    <h1 itemprop="name">string类学习</h1>
+    
+     
+           <p itemprop="description" >字符串初识
+
+字符串是一个特殊的对象
+
+字符串一旦初始化, 就不可以被改变
+ 字符串初始化在字符串常量池
+1
+2
+3
+4
+String s = &quot;abc&quot;; // 在常量池当中
+String s1 = new String(&quot;abc&quot;); // 在堆内存中生成
+println(s</p>
+        
+    
+    <time datetime="2014-04-11T06:34:24.000Z" itemprop="datePublished">4月 11 2014</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2014/04/10/java线程学习/" title="java线程学习" itemprop="url">
+  
+    <h1 itemprop="name">java线程学习</h1>
+    
+     
+           <p itemprop="description" >运行java程序两个线程
+
+执行main函数的线程
+ 该线程的任务代码都定义在main函数中
+
+负责垃圾回收的线程, 调用 System.gc()
+
+
+多线程的创建方法
+
+继承Thread
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+class MyThread ext</p>
+        
+    
+    <time datetime="2014-04-10T12:14:27.000Z" itemprop="datePublished">4月 10 2014</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2014/04/10/testdisk-磁盘恢复总结/" title="testdisk 磁盘恢复总结" itemprop="url">
+  
+    <h1 itemprop="name">testdisk 磁盘恢复总结</h1>
+    
+     
+           <p itemprop="description" >上次手贱把移动硬盘里的磁盘全部格式化, 分区没了, 我X, 我所有的资料啊... 这该如何是好?不过根据经验磁盘里面的数据没有
+被重写, So, 上天有好生之德, 赐予了我 TestDisk 来拯救于我水火之中. 膜拜写这个软件的前辈, 以及再次感叹Linux的工具集
+的丰富.
+</p>
+        
+    
+    <time datetime="2014-04-10T10:17:11.000Z" itemprop="datePublished">4月 10 2014</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2014/04/10/传智播客day09-servlet入门/" title="传智播客day09-servlet" itemprop="url">
+  
+    <h1 itemprop="name">传智播客day09-servlet</h1>
+    
+     
+           <p itemprop="description" >Servlet
+servlet是运行在服务器中的动态资源, 能接收用户的请求,发出响应.
+创建 Servlet 步骤
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+package cn.itcast;
+import javax.servlet.*;
+import java.io.*;</p>
+        
+    
+    <time datetime="2014-04-10T00:33:53.000Z" itemprop="datePublished">4月 10 2014</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2014/04/09/传智播客day08-web开发&tomcat/" title="传智播客day08-web开发&amp;tomcat" itemprop="url">
+  
+    <h1 itemprop="name">传智播客day08-web开发&amp;tomcat</h1>
+    
+     
+           <p itemprop="description" >Tips
+1
+2
+3
+4
+ByteArrayOutputStream baos = new ByteArrayOutputStream();//带缓冲的输出流
+GZIPOutputStream gout = new GZIPOutputStream(baos);
+gout.wri</p>
+        
+    
+    <time datetime="2014-04-09T00:55:30.000Z" itemprop="datePublished">4月 9 2014</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2014/04/07/php语法/" title="php基本语法" itemprop="url">
+  
+    <h1 itemprop="name">php基本语法</h1>
+    
+     
+           <p itemprop="description" >php语法
+php标签
+php是嵌入式语言，意味着代码的混编，为了区别，所以有四种标签
+
+两种标准标签
+1
+2
+3
+4
+5
+&lt;?php  `content` ?&gt;
+
+&lt;script language=“php&quot;&gt;
+echo &#39;php&#39;;
+&lt;/scri</p>
+        
+    
+    <time datetime="2014-04-07T11:51:06.000Z" itemprop="datePublished">4月 7 2014</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2014/04/07/传智播客day07-junit&jdk5新特性/" title="传智播客day07-junit&amp;jdk5新特性" itemprop="url">
+  
+    <h1 itemprop="name">传智播客day07-junit&amp;jdk5新特性</h1>
+    
+     
+           <p itemprop="description" >Tips
+1
+2
+3
+// propoties 的快捷方法
+ResourceBundle res = ResourceBundle.getBundle(&quot;db&quot;); //文件名为 db.prop
+res.getString(&quot;user&quot;)
+
+
+.properties 不支持中文。</p>
+        
+    
+    <time datetime="2014-04-07T01:01:39.000Z" itemprop="datePublished">4月 7 2014</time>
+  </a>
+</section>
+
+
+  <nav id="page-nav" class="clearfix">
+    <a class="extend prev" href="/page/10/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/page/12/">12</a><a class="extend next" href="/page/12/">Next &raquo;</a>
+  </nav>
+
+</div>
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/AJAX/" title="AJAX">AJAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Android/" title="Android">Android<sup>1</sup></a></li>
+		
+			<li><a href="/tags/DOM/" title="DOM">DOM<sup>2</sup></a></li>
+		
+			<li><a href="/tags/EL表达式/" title="EL表达式">EL表达式<sup>1</sup></a></li>
+		
+			<li><a href="/tags/HBase/" title="HBase">HBase<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Hibernate/" title="Hibernate">Hibernate<sup>2</sup></a></li>
+		
+			<li><a href="/tags/HttpSession/" title="HttpSession">HttpSession<sup>1</sup></a></li>
+		
+			<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Illustrator/" title="Illustrator">Illustrator<sup>3</sup></a></li>
+		
+			<li><a href="/tags/JSP/" title="JSP">JSP<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaBean/" title="JavaBean">JavaBean<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaScript/" title="JavaScript">JavaScript<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Mybatis/" title="Mybatis">Mybatis<sup>1</sup></a></li>
+		
+			<li><a href="/tags/NoSql/" title="NoSql">NoSql<sup>1</sup></a></li>
+		
+			<li><a href="/tags/SAX/" title="SAX">SAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletRequest/" title="ServletRequest">ServletRequest<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletResponse/" title="ServletResponse">ServletResponse<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Spring/" title="Spring">Spring<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2014 
+		
+		<a href="http://zhpooer.github.io" target="_blank" title="zhpooer">zhpooer</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+
+
+
+
+
+  </body>
+ </html>
