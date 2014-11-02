@@ -496,18 +496,18 @@ Its members have the property of being able to act like numbers.</p>
 10
 11
 12
-</pre></td><td class="code"><pre><span class="xml"><span class="php"><span class="class">// 下面这样是不行的, 因为 <span class="title">Equal</span>[<span class="title">F</span>] 是 <span class="title">nonvariant</span>
-// <span class="title">sealed</span> <span class="title">trait</span> <span class="title">TrafficLight</span>
-// <span class="title">case</span> <span class="title">object</span> <span class="title">Red</span> <span class="keyword">extends</span> <span class="title">TrafficLight</span>
-// <span class="title">case</span> <span class="title">object</span> <span class="title">Yellow</span> <span class="keyword">extends</span> <span class="title">TrafficLight</span>
-// <span class="title">case</span> <span class="title">object</span> <span class="title">Green</span> <span class="keyword">extends</span> <span class="title">TrafficLight</span>
+</pre></td><td class="code"><pre><span class="comment">// 下面这样是不行的, 因为 Equal[F] 是 nonvariant</span>
+<span class="comment">// sealed trait TrafficLight</span>
+<span class="comment">// case object Red extends TrafficLight</span>
+<span class="comment">// case object Yellow extends TrafficLight</span>
+<span class="comment">// case object Green extends TrafficLight</span>
 
-<span class="title">case</span> <span class="title">class</span> <span class="title">TrafficLight</span>(<span class="title">name</span>: <span class="title">String</span>)
-<span class="title">val</span> <span class="title">red</span> = <span class="title">TrafficLight</span>("<span class="title">red</span>")
-<span class="title">val</span> <span class="title">yellow</span> = <span class="title">TrafficLight</span>("<span class="title">yellow</span>")
-<span class="title">val</span> <span class="title">green</span> = <span class="title">TrafficLight</span>("<span class="title">green</span>")
+<span class="class"><span class="keyword">case</span> <span class="keyword">class</span> <span class="title">TrafficLight</span><span class="params">(name: String)</span></span>
+<span class="keyword">val</span> red = TrafficLight(<span class="string">"red"</span>)
+<span class="keyword">val</span> yellow = TrafficLight(<span class="string">"yellow"</span>)
+<span class="keyword">val</span> green = TrafficLight(<span class="string">"green"</span>)
 
-<span class="title">implicit</span> <span class="title">val</span> <span class="title">TrafficLightEqual</span>: <span class="title">Equal</span>[<span class="title">TrafficLight</span>] = <span class="title">Equal</span>.<span class="title">equal</span>(<span class="title">_</span> == <span class="title">_</span>)</span></span></span>
+implicit <span class="keyword">val</span> TrafficLightEqual: Equal[TrafficLight] = Equal.equal(_ == _)
 </pre></td></tr></table></figure>
 
 <h2 id="yes-no-typeclass">Yes-No typeclass</h2>

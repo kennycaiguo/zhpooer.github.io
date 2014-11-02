@@ -4,7 +4,7 @@
   <subtitle><![CDATA[竹杖芒鞋轻胜马，一蓑烟雨任平生]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://zhpooer.github.io/"/>
-  <updated>2014-10-25T13:56:23.592Z</updated>
+  <updated>2014-11-02T13:50:40.073Z</updated>
   <id>http://zhpooer.github.io/</id>
   
   <author>
@@ -15,11 +15,236 @@
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
   
   <entry>
-    <title><![CDATA[web设计-4]]></title>
+    <title><![CDATA[web设计-电商&企业主页点评]]></title>
+    <link href="http://zhpooer.github.io/2014/10/31/web%E8%AE%BE%E8%AE%A1-7/"/>
+    <id>http://zhpooer.github.io/2014/10/31/web设计-7/</id>
+    <published>2014-10-31T01:32:02.000Z</published>
+    <updated>2014-11-02T08:13:14.000Z</updated>
+    <content type="html"><![CDATA[<blockquote>
+<p>快速查找书法字体: ziti.cndesign.com
+选区转路径, 加 Alt 可以调细节</p>
+</blockquote>
+<h1 id="-">电商点评</h1>
+<p><img src="/img/dp5/1_1.png" alt=""></p>
+<p><img src="/img/dp5/1_2.png" alt=""></p>
+<blockquote>
+<p>形式服务于内容, 服务于功能</p>
+</blockquote>
+<p><img src="/img/dp5/1_3.png" alt=""></p>
+<blockquote>
+<p>橙色Logo栏, 突出, 郑家购买欲<br>使用图标, 快速定位<br>虚线分割线, 功能性的, 需要时可以找到<br>文案排版 需要修改</p>
+</blockquote>
+<h1 id="-">主页点评</h1>
+<p><img src="/img/dp5/1_4.png" alt=""></p>
+<blockquote>
+<p>导航栏, 稍显呆板</p>
+</blockquote>
+<p><img src="/img/dp5/1_5.png" alt=""></p>
+<blockquote>
+<p>banner 景别太多, 远近景, 中景不明显; 没有文字跳跃率</p>
+</blockquote>
+<p><img src="/img/dp5/1_6.png" alt=""></p>
+<blockquote>
+<p>简介, 但是没有文字跳跃率, 可以稍微加一点变化</p>
+</blockquote>
+<p><img src="/img/dp5/1_7.png" alt=""></p>
+<blockquote>
+<p>banner 颜色需要调明暗对比度</p>
+</blockquote>
+<p><img src="/img/dp5/1_8.png" alt=""></p>
+<blockquote>
+<p>使模块清晰, 标题清晰</p>
+</blockquote>
+<p><img src="/img/dp5/1_9.png" alt=""></p>
+<blockquote>
+<p>书法家字体和常规字体配合</p>
+</blockquote>
+<p><img src="/img/dp5/1_10.png" alt=""></p>
+<p><img src="/img/dp5/1_11.png" alt=""></p>
+<blockquote>
+<p>标题颜色可以添加黄色</p>
+</blockquote>
+<h1 id="tips">Tips</h1>
+<p>配色: Logo 上所采用的颜色, 要在设计中体现出来(页面配色上, 要温和LOGO配色)</p>
+<p>LOGO无色系: 设计过程中, 可以添加辅助配色</p>
+<blockquote>
+<p>如果正文:14, 那么标题: 16; 直通车最小 16</p>
+</blockquote>
+]]></content>
+    
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[web设计-电商详情页&主页 设计]]></title>
+    <link href="http://zhpooer.github.io/2014/10/28/web%E8%AE%BE%E8%AE%A1-6/"/>
+    <id>http://zhpooer.github.io/2014/10/28/web设计-6/</id>
+    <published>2014-10-28T01:37:48.000Z</published>
+    <updated>2014-11-02T01:32:13.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="-">商城</h1>
+<ul>
+<li>分析原作, 整理文案</li>
+<li>手绘, 客户交流</li>
+<li>小样, 两三个Banner, 给客户看<ul>
+<li>用最简单的视觉元素, 做到合理的构图和配色</li>
+<li>添加修饰性的元素</li>
+<li>背景相对单一, 互相配合使用<ol>
+<li>加渐变(线性渐变 + 径向渐变, 背景明暗变化)</li>
+<li>纹理, 需要打造画面质感(添加杂色, 现成的纹理素材, 自己定义图案)</li>
+<li>添加适合的形态</li>
+<li>光影效果, 添加类似光域网类的效果</li>
+<li>添加背景图片(不建议)</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="/img/lp_banner.png" alt=""></p>
+<p>电商, 20个产品一个商业全套视觉设计(3000)</p>
+<ul>
+<li>首页: 1500, 至少一个星期</li>
+<li>详情页模板 500, 3-1 个星期</li>
+<li>基于模板, 套产品, 50一个(不算低)</li>
+</ul>
+<h1 id="banner-">Banner的配色</h1>
+<ol>
+<li>同类相比于总不同</li>
+<li>抓住受众的视觉同时, 始终需要思考的问题是和产品的特点,
+用户的心理需求是否吻合</li>
+</ol>
+<h1 id="-">耐克淘宝主页</h1>
+<h2 id="-">直通车</h2>
+<ul>
+<li><code>欢迎来到xx</code>, 微软雅黑-12, 小喇叭</li>
+<li>根据字体大小画出背景, 根据主题<code>运动</code>, 设置背景颜色为蓝色</li>
+</ul>
+<blockquote>
+<p>文字边缘控制: 12, 14 宋体, 不加边缘控制; 其他情况加边缘控制 <code>锐利</code></p>
+</blockquote>
+<h2 id="logo">Logo</h2>
+<ul>
+<li>根据店铺名, 及关键字, 做文字穿插, 字体大小变化</li>
+<li>根据文字大小, 画出 Logo 栏的范围</li>
+<li>搜索框</li>
+</ul>
+<h2 id="-">首导航</h2>
+<ul>
+<li>字体 10</li>
+<li>根据字体画出范围</li>
+</ul>
+<h2 id="banner">Banner</h2>
+<ul>
+<li>基础造型 <code>三角形</code></li>
+<li>贴上图片</li>
+<li>如果变化单一, 增加变化, 如透明三角形</li>
+</ul>
+<p><img src="/img/nike_banner.png" alt="">
+<img src="/img/nike_banner1.png" alt="">
+<img src="/img/nike_banner2.png" alt=""></p>
+<h2 id="-">产品罗列</h2>
+<p><img src="/img/nike_banner3.png" alt=""></p>
+<p><img src="/img/nike_banner4.png" alt=""></p>
+<h1 id="-">详情页设计</h1>
+<p>版心 750</p>
+<p>特色产品推荐</p>
+<ul>
+<li>新品</li>
+<li>独一无二</li>
+<li>搭配</li>
+<li>品牌团</li>
+</ul>
+<blockquote>
+<p>文字有无衬线(sans serif, time new roman), 和有衬线体(serif, 宋体, Aria, 雅黑, 美观)</p>
+</blockquote>
+<p><img src="/img/7gege_banner1.png" alt=""></p>
+<p><img src="/img/7gege_banner2.png" alt=""></p>
+<p><img src="/img/7gege_banner3.png" alt=""></p>
+<blockquote>
+<p>破局<br>标签的颜色对比, 字体的对比, 两边的的平衡
+标签两边字的平衡, 使用阴影实现中间凸起<br>标签利用阴影, 实现挂在外面<br>添加形状, 是画面丰富(白色的线条)</p>
+</blockquote>
+<p><img src="/img/7gege_banner4.png" alt=""></p>
+]]></content>
+    
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[web设计-个人简历点评]]></title>
+    <link href="http://zhpooer.github.io/2014/10/27/web%E8%AE%BE%E8%AE%A1-5/"/>
+    <id>http://zhpooer.github.io/2014/10/27/web设计-5/</id>
+    <published>2014-10-27T01:28:04.000Z</published>
+    <updated>2014-11-02T01:33:08.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="-">点评一</h1>
+<p><img src="/img/dp4/dp_1_1.png" alt=""></p>
+<p><img src="/img/dp4/dp_1_2.png" alt=""></p>
+<blockquote>
+<p>图片素材, 不能由缺失</p>
+</blockquote>
+<h1 id="-">点评二</h1>
+<p><img src="/img/dp4/dp_2_1.png" alt=""></p>
+<blockquote>
+<p>画面不清晰可以加 USM 锐化</p>
+</blockquote>
+<p><img src="/img/dp4/dp_2_2.png" alt=""></p>
+<blockquote>
+<p>头重脚轻</p>
+</blockquote>
+<p><img src="/img/dp4/dp_2_3.png" alt=""></p>
+<blockquote>
+<p>视觉引导, 不是非常强烈, 可以添加箭头</p>
+</blockquote>
+<h1 id="-">点评三</h1>
+<p><img src="/img/dp4/dp_3_1.png" alt=""></p>
+<h1 id="-">点评四</h1>
+<p><img src="/img/dp4/dp_4_1.png" alt=""></p>
+<blockquote>
+<p>个别文案添加一点颜色</p>
+</blockquote>
+<p><img src="/img/dp4/dp_4_2.png" alt=""></p>
+<h1 id="-">点评五</h1>
+<p><img src="/img/dp4/dp_5_1.png" alt=""></p>
+<blockquote>
+<p>logo 是 VI 的核心</p>
+</blockquote>
+<p><img src="/img/dp4/dp_5_2.png" alt=""></p>
+<blockquote>
+<p><code>的</code> 字可以更小<br>段落文本加速</p>
+</blockquote>
+<p><img src="/img/dp4/dp_5_3.png" alt=""></p>
+<blockquote>
+<p>名字突出<br>红色太显眼, 不应该太跳跃</p>
+</blockquote>
+<p><img src="/img/dp4/dp_5_4.png" alt=""></p>
+<h1 id="-">点评六</h1>
+<p><img src="/img/dp4/dp_6_1.png" alt=""></p>
+<blockquote>
+<p>文字左上<br><code>立足</code> 变化  </p>
+</blockquote>
+<h1 id="-">点评七</h1>
+<p><img src="/img/dp4/dp_7_1.png" alt=""></p>
+<h1 id="tips">Tips</h1>
+<p><img src="/img/dp4/pic_outline.png" alt=""></p>
+<blockquote>
+<p>去掉白色边, 视觉效果生硬; 和蓝色系搭配, 使用白色系配对</p>
+</blockquote>
+<p>图片描边: 让在同一个画面内, 不同的小角版素材达到更加同一的视觉效果,
+走内部描边, 不走外部, 避免边角出现问题</p>
+<ul>
+<li>第一步, 用最简单的视觉元素, 做到最合理的视觉效果</li>
+<li>第二部, 用</li>
+</ul>
+]]></content>
+    
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[web设计-企业级页面改版点评]]></title>
     <link href="http://zhpooer.github.io/2014/10/24/web%E8%AE%BE%E8%AE%A1-4/"/>
     <id>http://zhpooer.github.io/2014/10/24/web设计-4/</id>
     <published>2014-10-24T01:40:09.000Z</published>
-    <updated>2014-10-24T10:31:37.000Z</updated>
+    <updated>2014-11-02T01:34:22.000Z</updated>
     <content type="html"><![CDATA[<h1 id="-">点评一</h1>
 <p><img src="/img/dp3/dp1_1.png" alt=""></p>
 <blockquote>
@@ -75,7 +300,7 @@
     <link href="http://zhpooer.github.io/2014/10/23/web%E8%AE%BE%E8%AE%A1-3/"/>
     <id>http://zhpooer.github.io/2014/10/23/web设计-3/</id>
     <published>2014-10-23T01:19:10.000Z</published>
-    <updated>2014-10-23T07:28:18.000Z</updated>
+    <updated>2014-11-02T01:35:06.000Z</updated>
     <content type="html"><![CDATA[<p>主色调和banner的色调要统一(比如概念banner加入一点点红色元素),
 使和背景不过于突兀</p>
 <p>调节对比度, 也可以调节饱和度</p>
@@ -522,11 +747,11 @@
   </entry>
   
   <entry>
-    <title><![CDATA[设计理论-4]]></title>
+    <title><![CDATA[设计理论 banner点评]]></title>
     <link href="http://zhpooer.github.io/2014/10/16/%E8%AE%BE%E8%AE%A1%E7%90%86%E8%AE%BA-4/"/>
     <id>http://zhpooer.github.io/2014/10/16/设计理论-4/</id>
     <published>2014-10-16T01:17:15.000Z</published>
-    <updated>2014-10-16T11:48:21.000Z</updated>
+    <updated>2014-11-02T01:35:58.000Z</updated>
     <content type="html"><![CDATA[<h1 id="-">点评一</h1>
 <p><img src="/img/dp_2_1.png" alt=""></p>
 <blockquote>
@@ -1661,248 +1886,6 @@ rgb, 72
 <ul>
 <li>图像合成, 不同画面的色调不容易融合</li>
 </ul>
-]]></content>
-    
-    
-      <category term="photoshop" scheme="http://zhpooer.github.io/tags/photoshop/"/>
-    
-      <category term="传智播客" scheme="http://zhpooer.github.io/tags/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[photoshop-9 图层样式]]></title>
-    <link href="http://zhpooer.github.io/2014/09/29/photoshop-9/"/>
-    <id>http://zhpooer.github.io/2014/09/29/photoshop-9/</id>
-    <published>2014-09-29T01:30:26.000Z</published>
-    <updated>2014-09-29T09:08:03.000Z</updated>
-    <content type="html"><![CDATA[<h1 id="-">图层样式</h1>
-<p>图层样式是用来添加效果的</p>
-<ul>
-<li>滤镜样式: 平面印刷品</li>
-<li>图层样式: web 设计 + UI 设计</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>图层相关快捷键</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>打开图层样式</td>
-<td><code>Alt + L + Y + N</code></td>
-</tr>
-<tr>
-<td>复制图层样</td>
-<td><code>Alt + L + Y + C</code></td>
-</tr>
-<tr>
-<td>粘贴图层样</td>
-<td><code>Alt + L + Y + P</code></td>
-</tr>
-<tr>
-<td>清除图层样</td>
-<td><code>Alt + L + Y + A</code></td>
-</tr>
-</tbody>
-</table>
-<h2 id="-">斜面和浮雕</h2>
-<p>模拟厚度, 向上或凸起或向下凹陷</p>
-<p>样式:</p>
-<ul>
-<li>外斜面, 在外面出效果</li>
-<li>内斜面, 在里面出效果</li>
-<li>浮雕, 结合外斜面和内斜面</li>
-<li>枕装浮雕, 陷入泥里的效果</li>
-<li>描边浮雕, 针对图层描边效果, 加上浮雕效果</li>
-</ul>
-<p>常用到的角度数值: 左上角打光(120度), 右上角(30度), 正上方(90度)</p>
-<h2 id="-">描边</h2>
-<h2 id="-">内阴影</h2>
-<p>向内投影</p>
-<ul>
-<li>大小, 控制大小效果</li>
-<li>阻塞, 边缘虚实度</li>
-<li>距离</li>
-</ul>
-<h2 id="-">投影</h2>
-<p>向内投影</p>
-<ul>
-<li>大小, 控制大小效果</li>
-<li>扩展, 边缘虚实度</li>
-<li>距离</li>
-</ul>
-<h2 id="-">内发光</h2>
-<h2 id="-">颜色叠加</h2>
-<p>新的颜色添加到原有颜色</p>
-<h2 id="-">渐变叠加</h2>
-<p>渐变叠加更改明暗度, 可以更改不透明度</p>
-<h2 id="-">外发光</h2>
-<h1 id="tips">Tips</h1>
-<p>更改画布颜色模式, 图像菜单 &gt; 模式,
-CMYK 转化为 RGB 模式, 颜色会丢失</p>
-<p>将组的色彩叠加模式, 穿透 -&gt; 正常, 色彩叠加模式不会影响到下方组外的图层</p>
-<p>路径重合位置镂空(字体变化):</p>
-<ol>
-<li>把后续文字做剪切(选中后, <code>Ctrl + X</code>)</li>
-<li>确保当前路径布尔运算是相加状态</li>
-<li>把剪切掉的文字粘贴回来, <code>Ctrl + V</code></li>
-</ol>
-<p>UI: WUI(页面), HUI, 其他(机顶盒, 车载)</p>
-<p>维度分类</p>
-<ul>
-<li>2维, 平面</li>
-<li>2.5维, 浮雕</li>
-<li>3维, 雕塑</li>
-</ul>
-<p>投影可以实现外发光效果</p>
-<p>斜面浮雕 + 等高线 = 斜面关系(下面一行白色像素)</p>
-<p>斜面浮雕, 可以制造凸起效果(外斜面, 下亮, 上黑(隐藏))</p>
-<p>斜面浮雕(内 + 白) = 凹槽出口;  斜面浮雕(外 + 白) = 凹槽入口</p>
-<p>描边 + 渐变(上白 + 下灰) = 斜面浮雕(凸起效果)</p>
-<p>去色 <code>Ctrl + Shift + U</code></p>
-<p>亮度/对比度设置,  <code>Alt + I + J + C</code>, 增强画面的明暗对比度
-(使用旧版)</p>
-<p>曲线 <code>Ctrl + M</code>, 设置黑白场(用黑场吸管点击想要变成黑色的位置, 反之, 用白场吸管)</p>
-]]></content>
-    
-    
-      <category term="传智播客" scheme="http://zhpooer.github.io/tags/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2/"/>
-    
-      <category term="photoshop" scheme="http://zhpooer.github.io/tags/photoshop/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[photoshop-8 图层面板]]></title>
-    <link href="http://zhpooer.github.io/2014/09/28/photoshop-8/"/>
-    <id>http://zhpooer.github.io/2014/09/28/photoshop-8/</id>
-    <published>2014-09-28T01:26:57.000Z</published>
-    <updated>2014-09-29T01:53:41.000Z</updated>
-    <content type="html"><![CDATA[<h1 id="-">图层色彩叠加模式</h1>
-<p>针对当前选择图层, 和下方图层, 通过一个计算方法, 得到全新画面颜色模式</p>
-<p>变暗模式</p>
-<ul>
-<li>正片叠底, 可以隐藏亮色调(白色)</li>
-<li>颜色加深, 找到当前色相的暗色调(暗调颜色), 针对灰色出效果</li>
-</ul>
-<p>变亮模式</p>
-<ul>
-<li>滤色, 隐藏暗色调(黑色)</li>
-<li>颜色减淡, 找到当前色相的亮色调(高光颜色)</li>
-</ul>
-<blockquote>
-<p>如果颜色加深或减淡 给出命令后, 没有效果
-调节上方图层的明亮读(亮的给暗, 暗的给亮) <code>Ctrl + U</code></p>
-</blockquote>
-<ul>
-<li>叠加, 让上方图层, 按照下方图层的明暗度走<ul>
-<li>可以把纹理素材赋予到画面上</li>
-</ul>
-</li>
-<li>柔光, 柔光设计叠加的减弱版</li>
-</ul>
-<blockquote>
-<p>叠加和柔光在效果的方向性上是完全一致的</p>
-</blockquote>
-<h2 id="-">懒人修图</h2>
-<p>原位复制<code>Ctrl + J</code> + 叠加: 通透 + 加深饱和度 + 使色彩浓重</p>
-<p>调节色彩走向: 叠加 + 不透明度</p>
-<p>边缘光晕效果, 是图像更柔和: 叠加 + 高斯模糊</p>
-<p>光线效果: 径向模糊(缩放) + 叠加</p>
-<h1 id="-">图层蒙版</h1>
-<p>用于图像合成, 黑白关系</p>
-<ul>
-<li>黑, 隐藏</li>
-<li>白, 显示</li>
-</ul>
-<p>简单使用, 带着选区画蒙版(类似于剪切蒙版), 选区内白色显示, 选区外黑色隐藏</p>
-<p>删除蒙版</p>
-<ul>
-<li>应用: 效果保留, 蒙版删除</li>
-<li>删除, 效果和蒙版同时干掉</li>
-</ul>
-<p>暂时关闭蒙版效果: <code>Shift + click</code>: 打开直接单机</p>
-<p>在画布上显示蒙版黑白关系: Alt + 键单机蒙版; 恢复再次点击</p>
-<p>对同一个图层添加多个蒙版, 使用分组功能 <code>Ctrl + G</code>, 给组添加模板</p>
-<p>矢量蒙版: 基于蒙版效果, 再基于矢量元素(贝塞尔曲线 路径)控制显示范围</p>
-<h1 id="-">创建图层剪切蒙版</h1>
-<p>透过下面的图层, 看上面的图层</p>
-<p>下面图层, 控制显示范围, 和颜色无关</p>
-<p>上面图层, 控制显示内容</p>
-<p>在两个图层之间, 按住 <code>Alt</code>, 单击</p>
-<p>用来制作水印(投影 or 浮雕)</p>
-<h1 id="-">不透明度和填充</h1>
-<p>两种方式效果一样的透明影响的像素不一样</p>
-<ul>
-<li>不透明度: 影响所有的像素</li>
-<li>填充: 只是不影响外部描边(图层样式描边), 不影响图层样式<ul>
-<li>设置图层渐隐效果, 实现类似苹果图标</li>
-</ul>
-</li>
-</ul>
-<h1 id="-">锁定</h1>
-<p>选项</p>
-<ul>
-<li>锁定透明像素, 不能在透明像素上操作, 可用于改变颜色</li>
-<li>锁定像素, 锁定画面上所有的像素, 不会用到</li>
-<li>锁定图像位置, 不能移动, 但是带着选区的移动是允许的, 背景层默认使用</li>
-<li>锁定全部</li>
-</ul>
-<h1 id="-">图层样式(投影)</h1>
-<ul>
-<li>透明度: 投影效果强弱</li>
-<li>角度: 光源及啊家辉</li>
-<li>距离: 投影效果与原物件之间的距离</li>
-<li>大小: 投影的大小</li>
-</ul>
-<h1 id="tips">Tips</h1>
-<p>像素组成:</p>
-<ol>
-<li>普通像素</li>
-<li>透明像素</li>
-</ol>
-<p>填充当前颜色到普通像素</p>
-<ul>
-<li><code>Shift + Ctrl + Backspace</code></li>
-<li><code>Shift + Alt + Backspace</code></li>
-</ul>
-<p>重复上一次滤镜 <code>Ctrl + F</code></p>
-<p>调出上一次滤镜调节对话框 <code>Ctrl + Alt + F</code></p>
-<p>反向, <code>Ctrl + I</code></p>
-<ul>
-<li>黑白对调</li>
-<li>彩色系, 把当前颜色转化为补色(对比色)替换</li>
-</ul>
-]]></content>
-    
-    
-      <category term="photoshop" scheme="http://zhpooer.github.io/tags/photoshop/"/>
-    
-      <category term="传智播客" scheme="http://zhpooer.github.io/tags/%E4%BC%A0%E6%99%BA%E6%92%AD%E5%AE%A2/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[photoshop-7 钢笔工具高级应用]]></title>
-    <link href="http://zhpooer.github.io/2014/09/26/photoshop-7/"/>
-    <id>http://zhpooer.github.io/2014/09/26/photoshop-7/</id>
-    <published>2014-09-26T02:13:11.000Z</published>
-    <updated>2014-09-28T01:43:24.000Z</updated>
-    <content type="html"><![CDATA[<h1 id="-">描点的转换</h1>
-<p>三种点的类型:(相互转换按住<code>alt</code>)</p>
-<ol>
-<li>尖角点, 没有杠杆</li>
-<li>平滑点, 两条杠杆保持在同一条直线上</li>
-<li>贝塞尔角点, 至少有一个杠杆, 且不在一条直线上</li>
-</ol>
-<blockquote>
-<p>在任何一种类型上按住 alt, 拖拽, 会变成平滑点<br>平滑点, 贝塞尔角点按住alt键点击, 变成尖角点</p>
-</blockquote>
-<p>文字转换为形状</p>
-<h1 id="tips">Tips</h1>
-<p>针对路径形状羽化效果, 窗口&gt;属性面板 </p>
 ]]></content>
     
     
