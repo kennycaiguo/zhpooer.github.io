@@ -1,0 +1,1183 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Compass 基础语法 | Poe&#39;s World</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="zhpooer">
+    
+    <meta name="description" content="Compass Base
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="Poe&#39;s World" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="Poe&#39;s World" title="Poe&#39;s World"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Poe&#39;s World">Poe&#39;s World</a></h1>
+				<h2 class="blog-motto">竹杖芒鞋轻胜马，一蓑烟雨任平生</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/english-monthly">英语角</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:zhpooer.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/12/04/compass-基础语法/" title="Compass 基础语法" itemprop="url">Compass 基础语法</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://zhpooer.github.io" title="zhpooer">zhpooer</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2014-12-04T01:18:21.000Z" itemprop="datePublished">12月 4 2014</time>
+    更新日期:<time datetime="2014-12-04T06:35:29.000Z" itemprop="dateModified">12月 4 2014</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#compass-base"><span class="toc-number">1.</span> <span class="toc-text">Compass Base</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#layout-helpers"><span class="toc-number">2.</span> <span class="toc-text">Layout helpers</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#css3"><span class="toc-number">3.</span> <span class="toc-text">CSS3</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#support-for-internet-explorer-with-css-pie"><span class="toc-number">4.</span> <span class="toc-text">Support for Internet Explorer with CSS PIE</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#sprite"><span class="toc-number">5.</span> <span class="toc-text">Sprite</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#customizing-the-sprite-css"><span class="toc-number">5.1.</span> <span class="toc-text">Customizing the sprite CSS</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#production"><span class="toc-number">6.</span> <span class="toc-text">production</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#deploy"><span class="toc-number">6.1.</span> <span class="toc-text">deploy</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">7.</span> <span class="toc-text">网络优化</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#scripting"><span class="toc-number">8.</span> <span class="toc-text">Scripting</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">9.</span> <span class="toc-text">控制指令</span></a></li></ol>
+		</div>
+		
+		<h1 id="compass-base">Compass Base</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+</pre></td><td class="code"><pre>@<span class="keyword">import</span> <span class="string">"reset/utilities"</span>;
+@include <span class="built_in">global</span><span class="attribute">-reset</span>;
+
+<span class="comment">/* a :hover :active :visited :focus */</span>
+a { @include <span class="keyword">link</span><span class="attribute">-colors</span>(<span class="variable">#333</span>, <span class="variable">#00</span>f, <span class="variable">#f00</span>, <span class="variable">#555</span>, <span class="variable">#f00</span>); }
+
+a { @include <span class="keyword">link</span><span class="attribute">-colors</span>(
+  <span class="variable">#333</span>,
+  <span class="variable">$hover</span>: <span class="variable">#00</span>f,
+  <span class="variable">$active</span>: <span class="variable">#f00</span>,
+  <span class="variable">$visited</span>: <span class="variable">#555</span>,
+  <span class="variable">$focus</span>: <span class="variable">#f00</span>);
+}
+
+<span class="comment">// a {text-decoration: none;} a:hover{underline}</span>
+a {@include hover<span class="attribute">-link</span>}
+
+<span class="comment">// 隐藏超链接</span>
+p<span class="built_in">.</span>secret a,
+p<span class="built_in">.</span>secret a:hover,
+p<span class="built_in">.</span>secret a:focus {
+color: inherit;
+cursor: inherit;
+text<span class="attribute">-decoration</span>: inherit
+}
+
+p<span class="built_in">.</span>secret a { @include unstyled<span class="attribute">-link</span> }
+
+<span class="comment">// 列表标签</span>
+ul<span class="built_in">.</span>features {
+  @include pretty<span class="attribute">-bullets</span>(<span class="string">'pretty-bullet.png'</span>,
+    <span class="variable">$padding</span>: <span class="number">10</span>px,
+    <span class="variable">$line</span><span class="attribute">-height</span>: <span class="number">22</span>px)
+}
+
+ul<span class="built_in">.</span>no<span class="attribute">-bullet</span> { @include no<span class="attribute">-bullets</span>}
+li<span class="built_in">.</span>no<span class="attribute">-bullet</span> { @include no<span class="attribute">-bullet</span> }
+
+<span class="comment">// 标题: default $padding is 4px. </span>
+ul<span class="built_in">.</span>nav { @include horizontal<span class="attribute">-list</span> }
+<span class="comment">// For browsers that support :first-child and :last-child, we can omit the padding</span>
+<span class="comment">// on the outside-facing edge of those elements.</span>
+
+<span class="comment">// 列表一行展示, 用 ! 分割</span>
+ul<span class="built_in">.</span>words { @include delimited<span class="attribute">-list</span>(<span class="string">"! "</span>) }
+
+
+<span class="comment">// 超出自动省略</span>
+td<span class="built_in">.</span>dot<span class="attribute">-dot</span><span class="attribute">-dot</span> {
+  @include ellipsis;
+  }
+
+td { @include nowrap }
+
+<span class="comment">// 图片替换文本</span>
+h1<span class="built_in">.</span>coffee { @include replace<span class="attribute">-text</span>(<span class="string">"coffee-header.png"</span>) }
+</pre></td></tr></table></figure>
+
+<h1 id="layout-helpers">Layout helpers</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre><span class="at_rule">@<span class="keyword">import</span> <span class="string">"compass/layout"</span>;</span> .
+
+<span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> sticky-footer</span>(<span class="number">40</span>px, <span class="string">"#content"</span>, <span class="string">"#footer"</span>, <span class="string">"#sticky-footer"</span>);</span>
+
+<span class="comment">// 弹出窗口 绝对定位</span>
+<span class="tag">a</span><span class="class">.login</span> { <span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> stretch</span>(<span class="number">5</span>px,<span class="preprocessor"> 5px</span>,<span class="preprocessor"> 5px</span>,<span class="preprocessor"> 5px</span>) }</span>
+</pre></td></tr></table></figure>
+
+<h1 id="css3">CSS3</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+</pre></td><td class="code"><pre><span class="at_rule">@<span class="keyword">import</span> <span class="string">"compass/css3"</span>;</span>
+$experimental-support-for-opera<span class="value">: false;</span>
+$experimental-support-for-microsoft<span class="value">: false;</span>
+$experimental-support-for-khtml<span class="value">: false;</span>
+<span class="class">.notice</span> {
+  <span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> border-radius</span>(<span class="number">5</span>px);</span>
+}
+
+<span class="class">.h2</span> {
+  <span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> box-shadow</span>(<span class="hexcolor">#ccc</span><span class="preprocessor"> 5px</span><span class="preprocessor"> 5px</span><span class="preprocessor"> 2px</span>);</span>
+  <span class="attribute">text-shadow</span><span class="value">: <span class="hexcolor">#ddd</span> -<span class="number">1</span>px <span class="number">1</span>px <span class="number">0</span>;</span>
+  <span class="attribute">background</span><span class="value">: <span class="hexcolor">#999</span>;</span>
+  <span class="attribute">padding</span><span class="value">: <span class="number">1</span>em;</span>
+}
+
+
+<span class="class">.motion</span> {
+  <span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> text-shadow</span>(
+  <span class="preprocessor"> rgba</span>(<span class="hexcolor">#000</span>,.<span class="number">5</span>)<span class="preprocessor"> -200px</span><span class="preprocessor"> 0</span><span class="preprocessor"> 0</span>,
+  <span class="preprocessor"> rgba</span>(<span class="hexcolor">#000</span>,.<span class="number">4</span>)<span class="preprocessor"> -400px</span><span class="preprocessor"> 0</span><span class="preprocessor"> 0</span>,
+  <span class="preprocessor"> rgba</span>(<span class="hexcolor">#000</span>,.<span class="number">3</span>)<span class="preprocessor"> -600px</span><span class="preprocessor"> 0</span><span class="preprocessor"> 0</span>,
+  <span class="preprocessor"> rgba</span>(<span class="hexcolor">#000</span>,.<span class="number">2</span>)<span class="preprocessor"> -800px</span><span class="preprocessor"> 0</span><span class="preprocessor"> 0</span>
+  );</span>
+  <span class="attribute">font-size</span><span class="value">: <span class="number">2</span>em;</span>
+  <span class="attribute">font-style</span><span class="value">: italic;</span>
+  <span class="attribute">text-align</span><span class="value">: right;</span>
+}
+  
+<span class="at_rule">@<span class="keyword">import</span> <span class="string">"compass"</span>;</span>
+<span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> font-face</span>(<span class="string">"ChunkFiveRegular"</span>,<span class="preprocessor">
+font-files</span>( <span class="string">"Chunkfive-webfont.woff"</span>,<span class="preprocessor"> woff</span>,
+  <span class="string">"Chunkfive-webfont.ttf"</span>,<span class="preprocessor"> ttf</span>,
+  <span class="string">"Chunkfive-webfont.svg"</span>,<span class="preprocessor"> svg</span>),
+  <span class="string">"Chunkfive-webfont.eot"</span>,<span class="preprocessor"> normal</span>,<span class="preprocessor"> normal</span>);</span>
+</pre></td></tr></table></figure>
+
+<h1 id="support-for-internet-explorer-with-css-pie">Support for Internet Explorer with CSS PIE</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+</pre></td><td class="code"><pre><span class="comment">//compass install compass/pie</span>
+<span class="at_rule">@<span class="keyword">import</span> <span class="string">"compass/css3/pie"</span>;</span>
+<span class="class">.pie-element</span> {
+  <span class="comment">// relative is the default, so passing relative</span>
+  <span class="comment">// is redundant, but we do it here for clarity.</span>
+  <span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> pie-element</span>(relative);</span>
+}
+
+<span class="class">.rounded</span> {
+  <span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> pie</span>;</span>
+  <span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> border-radius</span>(<span class="number">20</span>px);</span>
+}
+
+<span class="class">.gradient</span> {
+  <span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> pie</span>;</span>
+  <span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> background</span>(<span class="function">linear-gradient(#aaa, #<span class="number">333</span>)</span>);</span>
+}
+</pre></td></tr></table></figure>
+
+<h1 id="sprite">Sprite</h1>
+<p><a href="https://github.com/Keyamoon/IcoMoon-limited" target="_blank">https://github.com/Keyamoon/IcoMoon-limited</a></p>
+<p><code>&lt;map&gt;</code> part is a placeholder and should be replaced with
+the name of the folder containing your sprite images.</p>
+<p>The all-sprites mixin will write all the necessary CSS
+for the entire sprite map, whereas the second mixin will
+output CSS for a single named sprite.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre><span class="at_rule">@<span class="keyword">include</span> all-&lt;map&gt;-sprites</span>;
+<span class="at_rule">@<span class="keyword">include</span> &lt;map&gt;<span class="function">-sprite($name)</span></span>;
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+</pre></td><td class="code"><pre>@<span class="keyword">import</span> <span class="string">"compass/utilities/sprites"</span>;
+<span class="comment">// generate sprite from images/icons/</span>
+@<span class="keyword">import</span> <span class="string">"icons/*.png"</span>;
+
+@include <span class="literal">all</span><span class="attribute">-icons</span><span class="attribute">-sprites</span>;
+<span class="built_in">.</span>add<span class="attribute">-button</span> { @extend <span class="built_in">.</span>icons<span class="attribute">-box</span><span class="attribute">-add</span>; }
+
+<span class="comment">// 导入单个sprite, 不使用 @include all-icons-sprites</span>
+<span class="built_in">.</span>add<span class="attribute">-button</span> {
+  @include icons<span class="attribute">-sprite</span>(box<span class="attribute">-add</span>);
+}
+
+$<span class="subst">&lt;</span><span class="built_in">map</span><span class="subst">&gt;-&lt;</span>property<span class="subst">&gt;</span>: setting;
+$<span class="subst">&lt;</span><span class="built_in">map</span><span class="subst">&gt;-&lt;</span>sprite<span class="subst">&gt;-&lt;</span>property<span class="subst">&gt;</span>: setting;
+
+<span class="comment">// sprite map 中的间隔</span>
+<span class="variable">$icons</span><span class="attribute">-spacing</span>: <span class="number">4</span>px;
+<span class="variable">$icons</span><span class="attribute">-arrow</span><span class="attribute">-spacing</span>:<span class="number">12</span>px;
+
+<span class="comment">// 会在map中重复</span>
+<span class="variable">$icons</span><span class="attribute">-arrow</span><span class="attribute">-repeat</span>: repeat<span class="attribute">-x</span>;
+
+<span class="comment">// 左边距  4px, arrow浮动到最右边</span>
+<span class="variable">$icons</span><span class="attribute">-position</span>: <span class="number">4</span>px;
+<span class="variable">$icons</span><span class="attribute">-arrow</span><span class="attribute">-position</span>: <span class="number">100</span><span class="subst">%</span>;
+<span class="comment">// 布局方式, 默认是 vertical</span>
+$<span class="subst">&lt;</span><span class="built_in">map</span><span class="subst">&gt;-</span>layout: vertical/horizontal/diagonal/smart;
+
+<span class="comment">// configuring-automatic-sprites/layout.</span>
+<span class="variable">$icons</span><span class="attribute">-layout</span>: smart;
+<span class="comment">// 清理</span>
+$<span class="subst">&lt;</span><span class="built_in">map</span><span class="subst">&gt;-</span>clean<span class="attribute">-up</span>: <span class="literal">true</span>/<span class="literal">false</span>;
+</pre></td></tr></table></figure>
+
+<h2 id="customizing-the-sprite-css">Customizing the sprite CSS</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="code"><pre>@<span class="keyword">import</span> <span class="string">"icons/*.png"</span>;
+<span class="built_in">.</span>next {
+  @include icons<span class="attribute">-sprite</span>(arrow);
+  width: icons<span class="attribute">-sprite</span><span class="attribute">-width</span>(arrow);
+  height: icons<span class="attribute">-sprite</span><span class="attribute">-height</span>(arrow);
+}
+
+<span class="built_in">.</span>add<span class="attribute">-button</span> {
+  @include icons<span class="attribute">-sprite</span>(box<span class="attribute">-add</span>);
+}
+
+<span class="comment">// 是否自动度量元素的高度和宽度, 会给容器自动添加 width, height</span>
+$<span class="subst">&lt;</span><span class="built_in">map</span><span class="subst">&gt;-</span>sprite<span class="attribute">-dimensions</span>: <span class="literal">true</span>/<span class="literal">false</span>;
+
+<span class="variable">$disable</span><span class="attribute">-magic</span><span class="attribute">-sprite</span><span class="attribute">-selectors</span>: <span class="literal">true</span>/<span class="literal">false</span>;
+</pre></td></tr></table></figure>
+
+<p>Magic sprite selectors are enabled by default, meaning Compass will automatically
+output CSS <code>:hover</code> , <code>:active</code>, and <code>:target</code> pseudo selectors for sprites
+with names ending in <code>_hover</code>, <code>_active</code>, or <code>_target</code>.</p>
+<p>You add <code>arrow.png</code> and <code>arrow_hover.png</code> to your sprite folder.</p>
+<p>帮助函数</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+</pre></td><td class="code"><pre><span class="variable">$icons</span>: sprite-<span class="keyword">map</span>(<span class="string">"icons/<span class="variable">*.</span>png"</span>, <span class="variable">$arrow</span>-spacing: <span class="number">5</span>px);
+<span class="variable">$icons</span>: sprite-<span class="keyword">map</span>(<span class="string">"icons/<span class="variable">*.</span>png"</span>, <span class="variable">$arrow</span>-spacing: <span class="number">5</span>px);
+sprite(<span class="variable">$map</span>, <span class="variable">$sprite</span>, [<span class="variable">$offset</span>-<span class="keyword">x</span>], [<span class="variable">$offset</span>-<span class="keyword">y</span>])
+
+<span class="variable">$icons</span>: sprite-<span class="keyword">map</span>(<span class="string">"icons/<span class="variable">*.</span>png"</span>);
+.<span class="keyword">next</span> {
+  background: sprite(<span class="variable">$icons</span>, arrow) <span class="keyword">no</span>-repeat;
+}
+.add-button {
+  background: sprite(<span class="variable">$icons</span>, box-add) <span class="keyword">no</span>-repeat;
+}
+
+<span class="variable">$icons</span>: sprite-<span class="keyword">map</span>(<span class="string">"icons/<span class="variable">*.</span>png"</span>);
+.sprite-base { background: <span class="variable">$icons</span> <span class="keyword">no</span>-repeat; }
+.<span class="keyword">next</span> {
+  <span class="variable">@extend</span> .sprite-base;
+  background-position: sprite-position(<span class="variable">$icons</span>, arrow);
+}
+.add-button {
+  <span class="variable">@extend</span> .sprite-base;
+  <span class="variable">@include</span> sprite-background-position(<span class="variable">$icons</span>, box-add);
+}
+  
+// 自动添加 width height
+<span class="variable">$icons</span>: sprite-<span class="keyword">map</span>(<span class="string">"icons/<span class="variable">*.</span>png"</span>);
+.sprite-base { background: <span class="variable">$icons</span> <span class="keyword">no</span>-repeat; }
+.<span class="keyword">next</span> {
+  <span class="variable">@extend</span> .sprite-base;
+  <span class="variable">@include</span> sprite-background-position(<span class="variable">$icons</span>, arrow);
+  <span class="variable">@include</span> sprite-dimensions(<span class="variable">$icons</span>, arrow);
+}
+</pre></td></tr></table></figure>
+
+<h1 id="production">production</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code"><pre><span class="preprocessor"># 配置文件中</span>
+
+<span class="preprocessor"># Increment the deploy_version before every</span>
+<span class="preprocessor"># release to force cache busting.</span>
+asset_cache_buster <span class="keyword">do</span> |http_path, real_path|
+<span class="string">"v=1"</span>
+end
+
+asset_cache_buster :none
+
+<span class="comment">// 设置相对路径</span>
+relative_assets = <span class="literal">true</span>
+</pre></td></tr></table></figure>
+
+<p>We encourage you to investigate using a rapid
+prototyping framework like Serve (<a href="http://get-serve.com/" target="_blank">http://get-serve.com/</a>)
+or Middleman (<a href="http://middlemanapp.com/" target="_blank">http://middlemanapp.com/</a>), which include
+support for Sass and Compass out of the box.</p>
+<h2 id="deploy">deploy</h2>
+<p><code>compass compile --force -e production</code> </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre><span class="keyword">if</span> environment == :production
+  output_style = :compact
+  <span class="function"><span class="keyword">end</span></span>
+<span class="comment">
+// 部署时, 改变路径</span>
+
+http_path = <span class="string">'/my-app'</span>
+relative_assets = <span class="constant">false</span>
+images_dir = <span class="string">'images'</span> <span class="comment">#locally it's the images folder</span>
+http_images_dir = <span class="string">'imgs'</span> <span class="comment">#on the webserver it's different</span>
+</pre></td></tr></table></figure>
+
+<p>添加版权信息</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre><span class="variable">$copyright</span><span class="attribute">-year</span>: unquote(<span class="string">"2012"</span>);
+<span class="variable">$company</span><span class="attribute">-name</span>: unquote(<span class="string">"Example, Inc."</span>);
+<span class="comment">/*!
+Copyright © #{$copyright-year}, #{$company-name}
+All Rights Reserved.
+*/</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre>compass compile my_sass_dir/application<span class="preprocessor">.scss</span>
+sass --compass my_sass_dir/application<span class="preprocessor">.scss</span> my_css_dir/application<span class="preprocessor">.css</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre><span class="comment"># STAGING=true compass compile --force -e production</span>
+<span class="keyword">if</span> <span class="constant">ENV</span>[<span class="string">'STAGING'</span>]
+  relative_urls = <span class="keyword">true</span>
+  output_style = <span class="symbol">:compact</span>
+<span class="keyword">elsif</span> environment == <span class="symbol">:production</span>
+  relative_urls = <span class="keyword">false</span>
+  output_style = <span class="symbol">:compact</span>
+<span class="keyword">else</span> <span class="comment">#development</span>
+  relative_urls = <span class="keyword">true</span>
+  output_style = <span class="symbol">:expanded</span>
+<span class="keyword">end</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre>// compass compile <span class="comment">--force -c staging_config.rb -e production</span>
+eval(File.<span class="built_in">read</span>(<span class="string">"#{File.dirname(__FILE__)}/config.rb"</span>))
+relative_urls = <span class="constant">true</span>
+output_style = :compact
+
+on_stylesheet_save <span class="built_in">do</span> |filename|
+  <span class="comment"># run the gzip tool on the file</span>
+  <span class="comment"># generates a file of the same name</span>
+  <span class="comment"># plus a .gz at the end.</span>
+  `gzip -f <span class="comment">#{file}`</span>
+<span class="function"><span class="keyword">end</span></span>
+</pre></td></tr></table></figure>
+
+<h1 id="-">网络优化</h1>
+<p>PNG is a complex format that can handle a range of image types. Be sure to remove
+the alpha layer unless you need transparency. We highly recommend that you install
+the free tool Pngcrush and run it on all your PNG images.
+<a href="http://pmt.sourceforge.net/pngcrush/" target="_blank">http://pmt.sourceforge.net/pngcrush/</a></p>
+<p>Beyond the benefits of parallelization, it’s also important to set up your assets hosts
+to use a cookieless domain—a domain that doesn’t share cookies with your site. This will
+result in fewer bytes being sent to your web server with each image request.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>asset_host <span class="keyword">do</span> |asset|
+  host_number = (asset.hash % <span class="number">4</span>) + <span class="number">1</span>
+  <span class="string">"http://img-<span class="subst">#{host_number}</span>.example.com"</span>
+<span class="keyword">end</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre>background<span class="attribute">-image</span>: <span class="keyword">inline</span><span class="attribute">-url</span>(<span class="string">"logo.gif"</span>);
+<span class="subst">*</span>background<span class="attribute">-image</span>: image<span class="attribute">-url</span>(<span class="string">"logo.gif"</span>);
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre>gem <span class="keyword">install</span> css_parser
+compass stats
+</pre></td></tr></table></figure>
+
+<h1 id="scripting">Scripting</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+</pre></td><td class="code"><pre>
+<span class="variable">$grid</span>-cells: <span class="number">20</span>;
+<span class="variable">$cell</span>-width: <span class="number">25</span>px;
+#main {
+  <span class="variable">$main</span>-width: <span class="variable">$grid</span>-cells * <span class="variable">$cell</span>-width;
+  <span class="variable">$main</span>-padding: <span class="number">10</span>px;
+  width: <span class="variable">$main</span>-width;
+  padding: <span class="variable">$main</span>-padding;
+  .siderbar {width: (<span class="variable">$main</span>-width - <span class="variable">$main</span>-padding<span class="variable">*2</span>)/<span class="number">4</span>}
+
+
+<span class="variable">$pixels</span>-per-em: <span class="number">16</span>px/<span class="number">1</span>em;
+<span class="number">5</span>em * <span class="variable">$pixels</span>-per-em <span class="comment">// 80px</span>
+
+<span class="number">1</span>px/<span class="number">2</span>px =&gt; <span class="number">1</span>px/<span class="number">2</span>px; <span class="comment">// dont work</span>
+
+<span class="comment">// that's work</span>
+<span class="variable">$var</span>: <span class="number">1</span>px; <span class="variable">$var</span>/<span class="number">2</span>px =&gt; <span class="number">0.5</span>px
+(<span class="number">1</span>px/<span class="number">2</span>px) =&gt; <span class="number">0.5</span>px
+<span class="number">1</span> + (<span class="number">1</span>px/<span class="number">2</span>px) =&gt; <span class="number">1.5</span>px
+
+
+<span class="keyword">abs</span>(<span class="variable">$number</span>);
+<span class="keyword">ceil</span>(<span class="variable">$number</span>);
+comparable(<span class="number">13</span><span class="keyword">in</span>, <span class="number">4</span>cm);
+<span class="keyword">floor</span>(<span class="variable">$number</span>);
+percentage(<span class="number">0.4</span>); <span class="comment">// 40%;</span>
+round(<span class="variable">$number</span>); 
+<span class="keyword">unit</span>(<span class="variable">$number</span>);
+unitless(<span class="variable">$number</span>);
+
+<span class="comment">// 颜色函数</span>
+
+alpha(<span class="variable">$color</span>);
+opacity(<span class="variable">$color</span>);
+lightness(<span class="variable">$color</span>);
+red(<span class="variable">$color</span>);
+greyscale(<span class="variable">$color</span>);
+invert(<span class="variable">$color</span>);
+miix(<span class="variable">$color</span>-<span class="number">1</span>, <span class="variable">$color</span>-<span class="number">2</span>, [<span class="variable">$weight</span>]);
+<span class="keyword">scale</span>(<span class="variable">$color</span>, <span class="variable">$lightness</span>: <span class="number">30</span><span class="variable">%)</span>;
+
+<span class="comment">// List Funciton</span>
+nth(foo bar baz, <span class="number">2</span>); <span class="comment">// bar</span>
+join(<span class="variable">$list1</span>, <span class="variable">$list2</span>, [<span class="variable">$separator</span>]);
+length(<span class="number">1</span> <span class="number">2</span> <span class="number">3</span>);
+
+
+type-of(<span class="variable">$value</span>);  <span class="comment">// number string color bool list </span>
+
+<span class="keyword">if</span>(<span class="variable">$condition</span>, <span class="variable">$if</span>-true, <span class="variable">$if</span>-false)
+
+<span class="variable">@function</span> <span class="keyword">grid</span>-width(<span class="variable">$cells</span>) {
+  <span class="variable">@return</span> (<span class="variable">$cell</span>-width + <span class="variable">$cell</span>-padding) * <span class="variable">$cells</span>;
+}
+
+<span class="variable">@mixin</span> thing(<span class="variable">$class</span>, <span class="variable">$prop</span>) {
+  .thing.#{<span class="variable">$class</span>} {
+  prop-{<span class="variable">$prop</span>}: val;
+  }
+}
+
+<span class="variable">@mixin</span> bang-hack(<span class="variable">$property</span>, <span class="variable">$value</span>, <span class="variable">$ie6</span>-value) {
+  #{<span class="variable">$property</span>}: <span class="variable">$value</span> !important;
+  #{<span class="variable">$property</span>}: <span class="variable">$ie6</span>-value;
+}
+content: <span class="string">"This element is #{$color}"</span>;
+width: calc(<span class="number">10</span>% + #{<span class="variable">$padding</span>});
+<span class="keyword">filter</span>: progid:DXImageTransform.Microsoft.Alpha(
+  Opacity=#{<span class="variable">$opacity</span> * <span class="number">100</span>}
+);
+</pre></td></tr></table></figure>
+
+<h1 id="-">控制指令</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+</pre></td><td class="code"><pre><span class="variable">@for</span> <span class="variable">$i</span> from <span class="number">1</span> through <span class="number">5</span> {
+  .rating-#{<span class="variable">$i</span>} {
+    background-<span class="keyword">image</span>; url(/images/rating-#{<span class="variable">$i</span>}.png);
+  }
+}
+
+<span class="comment">// count backwards from 10 to 0</span>
+<span class="variable">@for</span> <span class="variable">$i</span> from <span class="number">0</span> through <span class="number">10</span> {
+  <span class="variable">$i</span>: <span class="number">10</span> - <span class="variable">$i</span>;
+}
+<span class="comment">// count to 20 by twos</span>
+<span class="variable">@for</span> <span class="variable">$i</span> from <span class="number">0</span> through <span class="number">10</span> {
+  <span class="variable">$i</span>: <span class="variable">$i</span> * <span class="number">2</span>;
+}
+
+<span class="variable">@each</span> <span class="variable">$section</span> <span class="keyword">in</span> home, <span class="keyword">about</span>, archive, project {
+  nav .#{section} {
+    background-<span class="keyword">image</span>: url(/images/nav/#{<span class="variable">$section</span>}.png);
+  }
+}
+
+
+<span class="variable">@if</span> <span class="variable">$alpha</span> &lt; <span class="number">0.2</span> {
+  background-<span class="keyword">color</span>: black;
+} <span class="variable">@else</span> <span class="keyword">if</span> <span class="variable">$alpha</span> &lt; <span class="number">0.5</span> {
+  background-<span class="keyword">color</span>: gray;
+} <span class="variable">@else</span> {
+  background-<span class="keyword">color</span>: white;
+}
+</pre></td></tr></table></figure>
+
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://zhpooer.github.io/2014/12/04/compass-基础语法/" data-title="Compass 基础语法 | Poe&#39;s World" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2014/12/06/bootstrap-1/" title="Bootstrap">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  Bootstrap</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2014/12/03/sass-基础语法/"  title="SASS 基础语法">
+ <strong>NEXT:</strong><br/> 
+ <span>SASS 基础语法
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#compass-base"><span class="toc-number">1.</span> <span class="toc-text">Compass Base</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#layout-helpers"><span class="toc-number">2.</span> <span class="toc-text">Layout helpers</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#css3"><span class="toc-number">3.</span> <span class="toc-text">CSS3</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#support-for-internet-explorer-with-css-pie"><span class="toc-number">4.</span> <span class="toc-text">Support for Internet Explorer with CSS PIE</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#sprite"><span class="toc-number">5.</span> <span class="toc-text">Sprite</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#customizing-the-sprite-css"><span class="toc-number">5.1.</span> <span class="toc-text">Customizing the sprite CSS</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#production"><span class="toc-number">6.</span> <span class="toc-text">production</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#deploy"><span class="toc-number">6.1.</span> <span class="toc-text">deploy</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">7.</span> <span class="toc-text">网络优化</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#scripting"><span class="toc-number">8.</span> <span class="toc-text">Scripting</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">9.</span> <span class="toc-text">控制指令</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/AJAX/" title="AJAX">AJAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Android/" title="Android">Android<sup>1</sup></a></li>
+		
+			<li><a href="/tags/DOM/" title="DOM">DOM<sup>2</sup></a></li>
+		
+			<li><a href="/tags/EL表达式/" title="EL表达式">EL表达式<sup>1</sup></a></li>
+		
+			<li><a href="/tags/HBase/" title="HBase">HBase<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Hibernate/" title="Hibernate">Hibernate<sup>2</sup></a></li>
+		
+			<li><a href="/tags/HttpSession/" title="HttpSession">HttpSession<sup>1</sup></a></li>
+		
+			<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Illustrator/" title="Illustrator">Illustrator<sup>3</sup></a></li>
+		
+			<li><a href="/tags/JSP/" title="JSP">JSP<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaBean/" title="JavaBean">JavaBean<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaScript/" title="JavaScript">JavaScript<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Mybatis/" title="Mybatis">Mybatis<sup>1</sup></a></li>
+		
+			<li><a href="/tags/NoSql/" title="NoSql">NoSql<sup>1</sup></a></li>
+		
+			<li><a href="/tags/SASS/" title="SASS">SASS<sup>1</sup></a></li>
+		
+			<li><a href="/tags/SAX/" title="SAX">SAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletRequest/" title="ServletRequest">ServletRequest<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletResponse/" title="ServletResponse">ServletResponse<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2014 
+		
+		<a href="http://zhpooer.github.io" target="_blank" title="zhpooer">zhpooer</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"zhpoooer"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>

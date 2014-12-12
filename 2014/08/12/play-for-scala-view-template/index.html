@@ -118,18 +118,18 @@ details page for that article, where more information about that article is show
 10
 11
 12
-</pre></td><td class="code"><pre><span class="at_rule">@<span class="keyword">(articles:</span> Seq[models.Article])
-&lt;hi&gt;Articles&lt;/hi&gt;
-&lt;ul&gt;
-@<span class="function">for(article &lt;- articles)</span> </span>{
-  &lt;<span class="tag">li</span>&gt;
-    <span class="at_rule">@<span class="keyword">article.name</span> -
-    &lt;a href=<span class="string">"@controllers.routes.Aritcles.show(article.id)"</span>&gt;
+</pre></td><td class="code"><pre><span class="xml">@(articles: Seq[models.Article])
+<span class="tag">&lt;<span class="title">hi</span>&gt;</span>Articles<span class="tag">&lt;/<span class="title">hi</span>&gt;</span>
+<span class="tag">&lt;<span class="title">ul</span>&gt;</span>
+@for(article <span class="tag">&lt;<span class="title">-</span> <span class="attribute">articles</span>) {
+  &lt;<span class="attribute">li</span>&gt;</span>
+    @article.name -
+    <span class="tag">&lt;<span class="title">a</span> <span class="attribute">href</span>=<span class="value">"@controllers.routes.Aritcles.show(article.id)"</span>&gt;</span>
       details
-    &lt;/a&gt;
-  &lt;/li&gt;
+    <span class="tag">&lt;/<span class="title">a</span>&gt;</span>
+  <span class="tag">&lt;/<span class="title">li</span>&gt;</span>
 }
-&lt;/ul&gt;</span>
+<span class="tag">&lt;/<span class="title">ul</span>&gt;</span></span>
 </pre></td></tr></table></figure>
 
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
@@ -222,22 +222,22 @@ automatically imported by Play:</p>
 14
 15
 16
-</pre></td><td class="code"><pre>&lt;ul&gt;
-<span class="keyword">@articles</span>.map { article =&gt;
-  &lt;li&gt;<span class="keyword">@article</span>.name&lt;/li&gt;
+</pre></td><td class="code"><pre><span class="xml"><span class="tag">&lt;<span class="title">ul</span>&gt;</span>
+@articles.map { article =&gt;
+  <span class="tag">&lt;<span class="title">li</span>&gt;</span>@article.name<span class="tag">&lt;/<span class="title">li</span>&gt;</span>
 }
-&lt;/ul&gt;
+<span class="tag">&lt;/<span class="title">ul</span>&gt;</span>
 
-@* The <span class="keyword">template</span> compiler automatically adds the yield keyword *@
-&lt;ul&gt;
-<span class="keyword">@for</span>(article &lt;- articles) {
-  &lt;li&gt;<span class="keyword">@article</span>.name&lt;/li&gt;
+@* The template compiler automatically adds the yield keyword *@
+<span class="tag">&lt;<span class="title">ul</span>&gt;</span>
+@for(article <span class="tag">&lt;<span class="title">-</span> <span class="attribute">articles</span>) {
+  &lt;<span class="attribute">li</span>&gt;</span>@article.name<span class="tag">&lt;/<span class="title">li</span>&gt;</span>
 }
-&lt;/ul&gt;
+<span class="tag">&lt;/<span class="title">ul</span>&gt;</span>
 
-<span class="keyword">@for</span>(article &lt;- articles) {
-  Article name: <span class="keyword">@article</span>.name
-}
+@for(article <span class="tag">&lt;<span class="title">-</span> <span class="attribute">articles</span>) {
+  <span class="attribute">Article</span> <span class="attribute">name:</span> @<span class="attribute">article.name</span>
+}</span></span>
 </pre></td></tr></table></figure>
 
 <p>If you’re interested in the details of the template engine,
@@ -425,18 +425,18 @@ can use the following code:</p>
 10
 11
 12
-</pre></td><td class="code"><pre>@(products: Seq[Product])
-<span class="keyword">@main</span> {
-  &lt;h2&gt;Products&lt;/h2&gt;
-  &lt;ul <span class="keyword">class</span>=<span class="string">"products"</span>&gt;
-  <span class="keyword">@for</span>(product &lt;- products) {
-    &lt;li&gt;
-      &lt;h3&gt;<span class="keyword">@product</span>.name&lt;/h3&gt;
-      &lt;p <span class="keyword">class</span>=<span class="string">"description"</span>&gt;<span class="keyword">@product</span>.description&lt;/p&gt;
-    &lt;/li&gt;
+</pre></td><td class="code"><pre><span class="xml">@(products: Seq[Product])
+@main {
+  <span class="tag">&lt;<span class="title">h2</span>&gt;</span>Products<span class="tag">&lt;/<span class="title">h2</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">ul</span> <span class="attribute">class</span>=<span class="value">"products"</span>&gt;</span>
+  @for(product <span class="tag">&lt;<span class="title">-</span> <span class="attribute">products</span>) {
+    &lt;<span class="attribute">li</span>&gt;</span>
+      <span class="tag">&lt;<span class="title">h3</span>&gt;</span>@product.name<span class="tag">&lt;/<span class="title">h3</span>&gt;</span>
+      <span class="tag">&lt;<span class="title">p</span> <span class="attribute">class</span>=<span class="value">"description"</span>&gt;</span>@product.description<span class="tag">&lt;/<span class="title">p</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">li</span>&gt;</span>
   }
-  &lt;/ul&gt;
-}
+  <span class="tag">&lt;/<span class="title">ul</span>&gt;</span>
+}</span>
 </pre></td></tr></table></figure>
 
 <p>可以这样定义</p>
@@ -474,15 +474,15 @@ can use the following code:</p>
 7
 8
 9
-</pre></td><td class="code"><pre><span class="variable">@(</span>products: Se<span class="string">q[Product]</span>)
-&lt;ul class=<span class="string">"products"</span>&gt;
-<span class="variable">@for</span>(product &lt;- products) {
-  &lt;li&gt;
-    &lt;h3&gt;<span class="variable">@product</span>.name&lt;<span class="regexp">/h3&gt;
-    &lt;p class="description"&gt;@product.description&lt;/p</span>&gt;
-  &lt;<span class="regexp">/li&gt;
+</pre></td><td class="code"><pre><span class="xml">@(products: Seq[Product])
+<span class="tag">&lt;<span class="title">ul</span> <span class="attribute">class</span>=<span class="value">"products"</span>&gt;</span>
+@for(product <span class="tag">&lt;<span class="title">-</span> <span class="attribute">products</span>) {
+  &lt;<span class="attribute">li</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">h3</span>&gt;</span>@product.name<span class="tag">&lt;/<span class="title">h3</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">p</span> <span class="attribute">class</span>=<span class="value">"description"</span>&gt;</span>@product.description<span class="tag">&lt;/<span class="title">p</span>&gt;</span>
+  <span class="tag">&lt;/<span class="title">li</span>&gt;</span>
 }
-&lt;/ul</span>&gt;
+<span class="tag">&lt;/<span class="title">ul</span>&gt;</span></span>
 </pre></td></tr></table></figure>
 
 <p><code>catalog.scala.html</code></p>
@@ -825,13 +825,13 @@ shop.thanks = Thank you <span class="keyword">for</span> your <span class="keywo
 		
 			<li><a href="/tags/NoSql/" title="NoSql">NoSql<sup>1</sup></a></li>
 		
+			<li><a href="/tags/SASS/" title="SASS">SASS<sup>1</sup></a></li>
+		
 			<li><a href="/tags/SAX/" title="SAX">SAX<sup>1</sup></a></li>
 		
 			<li><a href="/tags/ServletRequest/" title="ServletRequest">ServletRequest<sup>1</sup></a></li>
 		
 			<li><a href="/tags/ServletResponse/" title="ServletResponse">ServletResponse<sup>1</sup></a></li>
-		
-			<li><a href="/tags/Spring/" title="Spring">Spring<sup>1</sup></a></li>
 		
 		</ul>
 </div>
