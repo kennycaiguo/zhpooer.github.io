@@ -4,7 +4,7 @@
   <subtitle><![CDATA[竹杖芒鞋轻胜马，一蓑烟雨任平生]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://zhpooer.github.io/"/>
-  <updated>2014-12-12T13:14:19.252Z</updated>
+  <updated>2014-12-16T03:11:53.781Z</updated>
   <id>http://zhpooer.github.io/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://zhpooer.github.io/2014/12/12/js-%E9%AB%98%E7%BA%A7/"/>
     <id>http://zhpooer.github.io/2014/12/12/js-高级/</id>
     <published>2014-12-12T02:32:33.000Z</published>
-    <updated>2014-12-12T10:24:42.000Z</updated>
+    <updated>2014-12-13T06:03:16.000Z</updated>
     <content type="html"><![CDATA[<h1 id="-">高级事件</h1>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
@@ -95,7 +95,7 @@ re.text(str);
 </pre></td></tr></table></figure>
 
 <h1 id="-">图片预加载</h1>
-<p>预判加载, 自动加载下一张图片 </p>
+<p>预判加载, 自动加载下一张图片</p>
 <p>延迟加载, 先加载html框架, 在加载图片</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 2

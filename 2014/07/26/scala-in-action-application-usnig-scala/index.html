@@ -869,37 +869,37 @@ up the product by description, shown in the following listing.</p>
 89
 90
 91
-</pre></td><td class="code"><pre><span class="keyword">package</span> com.akkaoogle.calculators
-<span class="keyword">import</span> messages._
-<span class="keyword">import</span> com.akkaoogle.db.models._
-<span class="keyword">import</span> akka.actor._
+</pre></td><td class="code"><pre><span class="xml"><span class="php">package com.akkaoogle.calculators
+import messages._
+import com.akkaoogle.db.models._
+import akka.actor._
 <span class="class"><span class="keyword">class</span> <span class="title">InternalPriceCalculator</span> <span class="keyword">extends</span> <span class="title">Actor</span> {</span>
-  <span class="keyword">def</span> receive = {
+  def receive = {
     <span class="keyword">case</span> FindPrice(productDescription, quantity) =&gt;
-      <span class="keyword">val</span> price = calculatePrice(productDescription, quantity)
+      val price = calculatePrice(productDescription, quantity)
       sender ! price
   }
-  <span class="keyword">def</span> calculatePrice( productDescription: String, qty: Int): Option[LowestPrice] = {
+  def calculatePrice( productDescription: String, qty: Int): Option[LowestPrice] = {
     Product.findByDescription(productDescription) map { product =&gt;
       Some(
         LowestPrice(product.vendorName,
                     product.description,
                     product.calculatePrice * qty) )
-    } getOrElse Option.empty[LowestPrice]
+    } getOrElse Option.<span class="keyword">empty</span>[LowestPrice]
   }
 }
 <span class="comment">//  you can have many external vendors for your application, you can’t make</span>
 <span class="comment">// the remote service calls sequentially</span>
 <span class="comment">// set a timeout for each service so you can</span>
 <span class="comment">// respond to the user within a reasonable time</span>
-<span class="class"><span class="keyword">class</span> <span class="title">ExternalVendorProxyActor</span><span class="params">(val v: ExternalVendor)</span> <span class="keyword">extends</span> <span class="title">Actor</span> {</span>
-  <span class="keyword">def</span> receive = {
-    <span class="keyword">var</span> result: Option[LowestPrice] = Option.empty[LowestPrice]
-    <span class="keyword">val</span> f = Future({
-      <span class="keyword">val</span> params = <span class="string">"?pd="</span> + fp.productDescription + <span class="string">"&q="</span> + fp.quantity
-      <span class="keyword">val</span> price = Source.fromURL(v.url + params).mkString.toDouble
+<span class="class"><span class="keyword">class</span> <span class="title">ExternalVendorProxyActor</span>(<span class="title">val</span> <span class="title">v</span>: <span class="title">ExternalVendor</span>) <span class="keyword">extends</span> <span class="title">Actor</span> {</span>
+  def receive = {
+    <span class="keyword">var</span> result: Option[LowestPrice] = Option.<span class="keyword">empty</span>[LowestPrice]
+    val f = Future({
+      val params = <span class="string">"?pd="</span> + fp.productDescription + <span class="string">"&q="</span> + fp.quantity
+      val price = Source.fromURL(v.url + params).mkString.toDouble
       Some(LowestPrice(v.name, fp.productDescription, price * fp.quantity))
-    }) recover { <span class="keyword">case</span> t =&gt; Option.empty[LowestPrice] }
+    }) recover { <span class="keyword">case</span> t =&gt; Option.<span class="keyword">empty</span>[LowestPrice] }
     f pipeTo sender
   }
 }
@@ -909,33 +909,33 @@ up the product by description, shown in the following listing.</p>
 
 <span class="comment">// The ExternalPriceCalculator actor is created with references to ExternalVendorProxyActor.</span>
 <span class="comment">// The FindPrice message is broadcast to all the proxy actors using the ? method</span>
-<span class="class"><span class="keyword">class</span> <span class="title">ExternalPriceCalculator</span><span class="params">(val proxies: Iterable[ActorRef])</span></span>
-      <span class="keyword">extends</span> Actor {
-  <span class="keyword">def</span> receive = {
+<span class="class"><span class="keyword">class</span> <span class="title">ExternalPriceCalculator</span>(<span class="title">val</span> <span class="title">proxies</span>: <span class="title">Iterable</span>[<span class="title">ActorRef</span>])
+      <span class="keyword">extends</span> <span class="title">Actor</span> {</span>
+  def receive = {
     <span class="keyword">case</span> FindPrice(productId, quantity) =&gt;
-      <span class="keyword">val</span> futures = proxies map { proxy =&gt;
-        <span class="keyword">val</span> fp = FindPrice(productId, quantity)
+      val futures = proxies map { proxy =&gt;
+        val fp = FindPrice(productId, quantity)
         
         (proxy ? fp).mapTo[Option[LowestPrice]] recover {
           <span class="keyword">case</span> e: AskTimeoutException =&gt;
             AkkaoogleActorServer.lookup(<span class="string">"monitor"</span>) ! LogTimeout(proxy.path.name, <span class="string">"Timeout for "</span> + fp)
-            Option.empty[LowestPrice]
+            Option.<span class="keyword">empty</span>[LowestPrice]
           }
       }
-      <span class="keyword">val</span> lowestPrice: Future[Option[LowestPrice]] =
+      val lowestPrice: Future[Option[LowestPrice]] =
         findLowestPrice(futures)
-      <span class="keyword">val</span> totalPrice: Future[Option[LowestPrice]] = lowestPrice.map {
+      val totalPrice: Future[Option[LowestPrice]] = lowestPrice.map {
         l =&gt; l.map(p =&gt; p.copy(price = p.price + (p.price * <span class="number">.02</span>)))
       }
       totalPrice pipeTo sender
   }
 }  
 
-<span class="keyword">def</span> findLowestPrice(futures: Iterable[Future[Option[LowestPrice]]]):
+def findLowestPrice(futures: Iterable[Future[Option[LowestPrice]]]):
     Future[Option[LowestPrice]] = {
-  <span class="keyword">val</span> f: Future[Option[LowestPrice]] = Future.fold(futures)(Option.empty[LowestPrice]) {
+  val f: Future[Option[LowestPrice]] = Future.fold(futures)(Option.<span class="keyword">empty</span>[LowestPrice]) {
     (lowestPrice: Option[LowestPrice], currentPrice: Option[LowestPrice]) =&gt; {
-      currentPrice <span class="keyword">match</span> {
+      currentPrice match {
         <span class="keyword">case</span> Some(first) <span class="keyword">if</span> (lowsetPrice.isEmpty) =&gt; Some(first)
         <span class="keyword">case</span> Some(c) <span class="keyword">if</span> (c.price &lt; lowestPrice.get.price) =&gt; Some(c)
         <span class="keyword">case</span> _ =&gt; lowestPrice
@@ -947,19 +947,19 @@ up the product by description, shown in the following listing.</p>
 
 <span class="comment">// find the lowest price from both internal and external vendors and return the result.</span>
 <span class="class"><span class="keyword">class</span> <span class="title">CheapestDealFinder</span> <span class="keyword">extends</span> <span class="title">Actor</span> {</span>
-  <span class="keyword">def</span> receive = {
+  def receive = {
     <span class="keyword">case</span> req: FindPrice =&gt;
-      <span class="keyword">val</span> internalPrice =
+      val internalPrice =
         (AkkaoogleActorServer.lookup(<span class="string">"internal-load-balancer"</span>) ? req).mapTo[Option[LowestPrice]]
-      <span class="keyword">val</span> externalPrice =
+      val externalPrice =
         (AkkaoogleActorServer.lookup(<span class="string">"external-load-balancer"</span>) ?
           req).mapTo[Option[LowestPrice]] recover {
-            <span class="keyword">case</span> e: AskTimeoutException =&gt; Option.empty[LowestPrice]
+            <span class="keyword">case</span> e: AskTimeoutException =&gt; Option.<span class="keyword">empty</span>[LowestPrice]
         }
-      <span class="keyword">val</span> lowestPrice: Future[Option[LowestPrice]] = findLowestPrice(internalPrice :: externalPrice :: Nil)
+      val lowestPrice: Future[Option[LowestPrice]] = findLowestPrice(internalPrice :: externalPrice :: Nil)
       lowestPrice pipeTo sender
   }
-}
+}</span></span>
 </pre></td></tr></table></figure>
 
 <h2 id="increase-scalability-with-remote-actors-dispatchers-and-routers">Increase scalability with remote actors, dispatchers, and routers</h2>
