@@ -367,17 +367,17 @@ for a particular language</li>
 9
 10
 11
-</pre></td><td class="code"><pre>&lt;!-- The implicit Lang parameter <span class="keyword">is</span> used <span class="keyword">for</span> the localized message --&gt;
-&lt;!-- lookup performed by the Messages object. --&gt;
+</pre></td><td class="code"><pre><span class="xml"><span class="tag">&lt;!<span class="attribute">--</span> <span class="attribute">The</span> <span class="attribute">implicit</span> <span class="attribute">Lang</span> <span class="attribute">parameter</span> <span class="attribute">is</span> <span class="attribute">used</span> <span class="attribute">for</span> <span class="attribute">the</span> <span class="attribute">localized</span> <span class="attribute">message</span> <span class="attribute">--</span>&gt;</span>
+<span class="comment">&lt;!-- lookup performed by the Messages object. --&gt;</span>
 @(products: List[Product])(implicit lang: Lang)
-<span class="keyword">@main</span>(Messages(<span class="string">"application.name"</span>)) {
-  &lt;dl <span class="keyword">class</span>=<span class="string">"products"</span>&gt;
-  <span class="keyword">@for</span>(product &lt;- products) {
-    &lt;dt&gt;<span class="keyword">@product</span>.name&lt;/dt&gt;
-    &lt;dd&gt;<span class="keyword">@product</span>.description&lt;/dd&gt;
+@main(Messages("application.name")) {
+  <span class="tag">&lt;<span class="title">dl</span> <span class="attribute">class</span>=<span class="value">"products"</span>&gt;</span>
+  @for(product <span class="tag">&lt;<span class="title">-</span> <span class="attribute">products</span>) {
+    &lt;<span class="attribute">dt</span>&gt;</span>@product.name<span class="tag">&lt;/<span class="title">dt</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">dd</span>&gt;</span>@product.description<span class="tag">&lt;/<span class="title">dd</span>&gt;</span>
   }
-  &lt;/dl&gt;
-}
+  <span class="tag">&lt;/<span class="title">dl</span>&gt;</span>
+}</span>
 </pre></td></tr></table></figure>
 
 <h3 id="layout-template">Layout template</h3>
@@ -1124,7 +1124,7 @@ GET /products/new controllers<span class="preprocessor">.Products</span><span cl
 		
 		
 	</div>
-		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2014 
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2015 
 		
 		<a href="http://zhpooer.github.io" target="_blank" title="zhpooer">zhpooer</a>
 		

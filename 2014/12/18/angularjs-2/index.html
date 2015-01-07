@@ -1,0 +1,1479 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>angularjs - Forms, Inputs, and Services | Poe&#39;s World</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="zhpooer">
+    
+    <meta name="description" content="ng-model
+AngularJS provides the ng-model directive for us to deal with
+inputs and two-way data-binding
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+&lt;body ng">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="Poe&#39;s World" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="Poe&#39;s World" title="Poe&#39;s World"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Poe&#39;s World">Poe&#39;s World</a></h1>
+				<h2 class="blog-motto">竹杖芒鞋轻胜马，一蓑烟雨任平生</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/english-monthly">英语角</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:zhpooer.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/12/18/angularjs-2/" title="angularjs - Forms, Inputs, and Services" itemprop="url">angularjs - Forms, Inputs, and Services</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://zhpooer.github.io" title="zhpooer">zhpooer</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2014-12-18T03:42:38.000Z" itemprop="datePublished">12月 18 2014</time>
+    更新日期:<time datetime="2014-12-20T12:09:59.000Z" itemprop="dateModified">12月 20 2014</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#ng-model"><span class="toc-number">1.</span> <span class="toc-text">ng-model</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#forms"><span class="toc-number">2.</span> <span class="toc-text">Forms</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#displaying-error-messages"><span class="toc-number">2.1.</span> <span class="toc-text">Displaying Error Messages</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#styling-forms-and-states"><span class="toc-number">2.2.</span> <span class="toc-text">Styling Forms and States</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#nested-forms-with-ng-form"><span class="toc-number">2.3.</span> <span class="toc-text">Nested Forms with ng-form</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#other-form-controls"><span class="toc-number">2.4.</span> <span class="toc-text">Other Form Controls</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#radio-buttons"><span class="toc-number">2.5.</span> <span class="toc-text">Radio Buttons</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#combo-boxex-drop-downs"><span class="toc-number">2.6.</span> <span class="toc-text">Combo Boxex/Drop-Downs</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#angularjs-services"><span class="toc-number">3.</span> <span class="toc-text">AngularJS Services</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#creating-a-simple-angularjs-service"><span class="toc-number">3.1.</span> <span class="toc-text">Creating a Simple AngularJS Service</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#the-defference-between-factory-service-and-provider"><span class="toc-number">3.2.</span> <span class="toc-text">The defference between Factory, Service, and Provider</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#server-communication-using-http"><span class="toc-number">4.</span> <span class="toc-text">Server Communication Using $http</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-http-api"><span class="toc-number">4.1.</span> <span class="toc-text">$http API</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-httpprovider"><span class="toc-number">4.2.</span> <span class="toc-text">$httpProvider</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#interceptors"><span class="toc-number">4.2.1.</span> <span class="toc-text">Interceptors</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#promise"><span class="toc-number">4.3.</span> <span class="toc-text">Promise</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#-q-service"><span class="toc-number">4.3.1.</span> <span class="toc-text">$q Service</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#ngresource"><span class="toc-number">4.4.</span> <span class="toc-text">ngResource</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#best-practices"><span class="toc-number">4.5.</span> <span class="toc-text">Best Practices</span></a></li></ol>
+		</div>
+		
+		<h1 id="ng-model">ng-model</h1>
+<p>AngularJS provides the <code>ng-model</code> directive for us to deal with
+inputs and two-way data-binding</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">body</span> <span class="attribute">ng-controller</span>=<span class="value">"MainCtrl as ctrl"</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"text"</span> <span class="attribute">ng-model</span>=<span class="value">"ctrl.username"</span>/&gt;</span>
+  You typed 
+  <span class="tag">&lt;<span class="title">button</span> <span class="attribute">ng-click</span>=<span class="value">"ctrl.change()"</span>&gt;</span>Change Values<span class="tag">&lt;/<span class="title">button</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">body</span>&gt;</span>
+<span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/javascript"</span>&gt;</span><span class="javascript">
+  angular.module(<span class="string">'notesApp'</span>, [])
+    .controller(<span class="string">'MainCtrl'</span>, [<span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+    <span class="keyword">this</span>.username = <span class="string">'nothing'</span>;
+    self.change = <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+      self.username = <span class="string">'changed'</span>;
+      self.password = <span class="string">'password'</span>;
+    };
+  }]);
+</span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<h1 id="forms">Forms</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+</pre></td><td class="code"><pre>&lt;form ng-submit=<span class="string">"ctrl.submit()"</span>&gt;
+  &lt;input <span class="class"><span class="keyword">type</span>=</span><span class="string">"text"</span> ng-model=<span class="string">"ctrl.user.username"</span>&gt;
+  &lt;input <span class="class"><span class="keyword">type</span>=</span><span class="string">"password"</span> ng-model=<span class="string">"ctrl.user.password"</span>&gt;
+  &lt;input <span class="class"><span class="keyword">type</span>=</span><span class="string">"submit"</span> <span class="keyword">value</span>=<span class="string">"Submit"</span>&gt;
+&lt;/form&gt;
+
+&lt;form ng-submit=<span class="string">"ctrl.submit()"</span> name=<span class="string">"myForm"</span>&gt;
+  &lt;input <span class="class"><span class="keyword">type</span>=</span><span class="string">"text"</span>
+         ng-model=<span class="string">"ctrl.user.username"</span>
+         required
+         ng-minlength=<span class="string">"4"</span>&gt;
+  &lt;input <span class="class"><span class="keyword">type</span>=</span><span class="string">"password"</span>
+         ng-model=<span class="string">"ctrl.user.password"</span>
+         required&gt;
+  &lt;input <span class="class"><span class="keyword">type</span>=</span><span class="string">"submit"</span>
+         <span class="keyword">value</span>=<span class="string">"Submit"</span>
+         ng-disabled=<span class="string">"myForm.$invalid"</span>&gt;
+&lt;/form&gt;
+</pre></td></tr></table></figure>
+
+<p>Form states in AngularJS</p>
+<ul>
+<li><code>$invalid</code>, AngularJS sets this state when any of the validations (required, ng-minlength, and others) mark any of
+the fields within the form as invalid.</li>
+<li><code>$valid</code>, The inverse of the previous state, which states that all the validations in the form are currently evaluating to
+correct.</li>
+<li><code>$pristine</code>,All forms in AngularJS start with this state. This allows you to figure out if a user has started typing in and
+modifying any of the form elements. Possible usage: disabling the reset button if a form is pristine.</li>
+<li><code>$dirty</code>, The inverse of $pristine, which states that the user made some changes (he can revert it, but the $dirty
+bit is set).</li>
+<li><code>$error</code>, This field on the form houses all the individual fields and the errors on each form element. </li>
+</ul>
+<p>Built-in AngularJS validators</p>
+<ul>
+<li><code>required</code>,</li>
+<li><code>ng-required</code>, Unlike required, which marks a field as always required, the ng-required directive allows us to
+conditionally mark an input field as required based on a Boolean condition in the controller.</li>
+<li><code>ng-minlength</code>and <code>ng-maxlength</code></li>
+<li><code>ng-pattern</code></li>
+<li><code>type=&quot;email&quot;</code></li>
+<li><code>type=&quot;number&quot;</code>,Can also have additional attributes for min and max values of the
+number itself.</li>
+<li><code>type=&quot;date&quot;</code>, This expects the date to be in yyyy-mm-dd format</li>
+<li><code>type=&quot;url&quot;</code></li>
+</ul>
+<h2 id="displaying-error-messages">Displaying Error Messages</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">form</span> <span class="attribute">ng-submit</span>=<span class="value">"ctrl.submit()"</span> <span class="attribute">name</span>=<span class="value">"myForm"</span>&gt;</span>
+<span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"text"</span>
+       <span class="attribute">name</span>=<span class="value">"uname"</span>
+       <span class="attribute">ng-model</span>=<span class="value">"ctrl.user.username"</span>
+       <span class="attribute">required</span>
+       <span class="attribute">ng-minlength</span>=<span class="value">"4"</span>&gt;</span>
+       
+<span class="tag">&lt;<span class="title">span</span> <span class="attribute">ng-show</span>=<span class="value">"myForm.uname.$error.required"</span>&gt;</span>
+  This is a required field
+<span class="tag">&lt;/<span class="title">span</span>&gt;</span>
+  
+<span class="tag">&lt;<span class="title">span</span> <span class="attribute">ng-show</span>=<span class="value">"myForm.uname.$error.minlength"</span>&gt;</span>
+      Minimum length required is 4
+<span class="tag">&lt;/<span class="title">span</span>&gt;</span>
+      
+<span class="tag">&lt;<span class="title">span</span> <span class="attribute">ng-show</span>=<span class="value">"myForm.uname.$invalid"</span>&gt;</span>
+  This field is invalid
+<span class="tag">&lt;/<span class="title">span</span>&gt;</span>
+  
+<span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"password"</span>
+       <span class="attribute">name</span>=<span class="value">"pwd"</span>
+       <span class="attribute">ng-model</span>=<span class="value">"ctrl.user.password"</span>
+       <span class="attribute">required</span>&gt;</span>
+       
+<span class="tag">&lt;<span class="title">span</span> <span class="attribute">ng-show</span>=<span class="value">"myForm.pwd.$error.required"</span>&gt;</span>
+  This is a required field
+<span class="tag">&lt;/<span class="title">span</span>&gt;</span>
+  
+<span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"submit"</span>
+       <span class="attribute">value</span>=<span class="value">"Submit"</span>
+       <span class="attribute">ng-disabled</span>=<span class="value">"myForm.$invalid"</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">form</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<h2 id="styling-forms-and-states">Styling Forms and States</h2>
+<p>AngularJS adds and removes the CSS
+classes to and from the forms and input elements.</p>
+<ul>
+<li><code>$invalid</code>, ng-invalid</li>
+<li><code>$valid</code>, ng-valid</li>
+<li><code>$pristine</code>, ng-pristine</li>
+<li><code>$dirty</code>, ng-dirty</li>
+<li><code>required</code>, ng-valid-required or ng-invalid-required</li>
+<li><code>min</code>, ng-valid-min or ng-invalid-min</li>
+<li><code>max</code>, ng-valid-max or ng-invalid-max</li>
+<li><code>minlength</code>, ng-valid-minlength or ng-invalid-minlength</li>
+<li><code>maxlength</code>, ng-valid-maxlength or ng-invalid-maxlength</li>
+<li><code>pattern</code>, ng-valid-pattern or ng-invalid-pattern</li>
+<li><code>url</code>, ng-valid-url or ng-invalid-url</li>
+<li><code>email</code>, ng-valid-email or ng-invalid-email</li>
+<li><code>date</code>, ng-valid-date or ng-invalid-date</li>
+<li><code>number</code>, ng-valid-number or ng-invalid-number</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="code"><pre><span class="class">.username</span><span class="class">.ng-valid</span> <span class="rules">{
+  <span class="rule"><span class="attribute">background-color</span>:<span class="value"> green</span></span>;
+<span class="rule">}</span></span>
+<span class="class">.username</span><span class="class">.ng-dirty</span><span class="class">.ng-invalid-required</span> <span class="rules">{
+  <span class="rule"><span class="attribute">background-color</span>:<span class="value"> red</span></span>;
+<span class="rule">}</span></span>
+<span class="class">.username</span><span class="class">.ng-dirty</span><span class="class">.ng-invalid-minlength</span> <span class="rules">{
+  <span class="rule"><span class="attribute">background-color</span>:<span class="value"> lightpink</span></span>;
+<span class="rule">}</span></span>
+</pre></td></tr></table></figure>
+
+<h2 id="nested-forms-with-ng-form">Nested Forms with ng-form</h2>
+<p>We sometimes run into cases where we need
+subsections of our form to be valid as a group,
+and to check and ascertain its validity.</p>
+<p>AngularJS provides an ng-form directive, which acts similar to form but allows nesting,
+so that we can accomplish the requirement of grouping related form fields</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+</pre></td><td class="code"><pre><span class="subst">&lt;</span>form novalidate name<span class="subst">=</span><span class="string">"myForm"</span><span class="subst">&gt;</span>
+  <span class="subst">&lt;</span>input <span class="keyword">type</span><span class="subst">=</span><span class="string">"text"</span>
+         class<span class="subst">=</span><span class="string">"username"</span>
+         name<span class="subst">=</span><span class="string">"uname"</span>
+         ng<span class="attribute">-model</span><span class="subst">=</span><span class="string">"ctrl.user.username"</span>
+         required<span class="subst">=</span><span class="string">""</span>
+         placeholder<span class="subst">=</span><span class="string">"Username"</span>
+         ng<span class="attribute">-minlength</span><span class="subst">=</span><span class="string">"4"</span> <span class="subst">/</span><span class="subst">&gt;</span>
+  <span class="subst">&lt;</span>input <span class="keyword">type</span><span class="subst">=</span><span class="string">"password"</span>
+         class<span class="subst">=</span><span class="string">"password"</span>
+         name<span class="subst">=</span><span class="string">"pwd"</span>
+         ng<span class="attribute">-model</span><span class="subst">=</span><span class="string">"ctrl.user.password"</span>
+         placeholder<span class="subst">=</span><span class="string">"Password"</span>
+         required<span class="subst">=</span><span class="string">""</span> <span class="subst">/</span><span class="subst">&gt;</span>
+  <span class="subst">&lt;</span>ng<span class="attribute">-form</span> name<span class="subst">=</span><span class="string">"profile"</span><span class="subst">&gt;</span>
+      <span class="subst">&lt;</span>input <span class="keyword">type</span><span class="subst">=</span><span class="string">"text"</span>
+             name<span class="subst">=</span><span class="string">"firstName"</span>
+             ng<span class="attribute">-model</span><span class="subst">=</span><span class="string">"ctrl.user.profile.firstName"</span>
+             placeholder<span class="subst">=</span><span class="string">"First Name"</span>
+             required<span class="subst">&gt;</span>
+      <span class="subst">&lt;</span>input <span class="keyword">type</span><span class="subst">=</span><span class="string">"text"</span>
+             name<span class="subst">=</span><span class="string">"middleName"</span>
+             placeholder<span class="subst">=</span><span class="string">"Middle Name"</span>
+             ng<span class="attribute">-model</span><span class="subst">=</span><span class="string">"ctrl.user.profile.middleName"</span><span class="subst">&gt;</span>
+      <span class="subst">&lt;</span>input <span class="keyword">type</span><span class="subst">=</span><span class="string">"text"</span>
+             name<span class="subst">=</span><span class="string">"lastName"</span>
+             placeholder<span class="subst">=</span><span class="string">"Last Name"</span>
+             ng<span class="attribute">-model</span><span class="subst">=</span><span class="string">"ctrl.user.profile.lastName"</span>
+             required<span class="subst">&gt;</span>
+      <span class="subst">&lt;</span>input <span class="keyword">type</span><span class="subst">=</span><span class="string">"date"</span>
+             name<span class="subst">=</span><span class="string">"dob"</span>
+             placeholder<span class="subst">=</span><span class="string">"Date Of Birth"</span>
+             ng<span class="attribute">-model</span><span class="subst">=</span><span class="string">"ctrl.user.profile.dob"</span><span class="subst">&gt;</span>
+  <span class="subst">&lt;</span>/ng<span class="attribute">-form</span><span class="subst">&gt;</span>
+  <span class="subst">&lt;</span>span ng<span class="attribute">-show</span><span class="subst">=</span><span class="string">"myForm.profile.$invalid"</span><span class="subst">&gt;</span>
+    Please fill out the profile information
+  <span class="subst">&lt;</span>/span<span class="subst">&gt;</span>
+  <span class="subst">&lt;</span>input <span class="keyword">type</span><span class="subst">=</span><span class="string">"submit"</span>
+         value<span class="subst">=</span><span class="string">"Submit"</span>
+         ng<span class="attribute">-disabled</span><span class="subst">=</span><span class="string">"myForm.$invalid"</span><span class="subst">/</span><span class="subst">&gt;</span>
+<span class="subst">&lt;</span>/form<span class="subst">&gt;</span>
+</pre></td></tr></table></figure>
+
+<h2 id="other-form-controls">Other Form Controls</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- textarea --&gt;</span>
+<span class="tag">&lt;<span class="title">textarea</span> <span class="attribute">ng-model</span>=<span class="value">"ctrl.user.address"</span> <span class="attribute">required</span>&gt;</span><span class="tag">&lt;/<span class="title">textarea</span>&gt;</span>
+
+<span class="comment">&lt;!-- checkbox --&gt;</span>
+<span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"checkbox"</span> <span class="attribute">ng-model</span>=<span class="value">"ctrl.user.agree"</span>&gt;</span>
+
+<span class="comment">&lt;!-- What if we wanted to assign the string
+     YES or NO to our model --&gt;</span>
+<span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"checkbox"</span>
+       <span class="attribute">ng-model</span>=<span class="value">"ctrl.user.agree"</span>
+       <span class="attribute">ng-true-value</span>=<span class="value">"YES"</span>
+       <span class="attribute">ng-false-value</span>=<span class="value">"NO"</span>&gt;</span>
+<span class="comment">&lt;!--  oneway binding --&gt;</span>
+<span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"checkbox"</span>
+       <span class="attribute">ng-checked</span>=<span class="value">"sport.selected === 'YES'"</span>&gt;</span><span class="tag">&lt;/<span class="title">input</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<h2 id="radio-buttons">Radio Buttons</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="code"><pre>&lt;div ng-init=<span class="string">"otherGender = 'other'"</span>&gt;
+  &lt;input <span class="class"><span class="keyword">type</span>=</span><span class="string">"radio"</span>
+         name=<span class="string">"gender"</span>
+         ng-model=<span class="string">"user.gender"</span>
+         <span class="keyword">value</span>=<span class="string">"male"</span>&gt;Male
+  &lt;input <span class="class"><span class="keyword">type</span>=</span><span class="string">"radio"</span>
+         name=<span class="string">"gender"</span>
+         ng-model=<span class="string">"user.gender"</span>
+         <span class="keyword">value</span>=<span class="string">"female"</span>&gt;Female
+  &lt;input <span class="class"><span class="keyword">type</span>=</span><span class="string">"radio"</span>
+         name=<span class="string">"gender"</span>
+         ng-model=<span class="string">"user.gender"</span>
+         ng-<span class="keyword">value</span>=<span class="string">"otherGender"</span>&gt;
+&lt;/div&gt;
+</pre></td></tr></table></figure>
+
+<p>We assign it as part of the initialization block (<code>ng-init</code>).</p>
+<h2 id="combo-boxex-drop-downs">Combo Boxex/Drop-Downs</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">div</span> <span class="attribute">ng-init</span>=<span class="value">"location = 'India'"</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">select</span> <span class="attribute">ng-model</span>=<span class="value">"location"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">option</span> <span class="attribute">value</span>=<span class="value">"USA"</span>&gt;</span>USA<span class="tag">&lt;/<span class="title">option</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">option</span> <span class="attribute">value</span>=<span class="value">"India"</span>&gt;</span>India<span class="tag">&lt;/<span class="title">option</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">option</span> <span class="attribute">value</span>=<span class="value">"Other"</span>&gt;</span>None of the above<span class="tag">&lt;/<span class="title">option</span>&gt;</span>
+  <span class="tag">&lt;/<span class="title">select</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+<span class="tag">&lt;<span class="title">select</span> <span class="attribute">ng-model</span>=<span class="value">"ctrl.selectedCountryId"</span>
+        <span class="attribute">ng-options</span>=<span class="value">"c.id as c.label for c in ctrl.countries"</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">select</span>&gt;</span>
+<span class="tag">&lt;<span class="title">select</span> <span class="attribute">ng-model</span>=<span class="value">"ctrl.selectedCountry"</span>
+        <span class="attribute">ng-options</span>=<span class="value">"c.label for c in ctrl.countries"</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">select</span>&gt;</span>
+
+<span class="comment">&lt;!-- this.selectedCountryId = 2; --&gt;</span>
+<span class="comment">&lt;!-- this.selectedCountry = this.countries[1]; --&gt;</span>
+</pre></td></tr></table></figure>
+
+<h1 id="angularjs-services">AngularJS Services</h1>
+<p>AngularJS services are functions or objects that can hold behavior or state across our
+application. Each AngularJS service is instantiated only once, so each part of our
+application gets access to the same instance of the AngularJS service.</p>
+<p>Controllers are stateful, but ephemeral. That is, they can be destroyed and re-created
+multiple times throughout the course of navigating across a Single Page Application.</p>
+<p>When we say “services” in AngularJS, we include factories, services, and providers.</p>
+<p>Any service known to AngularJS (internal or our own) can be
+simply injected into any other service, directive, or controller
+by stating it as a dependency.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre>myModule.controller(<span class="string">"MainCtrl"</span>, [<span class="string">"$log"</span>, <span class="function"><span class="keyword">function</span><span class="params">(<span class="variable">$log</span>)</span> {</span>}]);
+myModule.controller(<span class="string">"MainCtrl"</span>, <span class="function"><span class="keyword">function</span><span class="params">(<span class="variable">$log</span>)</span> {</span>});
+</pre></td></tr></table></figure>
+
+<ul>
+<li><code>$window</code>, the <code>$window</code> service in AngularJS is nothing but a wrapper
+around the global window object.</li>
+<li><code>$location</code>, the <code>$location</code> service in AngularJS allows us to
+interact with the URL in the browser bar, and get
+and manipulate its value. <ul>
+<li><code>absUrl</code>, <code>$location.absUrl())</code></li>
+<li><code>url</code>, A getter and setter that gets or sets the URL.</li>
+<li><code>path</code>,<code>$location.path()</code>, <code>$location.path(&#39;/new&#39;)</code></li>
+<li><code>search</code><ul>
+<li><code>$location.search()</code>, returns the search parameter as an object</li>
+<li><code>$location.search(&#39;test&#39;)</code>, removes the search parameter from Url</li>
+<li><code>$location.search(&#39;test&#39;, &#39;abc&#39;)</code></li>
+</ul>
+</li>
+<li><code>$http</code>,  it is the core AngularJS service used to make XHR requests to the server from the application.</li>
+</ul>
+</li>
+</ul>
+<h2 id="creating-a-simple-angularjs-service">Creating a Simple AngularJS Service</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+</pre></td><td class="code"><pre>angular.module(<span class="string">'notesApp'</span>, [])
+.controller(<span class="string">'MainCtrl'</span>, [<span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+  <span class="keyword">var</span> <span class="keyword">self</span> = this;
+  <span class="keyword">self</span>.tab = <span class="string">'first'</span>;
+  <span class="keyword">self</span>.open = <span class="function"><span class="keyword">function</span><span class="params">(tab)</span> {</span>
+    <span class="keyword">self</span>.tab = tab;
+  };
+}])
+
+.controller(<span class="string">'SubCtrl'</span>, [<span class="string">'ItemService'</span>, <span class="function"><span class="keyword">function</span><span class="params">(ItemService)</span> {</span>
+  <span class="keyword">var</span> <span class="keyword">self</span> = this;
+  <span class="keyword">self</span>.<span class="keyword">list</span> = <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+    <span class="keyword">return</span> ItemService.<span class="keyword">list</span>();
+  };
+  <span class="keyword">self</span>.add = <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+    ItemService.add({
+      id: <span class="keyword">self</span>.<span class="keyword">list</span>().length + <span class="number">1</span>,
+      label: <span class="string">'Item '</span> + <span class="keyword">self</span>.<span class="keyword">list</span>().length
+    });
+  };
+}])
+  
+.factory(<span class="string">'ItemService'</span>, [<span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+  <span class="keyword">var</span> items = [
+    {id: <span class="number">1</span>, label: <span class="string">'Item 0'</span>},
+    {id: <span class="number">2</span>, label: <span class="string">'Item 1'</span>}
+  ];
+  <span class="keyword">return</span> {
+    <span class="keyword">list</span>: <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+      <span class="keyword">return</span> items;
+    },
+    add: <span class="function"><span class="keyword">function</span><span class="params">(item)</span> {</span>
+      items.push(item);
+    }
+  };
+}]);
+</pre></td></tr></table></figure>
+
+<ul>
+<li>The service will be lazily instantiated. The very first time a controller, service, or
+directive asks for the service, it will be created.</li>
+<li>The service definition function will be called once, and the instance stored. Every
+caller of this service will get this same, singleton instance handed to them.</li>
+</ul>
+<h2 id="the-defference-between-factory-service-and-provider">The defference between Factory, Service, and Provider</h2>
+<p>You should use <code>module.factory()</code> to define your services if:</p>
+<ul>
+<li>You follow a functional style of programming</li>
+<li>You prefer to return functions and objects</li>
+</ul>
+<p>When we use a <code>service</code>, AngularJS assumes that the function
+definition passed in as part of the array of
+dependencies is actually a JavaScript type/class.
+So instead of just invoking the function
+and storing its return value, AngularJS will call new on the function to create an instance
+of the type/class.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre><span class="regexp">//</span> <span class="class"><span class="keyword">class</span> <span class="title">ItemService</span></span>
+angular.<span class="built_in">module</span>(<span class="string">'notesApp'</span>, []) .service(<span class="string">'ItemService'</span>, [ItemService])
+</pre></td></tr></table></figure>
+
+<p>When we need to set up some configuration for our service
+before our application loads, you can use <code>provider</code> function.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+</pre></td><td class="code"><pre>angular.module(<span class="string">'notesApp'</span>, [])
+.provider(<span class="string">'ItemService'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+  <span class="keyword">var</span> haveDefaultItems = <span class="literal">true</span>;
+  <span class="keyword">this</span>.disableDefaultItems = <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+    haveDefaultItems = <span class="literal">false</span>;
+  };
+  <span class="comment">// This function gets our dependencies, not the</span>
+  <span class="comment">// provider above</span>
+  <span class="keyword">this</span>.$<span class="keyword">get</span> = [<span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+    <span class="keyword">var</span> optItems = [];
+    <span class="keyword">if</span> (haveDefaultItems) {
+      optItems = [
+        {id: <span class="number">1</span>, label: <span class="string">'Item 0'</span>},
+        {id: <span class="number">2</span>, label: <span class="string">'Item 1'</span>}
+      ];
+    }
+    <span class="keyword">return</span> <span class="keyword">new</span> ItemService(optItems);
+  }];
+})
+
+.config([<span class="string">'ItemServiceProvider'</span>,
+  <span class="function"><span class="keyword">function</span><span class="params">(ItemServiceProvider)</span> {</span>
+  <span class="comment">// To see how the provider can change</span>
+  <span class="comment">// configuration, change the value of</span>
+  <span class="comment">// shouldHaveDefaults to true and try</span>
+  <span class="comment">// running the example</span>
+  <span class="keyword">var</span> shouldHaveDefaults = <span class="literal">false</span>;
+  <span class="comment">// Get configuration from server</span>
+  <span class="comment">// Set shouldHaveDefaults somehow</span>
+  <span class="comment">//Assume it magically changes for now</span>
+  <span class="keyword">if</span> (!shouldHaveDefaults) {
+    ItemServiceProvider.disableDefaultItems();
+  }
+}])
+</pre></td></tr></table></figure>
+
+<p>Note that the provider does not use the same notation as
+factory and service. It doesn’t take an array as the
+second argument because providers cannot have dependencies
+on other services.</p>
+<p>The <code>config</code> function executes before the AngularJS app executes. So we can be
+assured that this executes before our controllers, services, and other functions.</p>
+<h1 id="server-communication-using-http">Server Communication Using $http</h1>
+<p>The AngularJS XHR API follows what is commonly known as the Promise
+interface.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre>angular.module(<span class="string">'notesApp'</span>, [])
+.controller(<span class="string">'MainCtrl'</span>, [<span class="string">'$http'</span>, <span class="function"><span class="keyword">function</span><span class="params">(<span class="variable">$http</span>)</span> {</span>
+  <span class="keyword">var</span> <span class="keyword">self</span> = this;
+  <span class="keyword">self</span>.items = [];
+  <span class="variable">$http</span>.get(<span class="string">'/api/note'</span>).then(<span class="function"><span class="keyword">function</span><span class="params">(response)</span> {</span>
+    <span class="keyword">self</span>.items = response.data;
+  }, <span class="function"><span class="keyword">function</span><span class="params">(errResponse)</span> {</span>
+    console.error(<span class="string">'Error while fetching notes'</span>);
+  });
+}]);
+</pre></td></tr></table></figure>
+
+<p>Both these handlers get passed in a response object, which has the
+following keys:</p>
+<ul>
+<li><code>headers</code> The headers for the call</li>
+<li><code>status</code> The status code for the response</li>
+<li><code>config</code> The configuration with which the call was made</li>
+<li><code>data</code> The body of the response from the server</li>
+</ul>
+<h2 id="-http-api">$http API</h2>
+<p><code>$http</code> provides the following convenience methods to
+make certain types of requests: <code>GET</code> <code>HEAD</code> <code>POST</code> <code>DELETE</code> <code>PUT</code> <code>JSONP</code></p>
+<ul>
+<li>For requests without any post data (think GET), the function takes two arguments:
+the URL as the first argument, and a configuration object as the second. </li>
+<li>For requests with post data (POST, PUT), the function takes three arguments: the
+URL as the first argument, the post data as the second, and a configuration object
+as the third and final argument.</li>
+</ul>
+<p><code>$http.get(url, config)</code> can be replaced with:
+<code>$http(config)</code> where the url and the method (GET, in this case)
+become part of the configuration object itself.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="code"><pre>{
+  <span class="keyword">method</span>: <span class="built_in">string</span>,
+  url: <span class="built_in">string</span>,
+  params: <span class="keyword">object</span>,
+  data: <span class="built_in">string</span> <span class="keyword">or</span> <span class="keyword">object</span>,
+  headers: <span class="keyword">object</span>,
+  xsrfHeaderName: <span class="built_in">string</span>,
+  xsrfCookieName: <span class="built_in">string</span>,
+  transformRequest: <span class="keyword">function</span> transform(data, headersGetter) <span class="keyword">or</span> an <span class="built_in">array</span> <span class="keyword">of</span> functions,
+  transformResponse: <span class="keyword">function</span> transform(data, headersGetter) <span class="keyword">or</span> an <span class="built_in">array</span> <span class="keyword">of</span> functions,
+  cache: boolean <span class="keyword">or</span> Cache <span class="keyword">object</span>,
+  timeout: number,
+  withCredentials: boolean
+}
+</pre></td></tr></table></figure>
+
+<ul>
+<li>params: <code>[{key1: &#39;value1&#39;, key2: &#39;value2&#39;}]</code> would be converted to:
+<code>?key1=value1&amp;key2=value2</code>. If we use an object instead of a string or a
+number for the value, the object will be converted to a JSON string.</li>
+<li>data: A string or an object that will be sent as the request message data. This basically
+becomes the POST data for the server.</li>
+<li>headers:  Like passing <code>{&#39;Content-Type&#39;: &#39;text/csv&#39;}</code> would set the Content-Type header to be <code>text/csv</code>.</li>
+<li>xsrHeaderName: We can set the XSRF header that the server will be setting to prevent XSRF attacks
+on our website. TODO</li>
+<li><p>xsrfCookieName: The name of the cookie that has the xsrf token to be used for the XSRF handshake.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="code"><pre><span class="comment">// A simple transformRequest that takes the JSON</span>
+<span class="comment">// post data and converts it into jQuery like a post data</span>
+<span class="comment">// string is as follows:</span>
+
+transformRequest: <span class="function"><span class="keyword">function</span><span class="params">(data, headers)</span> {</span>
+  <span class="keyword">var</span> requestStr;
+  <span class="keyword">for</span> (<span class="keyword">var</span> key <span class="keyword">in</span> data) {
+    <span class="keyword">if</span> (requestStr) {
+      requestStr += <span class="string">'&'</span> + key + <span class="string">'='</span> + data[key];
+    } <span class="keyword">else</span> {
+      requestStr = key + <span class="string">'='</span> + data[key];
+    }
+  }
+  <span class="keyword">return</span> requestStr;
+}
+</pre></td></tr></table></figure>
+</li>
+<li><p>cache: A Boolean or a cache object to use for an application-level caching mechanism.
+This would be over and above the browser-level caching. If set to true, AngularJS
+will automatically cache server responses and return them for subsequent requests
+to the same URL.</p>
+</li>
+</ul>
+<h2 id="-httpprovider">$httpProvider</h2>
+<p>We can use the config section of our module, and use the
+<code>$httpProvider</code> to configure these defaults.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+</pre></td><td class="code"><pre>angular.module(<span class="string">'notesApp'</span>, [])
+.controller(<span class="string">'LoginCtrl'</span>, [<span class="string">'$http'</span>, <span class="function"><span class="keyword">function</span><span class="params">(<span class="variable">$http</span>)</span> {</span>
+  <span class="keyword">var</span> <span class="keyword">self</span> = this;
+  <span class="keyword">self</span>.user = {};
+  <span class="keyword">self</span>.message = <span class="string">'Please login'</span>;
+  <span class="keyword">self</span>.login = <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+    <span class="variable">$http</span>.post(<span class="string">'/api/login'</span>, <span class="keyword">self</span>.user).then(
+      <span class="function"><span class="keyword">function</span><span class="params">(resp)</span> {</span>
+        <span class="keyword">self</span>.message = resp.data.msg;
+      });
+  };
+}])
+.config([<span class="string">'$httpProvider'</span>, <span class="function"><span class="keyword">function</span><span class="params">(<span class="variable">$httpProvider</span>)</span> {</span>
+  <span class="comment">// Every POST data becomes jQuery style</span>
+  <span class="variable">$httpProvider</span>.defaults.transformRequest.push(
+    <span class="function"><span class="keyword">function</span><span class="params">(data)</span> {</span>
+      <span class="keyword">var</span> requestStr;
+      <span class="keyword">if</span> (data) {
+        data = JSON.parse(data);
+        <span class="keyword">for</span> (<span class="keyword">var</span> key in data) {
+          <span class="keyword">if</span> (requestStr) {
+            requestStr += <span class="string">'&'</span> + key + <span class="string">'='</span> + data[key];
+          } <span class="keyword">else</span> {
+            requestStr = key + <span class="string">'='</span> + data[key];
+          }
+        }
+      }
+      <span class="keyword">return</span> requestStr;
+  });
+  <span class="comment">// Set the content type to be FORM type for all post requests</span>
+  <span class="comment">// This does not add it for GET requests.</span>
+  <span class="variable">$httpProvider</span>.defaults.headers.post[<span class="string">'Content-Type'</span>] = <span class="string">'application/x-www-form-urlencoded'</span>;
+}]);
+</pre></td></tr></table></figure>
+
+<p>The <code>$httpProvider.defaults.headers</code> object allows us
+to set default headers for common, get, post, and put requests.
+Each one (<code>$httpProvider.defaults.headers.post</code>, for example) is an
+object, where the key is the header name and the
+value is the value of the header. </p>
+<p>The following is the list of keys and values that can have defaults set using $httpPro
+vider (using $httpProvider.defaults):</p>
+<ul>
+<li><code>headers.common</code></li>
+<li><code>headers.get</code></li>
+<li><code>headers.put</code></li>
+<li><code>headers.post</code></li>
+<li><code>transformRequest</code></li>
+<li><code>transformResponse</code></li>
+<li><code>xsrfHeaderName</code></li>
+<li><code>xsrfCookieName</code></li>
+</ul>
+<h3 id="interceptors">Interceptors</h3>
+<p>It usually required planning to create a layer through which all requests
+would be channeled so that we could add global hooks.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+</pre></td><td class="code"><pre>angular.module(<span class="string">'notesApp'</span>, [])
+.factory(<span class="string">'MyLoggingInterceptor'</span>, [<span class="string">'$q'</span>, <span class="function"><span class="keyword">function</span><span class="params">(<span class="variable">$q</span>)</span> {</span>
+  <span class="keyword">return</span> {
+    request: <span class="function"><span class="keyword">function</span><span class="params">(config)</span> {</span>
+    console.log(<span class="string">'Request made with '</span>, config);
+    <span class="keyword">return</span> config;
+    <span class="comment">// If an error, not allowed, or my custom condition,</span>
+    <span class="comment">// return $q.reject('Not allowed');</span>
+    },
+    requestError: <span class="function"><span class="keyword">function</span><span class="params">(rejection)</span> {</span>
+      console.log(<span class="string">'Request error due to '</span>, rejection);
+      <span class="comment">// Continue to ensure that the next promise chain</span>
+      <span class="comment">// sees an error</span>
+      <span class="keyword">return</span> <span class="variable">$q</span>.reject(rejection);
+      <span class="comment">// Or handled successfully?</span>
+      <span class="comment">// return someValue</span>
+    },
+    response: <span class="function"><span class="keyword">function</span><span class="params">(response)</span> {</span>
+      console.log(<span class="string">'Response from server'</span>, response);
+      <span class="comment">// Return a promise</span>
+      <span class="keyword">return</span> response || <span class="variable">$q</span>.when(response);
+    },
+    responseError: <span class="function"><span class="keyword">function</span><span class="params">(rejection)</span> {</span>
+      console.log(<span class="string">'Error in response '</span>, rejection);
+      <span class="comment">// Continue to ensure that the next promise chain</span>
+      <span class="comment">// sees an error</span>
+      <span class="comment">// Can check auth status code here if need to</span>
+      <span class="comment">// if (rejection.status === 403) {</span>
+      <span class="comment">// Show a login dialog</span>
+      <span class="comment">// return a value to tell controllers it has</span>
+      <span class="comment">// been handled</span>
+      <span class="comment">// }</span>
+      <span class="comment">// Or return a rejection to continue the</span>
+      <span class="comment">// promise failure chain</span>
+      <span class="keyword">return</span> <span class="variable">$q</span>.reject(rejection);
+    }
+  };
+}])
+.config([<span class="string">'$httpProvider'</span>, <span class="function"><span class="keyword">function</span><span class="params">(<span class="variable">$httpProvider</span>)</span> {</span>
+  <span class="variable">$httpProvider</span>.interceptors.push(<span class="string">'MyLoggingInterceptor'</span>);
+}]);
+</pre></td></tr></table></figure>
+
+<p>The interceptors will be called in the order we add them to the provider,
+so we can also control the order in which they are called.</p>
+<h2 id="promise">Promise</h2>
+<p>The Promise API was designed to solve this nesting problem and the problem of error
+handling.</p>
+<ul>
+<li>Each asynchronous task will return a promise object.</li>
+<li>Each promise object will have a then function that can take two arguments, a success
+handler and an error handler.</li>
+<li>The success or the error handler in the then function will be called only once, after
+the asynchronous task finishes.</li>
+<li>The then function will also return a promise, to allow chaining multiple calls.</li>
+<li>Each handler (success or error) can return a value, which will be passed to the next
+function in the chain of promises.</li>
+<li>If a handler returns a promise (makes another asynchronous request), then the next
+handler (success or error) will be called only after that request is finished.</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="code"><pre><span class="variable">$http</span>.get(<span class="string">'/api/server-config'</span>).then(<span class="function"><span class="keyword">function</span><span class="params">(configResponse)</span> {</span>
+  <span class="keyword">return</span> <span class="variable">$http</span>.get(<span class="string">'/api/'</span> + configResponse.data.USER_END_POINT);
+}).then(<span class="function"><span class="keyword">function</span><span class="params">(userResponse)</span> {</span>
+  <span class="keyword">return</span> <span class="variable">$http</span>.get(<span class="string">'/api/'</span> + userResponse.data.id + <span class="string">'/items'</span>);
+}).then(<span class="function"><span class="keyword">function</span><span class="params">(itemResponse)</span> {</span>
+  <span class="comment">// Display items here</span>
+}, <span class="function"><span class="keyword">function</span><span class="params">(error)</span> {</span>
+  <span class="comment">// Common error handling</span>
+});
+</pre></td></tr></table></figure>
+
+<p>If any error happens in any of the
+functions in the promise chain, AngularJS will find the
+next closest error handler and trigger it.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+</pre></td><td class="code"><pre><span class="keyword">var</span> <span class="keyword">self</span> = this;
+<span class="keyword">self</span>.items = [];
+<span class="keyword">self</span>.newTodo = {};
+<span class="keyword">var</span> fetchTodos = <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+  <span class="keyword">return</span> <span class="variable">$http</span>.get(<span class="string">'/api/note'</span>).then(
+    <span class="function"><span class="keyword">function</span><span class="params">(response)</span> {</span>
+      <span class="keyword">self</span>.items = response.data;
+    }, <span class="function"><span class="keyword">function</span><span class="params">(errResponse)</span> {</span>
+      console.error(<span class="string">'Error while fetching notes'</span>);
+    });
+};
+fetchTodos();
+<span class="keyword">self</span>.add = <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+  <span class="variable">$http</span>.post(<span class="string">'/api/note'</span>, <span class="keyword">self</span>.newTodo)
+    .then(fetchTodos)
+    .then(<span class="function"><span class="keyword">function</span><span class="params">(response)</span> {</span>
+      <span class="keyword">self</span>.newTodo = {};
+    });
+};
+</pre></td></tr></table></figure>
+
+<h3 id="-q-service">$q Service</h3>
+<p>If we want to trigger the success handler for the next promise in the chain, we can just
+return a value from the success or the error handler.</p>
+<p>If, on the other hand, we want to trigger the error handler for the next promise in the
+chain, we can leverage the $q service in AngularJS.
+Just ask for $q as a dependency in our controller and service,
+and return <code>$q.reject(data)</code> from the handler.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>xhrCall()
+  .<span class="keyword">then</span>(S1, E1) <span class="comment">//P1</span>
+  .<span class="keyword">then</span>(S2, E2) <span class="comment">//P2</span>
+  .<span class="keyword">then</span>(S3, E3) <span class="comment">//P3</span>
+</pre></td></tr></table></figure>
+
+<ul>
+<li><code>$q.defer()</code> Creates a deferred object when we need to create a promise for our own asynchro‐
+nous task. Use <code>deferredObject.resolve</code> and <code>deferredObject.reject</code> to
+trigger the Promise</li>
+<li><code>$q.reject()</code> The return value of this should be returned to ensure that the
+promise continues to the next error handler instead of the success handler in the
+promise chain.</li>
+</ul>
+<h2 id="ngresource">ngResource</h2>
+<p>AngularJS’s optional module, <code>ngResource. ngResource</code> allows
+us to take an API endpoint and create an
+AngularJS service around it.</p>
+<ul>
+<li>GET request to <code>/api/project/</code> returned an array of projects</li>
+<li>GET request to <code>/api/project/17</code> returned the project with ID 17</li>
+<li>POST request to <code>/api/project/</code> with a project object as JSON created a new project</li>
+<li>POST request to <code>/api/project/19</code> with a project object as JSON updated the project
+with ID 19</li>
+<li>DELETE request to <code>/api/project/</code> deleted all the projects</li>
+<li>DELETE request to <code>/api/project/23</code> deleted the project with ID 23</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>angular.module(<span class="string">'resourceApp'</span>, [<span class="string">'ngResource'</span>])
+.factory(<span class="string">'ProjectService'</span>, [<span class="string">'$resource'</span>, <span class="function"><span class="keyword">function</span><span class="params">(<span class="variable">$resource</span>)</span> {</span>
+  <span class="keyword">return</span> <span class="variable">$resource</span>(<span class="string">'/api/project/:id'</span>);
+}]);
+</pre></td></tr></table></figure>
+
+<ul>
+<li><code>ProjectService.query()</code> to get a list of projects</li>
+<li><code>ProjectService.save({id: 15}, projectObj)</code> to update a project with ID 15</li>
+<li><code>ProjectService.get({id: 19})</code> to get an individual project with ID 19</li>
+</ul>
+<h2 id="best-practices">Best Practices</h2>
+<p>Wrap <code>$http</code> in services</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre>angular.module(<span class="string">'notesApp'</span>, [])
+.factory(<span class="string">'NoteService'</span>, [<span class="string">'$http'</span>, <span class="function"><span class="keyword">function</span><span class="params">(<span class="variable">$http</span>)</span> {</span>
+  <span class="keyword">return</span> {
+    query: <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+      <span class="keyword">return</span> <span class="variable">$http</span>.get(<span class="string">'/api/notes'</span>);
+    }
+  };
+}]);
+</pre></td></tr></table></figure>
+
+<p>Use interceptors</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+</pre></td><td class="code"><pre>angular.module(<span class="string">'notesApp'</span>, [])
+.factory(<span class="string">'AuthInterceptor'</span>, [<span class="string">'AuthInfoService'</span>, <span class="string">'$q'</span>, <span class="function"><span class="keyword">function</span><span class="params">(AuthInfoService, <span class="variable">$q</span>)</span> {</span>
+  <span class="keyword">return</span> {
+    request: <span class="function"><span class="keyword">function</span><span class="params">(config)</span> {</span>
+      <span class="keyword">if</span> (AuthInfoService.hasAuthHeader()) {
+        config.headers[<span class="string">'Authorization'</span>] =
+        AuthInfoService.getAuthHeader();
+      }
+      <span class="keyword">return</span> config;
+    },
+    responseError: <span class="function"><span class="keyword">function</span><span class="params">(responseRejection)</span> {</span>
+      <span class="keyword">if</span> (responseError.status === <span class="number">403</span>) {
+        <span class="comment">// Authorization issue, access forbidden</span>
+        AuthInfoService.redirectToLogin();
+      }
+      <span class="keyword">return</span> <span class="variable">$q</span>.reject(responseRejection);
+    }
+  };
+}])
+.config([<span class="string">'$httpProvider'</span>, <span class="function"><span class="keyword">function</span><span class="params">(<span class="variable">$httpProvider</span>)</span> {</span>
+  <span class="variable">$httpProvider</span>.interceptors.push(<span class="string">'AuthInterceptor'</span>);
+}]);
+</pre></td></tr></table></figure>
+
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://zhpooer.github.io/2014/12/18/angularjs-2/" data-title="angularjs - Forms, Inputs, and Services | Poe&#39;s World" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2014/12/21/angularjs-3/" title="angularJS - Unit Testing Services and XHRs">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  angularJS - Unit Testing Services and XHRs</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2014/12/18/angularjs-1/"  title="angularjs-入门">
+ <strong>NEXT:</strong><br/> 
+ <span>angularjs-入门
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#ng-model"><span class="toc-number">1.</span> <span class="toc-text">ng-model</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#forms"><span class="toc-number">2.</span> <span class="toc-text">Forms</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#displaying-error-messages"><span class="toc-number">2.1.</span> <span class="toc-text">Displaying Error Messages</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#styling-forms-and-states"><span class="toc-number">2.2.</span> <span class="toc-text">Styling Forms and States</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#nested-forms-with-ng-form"><span class="toc-number">2.3.</span> <span class="toc-text">Nested Forms with ng-form</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#other-form-controls"><span class="toc-number">2.4.</span> <span class="toc-text">Other Form Controls</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#radio-buttons"><span class="toc-number">2.5.</span> <span class="toc-text">Radio Buttons</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#combo-boxex-drop-downs"><span class="toc-number">2.6.</span> <span class="toc-text">Combo Boxex/Drop-Downs</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#angularjs-services"><span class="toc-number">3.</span> <span class="toc-text">AngularJS Services</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#creating-a-simple-angularjs-service"><span class="toc-number">3.1.</span> <span class="toc-text">Creating a Simple AngularJS Service</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#the-defference-between-factory-service-and-provider"><span class="toc-number">3.2.</span> <span class="toc-text">The defference between Factory, Service, and Provider</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#server-communication-using-http"><span class="toc-number">4.</span> <span class="toc-text">Server Communication Using $http</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-http-api"><span class="toc-number">4.1.</span> <span class="toc-text">$http API</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-httpprovider"><span class="toc-number">4.2.</span> <span class="toc-text">$httpProvider</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#interceptors"><span class="toc-number">4.2.1.</span> <span class="toc-text">Interceptors</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#promise"><span class="toc-number">4.3.</span> <span class="toc-text">Promise</span></a></li><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#-q-service"><span class="toc-number">4.3.1.</span> <span class="toc-text">$q Service</span></a></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#ngresource"><span class="toc-number">4.4.</span> <span class="toc-text">ngResource</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#best-practices"><span class="toc-number">4.5.</span> <span class="toc-text">Best Practices</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/AJAX/" title="AJAX">AJAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Android/" title="Android">Android<sup>1</sup></a></li>
+		
+			<li><a href="/tags/DOM/" title="DOM">DOM<sup>2</sup></a></li>
+		
+			<li><a href="/tags/EL表达式/" title="EL表达式">EL表达式<sup>1</sup></a></li>
+		
+			<li><a href="/tags/HBase/" title="HBase">HBase<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Hibernate/" title="Hibernate">Hibernate<sup>2</sup></a></li>
+		
+			<li><a href="/tags/HttpSession/" title="HttpSession">HttpSession<sup>1</sup></a></li>
+		
+			<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Illustrator/" title="Illustrator">Illustrator<sup>3</sup></a></li>
+		
+			<li><a href="/tags/JSP/" title="JSP">JSP<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaBean/" title="JavaBean">JavaBean<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaScript/" title="JavaScript">JavaScript<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Mybatis/" title="Mybatis">Mybatis<sup>1</sup></a></li>
+		
+			<li><a href="/tags/NoSql/" title="NoSql">NoSql<sup>1</sup></a></li>
+		
+			<li><a href="/tags/SASS/" title="SASS">SASS<sup>1</sup></a></li>
+		
+			<li><a href="/tags/SAX/" title="SAX">SAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletRequest/" title="ServletRequest">ServletRequest<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletResponse/" title="ServletResponse">ServletResponse<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2015 
+		
+		<a href="http://zhpooer.github.io" target="_blank" title="zhpooer">zhpooer</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"zhpoooer"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>

@@ -1,0 +1,1107 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>响应式网站 | Poe&#39;s World</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="zhpooer">
+    
+    <meta name="description" content="入门
+响应式, 可以适应不同尺寸的屏幕,
+自动响应变化自己的外观的网站.使用html5和css3
+HTML5
+HTML5 由全球五大浏览器厂商共同指定
+&lt;!doctype html&gt;, 包含了以往所有版本的文档dtd功能
+1
+2
+3
+4
+5
+6
+7
+8
+9
+&lt;!doctype ht">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="Poe&#39;s World" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="Poe&#39;s World" title="Poe&#39;s World"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Poe&#39;s World">Poe&#39;s World</a></h1>
+				<h2 class="blog-motto">竹杖芒鞋轻胜马，一蓑烟雨任平生</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/english-monthly">英语角</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:zhpooer.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2014/12/22/响应式网站/" title="响应式网站" itemprop="url">响应式网站</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://zhpooer.github.io" title="zhpooer">zhpooer</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2014-12-22T01:12:08.000Z" itemprop="datePublished">12月 22 2014</time>
+    更新日期:<time datetime="2015-01-05T15:04:45.000Z" itemprop="dateModified">1月 5 2015</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">入门</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#html5"><span class="toc-number">2.</span> <span class="toc-text">HTML5</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.1.</span> <span class="toc-text">结构标签</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.2.</span> <span class="toc-text">视频标签</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.3.</span> <span class="toc-text">其他标签</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#css3"><span class="toc-number">3.</span> <span class="toc-text">CSS3</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">3.1.</span> <span class="toc-text">选择器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">3.2.</span> <span class="toc-text">浏览器私有前缀</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2d-"><span class="toc-number">3.3.</span> <span class="toc-text">2D 转换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">3.4.</span> <span class="toc-text">动画</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">3.5.</span> <span class="toc-text">渐变背景色</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">3.6.</span> <span class="toc-text">内减属性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">3.7.</span> <span class="toc-text">自定义动画</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">3.8.</span> <span class="toc-text">跳转链接</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">3.9.</span> <span class="toc-text">图标字体</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-3d"><span class="toc-number">3.10.</span> <span class="toc-text">构建3D</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">4.</span> <span class="toc-text">响应布局</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">4.1.</span> <span class="toc-text">百分比</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">4.2.</span> <span class="toc-text">设备长宽</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#phonegap"><span class="toc-number">5.</span> <span class="toc-text">Phonegap</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#swipe-"><span class="toc-number">6.</span> <span class="toc-text">Swipe 手机滑动轮播图</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#rem-and-em"><span class="toc-number">7.</span> <span class="toc-text">rem and em</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#jquery-mobile"><span class="toc-number">8.</span> <span class="toc-text">Jquery-mobile</span></a></li></ol>
+		</div>
+		
+		<h1 id="-">入门</h1>
+<p>响应式, 可以适应不同尺寸的屏幕,
+自动响应变化自己的外观的网站.使用html5和css3</p>
+<h1 id="html5">HTML5</h1>
+<p>HTML5 由全球五大浏览器厂商共同指定</p>
+<p><code>&lt;!doctype html&gt;</code>, 包含了以往所有版本的文档dtd功能</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="code"><pre><span class="doctype">&lt;!doctype html&gt;</span>
+<span class="tag">&lt;<span class="title">html</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">head</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">meta</span> <span class="attribute">charset</span>=<span class="value">'utf-8'</span>/&gt;</span>
+    <span class="tag">&lt;<span class="title">meta</span> <span class="attribute">name</span>=<span class="value">”renderer”</span> <span class="attribute">content</span>=<span class="value">”webkit|ie-comp|ie-stand”</span>&gt;</span>
+  <span class="tag">&lt;/<span class="title">head</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">body</span>&gt;</span>
+  <span class="tag">&lt;/<span class="title">body</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">html</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+</pre></td><td class="code"><pre><span class="comment">/* 禁用iPhone中Safari的字号自动调整 */</span>
+<span class="tag">html</span> <span class="rules">{
+  <span class="rule"><span class="attribute">-webkit-text-size-adjust</span>:<span class="value"> <span class="number">100</span>%</span></span>;   <span class="comment">/*让谷歌浏览器可以设定字体大小*/</span>
+  <span class="rule"><span class="attribute">-ms-text-size-adjust</span>:<span class="value"> <span class="number">100</span>%</span></span>;
+<span class="rule">}</span></span>
+<span class="comment">/* 设置HTML5元素为块 */</span>
+<span class="tag">article</span>,<span class="tag">aside</span>, <span class="tag">details</span>, <span class="tag">figcaption</span>,<span class="tag">figure</span>, <span class="tag">footer</span>, <span class="tag">header</span>, <span class="tag">hgroup</span>,<span class="tag">menu</span>, <span class="tag">nav</span>, <span class="tag">section</span> <span class="rules">{
+  <span class="rule"><span class="attribute">display</span>:<span class="value">block</span></span>;
+<span class="rule">}</span></span>
+<span class="comment">/* 设置图片视频等自适应调整 */</span>
+<span class="tag">img</span> <span class="rules">{
+  <span class="rule"><span class="attribute">max-widthL</span>:<span class="value"> <span class="number">100</span>%</span></span>;
+  <span class="rule"><span class="attribute">height</span>:<span class="value">auto</span></span>;
+  <span class="rule"><span class="attribute">width</span>:<span class="value">auto\<span class="number">9</span></span></span>; <span class="comment">/* ie8 */</span>
+<span class="rule">}</span></span>
+<span class="class">.video</span> <span class="tag">embed</span>, <span class="class">.video</span> <span class="tag">object</span>, <span class="class">.video</span> <span class="tag">iframe</span> <span class="rules">{
+  <span class="rule"><span class="attribute">width</span>:<span class="value"> <span class="number">100</span>%</span></span>;
+  <span class="rule"><span class="attribute">height</span>:<span class="value"> auto</span></span>;
+<span class="rule">}</span></span>
+</pre></td></tr></table></figure>
+
+<p>ie9+对html5支持, 检测浏览器支持html5. 任何浏览器对不能识别的标签,
+都能显示里面的内容</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">canvas</span>&gt;</span> 您的浏览器版本过低, 请更新浏览器 <span class="tag">&lt;/<span class="title">canvas</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<h2 id="-">结构标签</h2>
+<p>用来布局</p>
+<ul>
+<li><code>&lt;header&gt; &lt;/header&gt;</code></li>
+<li><code>&lt;nav&gt;&lt;/nav&gt;</code></li>
+<li><code>&lt;section&gt;&lt;/section&gt;</code>, 分区标签, 语义上大于 div<ul>
+<li><code>&lt;aside&gt;&lt;/aside&gt;</code></li>
+<li><code>&lt;article&gt;&lt;/article&gt;</code></li>
+</ul>
+</li>
+<li><code>&lt;footer&gt;&lt;/footer&gt;</code></li>
+<li><code>hgroup</code> 定义比标题标记的组</li>
+<li><code>figure</code> 定义一组媒体内容及其标题</li>
+<li><code>figcaption</code> 定义figure元素的标题</li>
+</ul>
+<p>h5新增的标签本质是div制作的, 最大的意义在于嵌套使用. 比如 <code>header</code>, <code>hgroup&gt;h2</code></p>
+<h2 id="-">视频标签</h2>
+<p>早在html4, 或者 xhtml1.0 是没有处理视频的能力的, 只能通过某些插件来实现.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">video</span> <span class="attribute">src</span>=<span class="value">""</span> <span class="attribute">controls</span>=<span class="value">"controls"</span>&gt;</span><span class="tag">&lt;/<span class="title">video</span>&gt;</span>
+<span class="tag">&lt;<span class="title">video</span> <span class="attribute">src</span>=<span class="value">""</span> <span class="attribute">autoplay</span> =<span class="value">"autoplay"</span>&gt;</span><span class="tag">&lt;/<span class="title">video</span>&gt;</span>
+<span class="comment">&lt;!-- 设置视频循环播放 --&gt;</span>
+<span class="tag">&lt;<span class="title">video</span> <span class="attribute">src</span>=<span class="value">""</span> <span class="attribute">loop</span>=<span class="value">"loop"</span>&gt;</span><span class="tag">&lt;/<span class="title">video</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<p>支持的格式, ogg, mpeg4, webm(w3c推荐格式), 但是不是所有浏览器都支持.
+可以放两个视频来全部支持如 <code>ogg</code>组合<code>mp4</code>, <code>webm</code>组合<code>mp4</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre>&lt;video width=<span class="string">""</span> height=<span class="string">""</span> controls=<span class="string">"controls"</span>&gt;
+  &lt;<span class="built_in">source</span> src=<span class="string">""</span> <span class="built_in">type</span>=<span class="string">"video/ogg"</span>&gt;&lt;/<span class="built_in">source</span>&gt;
+  &lt;<span class="built_in">source</span> src=<span class="string">""</span> <span class="built_in">type</span>=<span class="string">"video/mp4"</span>&gt;&lt;/<span class="built_in">source</span>&gt;
+  Your browser dont support this tag
+&lt;/video&gt;
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre>video.<span class="keyword">play</span>();
+video.<span class="keyword">pause</span>();
+<span class="comment">// 快进</span>
+video.<span class="keyword">currentTime</span> += <span class="number">10</span>;
+<span class="comment">// 加速</span>
+video.playbackRate = <span class="number">2</span>;
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">audio</span> <span class="attribute">src</span>=<span class="value">""</span> <span class="attribute">controls</span>=<span class="value">"controls"</span> <span class="attribute">autoplay</span> <span class="attribute">loop</span>&gt;</span> <span class="tag">&lt;/<span class="title">audio</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<h2 id="-">其他标签</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- 温度计标签 --&gt;</span>
+<span class="tag">&lt;<span class="title">meter</span> <span class="attribute">low</span>=<span class="value">"15"</span> <span class="attribute">value</span>=<span class="value">"23"</span> <span class="attribute">hight</span>=<span class="value">""</span> <span class="attribute">min</span>=<span class="value">""</span> <span class="attribute">max</span>=<span class="value">""</span>&gt;</span><span class="tag">&lt;/<span class="title">meter</span>&gt;</span>
+<span class="comment">&lt;!-- 进度条 --&gt;</span>
+<span class="tag">&lt;<span class="title">progress</span> <span class="attribute">max</span>=<span class="value">'100'</span> <span class="attribute">value</span>=<span class="value">'0'</span>&gt;</span> <span class="tag">&lt;/<span class="title">progress</span>&gt;</span>
+
+<span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"text"</span> <span class="attribute">list</span>=<span class="value">"car"</span>/&gt;</span>
+<span class="tag">&lt;<span class="title">datalist</span> <span class="attribute">id</span>=<span class="value">'car'</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">option</span>&gt;</span> one <span class="tag">&lt;/<span class="title">option</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">option</span>&gt;</span> two <span class="tag">&lt;/<span class="title">option</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">option</span>&gt;</span> three<span class="tag">&lt;/<span class="title">option</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">datalist</span>&gt;</span>
+
+<span class="tag">&lt;<span class="title">details</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">summary</span>&gt;</span>概要<span class="tag">&lt;/<span class="title">summary</span>&gt;</span>
+  详情内容
+<span class="tag">&lt;/<span class="title">details</span>&gt;</span>
+
+<span class="comment">&lt;!-- 新增表单元素 --&gt;</span>
+<span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"email"</span>/&gt;</span>
+<span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"color"</span>/&gt;</span>
+<span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"range"</span> <span class="attribute">min</span>=<span class="value">"0"</span> <span class="attribute">max</span>=<span class="value">"100"</span>/&gt;</span>
+<span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"search"</span>/&gt;</span>
+
+<span class="tag">&lt;<span class="title">script</span>&gt;</span><span class="javascript">
+$().change(<span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>})
+</span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<h1 id="css3">CSS3</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+</pre></td><td class="code"><pre><span class="comment">// 新增了选择器 nth-of-type 等同于 eq(), 从 1 开始</span>
+<span class="tag">ul</span> <span class="tag">li</span><span class="pseudo">:nth-of-type</span>(1) {
+  <span class="attribute">border-radius</span><span class="value">: <span class="number">10</span>px;</span>
+  <span class="attribute">border-radius</span><span class="value">: <span class="number">5</span>  <span class="number">0</span>%;</span>
+  <span class="comment">/**上右下左**/</span>
+  <span class="attribute">border-radius</span><span class="value">: <span class="number">10</span>px <span class="number">10</span>px <span class="number">10</span>px <span class="number">10</span>px;</span>
+}
+
+<span class="tag">div</span> {
+  <span class="comment">/*水平偏移 纵向偏移 羽化程度*/</span>
+  <span class="attribute">box-shadow</span><span class="value">: <span class="number">0</span> <span class="number">0</span> <span class="number">10</span>px <span class="hexcolor">#000</span>;</span>
+  <span class="comment">/*内阴影*/</span>
+  <span class="attribute">box-shadow</span><span class="value">: <span class="number">0</span> <span class="number">0</span> <span class="number">10</span>px <span class="hexcolor">#000</span> inset;</span>
+  <span class="comment">/*透明*/</span>
+  <span class="attribute">background</span><span class="value">: rgba(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0.5</span>)
+  /*文字投影*/
+  text-shadow: <span class="number">0</span> <span class="number">0</span> <span class="number">10</span>px <span class="hexcolor">#000</span>;</span>
+}
+<span class="comment">/*转换为内联级元素*/</span>
+<span class="tag">section</span> {
+  <span class="attribute">display</span><span class="value">: box;</span>
+  <span class="attribute">display</span><span class="value">: -webkit-box;</span>
+}
+<span class="tag">article</span> {-webkit-box-<span class="attribute">flex</span><span class="value">: <span class="number">3</span>;</span>} <span class="comment">/* 3/8 */</span>
+<span class="tag">article</span> {-webkit-box-<span class="attribute">flex</span><span class="value">: <span class="number">5</span>;</span>} <span class="comment">/* 5/8 */</span>
+</pre></td></tr></table></figure>
+
+<h2 id="-">选择器</h2>
+<ul>
+<li><code>:nth-child</code>, 表示过滤当前容器中的第几个</li>
+<li><code>:nth-of-type</code> 表示过滤当前容器中同类型的第几个, 相当于 <code>eq()</code></li>
+<li><code>:first-child</code>, <code>:last-child</code></li>
+<li><code>:not()</code> 排除指定的元素</li>
+<li><code>:empty</code> 空元素</li>
+<li><code>[key=value]</code>, 过滤拥有指定属性值的元素, 例如 <code>input[type=button]</code></li>
+<li><code>:before</code> <code>:after</code><figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre><span class="tag">div</span><span class="pseudo">:before</span> <span class="rules">{ <span class="rule"><span class="attribute">content</span>:<span class="value"> <span class="string">'你好'</span></span></span>; <span class="rule"><span class="attribute">display</span>:<span class="value"> block</span></span>;<span class="rule">}</span></span>
+<span class="tag">div</span><span class="pseudo">:after</span> <span class="rules">{<span class="rule"><span class="attribute">content</span>:<span class="value"> <span class="string">''</span></span></span>;<span class="rule">}</span></span>
+</pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2 id="-">浏览器私有前缀</h2>
+<ul>
+<li>IE: <code>-ms-</code></li>
+<li>Firefox: <code>-moz-</code></li>
+<li>Chrome, Safari: <code>-webkit-</code></li>
+<li>Opera: <code>-0-</code></li>
+</ul>
+<h2 id="2d-">2D 转换</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+</pre></td><td class="code"><pre><span class="tag">div</span><span class="rules">{
+  <span class="comment">/* 顺时针旋转, 旋转的是整个坐标系 */</span>
+  <span class="rule"><span class="attribute">transform</span>:<span class="value"> <span class="function">rotate(<span class="number">45</span>deg)</span></span></span>;
+  <span class="rule"><span class="attribute">transform</span>:<span class="value"> <span class="function">scale(<span class="number">0.5</span>, <span class="number">2</span>)</span></span></span>;
+  <span class="comment">/* 移动横向, 纵向 */</span>
+  <span class="rule"><span class="attribute">transform</span>:<span class="value"> <span class="function">translate(<span class="number">100</span>px, <span class="number">0</span>)</span> <span class="function">scale(<span class="number">2</span>, <span class="number">2</span>)</span></span></span>;
+  <span class="rule"><span class="attribute">transform-origin</span>:<span class="value"> <span class="number">0</span>, <span class="number">10</span>px</span></span>; <span class="comment">/*设置旋转原点*/</span>
+  <span class="rule"><span class="attribute">transform-origin</span>:<span class="value"> <span class="number">50</span>%, top</span></span>;
+  <span class="rule"><span class="attribute">transform-origin</span>:<span class="value"> left, center</span></span>;
+  <span class="rule"><span class="attribute">transform-origin</span>:<span class="value"> right, bottom</span></span>;
+  <span class="comment">/*沿着y轴转*/</span>
+  <span class="rule"><span class="attribute">transform</span>:<span class="value"> <span class="function">rotateY(<span class="number">45</span>deg)</span></span></span>;
+  <span class="comment">/*沿着X轴转*/</span>
+  <span class="rule"><span class="attribute">transform</span>:<span class="value"> <span class="function">rotateX(<span class="number">45</span>deg)</span></span></span>;
+  <span class="comment">/*沿着Z轴转*/</span>
+  <span class="rule"><span class="attribute">transform</span>:<span class="value"> <span class="function">rotate(<span class="number">45</span>deg)</span></span></span>;
+<span class="rule">}</span></span>
+</pre></td></tr></table></figure>
+
+<h2 id="-">动画</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre><span class="comment">/*方式一*/</span>
+<span class="tag">div</span> <span class="rules">{<span class="rule"><span class="attribute">transition</span>:<span class="value"> width <span class="number">1</span>s, height <span class="number">2</span>s</span></span>;<span class="rule">}</span></span> <span class="comment">/*默认样式*/</span>
+<span class="tag">div</span><span class="pseudo">:hover</span> <span class="rules">{<span class="rule"><span class="attribute">width</span>:<span class="value"> <span class="number">400</span>px</span></span>; <span class="rule"><span class="attribute">height</span>:<span class="value"> <span class="number">300</span>px</span></span>;<span class="rule">}</span></span>
+
+<span class="comment">/*方式二 linear */</span>
+<span class="tag">div</span><span class="rules">{<span class="rule"><span class="attribute">transition</span>:<span class="value"> all <span class="number">2</span>s ease <span class="number">2</span>s</span></span>;<span class="rule">}</span></span>
+<span class="comment">/*transition-timing-function transition-delay*/</span>
+</pre></td></tr></table></figure>
+
+<ul>
+<li><code>linear</code> 匀速度</li>
+<li><code>ease</code> 逐渐慢下来</li>
+<li><code>ease-in</code> 加速</li>
+<li><code>ease-out</code> 减速</li>
+<li><code>ease-in-out</code> 先加后减</li>
+</ul>
+<h2 id="-">渐变背景色</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="code"><pre><span class="tag">div</span> <span class="rules">{
+  <span class="comment">/*角度*/</span>
+  <span class="rule"><span class="attribute">background</span>:<span class="value"> <span class="function">linear-gradient(<span class="number">180</span>deg, red, green <span class="number">30</span>%, blue)</span></span></span>;
+  <span class="rule"><span class="attribute">background-size</span>:<span class="value"> cover</span></span>; <span class="comment">/*拉申*/</span>
+  <span class="rule"><span class="attribute">background-size</span>:<span class="value"> <span class="number">100</span>% <span class="number">100</span>%</span></span>; <span class="comment">/* 背景盒子永远一样大*/</span>
+  <span class="rule"><span class="attribute">background-size</span>:<span class="value"> contain</span></span>; <span class="comment">/* 等比例拉申*/</span>
+  <span class="rule"><span class="attribute">background-image</span>:<span class="value"><span class="function">url()</span>, <span class="function">url()</span></span></span>; <span class="comment">/*设置两张背景图片*/</span>
+<span class="rule">}</span></span>
+
+<span class="comment">/*精灵图的缩放*/</span>
+<span class="tag">div</span> <span class="rules">{
+  <span class="comment">/*使用背景缩放*/</span>
+  <span class="rule"><span class="attribute">background-size</span>:<span class="value"> <span class="number">80</span>px <span class="number">283</span>px</span></span>; 
+<span class="rule">}</span></span>
+</pre></td></tr></table></figure>
+
+<h2 id="-">内减属性</h2>
+<p>排除 border和padding 对宽高的影响</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre><span class="attribute">box-sizing</span>: <span class="string">border-box;</span>
+</pre></td></tr></table></figure>
+
+
+
+<h2 id="-">自定义动画</h2>
+<p>animation, 让指定的元素实现自动运行的动画</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre><span class="tag">div</span> <span class="rules">{
+  <span class="comment">/*linear ease-in*/</span>
+  <span class="comment">/*正常播放, 轮流反向播放*/</span>
+  <span class="rule"><span class="attribute">-webkit-animation</span>:<span class="value"> sport <span class="number">2</span>s ease-out <span class="number">4</span>s infinite|n normal|alternate running|paused</span></span>;
+<span class="rule">}</span></span>
+<span class="tag">div</span><span class="pseudo">:hover</span> <span class="rules">{<span class="rule"><span class="attribute">animation-play-state</span>:<span class="value"> paused</span></span>;<span class="rule">}</span></span>
+<span class="at_rule">@<span class="keyword">-webkit-keyframes</span> sport </span>{
+  %0<span class="rules">{<span class="rule"><span class="attribute">left</span>:<span class="value"><span class="number">0</span></span></span></span>}
+  %100<span class="rules">{<span class="rule"><span class="attribute">left</span>:<span class="value"><span class="number">500</span></span></span></span>}
+}
+</pre></td></tr></table></figure>
+
+<h2 id="-">跳转链接</h2>
+<p>通过跳转域名的方式来制作手机, 使用<code>device.js</code>判断手记设备</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre><span class="built_in">window</span>.location = <span class="string">''</span>;
+<span class="built_in">window</span>.location.href = <span class="string">''</span>;
+</pre></td></tr></table></figure>
+
+<h2 id="-">图标字体</h2>
+<p><code>icomoon.io</code> <code>iconfont.cn2</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="comment">/* 声明字体 */</span>
+<span class="at_rule">@<span class="keyword">font-face</span></span> <span class="rules">{<span class="rule">}</span></span>
+<span class="comment">/* 引用 */</span>
+<span class="tag">div</span><span class="rules">{ <span class="rule"><span class="attribute">font-family</span>:<span class="value"> </span></span>; <span class="rule">}</span></span>
+</pre></td></tr></table></figure>
+
+<h2 id="-3d">构建3D</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">style</span>&gt;</span><span class="css">
+<span class="tag">body</span><span class="rules">{
+  <span class="comment">/*设置透视效果*/</span>
+  <span class="rule"><span class="attribute">perspective</span>:<span class="value"> <span class="number">1000</span>px</span></span>;
+  <span class="rule"><span class="attribute">transform</span>:<span class="value"> <span class="function">translate3d(<span class="number">100</span>%, <span class="number">100</span>%, <span class="number">100</span>%)</span></span></span>;
+<span class="rule">}</span></span>
+
+<span class="comment">/*transform-style:preserve-3d|flat*/</span>
+<span class="tag">ul</span><span class="rules">{
+  <span class="rule"><span class="attribute">transform-style</span>:<span class="value"> preserve-<span class="number">3</span>d</span></span>;
+  <span class="rule"><span class="attribute">width</span>:<span class="value"> <span class="number">200</span>px</span></span>;<span class="rule"><span class="attribute">height</span>:<span class="value"><span class="number">200</span>px</span></span>;
+  <span class="rule"><span class="attribute">border</span>:<span class="value"> <span class="number">1</span>px dashed</span></span>;
+  <span class="rule"><span class="attribute">position</span>:<span class="value"> relative</span></span>;
+  <span class="rule"><span class="attribute">transition</span>:<span class="value"> all <span class="number">4</span>s</span></span>;
+
+<span class="rule">}</span></span>
+<span class="tag">ul</span><span class="pseudo">:hover</span> <span class="rules">{
+  <span class="rule"><span class="attribute">transform</span>:<span class="value"><span class="function">rotateX(<span class="number">360</span>deg)</span> <span class="function">rotateY(<span class="number">360</span>deg)</span></span></span>;
+<span class="rule">}</span></span>  
+<span class="tag">ul</span> <span class="tag">li</span><span class="rules">{
+  <span class="rule"><span class="attribute">width</span>:<span class="value"> <span class="number">200</span>px</span></span>; <span class="rule"><span class="attribute">height</span>:<span class="value"> <span class="number">200</span>px</span></span>;
+  <span class="rule"><span class="attribute">border</span>:<span class="value"> <span class="number">1</span>px</span></span>; <span class="rule"><span class="attribute">position</span>:<span class="value"> absolute</span></span>;
+<span class="rule">}</span></span>
+<span class="comment">/*可以通过设置 scale 来设置成长方体*/</span>  
+<span class="tag">li</span><span class="pseudo">:nth-of-type(1)</span><span class="rules">{ <span class="rule"><span class="attribute">background</span>:<span class="value"> red</span></span>; <span class="rule"><span class="attribute">transform</span>:<span class="value"> <span class="function">rotateY(<span class="number">90</span>deg)</span> <span class="function">translateZ(<span class="number">100</span>px)</span></span></span>;<span class="rule">}</span></span> 
+<span class="tag">li</span><span class="pseudo">:nth-of-type(2)</span><span class="rules">{ <span class="rule"><span class="attribute">background</span>:<span class="value"> green</span></span>; <span class="rule"><span class="attribute">transform</span>:<span class="value"> <span class="function">rotateY(<span class="number">270</span>deg)</span>  <span class="function">translateZ(<span class="number">100</span>px)</span></span></span>;<span class="rule">}</span></span>
+<span class="tag">li</span><span class="pseudo">:nth-of-type(3)</span><span class="rules">{ <span class="rule"><span class="attribute">background</span>:<span class="value"> gold</span></span>; <span class="rule"><span class="attribute">transform</span>:<span class="value"> <span class="function">rotateX(<span class="number">0</span>deg)</span>  <span class="function">translateZ(<span class="number">100</span>px)</span></span></span>;<span class="rule">}</span></span>
+<span class="tag">li</span><span class="pseudo">:nth-of-type(4)</span><span class="rules">{ <span class="rule"><span class="attribute">background</span>:<span class="value"> blue</span></span>; <span class="rule"><span class="attribute">transform</span>:<span class="value"> <span class="function">rotateX(<span class="number">90</span>deg)</span>  <span class="function">translateZ(<span class="number">100</span>px)</span></span></span>;<span class="rule">}</span></span>
+<span class="tag">li</span><span class="pseudo">:nth-of-type(5)</span><span class="rules">{ <span class="rule"><span class="attribute">background</span>:<span class="value"> purple</span></span>; <span class="rule"><span class="attribute">transform</span>:<span class="value"><span class="function">rotateX(<span class="number">180</span>deg)</span> <span class="function">translateZ(<span class="number">100</span>px)</span></span></span>;<span class="rule">}</span></span>
+<span class="tag">li</span><span class="pseudo">:nth-of-type(6)</span><span class="rules">{ <span class="rule"><span class="attribute">background</span>:<span class="value"> pink</span></span>; <span class="rule"><span class="attribute">transform</span>:<span class="value"><span class="function">rotateX(<span class="number">270</span>deg)</span> <span class="function">translateZ(<span class="number">100</span>px)</span></span></span>;<span class="rule">}</span></span>
+
+</span><span class="tag">&lt;/<span class="title">style</span>&gt;</span>
+<span class="tag">&lt;<span class="title">ul</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">li</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">li</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">li</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">li</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">li</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">li</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">ul</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<h1 id="-">响应布局</h1>
+<p>响应式布局实现基本上是通过百分比来完成的, 必须了解设备的长 宽.</p>
+<h2 id="-">百分比</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="attribute">min-height</span><span class="value">: <span class="number">300</span>px;</span>
+<span class="attribute">width</span><span class="value">: <span class="number">70</span>%;</span> <span class="attribute">min-width</span><span class="value">: <span class="number">20</span>px;</span>
+<span class="attribute">box-sizing</span><span class="value">: border-box;</span>
+</pre></td></tr></table></figure>
+
+<h2 id="-">设备长宽</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre><span class="comment">/* 内嵌 */</span>
+@media (<span class="keyword">max</span><span class="attribute">-width</span>: <span class="number">620</span>px) {<span class="comment">/* mobile css */</span>}
+@media (<span class="keyword">min</span><span class="attribute">-width</span>:<span class="number">621</span>px) <span class="literal">and</span> (<span class="keyword">max</span><span class="attribute">-width</span>: <span class="number">980</span>px) {<span class="comment">/* pad css */</span>}
+@media (<span class="keyword">min</span><span class="attribute">-width</span>:<span class="number">981</span>px) {<span class="comment">/* desktop css */</span>}
+
+<span class="comment">/* 链接式 */</span>
+<span class="subst">&lt;</span><span class="keyword">link</span> rel<span class="subst">=</span><span class="string">"stylesheet"</span> <span class="keyword">type</span><span class="subst">=</span><span class="string">"text/css"</span> href<span class="subst">=</span><span class="string">"css/phone.css"</span> media<span class="subst">=</span><span class="string">"all"</span><span class="subst">/</span><span class="subst">&gt;</span>
+<span class="subst">&lt;</span><span class="keyword">link</span> rel<span class="subst">=</span><span class="string">"stylesheet"</span> <span class="keyword">type</span><span class="subst">=</span><span class="string">"text/css"</span> href<span class="subst">=</span><span class="string">"css/phone.css"</span> media<span class="subst">=</span><span class="string">" screen and (max-width:620px)"</span><span class="subst">/</span><span class="subst">&gt;</span><span class="number">1</span>
+<span class="subst">&lt;</span><span class="keyword">link</span> rel<span class="subst">=</span><span class="string">"stylesheet"</span> <span class="keyword">type</span><span class="subst">=</span><span class="string">"text/css"</span> href<span class="subst">=</span><span class="string">"css/pad.css"</span> media<span class="subst">=</span><span class="string">"(min-width:621px) and (max-width:980px)"</span><span class="subst">/</span><span class="subst">&gt;</span>
+<span class="subst">&lt;</span><span class="keyword">link</span> rel<span class="subst">=</span><span class="string">"stylesheet"</span> <span class="keyword">type</span><span class="subst">=</span><span class="string">"text/css"</span> href<span class="subst">=</span><span class="string">"css/pc.css"</span> media<span class="subst">=</span><span class="string">"(min-width:981px)"</span><span class="subst">/</span><span class="subst">&gt;</span>
+</pre></td></tr></table></figure>
+
+<p>pad和手机 正文文字一般都是 14 加粗.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="attribute">body&gt;*{min-width</span>: <span class="string">400px}</span>
+
+<span class="xml"><span class="tag">&lt;<span class="title">meta</span> <span class="attribute">name</span>=<span class="value">"viewport"</span>
+      <span class="attribute">content</span>=<span class="value">"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"</span>&gt;</span></span>
+</pre></td></tr></table></figure>
+
+<h1 id="phonegap">Phonegap</h1>
+<p>将制作的网页封装成手机app, 可以安装到手机里面</p>
+<h1 id="swipe-">Swipe 手机滑动轮播图</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre>
+
+</pre></td></tr></table></figure>
+
+<h1 id="rem-and-em">rem and em</h1>
+<p>root em 就是以根 html</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre><span class="attribute">height</span>: <span class="string">2rem;</span>
+</pre></td></tr></table></figure>
+
+<p><code>em</code> 默认以父级大小</p>
+<h1 id="jquery-mobile">Jquery-mobile</h1>
+<p>需要导入CSS样式</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">div</span> <span class="attribute">data-role</span>=<span class="value">"page"</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">div</span> <span class="attribute">data-role</span>=<span class="value">"header"</span>&gt;</span>
+     <span class="comment">&lt;!-- 添加图标， 在image中找 arrow-l-black  --&gt;</span>
+     <span class="tag">&lt;<span class="title">a</span> <span class="attribute">href</span>=<span class="value">"#"</span> <span class="attribute">data-icon</span>=<span class="value">"arrow-l"</span>&gt;</span>后退<span class="tag">&lt;/<span class="title">a</span>&gt;</span>
+     <span class="tag">&lt;<span class="title">h1</span>&gt;</span>我的手机网站<span class="tag">&lt;/<span class="title">h1</span>&gt;</span>
+     <span class="comment">&lt;!-- 设置图片的位置 top （notext没有文字））--&gt;</span>
+     <span class="tag">&lt;<span class="title">a</span> <span class="attribute">href</span>=<span class="value">"#"</span> <span class="attribute">data-icon</span>=<span class="value">"arrow-r"</span> <span class="attribute">data-iconpos</span>=<span class="value">"right"</span>&gt;</span>后退<span class="tag">&lt;/<span class="title">a</span>&gt;</span>
+  <span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">div</span> <span class="attribute">data-role</span>=<span class="value">"content"</span>&gt;</span>
+     <span class="comment">&lt;!-- 内部连接 #ID --&gt;</span>
+     <span class="tag">&lt;<span class="title">a</span> <span class="attribute">href</span>=<span class="value">"#page1"</span> <span class="attribute">data-role</span>=<span class="value">'button'</span>&gt;</span>订阅<span class="tag">&lt;/<span class="title">a</span>&gt;</span>
+     <span class="comment">&lt;!-- 外部链接 --&gt;</span>
+     <span class="tag">&lt;<span class="title">a</span> <span class="attribute">href</span>=<span class="value">"out.html"</span> <span class="attribute">rel</span>=<span class="value">'external'</span> &gt;</span>订阅<span class="tag">&lt;/<span class="title">a</span>&gt;</span>
+     <span class="comment">&lt;!-- 转产效果 flip slide fade Slidedown Slideup  --&gt;</span>
+     <span class="tag">&lt;<span class="title">a</span> <span class="attribute">href</span>=<span class="value">"out.html"</span> <span class="attribute">data-role</span>=<span class="value">'button'</span> <span class="attribute">data-transition</span>=<span class="value">'pop'</span>&gt;</span>订阅<span class="tag">&lt;/<span class="title">a</span>&gt;</span>
+ <span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+ <span class="comment">&lt;!-- .ui-control-group{100%;}; a{width:25%; border-sizing: boder-box; } --&gt;</span>
+     <span class="tag">&lt;<span class="title">div</span> <span class="attribute">data-role</span>=<span class="value">"footer"</span>
+          <span class="attribute">data-role</span>=<span class="value">"controlgroup"</span>
+          <span class="attribute">data-type</span>=<span class="value">"horizontal"</span>
+          <span class="attribute">data-position</span>=<span class="value">'fixed'</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">a</span> <span class="attribute">href</span>=<span class="value">"#"</span> <span class="attribute">data-role</span>=<span class="value">"button"</span>&gt;</span><span class="tag">&lt;/<span class="title">a</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">a</span> <span class="attribute">href</span>=<span class="value">"#"</span> <span class="attribute">data-role</span>=<span class="value">"button"</span>&gt;</span><span class="tag">&lt;/<span class="title">a</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">a</span> <span class="attribute">href</span>=<span class="value">"#"</span> <span class="attribute">data-role</span>=<span class="value">"button"</span>&gt;</span><span class="tag">&lt;/<span class="title">a</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">a</span> <span class="attribute">href</span>=<span class="value">"#"</span> <span class="attribute">data-role</span>=<span class="value">"button"</span>&gt;</span><span class="tag">&lt;/<span class="title">a</span>&gt;</span>
+  <span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+
+<span class="tag">&lt;<span class="title">div</span> <span class="attribute">data-role</span>=<span class="value">"page"</span> <span class="attribute">id</span>=<span class="value">’page1‘</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">div</span> <span class="attribute">data-role</span>=<span class="value">"header"</span>&gt;</span>
+     <span class="tag">&lt;<span class="title">h1</span>&gt;</span>我的手机网站<span class="tag">&lt;/<span class="title">h1</span>&gt;</span>
+  <span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">div</span> <span class="attribute">data-role</span>=<span class="value">"content"</span>&gt;</span>
+    这里是第二部分内容
+    <span class="tag">&lt;<span class="title">select</span> <span class="attribute">name</span>=<span class="value">"''"</span> <span class="attribute">id</span>=<span class="value">"''"</span>&gt;</span>
+      <span class="tag">&lt;<span class="title">option</span>&gt;</span> 选择 <span class="tag">&lt;/<span class="title">option</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">select</span>&gt;</span>
+  <span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">div</span> <span class="attribute">data-role</span>=<span class="value">"footer"</span> <span class="attribute">data-position</span>=<span class="value">'fixed'</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">h4</span>&gt;</span>版权信息<span class="tag">&lt;/<span class="title">h4</span>&gt;</span>
+  <span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+  
+<span class="comment">&lt;!-- 弹出对话框 --&gt;</span>
+<span class="tag">&lt;<span class="title">a</span> <span class="attribute">href</span>=<span class="value">"#page2"</span> <span class="attribute">data-rel</span>=<span class="value">"dialog"</span>&gt;</span><span class="tag">&lt;/<span class="title">a</span>&gt;</span>
+<span class="tag">&lt;<span class="title">div</span> <span class="attribute">data-role</span>=<span class="value">"page"</span> <span class="attribute">id</span>=<span class="value">"page2"</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">div</span> <span class="attribute">data-role</span>=<span class="value">"header"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">h2</span>&gt;</span>您确定要退出吗？<span class="tag">&lt;/<span class="title">h2</span>&gt;</span>
+  <span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">div</span> <span class="attribute">data-role</span>=<span class="value">"content"</span>&gt;</span>
+    确定 返回
+  <span class="tag">&lt;/<span class="title">div</span>&gt;</span>  
+<span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+<span class="tag">&lt;<span class="title">div</span> <span class="attribute">data-role</span>=<span class="value">"page"</span> <span class="attribute">id</span>=<span class="value">"page2"</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">div</span> <span class="attribute">data-role</span>=<span class="value">"header"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">h2</span>&gt;</span>您确定要退出吗？<span class="tag">&lt;/<span class="title">h2</span>&gt;</span>
+  <span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">div</span> <span class="attribute">data-role</span>=<span class="value">"content"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">a</span> <span class="attribute">href</span>=<span class="value">"#"</span> <span class="attribute">data-role</span>=<span class="value">"button"</span>&gt;</span>重启<span class="tag">&lt;/<span class="title">a</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">a</span> <span class="attribute">href</span>=<span class="value">"#"</span>&gt;</span>静音<span class="tag">&lt;/<span class="title">a</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">a</span> <span class="attribute">href</span>=<span class="value">"#"</span>&gt;</span><span class="tag">&lt;/<span class="title">a</span>&gt;</span>
+  <span class="tag">&lt;/<span class="title">div</span>&gt;</span>  
+<span class="tag">&lt;/<span class="title">div</span>&gt;</span>  
+
+<span class="comment">&lt;!-- 列表 --&gt;</span>
+<span class="tag">&lt;<span class="title">div</span> <span class="attribute">dat-role</span>=<span class="value">"content"</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">ul</span> <span class="attribute">data-role</span>=<span class="value">"listview"</span>
+      <span class="attribute">data-inset</span>=<span class="value">"true"</span>
+      <span class="attribute">data-filter</span>=<span class="value">"true"</span>
+      <span class="attribute">data-filter-placeholder</span>=<span class="value">"请输入名字"</span>&gt;</span>
+      <span class="tag">&lt;<span class="title">li</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">a</span>&gt;</span>
+          <span class="tag">&lt;<span class="title">img</span> <span class="attribute">src</span>=<span class="value">""</span>/&gt;</span>
+          <span class="tag">&lt;<span class="title">h3</span>&gt;</span>刘德华<span class="tag">&lt;/<span class="title">h3</span>&gt;</span>
+          <span class="tag">&lt;<span class="title">p</span>&gt;</span>简介<span class="tag">&lt;/<span class="title">p</span>&gt;</span>
+        <span class="tag">&lt;/<span class="title">a</span>&gt;</span>
+      <span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+      <span class="tag">&lt;<span class="title">li</span>&gt;</span><span class="tag">&lt;<span class="title">a</span>&gt;</span>张学友<span class="tag">&lt;/<span class="title">a</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+      <span class="tag">&lt;<span class="title">li</span>&gt;</span><span class="tag">&lt;<span class="title">a</span>&gt;</span><span class="tag">&lt;/<span class="title">a</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+      <span class="tag">&lt;<span class="title">li</span>&gt;</span><span class="tag">&lt;<span class="title">a</span>&gt;</span><span class="tag">&lt;/<span class="title">a</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>
+  <span class="tag">&lt;/<span class="title">ul</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+
+<span class="tag">&lt;<span class="title">div</span> <span class="attribute">data-role</span>=<span class="value">"content"</span>&gt;</span>
+  <span class="comment">&lt;!-- ui-grid-a 两个子盒子排列
+       ui-grid-b 三个子盒子排列 以此类推--&gt;</span>
+  <span class="tag">&lt;<span class="title">div</span> <span class="attribute">class</span>=<span class="value">"ui-grid-a"</span>&gt;</span>
+      <span class="tag">&lt;<span class="title">div</span> <span class="attribute">class</span>=<span class="value">"ui-block-a"</span>&gt;</span> <span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+      <span class="tag">&lt;<span class="title">div</span> <span class="attribute">class</span>=<span class="value">"ui-block-b"</span>&gt;</span> <span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+  <span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://zhpooer.github.io/2014/12/22/响应式网站/" data-title="响应式网站 | Poe&#39;s World" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2014/12/23/angularjs-4/" title="angularjs-Working with Filters &amp; ngRoute">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  angularjs-Working with Filters &amp; ngRoute</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2014/12/21/angularjs-3/"  title="angularJS - Unit Testing Services and XHRs">
+ <strong>NEXT:</strong><br/> 
+ <span>angularJS - Unit Testing Services and XHRs
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">入门</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#html5"><span class="toc-number">2.</span> <span class="toc-text">HTML5</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.1.</span> <span class="toc-text">结构标签</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.2.</span> <span class="toc-text">视频标签</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">2.3.</span> <span class="toc-text">其他标签</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#css3"><span class="toc-number">3.</span> <span class="toc-text">CSS3</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">3.1.</span> <span class="toc-text">选择器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">3.2.</span> <span class="toc-text">浏览器私有前缀</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2d-"><span class="toc-number">3.3.</span> <span class="toc-text">2D 转换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">3.4.</span> <span class="toc-text">动画</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">3.5.</span> <span class="toc-text">渐变背景色</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">3.6.</span> <span class="toc-text">内减属性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">3.7.</span> <span class="toc-text">自定义动画</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">3.8.</span> <span class="toc-text">跳转链接</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">3.9.</span> <span class="toc-text">图标字体</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-3d"><span class="toc-number">3.10.</span> <span class="toc-text">构建3D</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">4.</span> <span class="toc-text">响应布局</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">4.1.</span> <span class="toc-text">百分比</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">4.2.</span> <span class="toc-text">设备长宽</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#phonegap"><span class="toc-number">5.</span> <span class="toc-text">Phonegap</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#swipe-"><span class="toc-number">6.</span> <span class="toc-text">Swipe 手机滑动轮播图</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#rem-and-em"><span class="toc-number">7.</span> <span class="toc-text">rem and em</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#jquery-mobile"><span class="toc-number">8.</span> <span class="toc-text">Jquery-mobile</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/AJAX/" title="AJAX">AJAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Android/" title="Android">Android<sup>1</sup></a></li>
+		
+			<li><a href="/tags/DOM/" title="DOM">DOM<sup>2</sup></a></li>
+		
+			<li><a href="/tags/EL表达式/" title="EL表达式">EL表达式<sup>1</sup></a></li>
+		
+			<li><a href="/tags/HBase/" title="HBase">HBase<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Hibernate/" title="Hibernate">Hibernate<sup>2</sup></a></li>
+		
+			<li><a href="/tags/HttpSession/" title="HttpSession">HttpSession<sup>1</sup></a></li>
+		
+			<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Illustrator/" title="Illustrator">Illustrator<sup>3</sup></a></li>
+		
+			<li><a href="/tags/JSP/" title="JSP">JSP<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaBean/" title="JavaBean">JavaBean<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaScript/" title="JavaScript">JavaScript<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Mybatis/" title="Mybatis">Mybatis<sup>1</sup></a></li>
+		
+			<li><a href="/tags/NoSql/" title="NoSql">NoSql<sup>1</sup></a></li>
+		
+			<li><a href="/tags/SASS/" title="SASS">SASS<sup>1</sup></a></li>
+		
+			<li><a href="/tags/SAX/" title="SAX">SAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletRequest/" title="ServletRequest">ServletRequest<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletResponse/" title="ServletResponse">ServletResponse<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2015 
+		
+		<a href="http://zhpooer.github.io" target="_blank" title="zhpooer">zhpooer</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"zhpoooer"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>

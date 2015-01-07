@@ -117,7 +117,7 @@ div.style.disp">
     </p>
   <p class="article-time">
     <time datetime="2014-12-07T11:13:56.000Z" itemprop="datePublished">12月 7 2014</time>
-    更新日期:<time datetime="2014-12-12T03:41:35.000Z" itemprop="dateModified">12月 12 2014</time>
+    更新日期:<time datetime="2014-12-27T11:29:14.000Z" itemprop="dateModified">12月 27 2014</time>
     
   </p>
 </header>
@@ -126,7 +126,7 @@ div.style.disp">
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">基础</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#dom"><span class="toc-number">2.</span> <span class="toc-text">DOM</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">事件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#cookie"><span class="toc-number">4.</span> <span class="toc-text">cookie</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">5.</span> <span class="toc-text">运动</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">5.1.</span> <span class="toc-text">完美运动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">5.2.</span> <span class="toc-text">弹性运动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">5.3.</span> <span class="toc-text">碰撞运动</span></a></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">基础</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#dom"><span class="toc-number">2.</span> <span class="toc-text">DOM</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">事件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#cookie"><span class="toc-number">4.</span> <span class="toc-text">cookie</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">5.</span> <span class="toc-text">运动</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">5.1.</span> <span class="toc-text">完美运动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">5.2.</span> <span class="toc-text">弹性运动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">5.3.</span> <span class="toc-text">碰撞运动</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">6.</span> <span class="toc-text">高级事件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">7.</span> <span class="toc-text">字符串操作</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">8.</span> <span class="toc-text">图片预加载</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">9.</span> <span class="toc-text">解决跨域</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#tips"><span class="toc-number">10.</span> <span class="toc-text">Tips</span></a></li></ol>
 		</div>
 		
 		<h1 id="-">基础</h1>
@@ -1006,6 +1006,99 @@ document.cookie = <span class="string">"user=blue;expires="</span> + expires;
 }
 </pre></td></tr></table></figure>
 
+<h1 id="-">高级事件</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+</pre></td><td class="code"><pre><span class="comment">// IE</span>
+<span class="keyword">if</span>(obj.attachEvent){
+  obj.attachEvent(<span class="string">'onclick'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+    <span class="keyword">this</span>;  <span class="comment">// this is window</span>
+  }); 
+} <span class="keyword">else</span> {
+  <span class="comment">// FF</span>
+  oBtn.addEventListener(<span class="string">'click'</span>, func, <span class="literal">false</span>); <span class="comment">// this is oBtn</span>
+}
+
+obj.detachEvent(<span class="string">'onclick'</span>, fun);
+obj.removeEventListener(<span class="string">'onclick'</span>, fun);
+
+<span class="comment">// IE 捕获所有事件</span>
+obj.setCapture();
+<span class="comment">// IE 释放所有事件</span>
+obj.releaseCapture();
+
+<span class="comment">// ie chrome 鼠标滚轮 </span>
+obj.onmousewheel = func;
+<span class="comment">// FF DOM 事件</span>
+obj.addEventistener(<span class="string">"DOMMouseScroll"</span>, func);
+</pre></td></tr></table></figure>
+
+<h1 id="-">字符串操作</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code"><pre>str.search(<span class="string">'d'</span>);  <span class="comment">// 返回要查找的字符串 第一次出现的位置</span>
+str.substring(<span class="number">1</span>, <span class="number">4</span>); <span class="comment">// 不包含最后一个位子</span>
+
+<span class="keyword">var</span> re = <span class="regexp">/\d+/g</span>; <span class="comment">// m multiline</span>
+str.match(re);
+re.text(str);
+
+<span class="comment">// 去首尾空格</span>
+<span class="keyword">var</span> str = <span class="regexp">/^\s*|\s*$/</span>;
+<span class="comment">// 匹配中文</span>
+<span class="keyword">var</span> str = <span class="regexp">/\u4e00-\u9fa5/</span>;
+<span class="keyword">new</span> <span class="built_in">RegExp</span>(<span class="string">'\\b'</span> + className + <span class="string">'\\b'</span>, <span class="string">'i'</span>);
+</pre></td></tr></table></figure>
+
+<h1 id="-">图片预加载</h1>
+<p>预判加载, 自动加载下一张图片</p>
+<p>延迟加载, 先加载html框架, 在加载图片</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre><span class="keyword">var</span> img = <span class="keyword">new</span> Imgage();
+img.src = <span class="string">"http://..."</span>;
+</pre></td></tr></table></figure>
+
+<h1 id="-">解决跨域</h1>
+<ol>
+<li><code>document.domain = &#39;a.com&#39;</code></li>
+<li>服务器代理</li>
+<li>jsonp, json + padding</li>
+<li>使用 iframe</li>
+<li>html5, postMessage</li>
+</ol>
+<h1 id="tips">Tips</h1>
+<p>mouseover, mouseout 连续触发问题, 可以用 mouseenter, mouseleave 替换</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -1025,10 +1118,10 @@ document.cookie = <span class="string">"user=blue;expires="</span> + expires;
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2014/12/12/js-高级/" title="JS-高级">
+ <a href="/2014/12/12/jquery-1/" title="Jquery">
   <strong>PREVIOUS:</strong><br/>
   <span>
-  JS-高级</span>
+  Jquery</span>
 </a>
 </div>
 
@@ -1053,7 +1146,7 @@ document.cookie = <span class="string">"user=blue;expires="</span> + expires;
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">基础</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#dom"><span class="toc-number">2.</span> <span class="toc-text">DOM</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">事件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#cookie"><span class="toc-number">4.</span> <span class="toc-text">cookie</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">5.</span> <span class="toc-text">运动</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">5.1.</span> <span class="toc-text">完美运动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">5.2.</span> <span class="toc-text">弹性运动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">5.3.</span> <span class="toc-text">碰撞运动</span></a></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">基础</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#dom"><span class="toc-number">2.</span> <span class="toc-text">DOM</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">3.</span> <span class="toc-text">事件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#cookie"><span class="toc-number">4.</span> <span class="toc-text">cookie</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">5.</span> <span class="toc-text">运动</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">5.1.</span> <span class="toc-text">完美运动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">5.2.</span> <span class="toc-text">弹性运动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">5.3.</span> <span class="toc-text">碰撞运动</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">6.</span> <span class="toc-text">高级事件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">7.</span> <span class="toc-text">字符串操作</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">8.</span> <span class="toc-text">图片预加载</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">9.</span> <span class="toc-text">解决跨域</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#tips"><span class="toc-number">10.</span> <span class="toc-text">Tips</span></a></li></ol>
   </div>
 
 <div id="asidepart">
@@ -1132,7 +1225,7 @@ document.cookie = <span class="string">"user=blue;expires="</span> + expires;
 		
 		
 	</div>
-		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2014 
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2015 
 		
 		<a href="http://zhpooer.github.io" target="_blank" title="zhpooer">zhpooer</a>
 		
