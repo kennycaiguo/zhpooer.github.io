@@ -4,7 +4,7 @@
   <subtitle><![CDATA[竹杖芒鞋轻胜马，一蓑烟雨任平生]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://zhpooer.github.io/"/>
-  <updated>2015-01-07T00:22:46.650Z</updated>
+  <updated>2015-01-28T00:01:29.696Z</updated>
   <id>http://zhpooer.github.io/</id>
   
   <author>
@@ -13,6 +13,458 @@
   </author>
   
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[锋利的jquery 小记]]></title>
+    <link href="http://zhpooer.github.io/2015/01/27/%E9%94%8B%E5%88%A9%E7%9A%84jquery-%E5%B0%8F%E8%AE%B0/"/>
+    <id>http://zhpooer.github.io/2015/01/27/锋利的jquery-小记/</id>
+    <published>2015-01-27T12:09:27.000Z</published>
+    <updated>2015-01-27T12:50:42.000Z</updated>
+    <content type="html"><![CDATA[<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="code"><pre><span class="variable">$(</span><span class="string">"div:visibile"</span>);
+<span class="variable">$(</span><span class="string">"div:hidden"</span>);
+<span class="variable">$(</span><span class="string">"div:contains('content')"</span>);
+<span class="variable">$(</span><span class="string">""</span>).is(<span class="string">"visibile"</span>);
+<span class="variable">$(</span>this).is(<span class="string">'#username'</span>);
+<span class="variable">$(</span><span class="string">""</span>).toggle(fn1, fn2);
+<span class="variable">$(</span><span class="string">""</span>).filter(<span class="string">""</span>);
+<span class="variable">$(</span><span class="string">"div[text|=''"</span>]);
+<span class="variable">$(</span><span class="string">"div[text*=''"</span>]);
+<span class="variable">$(</span><span class="string">"div[text^=''"</span>]);
+<span class="variable">$(</span><span class="string">"div[text$=''"</span>]);
+<span class="variable">$(</span><span class="string">"div[:checked]);
+$("</span>div[<span class="symbol">:nth-child</span>(<span class="number">2</span>n)]);
+<span class="variable">$(</span><span class="string">"div[:nth-child(2n + 1)]);</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="code"><pre>$(<span class="string">"div"</span>).replaceWith();
+$(<span class="string">"div"</span>).replace();
+$().wrap();
+$().wrapAll();
+$().after();
+$().toggleClass();
+A.insertAfter(B);  <span class="comment">// BA</span>
+
+$().detach(); <span class="comment">// 所有元素事件不解绑</span>
+$().clone(<span class="literal">true</span>);  <span class="comment">// 复制, 但是绑定事件</span>
+
+$(<span class="string">''</span>).offset();    <span class="comment">// 相对视口</span>
+$(<span class="string">''</span>).position();  <span class="comment">// 相对位置</span>
+<span class="keyword">this</span>.defaultValue; <span class="comment">// 获得默认值</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="code"><pre>$(document).ready(fn2);
+$(window).load(fn);
+
+$().bind(<span class="string">'click mouseover'</span>, fn);
+$().toggle(fn1, fn2, fn3);
+
+<span class="function"><span class="keyword">function</span> <span class="title">handler</span><span class="params">()</span> {</span>
+  e.relatedTarget();
+  e.target(); e.witch();
+  <span class="keyword">return</span> <span class="literal">false</span>; <span class="comment">// e.stopPropagation(); e.preventDefault();</span>
+}
+
+$().animate({left: <span class="string">"+=50px"</span>}).stop(clearQueue, gotoEnd);
+$().delay(<span class="number">200</span>);
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre>$(<span class="keyword">this</span>).triggerHandler(<span class="string">'blur'</span>);
+<span class="built_in">Array</span>.slice(<span class="string">'abcd'</span>, -<span class="number">2</span>);
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+</pre></td><td class="code"><pre><span class="variable">$(</span>).load(src, function(<span class="keyword">text</span>, status));
+<span class="variable">$.</span>getScript(<span class="string">"*.js"</span>);
+<span class="variable">$.</span>getJSON(, function(data){});
+<span class="variable">$.</span>ajax({
+  type: <span class="string">'GET'</span>,
+  url: <span class="string">''</span>,
+  dataType: <span class="string">''</span>,
+  success: function(data){}
+});
+
+<span class="variable">$(</span><span class="string">'#form'</span>).serialize();
+<span class="variable">$(</span><span class="string">':checkbox, :radio'</span>).serializeArray(); <span class="comment">// {name, value}</span>
+<span class="variable">$.</span>param({a:<span class="number">2</span>, b:<span class="number">3</span>}); <span class="comment">// a=1&b=2&c=3</span>
+
+<span class="variable">$.</span>ajaxComplete(cb);
+<span class="variable">$.</span>ajaxError(cb);
+<span class="variable">$.</span>ajaxSend(cb);
+<span class="variable">$.</span>ajaxSuccess(cb);
+
+<span class="variable">$.</span>ajax({<span class="keyword">global</span>: false}); <span class="comment">// 不触发全局事件</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre>option = $.extend({}, options);
+(<span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+$.fn.extend({
+  <span class="string">"color"</span>: <span class="function"><span class="keyword">function</span><span class="params">(value)</span>{</span><span class="keyword">return</span> <span class="keyword">this</span>.css(<span class="string">'color'</span>, value)}
+});
+})(jQuery);
+<span class="comment">// 全局</span>
+$.extend({
+  ltrim: <span class="function"><span class="keyword">function</span><span class="params">(text)</span>{</span>};
+});
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+</pre></td><td class="code"><pre><span class="variable">$(</span><span class="string">'table'</span>).delegate(<span class="string">'td'</span>, <span class="string">'hover'</span>, function());
+<span class="variable">$(</span><span class="string">'span'</span>).data(); <span class="comment">// {maxValue: 15, minValue: 5;}</span>
+
+<span class="comment">// input type='checkbox' checked</span>
+<span class="variable">$(</span>).attr(<span class="string">'checked'</span>); <span class="comment">// ''</span>
+<span class="variable">$(</span>).prop(<span class="string">'checked'</span>); <span class="comment">// true</span>
+
+<span class="variable">$(</span>elements).on(events, selector, handler);
+<span class="variable">$(</span>elements).off(events, selector, handler);
+
+<span class="variable">$.</span>Defered
+<span class="variable">$.</span>isNumeric();
+<span class="variable">$.</span>noop();
+<span class="variable">$.</span>now();
+
+<span class="variable">$.</span>localStorage
+</pre></td></tr></table></figure>
+
+]]></content>
+    
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[CSS Mstery-notes]]></title>
+    <link href="http://zhpooer.github.io/2015/01/25/css-mstery-notes/"/>
+    <id>http://zhpooer.github.io/2015/01/25/css-mstery-notes/</id>
+    <published>2015-01-25T07:32:49.000Z</published>
+    <updated>2015-01-27T13:05:17.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="-">意义的重要</h1>
+<ul>
+<li>与表现性相比，有意义的页面更容易处理。搜索代码，找到引用元素。</li>
+<li>程序和其他设备理解有意义的标记</li>
+</ul>
+<p>ID用于标识页面上特定的元素，以及持久的结构性元素，后一次性元素。</p>
+<p>类适合标识内容的类型或其他相似的条目。</p>
+<h1 id="-">为元素命名</h1>
+<p>应该根据 &#39;他们是什么&#39; 来为元素命名,而不应该根据 &#39;他们的外观如何&#39; 来命名.
+可以让代码更有意义, 并且避免代码与设计不同步.</p>
+<h1 id="css-">css 应用样式</h1>
+<ol>
+<li><p>外链式</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">style</span> <span class="attribute">type</span>=<span class="value">"text/css"</span>&gt;</span><span class="css">
+</span><span class="tag">&lt;/<span class="title">style</span>&gt;</span>
+</pre></td></tr></table></figure>
+</li>
+<li><p>内部导入, 比链接慢</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre><span class="at_rule">@<span class="keyword">import</span> <span class="function">url(/css/layout.css)</span></span>;
+</pre></td></tr></table></figure>
+
+</li>
+</ol>
+<p>使用结构良好的<em>单一</em>CSS文件可以显著提高下载速度.</p>
+<h1 id="-">盒子模型</h1>
+<p>它指定元素如何显示以及如何相互交互.页面上每个元素都被看作一个矩形框,这个框由元素的内容 内边距 边框 和 外边框组成</p>
+<p>全局 reset</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>*<span class="rules">{ <span class="rule"><span class="attribute">maring</span>:<span class="value"> <span class="number">0</span></span></span>; <span class="rule"><span class="attribute">padding</span>:<span class="value"> <span class="number">0</span></span></span>;<span class="rule">}</span></span>
+</pre></td></tr></table></figure>
+
+<p>css3 的 <code>box-sizing</code>属性可以定义要使用哪种盒模型.</p>
+<h2 id="-">外边距叠加</h2>
+<p>当两个或者更多个<em>垂直外边距</em>相遇时, 它们将形成<em>一个</em>外边距, 这个外边距的高度等于两个发生叠加的外边距的高度的较大者.</p>
+<p>只有普通文档流中的盒子的垂直外边距才会发生外边距叠加. 行内框 浮动框 或绝对定位框不会发生</p>
+<p>文本元素会被当作匿名框,  用<code>:first-line</code> 选中</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>&lt;<span class="keyword">div</span>&gt;
+  <span class="keyword">some</span> <span class="type">text</span>
+  &lt;p&gt;<span class="keyword">some</span> test&lt;/p&gt;
+&lt;/<span class="keyword">div</span>&gt;
+</pre></td></tr></table></figure>
+
+<h1 id="-">清理</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="code"><pre><span class="class">.clear</span><span class="pseudo">:after</span> <span class="rules">{
+  <span class="rule"><span class="attribute">content</span>:<span class="value"> <span class="string">"."</span></span></span>; <span class="rule"><span class="attribute">height</span>:<span class="value"> <span class="number">0</span></span></span>; <span class="rule"><span class="attribute">visibility</span>:<span class="value"> hidden</span></span>; <span class="rule"><span class="attribute">display</span>:<span class="value"> block</span></span>; <span class="rule"><span class="attribute">clear</span>:<span class="value">both</span></span>;
+<span class="rule">}</span></span>
+<span class="comment">/* IE hack */</span>  
+<span class="class">.clear</span> <span class="rules">{<span class="rule"><span class="attribute">display</span>:<span class="value"> inline-block</span></span>;<span class="rule">}</span></span>
+<span class="comment">/*针对ie6*/</span>
+* <span class="tag">html</span> <span class="class">.clear</span> <span class="rules">{<span class="rule"><span class="attribute">height</span>:<span class="value"> <span class="number">1</span>%</span></span>;<span class="rule">}</span></span>
+<span class="class">.clear</span> <span class="rules">{<span class="rule"><span class="attribute">display</span>:<span class="value"> block</span></span>;<span class="rule">}</span></span>
+
+<span class="comment">/*另一种方法*/</span>
+<span class="class">.clear</span><span class="rules">{<span class="rule"><span class="attribute">overflow</span>:<span class="value">hidden</span></span>; <span class="rule"><span class="attribute">_zoom</span>:<span class="value"><span class="number">1</span></span></span>;<span class="rule">}</span></span>
+<span class="comment">/* or */</span>
+<span class="class">.clear</span><span class="rules">{<span class="rule"><span class="attribute">overflow</span>:<span class="value">auto</span></span>; <span class="rule"><span class="attribute">_height</span>:<span class="value"> <span class="number">1</span>%</span></span>;<span class="rule">}</span></span>
+</pre></td></tr></table></figure>
+
+<h1 id="ie6-">ie6 透明</h1>
+<p>需要单独存放一个文件， 使用时用条件注释</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="tag">div</span> <span class="rules">{
+  <span class="rule"><span class="attribute">filter</span>:<span class="value">progid:DXImageTransform.Microsoft.<span class="function">AlphaImageLoader(src=<span class="string">'/img/xx.png'</span>,sizingMethod=<span class="string">'crop'</span>)</span></span></span>;
+  <span class="rule"><span class="attribute">background</span>:<span class="value"> none</span></span>;
+<span class="rule">}</span></span>
+</pre></td></tr></table></figure>
+
+<p>或者使用 <code>.htc</code> 文件, 在ie6专用样式表中引用它。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="tag">img</span>, <span class="tag">div</span><span class="rules">{
+  <span class="rule"><span class="attribute">behavior</span>:<span class="value"> <span class="function">url(iepngfix.htc)</span></span></span>;
+<span class="rule">}</span></span>
+</pre></td></tr></table></figure>
+
+<h1 id="-">图像相关</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="tag">a</span><span class="pseudo">:link</span>, <span class="tag">a</span><span class="pseudo">:visited</span> <span class="rules">{ <span class="rule"><span class="attribute">background</span>:<span class="value"> <span class="function">url(/img/button.png)</span> left top no-repeat</span></span>;<span class="rule">}</span></span>
+<span class="tag">a</span><span class="pseudo">:hover</span>, <span class="tag">a</span><span class="pseudo">:focus</span> <span class="rules">{<span class="rule"><span class="attribute">background-image</span>:<span class="value"> <span class="function">url(/img/button-over.png)</span></span></span>;<span class="rule">}</span></span>
+<span class="tag">a</span><span class="pseudo">:active</span> <span class="rules">{<span class="rule"><span class="attribute">background-image</span>:<span class="value"> <span class="function">url(/img/button-active.png)</span></span></span>;<span class="rule">}</span></span>
+</pre></td></tr></table></figure>
+
+<h1 id="ie-">ie 背景缓存　</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="tag">html</span> <span class="rules">{
+  <span class="rule"><span class="attribute">filter</span>:<span class="value"> <span class="function">expression(document.<span class="function">execCommand(<span class="string">"BackgroundImageCache"</span>, false, true)</span>)</span></span></span>;
+<span class="rule">}</span></span>
+</pre></td></tr></table></figure>
+
+<h1 id="-">布局</h1>
+<p>css 框架试图通过在标记和表现之间建立强耦合来简化css布局。</p>
+<ul>
+<li>使开发人员不得不使用表现性的标记</li>
+<li>设计中必须使用特定的网格结构</li>
+</ul>
+<p>布局技术的根本是3个基本概念: 定位 浮动 和 外边距操纵</p>
+<ul>
+<li>固定宽度布局, 尺寸使用固定像素</li>
+<li>流式布局, 尺寸使用百分比. 比如设计者使用 960 像素, 那么使用百分数就是 <code>960/1250</code></li>
+<li>弹性布局, 相对于字号设置大小. 大多数默认字号是16像素, 10像素大约是16像素的62.5%.<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="tag">body</span> <span class="rules">{ <span class="rule"><span class="attribute">font-size</span>:<span class="value"> <span class="number">62.5</span>%</span></span>; <span class="rule"><span class="attribute">text-align</span>:<span class="value"> center</span></span>;<span class="rule">}</span></span>
+<span class="class">.wrapper</span><span class="rules">{<span class="rule"><span class="attribute">width</span>:<span class="value"> <span class="number">92</span>em</span></span>;<span class="rule">}</span></span>
+<span class="comment">/*里面仍然用百分比*/</span>
+</pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h1 id="tips">tips</h1>
+<p>ie6中的<code>width</code>更像是 <code>min-width</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>&lt;<span class="operator">a</span> href=<span class="string">""</span> <span class="built_in">rel</span>=<span class="string">"prev"</span>&gt;&lt;/<span class="operator">a</span>&gt;
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="tag">ol</span><span class="class">.pagination</span> <span class="tag">a</span><span class="attr_selector">[rel="prev"]</span>, <span class="tag">ol</span><span class="class">.pagination</span> <span class="tag">a</span><span class="attr_selector">[rel="next"]</span> <span class="rules">{<span class="rule"><span class="attribute">border</span>:<span class="value"> none</span></span>;<span class="rule">}</span></span>
+<span class="tag">ol</span><span class="class">.pagination</span> <span class="tag">a</span><span class="attr_selector">[rel="prev"]</span><span class="pseudo">:before</span> <span class="rules">{ <span class="rule"><span class="attribute">content</span>:<span class="value"> <span class="string">"\00AB"</span></span></span>;<span class="rule">}</span></span>
+<span class="tag">ol</span><span class="class">.pagination</span> <span class="tag">a</span><span class="attr_selector">[rel="next"]</span><span class="pseudo">:before</span> <span class="rules">{ <span class="rule"><span class="attribute">content</span>:<span class="value"> <span class="string">"\00BB"</span></span></span>;<span class="rule">}</span></span>
+</pre></td></tr></table></figure>
+
+<p>双倍边距解决 <code>display: inline;</code></p>
+<h2 id="-label">表单标签 label</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- 方式一 --&gt;</span>
+<span class="tag">&lt;<span class="title">lable</span>&gt;</span> email <span class="tag">&lt;<span class="title">input</span> <span class="attribute">name</span>=<span class="value">"email"</span> <span class="attribute">type</span>=<span class="value">"text"</span>/&gt;</span> <span class="tag">&lt;/<span class="title">lable</span>&gt;</span>
+
+<span class="comment">&lt;!-- 方式二  --&gt;</span>
+<span class="tag">&lt;<span class="title">label</span> <span class="attribute">for</span>=<span class="value">"email"</span>&gt;</span> email <span class="tag">&lt;<span class="title">em</span> <span class="attribute">class</span>=<span class="value">"required"</span>&gt;</span>(required)<span class="tag">&lt;/<span class="title">em</span>&gt;</span> <span class="tag">&lt;/<span class="title">label</span>&gt;</span>
+<span class="tag">&lt;<span class="title">input</span> <span class="attribute">name</span>=<span class="value">"email"</span> <span class="attribute">type</span>=<span class="value">"text"</span>/&gt;</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre><span class="tag">input</span><span class="attr_selector">[type='text']</span>, <span class="tag">textrea</span> <span class="rules">{
+<span class="rule"><span class="attribute">border-top</span>:<span class="value"> <span class="number">2</span>px solid <span class="hexcolor">#999</span></span></span>;
+<span class="rule"><span class="attribute">border-left</span>:<span class="value"> <span class="number">2</span>px solid <span class="hexcolor">#999</span></span></span>;
+<span class="rule"><span class="attribute">border-bottom</span>:<span class="value"> <span class="number">1</span>px solid <span class="hexcolor">#999</span></span></span>;
+<span class="rule"><span class="attribute">border-right</span>:<span class="value"> <span class="number">1</span>px solid <span class="hexcolor">#999</span></span></span>;
+<span class="rule">}</span></span>
+</pre></td></tr></table></figure>
+
+<p>提交按钮</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">div</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">button</span> <span class="attribute">type</span>=<span class="value">"submit"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">img</span> <span class="attribute">src</span>=<span class="value">"/img/xx"</span>/&gt;</span>
+  <span class="tag">&lt;/<span class="title">button</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre><span class="attribute">text-overflow</span>: <span class="string">ellipsis;</span>
+</pre></td></tr></table></figure>
+
+<p>input 标签</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>&lt;input <span class="keyword">type</span>=<span class="string">"text"</span> autocomplete=<span class="string">"off"</span> autofocus spellcheck=<span class="string">'true'</span> required/&gt;
+</pre></td></tr></table></figure>
+
+<h1 id="appand">appand</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="code"><pre><span class="attribute">box-sizing</span>: <span class="string">content-box|border-box;</span>
+
+<span class="http"><span class="attribute">display</span>: <span class="string">box;</span>
+<span class="attribute">box-flex</span>: <span class="string">1;</span>
+
+<span class="scss"><span class="comment">// 改变元素显示位置</span>
+box-ordinal-group<span class="value">: <span class="number">3</span>;</span>
+<span class="comment">// 排列方向</span>
+box-orient<span class="value">: vertical;</span>
+
+box-align<span class="value">: start | center | end;</span>  <span class="comment">// hrizontal | vertical</span>
+
+out-<span class="value">line</span><span class="value">: thin solid red;</span>
+out-offset<span class="value">: ;</span></span></span>
+</pre></td></tr></table></figure>
+
+]]></content>
+    
+    
+      <category term="css" scheme="http://zhpooer.github.io/tags/css/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[angularjs End-to-End Testing & Guidelines]]></title>
@@ -4905,7 +5357,7 @@ with ID 19</li>
     <link href="http://zhpooer.github.io/2014/12/18/angularjs-1/"/>
     <id>http://zhpooer.github.io/2014/12/18/angularjs-1/</id>
     <published>2014-12-18T02:37:53.000Z</published>
-    <updated>2014-12-27T08:23:50.000Z</updated>
+    <updated>2015-01-25T07:29:16.000Z</updated>
     <content type="html"><![CDATA[<h1 id="hello-world">Hello World</h1>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
@@ -10928,126 +11380,6 @@ ICON规范：114 * 114  圆角18（or 20）
 <li>天气ICON基础造型展示</li>
 <li>尾巴(首尾呼应)</li>
 </ol>
-]]></content>
-    
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[UI设计 基础]]></title>
-    <link href="http://zhpooer.github.io/2014/11/03/ui%E8%AE%BE%E8%AE%A1-1/"/>
-    <id>http://zhpooer.github.io/2014/11/03/ui设计-1/</id>
-    <published>2014-11-03T01:27:54.000Z</published>
-    <updated>2014-11-06T01:19:04.000Z</updated>
-    <content type="html"><![CDATA[<h1 id="ui">UI</h1>
-<p>UI: User Interface(用户界面设计)</p>
-<p>用户界面: 联系数据和用户的桥梁(GUI=HUI+WUI)</p>
-<ul>
-<li>HUI, 手持设备用户界面设计</li>
-<li>WUI, WEB UI (实现功能, 注册\登陆框, 可点击按钮, 搜索框, 导航)</li>
-<li>其他, 车载导航, 电视操作页面</li>
-</ul>
-<p>UI的基础是图标(ICON)</p>
-<ul>
-<li>基础造型视觉形态</li>
-<li>表现形式(质感, 风格)
-五大调子: 高光(最亮) 亮调 明暗交界线 暗调 反光</li>
-</ul>
-<h1 id="-">透视</h1>
-<p>两点透视(两个视觉灭点)</p>
-<p><img src="/img/1103/1_1.png" alt=""></p>
-<p>形态</p>
-<ul>
-<li>具象形态</li>
-<li>抽象形态</li>
-<li>自然形态</li>
-<li>设计形态<ul>
-<li>具象形态抽象化</li>
-<li>赋予理念</li>
-</ul>
-</li>
-</ul>
-<p>ICON 制作</p>
-<ul>
-<li>统一形态</li>
-<li>统一造型(透视关系)</li>
-<li>颜色运用,多走无色系, 用统一的颜色做点缀; 在明度和饱和度上寻求变化(建议)</li>
-</ul>
-<p>2D 平面, 细节造型风格的统一, 构成造型的细节的统一(线的统一)</p>
-<p>2.5D 浮雕, 凸起厚度保持统一, 配色, 质感表现方式</p>
-<p>3D 立体, 透视角度, 光源角度, 质感表现方式</p>
-<p>流程</p>
-<ul>
-<li>风格定位(可爱 炫酷 ;扁平化 拟物化)</li>
-<li>初稿绘制</li>
-<li>完成手稿, 线条更加精简, 到位, 形态更加准确</li>
-<li>扫描</li>
-<li>选择自认为比较容易实现(表现), 一个图标开始制作; 确定颜色搭配(主色调, 辅色调)(色值)</li>
-<li>完成其余图标, 保存为透明背景格式(首选PNG)</li>
-</ul>
-<p><img src="/img/1103/1_2.png" alt=""></p>
-<p><img src="/img/1103/1_3.png" alt=""></p>
-]]></content>
-    
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[web设计-电商&企业主页点评]]></title>
-    <link href="http://zhpooer.github.io/2014/10/31/web%E8%AE%BE%E8%AE%A1-7/"/>
-    <id>http://zhpooer.github.io/2014/10/31/web设计-7/</id>
-    <published>2014-10-31T01:32:02.000Z</published>
-    <updated>2014-11-02T08:13:14.000Z</updated>
-    <content type="html"><![CDATA[<blockquote>
-<p>快速查找书法字体: ziti.cndesign.com
-选区转路径, 加 Alt 可以调细节</p>
-</blockquote>
-<h1 id="-">电商点评</h1>
-<p><img src="/img/dp5/1_1.png" alt=""></p>
-<p><img src="/img/dp5/1_2.png" alt=""></p>
-<blockquote>
-<p>形式服务于内容, 服务于功能</p>
-</blockquote>
-<p><img src="/img/dp5/1_3.png" alt=""></p>
-<blockquote>
-<p>橙色Logo栏, 突出, 郑家购买欲<br>使用图标, 快速定位<br>虚线分割线, 功能性的, 需要时可以找到<br>文案排版 需要修改</p>
-</blockquote>
-<h1 id="-">主页点评</h1>
-<p><img src="/img/dp5/1_4.png" alt=""></p>
-<blockquote>
-<p>导航栏, 稍显呆板</p>
-</blockquote>
-<p><img src="/img/dp5/1_5.png" alt=""></p>
-<blockquote>
-<p>banner 景别太多, 远近景, 中景不明显; 没有文字跳跃率</p>
-</blockquote>
-<p><img src="/img/dp5/1_6.png" alt=""></p>
-<blockquote>
-<p>简介, 但是没有文字跳跃率, 可以稍微加一点变化</p>
-</blockquote>
-<p><img src="/img/dp5/1_7.png" alt=""></p>
-<blockquote>
-<p>banner 颜色需要调明暗对比度</p>
-</blockquote>
-<p><img src="/img/dp5/1_8.png" alt=""></p>
-<blockquote>
-<p>使模块清晰, 标题清晰</p>
-</blockquote>
-<p><img src="/img/dp5/1_9.png" alt=""></p>
-<blockquote>
-<p>书法家字体和常规字体配合</p>
-</blockquote>
-<p><img src="/img/dp5/1_10.png" alt=""></p>
-<p><img src="/img/dp5/1_11.png" alt=""></p>
-<blockquote>
-<p>标题颜色可以添加黄色</p>
-</blockquote>
-<h1 id="tips">Tips</h1>
-<p>配色: Logo 上所采用的颜色, 要在设计中体现出来(页面配色上, 要温和LOGO配色)</p>
-<p>LOGO无色系: 设计过程中, 可以添加辅助配色</p>
-<blockquote>
-<p>如果正文:14, 那么标题: 16; 直通车最小 16</p>
-</blockquote>
 ]]></content>
     
     

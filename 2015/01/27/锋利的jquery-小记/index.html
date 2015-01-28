@@ -4,14 +4,31 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>angularjs End-to-End Testing &amp; Guidelines | Poe&#39;s World</title>
+    <title>锋利的jquery 小记 | Poe&#39;s World</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="zhpooer">
     
-    <meta name="description" content="Protractor
-We need to write end-to-end tests, which open the browser, navigate to
-a live running version of our web application, and click around usin">
+    <meta name="description" content="1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+$(&quot;div:visibile&quot;);
+$(&quot;div:hidden&quot;);
+$(&quot;div:contains(&#39;content&#39;)&quot;);
+$(&quot;&quot;).is(&quot;visibile&quot;);
+$(this).is(&#39;#username&#39;);
+$(&quot;&quot;">
     
     
     
@@ -74,15 +91,15 @@ a live running version of our web application, and click around usin">
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2014/12/27/angularjs-6/" title="angularjs End-to-End Testing &amp; Guidelines" itemprop="url">angularjs End-to-End Testing &amp; Guidelines</a>
+      <a href="/2015/01/27/锋利的jquery-小记/" title="锋利的jquery 小记" itemprop="url">锋利的jquery 小记</a>
   </h1>
   <p class="article-author">By
     
       <a href="http://zhpooer.github.io" title="zhpooer">zhpooer</a>
     </p>
   <p class="article-time">
-    <time datetime="2014-12-27T10:14:01.000Z" itemprop="datePublished">12月 27 2014</time>
-    更新日期:<time datetime="2014-12-27T11:14:24.000Z" itemprop="dateModified">12月 27 2014</time>
+    <time datetime="2015-01-27T12:09:27.000Z" itemprop="datePublished">1月 27 2015</time>
+    更新日期:<time datetime="2015-01-27T12:50:42.000Z" itemprop="dateModified">1月 27 2015</time>
     
   </p>
 </header>
@@ -91,26 +108,105 @@ a live running version of our web application, and click around usin">
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#protractor"><span class="toc-number">1.</span> <span class="toc-text">Protractor</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#guildlines-and-best-practices"><span class="toc-number">2.</span> <span class="toc-text">Guildlines and Best Practices</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#starting-point"><span class="toc-number">2.1.</span> <span class="toc-text">Starting Point</span></a></li></ol>
+		
 		</div>
 		
-		<h1 id="protractor">Protractor</h1>
-<p>We need to write end-to-end tests, which open the browser, navigate to
-a live running version of our web application, and click around using the application as
-a real-world user would. To accomplish this, we use Protractor.</p>
-<p>TODO</p>
-<h1 id="guildlines-and-best-practices">Guildlines and Best Practices</h1>
-<p>Directory Structure</p>
-<ul>
-<li><code>app</code> The app folder houses all the JavaScript code that you develop. We’ll talk about this
-in more detail next.</li>
-<li><code>tests</code> Houses all your unit tests and possibly the end-to-end scenario tests as well.
-data Any</li>
-<li><code>data</code> that is common but not dynamic in your application can be stored here.</li>
-<li><code>scripts</code> Build scripts and other common utility scripts can be stored in this folder.</li>
-<li><code>Other files</code> The <code>package.json</code>, <code>bower.json</code>, and other files that don’t really need a directory can
-be in the main folder.</li>
-</ul>
+		<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="code"><pre><span class="variable">$(</span><span class="string">"div:visibile"</span>);
+<span class="variable">$(</span><span class="string">"div:hidden"</span>);
+<span class="variable">$(</span><span class="string">"div:contains('content')"</span>);
+<span class="variable">$(</span><span class="string">""</span>).is(<span class="string">"visibile"</span>);
+<span class="variable">$(</span>this).is(<span class="string">'#username'</span>);
+<span class="variable">$(</span><span class="string">""</span>).toggle(fn1, fn2);
+<span class="variable">$(</span><span class="string">""</span>).filter(<span class="string">""</span>);
+<span class="variable">$(</span><span class="string">"div[text|=''"</span>]);
+<span class="variable">$(</span><span class="string">"div[text*=''"</span>]);
+<span class="variable">$(</span><span class="string">"div[text^=''"</span>]);
+<span class="variable">$(</span><span class="string">"div[text$=''"</span>]);
+<span class="variable">$(</span><span class="string">"div[:checked]);
+$("</span>div[<span class="symbol">:nth-child</span>(<span class="number">2</span>n)]);
+<span class="variable">$(</span><span class="string">"div[:nth-child(2n + 1)]);</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="code"><pre>$(<span class="string">"div"</span>).replaceWith();
+$(<span class="string">"div"</span>).replace();
+$().wrap();
+$().wrapAll();
+$().after();
+$().toggleClass();
+A.insertAfter(B);  <span class="comment">// BA</span>
+
+$().detach(); <span class="comment">// 所有元素事件不解绑</span>
+$().clone(<span class="literal">true</span>);  <span class="comment">// 复制, 但是绑定事件</span>
+
+$(<span class="string">''</span>).offset();    <span class="comment">// 相对视口</span>
+$(<span class="string">''</span>).position();  <span class="comment">// 相对位置</span>
+<span class="keyword">this</span>.defaultValue; <span class="comment">// 获得默认值</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="code"><pre>$(document).ready(fn2);
+$(window).load(fn);
+
+$().bind(<span class="string">'click mouseover'</span>, fn);
+$().toggle(fn1, fn2, fn3);
+
+<span class="function"><span class="keyword">function</span> <span class="title">handler</span><span class="params">()</span> {</span>
+  e.relatedTarget();
+  e.target(); e.witch();
+  <span class="keyword">return</span> <span class="literal">false</span>; <span class="comment">// e.stopPropagation(); e.preventDefault();</span>
+}
+
+$().animate({left: <span class="string">"+=50px"</span>}).stop(clearQueue, gotoEnd);
+$().delay(<span class="number">200</span>);
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre>$(<span class="keyword">this</span>).triggerHandler(<span class="string">'blur'</span>);
+<span class="built_in">Array</span>.slice(<span class="string">'abcd'</span>, -<span class="number">2</span>);
+</pre></td></tr></table></figure>
+
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
 3
@@ -131,130 +227,84 @@ be in the main folder.</li>
 18
 19
 20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
-51
-52
-53
-54
-55
-56
-57
-</pre></td><td class="code"><pre>— app<span class="preprocessor">.css</span>
-— app<span class="preprocessor">.js</span>
-— index<span class="preprocessor">.html</span>
-— components // Reusable common components
-  — datepicker
-    — datepicker-directive<span class="preprocessor">.js</span>
-    — datepicker-directive_test<span class="preprocessor">.js</span>
-  — authorization
-    — authorization<span class="preprocessor">.js</span>
-    — authorization-service<span class="preprocessor">.js</span>
-    — authorization-service_test<span class="preprocessor">.js</span>
-  — ui-widgets
-    — ui-widgets<span class="preprocessor">.js</span>
-    — grid
-      — grid<span class="preprocessor">.html</span>
-      — grid-directive<span class="preprocessor">.js</span>
-      — grid-directive_test<span class="preprocessor">.js</span>
-    — dialog
-      — dialog-service<span class="preprocessor">.js</span>
-      — dialog-service_test<span class="preprocessor">.js</span>
-    — list
-      — list<span class="preprocessor">.html</span>
-      — list<span class="preprocessor">.css</span>
-      — list-controller<span class="preprocessor">.js</span>
-      — list-controller_test<span class="preprocessor">.js</span>
-    — login
-      — login<span class="preprocessor">.html</span>
-      — login-controller<span class="preprocessor">.js</span>
-    — search
-      — search<span class="preprocessor">.html</span>
-      — search<span class="preprocessor">.css</span>
-      — search-controller<span class="preprocessor">.js</span>
-      — search-controller_test<span class="preprocessor">.js</span>
-    — detail
-      — detail<span class="preprocessor">.html</span>
-      — detail-controller<span class="preprocessor">.js</span>
-      — detail-controller_test<span class="preprocessor">.js</span>
-    — admin
-      — create
-        — create<span class="preprocessor">.html</span>
-        — create-controller<span class="preprocessor">.js</span>
-        — create-controller_test<span class="preprocessor">.js</span>
-      — update
-        — update<span class="preprocessor">.html</span>
-— vendors // third-party dependencies go here
-  — underscore
-  — jquery
-  — bootstrap
-— e2e // end-to-end scenario tests
-  — runner<span class="preprocessor">.html</span>
-  — login_scenario<span class="preprocessor">.js</span>
-  — list_scenario<span class="preprocessor">.js</span>
-  — search_scenario<span class="preprocessor">.js</span>
-  — detail_scenario<span class="preprocessor">.js</span>
-  — admin
-    — admin_create_scenario<span class="preprocessor">.js</span>
-    — admin_update_scenario<span class="preprocessor">.js</span>
+</pre></td><td class="code"><pre><span class="variable">$(</span>).load(src, function(<span class="keyword">text</span>, status));
+<span class="variable">$.</span>getScript(<span class="string">"*.js"</span>);
+<span class="variable">$.</span>getJSON(, function(data){});
+<span class="variable">$.</span>ajax({
+  type: <span class="string">'GET'</span>,
+  url: <span class="string">''</span>,
+  dataType: <span class="string">''</span>,
+  success: function(data){}
+});
+
+<span class="variable">$(</span><span class="string">'#form'</span>).serialize();
+<span class="variable">$(</span><span class="string">':checkbox, :radio'</span>).serializeArray(); <span class="comment">// {name, value}</span>
+<span class="variable">$.</span>param({a:<span class="number">2</span>, b:<span class="number">3</span>}); <span class="comment">// a=1&b=2&c=3</span>
+
+<span class="variable">$.</span>ajaxComplete(cb);
+<span class="variable">$.</span>ajaxError(cb);
+<span class="variable">$.</span>ajaxSend(cb);
+<span class="variable">$.</span>ajaxSuccess(cb);
+
+<span class="variable">$.</span>ajax({<span class="keyword">global</span>: false}); <span class="comment">// 不触发全局事件</span>
 </pre></td></tr></table></figure>
 
-<h2 id="starting-point">Starting Point</h2>
-<ul>
-<li><code>Yeoman</code>, Yeoman is a workflow management tool that automates a lot of the routine,
-chore-like tasks that are necessary in any project.</li>
-<li>Angular seed projects, <code>ng-boilerplate</code> and <code>angular-seed</code></li>
-<li>Mean.io</li>
-</ul>
-<p>A grunt task that is available for online use is <code>ng-templates</code>,
-which allows you to preload all the HTML templates that you use in
-your application instead of making an XHR request for them when it is needed.</p>
-<p>But if you have a large number of templates, you can consider preloading
-the most common templates and views in your application, and let
-the others load asynchronously as needed.</p>
-<p>General</p>
-<ul>
-<li>Prefer small files to large files.</li>
-<li>Use the AngularJS version of setTimeout, which is the <code>$timeout</code> service, and the
-AngularJS version of <code>setInterval</code>, which is the <code>$interval</code> service.</li>
-<li>If it adds <code>$timeout</code> or <code>$interval</code>, should remember to
-clean it up or cancel it when it is destroyed, to prevent it
-from unnecessarily executing in the background.</li>
-<li>If you are adding listeners outside of AngularJS, ensure that it is cleaned up correctly.</li>
-<li>Let the services and controllers take care of specific error handling only.</li>
-<li>Controllers can <code>$broadcast</code> or <code>$emit</code> events on their own scope, or inject the
-$rootScope and fire events on <code>$rootScope</code>.</li>
-</ul>
-<p><code>Batarang</code>, a Chrome extension to help debug and work with AngularJS projects</p>
-<p>Optional Modules: <code>ngCookies</code> <code>ngSanitieze</code> <code>ngResource</code> <code>ngTouch</code> <code>ngAnimate</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="code"><pre>option = $.extend({}, options);
+(<span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+$.fn.extend({
+  <span class="string">"color"</span>: <span class="function"><span class="keyword">function</span><span class="params">(value)</span>{</span><span class="keyword">return</span> <span class="keyword">this</span>.css(<span class="string">'color'</span>, value)}
+});
+})(jQuery);
+<span class="comment">// 全局</span>
+$.extend({
+  ltrim: <span class="function"><span class="keyword">function</span><span class="params">(text)</span>{</span>};
+});
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+</pre></td><td class="code"><pre><span class="variable">$(</span><span class="string">'table'</span>).delegate(<span class="string">'td'</span>, <span class="string">'hover'</span>, function());
+<span class="variable">$(</span><span class="string">'span'</span>).data(); <span class="comment">// {maxValue: 15, minValue: 5;}</span>
+
+<span class="comment">// input type='checkbox' checked</span>
+<span class="variable">$(</span>).attr(<span class="string">'checked'</span>); <span class="comment">// ''</span>
+<span class="variable">$(</span>).prop(<span class="string">'checked'</span>); <span class="comment">// true</span>
+
+<span class="variable">$(</span>elements).on(events, selector, handler);
+<span class="variable">$(</span>elements).off(events, selector, handler);
+
+<span class="variable">$.</span>Defered
+<span class="variable">$.</span>isNumeric();
+<span class="variable">$.</span>noop();
+<span class="variable">$.</span>now();
+
+<span class="variable">$.</span>localStorage
+</pre></td></tr></table></figure>
+
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -264,7 +314,7 @@ $rootScope and fire events on <code>$rootScope</code>.</li>
 
 <div class="article-share" id="share">
 
-  <div data-url="http://zhpooer.github.io/2014/12/27/angularjs-6/" data-title="angularjs End-to-End Testing &amp; Guidelines | Poe&#39;s World" data-tsina="null" class="share clearfix">
+  <div data-url="http://zhpooer.github.io/2015/01/27/锋利的jquery-小记/" data-title="锋利的jquery 小记 | Poe&#39;s World" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -273,19 +323,11 @@ $rootScope and fire events on <code>$rootScope</code>.</li>
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2015/01/25/css-mstery-notes/" title="CSS Mstery-notes">
-  <strong>PREVIOUS:</strong><br/>
-  <span>
-  CSS Mstery-notes</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2014/12/24/angularjs-5/"  title="angularjs-Directives">
+<a href="/2015/01/25/css-mstery-notes/"  title="CSS Mstery-notes">
  <strong>NEXT:</strong><br/> 
- <span>angularjs-Directives
+ <span>CSS Mstery-notes
 </span>
 </a>
 </div>
@@ -302,7 +344,7 @@ $rootScope and fire events on <code>$rootScope</code>.</li>
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#protractor"><span class="toc-number">1.</span> <span class="toc-text">Protractor</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#guildlines-and-best-practices"><span class="toc-number">2.</span> <span class="toc-text">Guildlines and Best Practices</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#starting-point"><span class="toc-number">2.1.</span> <span class="toc-text">Starting Point</span></a></li></ol>
+  
   </div>
 
 <div id="asidepart">

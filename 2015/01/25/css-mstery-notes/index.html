@@ -1,0 +1,602 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>CSS Mstery-notes | Poe&#39;s World</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="zhpooer">
+    
+    <meta name="description" content="意义的重要
+
+与表现性相比，有意义的页面更容易处理。搜索代码，找到引用元素。
+程序和其他设备理解有意义的标记
+
+ID用于标识页面上特定的元素，以及持久的结构性元素，后一次性元素。
+类适合标识内容的类型或其他相似的条目。
+为元素命名
+应该根据 &#39;他们是什么&#39; 来为元素命名,而不应该根据">
+    
+    
+    
+    
+    <link rel="alternative" href="/atom.xml" title="Poe&#39;s World" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="Poe&#39;s World" title="Poe&#39;s World"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Poe&#39;s World">Poe&#39;s World</a></h1>
+				<h2 class="blog-motto">竹杖芒鞋轻胜马，一蓑烟雨任平生</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">主页</a></li>
+					
+						<li><a href="/english-monthly">英语角</a></li>
+					
+						<li><a href="/about">关于</a></li>
+					
+						<li><a href="/archives">归档</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:zhpooer.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2015/01/25/css-mstery-notes/" title="CSS Mstery-notes" itemprop="url">CSS Mstery-notes</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://zhpooer.github.io" title="zhpooer">zhpooer</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2015-01-25T07:32:49.000Z" itemprop="datePublished">1月 25 2015</time>
+    更新日期:<time datetime="2015-01-27T13:05:17.000Z" itemprop="dateModified">1月 27 2015</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">意义的重要</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">2.</span> <span class="toc-text">为元素命名</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#css-"><span class="toc-number">3.</span> <span class="toc-text">css 应用样式</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">4.</span> <span class="toc-text">盒子模型</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">4.1.</span> <span class="toc-text">外边距叠加</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">5.</span> <span class="toc-text">清理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ie6-"><span class="toc-number">6.</span> <span class="toc-text">ie6 透明</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">7.</span> <span class="toc-text">图像相关</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ie-"><span class="toc-number">8.</span> <span class="toc-text">ie 背景缓存　</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">9.</span> <span class="toc-text">布局</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#tips"><span class="toc-number">10.</span> <span class="toc-text">tips</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-label"><span class="toc-number">10.1.</span> <span class="toc-text">表单标签 label</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#appand"><span class="toc-number">11.</span> <span class="toc-text">appand</span></a></li></ol>
+		</div>
+		
+		<h1 id="-">意义的重要</h1>
+<ul>
+<li>与表现性相比，有意义的页面更容易处理。搜索代码，找到引用元素。</li>
+<li>程序和其他设备理解有意义的标记</li>
+</ul>
+<p>ID用于标识页面上特定的元素，以及持久的结构性元素，后一次性元素。</p>
+<p>类适合标识内容的类型或其他相似的条目。</p>
+<h1 id="-">为元素命名</h1>
+<p>应该根据 &#39;他们是什么&#39; 来为元素命名,而不应该根据 &#39;他们的外观如何&#39; 来命名.
+可以让代码更有意义, 并且避免代码与设计不同步.</p>
+<h1 id="css-">css 应用样式</h1>
+<ol>
+<li><p>外链式</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">style</span> <span class="attribute">type</span>=<span class="value">"text/css"</span>&gt;</span><span class="css">
+</span><span class="tag">&lt;/<span class="title">style</span>&gt;</span>
+</pre></td></tr></table></figure>
+</li>
+<li><p>内部导入, 比链接慢</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre><span class="at_rule">@<span class="keyword">import</span> <span class="function">url(/css/layout.css)</span></span>;
+</pre></td></tr></table></figure>
+
+</li>
+</ol>
+<p>使用结构良好的<em>单一</em>CSS文件可以显著提高下载速度.</p>
+<h1 id="-">盒子模型</h1>
+<p>它指定元素如何显示以及如何相互交互.页面上每个元素都被看作一个矩形框,这个框由元素的内容 内边距 边框 和 外边框组成</p>
+<p>全局 reset</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>*<span class="rules">{ <span class="rule"><span class="attribute">maring</span>:<span class="value"> <span class="number">0</span></span></span>; <span class="rule"><span class="attribute">padding</span>:<span class="value"> <span class="number">0</span></span></span>;<span class="rule">}</span></span>
+</pre></td></tr></table></figure>
+
+<p>css3 的 <code>box-sizing</code>属性可以定义要使用哪种盒模型.</p>
+<h2 id="-">外边距叠加</h2>
+<p>当两个或者更多个<em>垂直外边距</em>相遇时, 它们将形成<em>一个</em>外边距, 这个外边距的高度等于两个发生叠加的外边距的高度的较大者.</p>
+<p>只有普通文档流中的盒子的垂直外边距才会发生外边距叠加. 行内框 浮动框 或绝对定位框不会发生</p>
+<p>文本元素会被当作匿名框,  用<code>:first-line</code> 选中</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre>&lt;<span class="keyword">div</span>&gt;
+  <span class="keyword">some</span> <span class="type">text</span>
+  &lt;p&gt;<span class="keyword">some</span> test&lt;/p&gt;
+&lt;/<span class="keyword">div</span>&gt;
+</pre></td></tr></table></figure>
+
+<h1 id="-">清理</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="code"><pre><span class="class">.clear</span><span class="pseudo">:after</span> <span class="rules">{
+  <span class="rule"><span class="attribute">content</span>:<span class="value"> <span class="string">"."</span></span></span>; <span class="rule"><span class="attribute">height</span>:<span class="value"> <span class="number">0</span></span></span>; <span class="rule"><span class="attribute">visibility</span>:<span class="value"> hidden</span></span>; <span class="rule"><span class="attribute">display</span>:<span class="value"> block</span></span>; <span class="rule"><span class="attribute">clear</span>:<span class="value">both</span></span>;
+<span class="rule">}</span></span>
+<span class="comment">/* IE hack */</span>  
+<span class="class">.clear</span> <span class="rules">{<span class="rule"><span class="attribute">display</span>:<span class="value"> inline-block</span></span>;<span class="rule">}</span></span>
+<span class="comment">/*针对ie6*/</span>
+* <span class="tag">html</span> <span class="class">.clear</span> <span class="rules">{<span class="rule"><span class="attribute">height</span>:<span class="value"> <span class="number">1</span>%</span></span>;<span class="rule">}</span></span>
+<span class="class">.clear</span> <span class="rules">{<span class="rule"><span class="attribute">display</span>:<span class="value"> block</span></span>;<span class="rule">}</span></span>
+
+<span class="comment">/*另一种方法*/</span>
+<span class="class">.clear</span><span class="rules">{<span class="rule"><span class="attribute">overflow</span>:<span class="value">hidden</span></span>; <span class="rule"><span class="attribute">_zoom</span>:<span class="value"><span class="number">1</span></span></span>;<span class="rule">}</span></span>
+<span class="comment">/* or */</span>
+<span class="class">.clear</span><span class="rules">{<span class="rule"><span class="attribute">overflow</span>:<span class="value">auto</span></span>; <span class="rule"><span class="attribute">_height</span>:<span class="value"> <span class="number">1</span>%</span></span>;<span class="rule">}</span></span>
+</pre></td></tr></table></figure>
+
+<h1 id="ie6-">ie6 透明</h1>
+<p>需要单独存放一个文件， 使用时用条件注释</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="tag">div</span> <span class="rules">{
+  <span class="rule"><span class="attribute">filter</span>:<span class="value">progid:DXImageTransform.Microsoft.<span class="function">AlphaImageLoader(src=<span class="string">'/img/xx.png'</span>,sizingMethod=<span class="string">'crop'</span>)</span></span></span>;
+  <span class="rule"><span class="attribute">background</span>:<span class="value"> none</span></span>;
+<span class="rule">}</span></span>
+</pre></td></tr></table></figure>
+
+<p>或者使用 <code>.htc</code> 文件, 在ie6专用样式表中引用它。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="tag">img</span>, <span class="tag">div</span><span class="rules">{
+  <span class="rule"><span class="attribute">behavior</span>:<span class="value"> <span class="function">url(iepngfix.htc)</span></span></span>;
+<span class="rule">}</span></span>
+</pre></td></tr></table></figure>
+
+<h1 id="-">图像相关</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="tag">a</span><span class="pseudo">:link</span>, <span class="tag">a</span><span class="pseudo">:visited</span> <span class="rules">{ <span class="rule"><span class="attribute">background</span>:<span class="value"> <span class="function">url(/img/button.png)</span> left top no-repeat</span></span>;<span class="rule">}</span></span>
+<span class="tag">a</span><span class="pseudo">:hover</span>, <span class="tag">a</span><span class="pseudo">:focus</span> <span class="rules">{<span class="rule"><span class="attribute">background-image</span>:<span class="value"> <span class="function">url(/img/button-over.png)</span></span></span>;<span class="rule">}</span></span>
+<span class="tag">a</span><span class="pseudo">:active</span> <span class="rules">{<span class="rule"><span class="attribute">background-image</span>:<span class="value"> <span class="function">url(/img/button-active.png)</span></span></span>;<span class="rule">}</span></span>
+</pre></td></tr></table></figure>
+
+<h1 id="ie-">ie 背景缓存　</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="tag">html</span> <span class="rules">{
+  <span class="rule"><span class="attribute">filter</span>:<span class="value"> <span class="function">expression(document.<span class="function">execCommand(<span class="string">"BackgroundImageCache"</span>, false, true)</span>)</span></span></span>;
+<span class="rule">}</span></span>
+</pre></td></tr></table></figure>
+
+<h1 id="-">布局</h1>
+<p>css 框架试图通过在标记和表现之间建立强耦合来简化css布局。</p>
+<ul>
+<li>使开发人员不得不使用表现性的标记</li>
+<li>设计中必须使用特定的网格结构</li>
+</ul>
+<p>布局技术的根本是3个基本概念: 定位 浮动 和 外边距操纵</p>
+<ul>
+<li>固定宽度布局, 尺寸使用固定像素</li>
+<li>流式布局, 尺寸使用百分比. 比如设计者使用 960 像素, 那么使用百分数就是 <code>960/1250</code></li>
+<li>弹性布局, 相对于字号设置大小. 大多数默认字号是16像素, 10像素大约是16像素的62.5%.<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="tag">body</span> <span class="rules">{ <span class="rule"><span class="attribute">font-size</span>:<span class="value"> <span class="number">62.5</span>%</span></span>; <span class="rule"><span class="attribute">text-align</span>:<span class="value"> center</span></span>;<span class="rule">}</span></span>
+<span class="class">.wrapper</span><span class="rules">{<span class="rule"><span class="attribute">width</span>:<span class="value"> <span class="number">92</span>em</span></span>;<span class="rule">}</span></span>
+<span class="comment">/*里面仍然用百分比*/</span>
+</pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h1 id="tips">tips</h1>
+<p>ie6中的<code>width</code>更像是 <code>min-width</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>&lt;<span class="operator">a</span> href=<span class="string">""</span> <span class="built_in">rel</span>=<span class="string">"prev"</span>&gt;&lt;/<span class="operator">a</span>&gt;
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre><span class="tag">ol</span><span class="class">.pagination</span> <span class="tag">a</span><span class="attr_selector">[rel="prev"]</span>, <span class="tag">ol</span><span class="class">.pagination</span> <span class="tag">a</span><span class="attr_selector">[rel="next"]</span> <span class="rules">{<span class="rule"><span class="attribute">border</span>:<span class="value"> none</span></span>;<span class="rule">}</span></span>
+<span class="tag">ol</span><span class="class">.pagination</span> <span class="tag">a</span><span class="attr_selector">[rel="prev"]</span><span class="pseudo">:before</span> <span class="rules">{ <span class="rule"><span class="attribute">content</span>:<span class="value"> <span class="string">"\00AB"</span></span></span>;<span class="rule">}</span></span>
+<span class="tag">ol</span><span class="class">.pagination</span> <span class="tag">a</span><span class="attr_selector">[rel="next"]</span><span class="pseudo">:before</span> <span class="rules">{ <span class="rule"><span class="attribute">content</span>:<span class="value"> <span class="string">"\00BB"</span></span></span>;<span class="rule">}</span></span>
+</pre></td></tr></table></figure>
+
+<p>双倍边距解决 <code>display: inline;</code></p>
+<h2 id="-label">表单标签 label</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- 方式一 --&gt;</span>
+<span class="tag">&lt;<span class="title">lable</span>&gt;</span> email <span class="tag">&lt;<span class="title">input</span> <span class="attribute">name</span>=<span class="value">"email"</span> <span class="attribute">type</span>=<span class="value">"text"</span>/&gt;</span> <span class="tag">&lt;/<span class="title">lable</span>&gt;</span>
+
+<span class="comment">&lt;!-- 方式二  --&gt;</span>
+<span class="tag">&lt;<span class="title">label</span> <span class="attribute">for</span>=<span class="value">"email"</span>&gt;</span> email <span class="tag">&lt;<span class="title">em</span> <span class="attribute">class</span>=<span class="value">"required"</span>&gt;</span>(required)<span class="tag">&lt;/<span class="title">em</span>&gt;</span> <span class="tag">&lt;/<span class="title">label</span>&gt;</span>
+<span class="tag">&lt;<span class="title">input</span> <span class="attribute">name</span>=<span class="value">"email"</span> <span class="attribute">type</span>=<span class="value">"text"</span>/&gt;</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre><span class="tag">input</span><span class="attr_selector">[type='text']</span>, <span class="tag">textrea</span> <span class="rules">{
+<span class="rule"><span class="attribute">border-top</span>:<span class="value"> <span class="number">2</span>px solid <span class="hexcolor">#999</span></span></span>;
+<span class="rule"><span class="attribute">border-left</span>:<span class="value"> <span class="number">2</span>px solid <span class="hexcolor">#999</span></span></span>;
+<span class="rule"><span class="attribute">border-bottom</span>:<span class="value"> <span class="number">1</span>px solid <span class="hexcolor">#999</span></span></span>;
+<span class="rule"><span class="attribute">border-right</span>:<span class="value"> <span class="number">1</span>px solid <span class="hexcolor">#999</span></span></span>;
+<span class="rule">}</span></span>
+</pre></td></tr></table></figure>
+
+<p>提交按钮</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">div</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">button</span> <span class="attribute">type</span>=<span class="value">"submit"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">img</span> <span class="attribute">src</span>=<span class="value">"/img/xx"</span>/&gt;</span>
+  <span class="tag">&lt;/<span class="title">button</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre><span class="attribute">text-overflow</span>: <span class="string">ellipsis;</span>
+</pre></td></tr></table></figure>
+
+<p>input 标签</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td><td class="code"><pre>&lt;input <span class="keyword">type</span>=<span class="string">"text"</span> autocomplete=<span class="string">"off"</span> autofocus spellcheck=<span class="string">'true'</span> required/&gt;
+</pre></td></tr></table></figure>
+
+<h1 id="appand">appand</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="code"><pre><span class="attribute">box-sizing</span>: <span class="string">content-box|border-box;</span>
+
+<span class="http"><span class="attribute">display</span>: <span class="string">box;</span>
+<span class="attribute">box-flex</span>: <span class="string">1;</span>
+
+<span class="scss"><span class="comment">// 改变元素显示位置</span>
+box-ordinal-group<span class="value">: <span class="number">3</span>;</span>
+<span class="comment">// 排列方向</span>
+box-orient<span class="value">: vertical;</span>
+
+box-align<span class="value">: start | center | end;</span>  <span class="comment">// hrizontal | vertical</span>
+
+out-<span class="value">line</span><span class="value">: thin solid red;</span>
+out-offset<span class="value">: ;</span></span></span>
+</pre></td></tr></table></figure>
+
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/css/">css</a>
+  </div>
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://zhpooer.github.io/2015/01/25/css-mstery-notes/" data-title="CSS Mstery-notes | Poe&#39;s World" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2015/01/27/锋利的jquery-小记/" title="锋利的jquery 小记">
+  <strong>PREVIOUS:</strong><br/>
+  <span>
+  锋利的jquery 小记</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2014/12/27/angularjs-6/"  title="angularjs End-to-End Testing &amp; Guidelines">
+ <strong>NEXT:</strong><br/> 
+ <span>angularjs End-to-End Testing &amp; Guidelines
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">1.</span> <span class="toc-text">意义的重要</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">2.</span> <span class="toc-text">为元素命名</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#css-"><span class="toc-number">3.</span> <span class="toc-text">css 应用样式</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">4.</span> <span class="toc-text">盒子模型</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-"><span class="toc-number">4.1.</span> <span class="toc-text">外边距叠加</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">5.</span> <span class="toc-text">清理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ie6-"><span class="toc-number">6.</span> <span class="toc-text">ie6 透明</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">7.</span> <span class="toc-text">图像相关</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ie-"><span class="toc-number">8.</span> <span class="toc-text">ie 背景缓存　</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#-"><span class="toc-number">9.</span> <span class="toc-text">布局</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#tips"><span class="toc-number">10.</span> <span class="toc-text">tips</span></a></li><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#-label"><span class="toc-number">10.1.</span> <span class="toc-text">表单标签 label</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#appand"><span class="toc-number">11.</span> <span class="toc-text">appand</span></a></li></ol>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			<li><a href="/tags/AJAX/" title="AJAX">AJAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Akka/" title="Akka">Akka<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Android/" title="Android">Android<sup>1</sup></a></li>
+		
+			<li><a href="/tags/DOM/" title="DOM">DOM<sup>2</sup></a></li>
+		
+			<li><a href="/tags/EL表达式/" title="EL表达式">EL表达式<sup>1</sup></a></li>
+		
+			<li><a href="/tags/HBase/" title="HBase">HBase<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Hadoop/" title="Hadoop">Hadoop<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Hibernate/" title="Hibernate">Hibernate<sup>2</sup></a></li>
+		
+			<li><a href="/tags/HttpSession/" title="HttpSession">HttpSession<sup>1</sup></a></li>
+		
+			<li><a href="/tags/IO/" title="IO">IO<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Illustrator/" title="Illustrator">Illustrator<sup>3</sup></a></li>
+		
+			<li><a href="/tags/JSP/" title="JSP">JSP<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaBean/" title="JavaBean">JavaBean<sup>1</sup></a></li>
+		
+			<li><a href="/tags/JavaScript/" title="JavaScript">JavaScript<sup>1</sup></a></li>
+		
+			<li><a href="/tags/Mybatis/" title="Mybatis">Mybatis<sup>1</sup></a></li>
+		
+			<li><a href="/tags/NoSql/" title="NoSql">NoSql<sup>1</sup></a></li>
+		
+			<li><a href="/tags/SASS/" title="SASS">SASS<sup>1</sup></a></li>
+		
+			<li><a href="/tags/SAX/" title="SAX">SAX<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletRequest/" title="ServletRequest">ServletRequest<sup>1</sup></a></li>
+		
+			<li><a href="/tags/ServletResponse/" title="ServletResponse">ServletResponse<sup>1</sup></a></li>
+		
+		</ul>
+</div>
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://zespia.tw/hexo/" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2015 
+		
+		<a href="http://zhpooer.github.io" target="_blank" title="zhpooer">zhpooer</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"zhpoooer"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>
