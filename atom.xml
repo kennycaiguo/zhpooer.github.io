@@ -4,7 +4,7 @@
   <subtitle><![CDATA[竹杖芒鞋轻胜马，一蓑烟雨任平生]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://zhpooer.github.io/"/>
-  <updated>2015-01-28T00:01:29.696Z</updated>
+  <updated>2015-04-23T06:54:56.035Z</updated>
   <id>http://zhpooer.github.io/</id>
   
   <author>
@@ -15,11 +15,2318 @@
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
   
   <entry>
+    <title><![CDATA[BackBone]]></title>
+    <link href="http://zhpooer.github.io/2015/04/21/backbone/"/>
+    <id>http://zhpooer.github.io/2015/04/21/backbone/</id>
+    <published>2015-04-21T12:13:57.000Z</published>
+    <updated>2015-04-23T03:46:28.830Z</updated>
+    <content type="html"><![CDATA[<p>什么是前端， Html +　Javascript</p>
+<p>html javascript 混杂在一起，开起来是一个大杂烩</p>
+<p>什么是好的代码，应当把你的应用解藕成一系列相互平等且独立的页面</p>
+<p>使用类、继承、对象和设计模式</p>
+<p>MVC:数据(模型)　展示层(视图)　用户交互层(控制器)</p>
+<ol>
+<li>用户和应用产生交互</li>
+<li>控制器的事件处理器被触发</li>
+<li>控制器从模型中请求数据，并将其交给视图</li>
+<li>视图将数据呈现给用户</li>
+</ol>
+<h1 id="-model-">模型(Model)</h1>
+<p>用来存放所有的数据对象</p>
+<p>模型不必知晓视图和控制器的细节，只需要包行数据及直接和这些数据相关的逻辑</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+</pre></td><td class="code"><pre>  <span class="comment">// model.js</span>
+  <span class="comment">// 用户字段</span>
+  <span class="keyword">var</span> User = Backbone.Model.extend({
+    defaults: {
+      identity: UserType.SelfEmployed,
+      canSpouseGuarantee: UserMap.CanSpouseGuarantee.Canot,
+      socialSecurityFundmonth: -<span class="number">1</span>,
+    },
+    isCompany: <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+      <span class="keyword">var</span> identity = <span class="keyword">this</span>.<span class="keyword">get</span>(<span class="string">'identity'</span>);
+      <span class="keyword">return</span> identity != UserType.WageEarner && identity != UserType.Other;
+    }
+  });
+
+  <span class="comment">// 记录页面信息</span>
+  <span class="keyword">var</span> PageInfo = Backbone.Model.extend({
+    defaults: {
+      permission: [ UserType.BusinessOwner,
+                    UserType.SelfEmployed,
+                    UserType.WageEarner,
+                    UserType.Other ],
+      current: <span class="literal">false</span>,  <span class="comment">// 是否当前页</span>
+      showInNav: <span class="literal">true</span>, <span class="comment">// 时候要显示在侧边栏上，针对 Index</span>
+      forInput: <span class="literal">true</span>,  <span class="comment">// 是否要显示出来以便用户填写</span>
+      complete: <span class="number">0</span>,     <span class="comment">// 显示填写百分比</span>
+      completeForCompany: <span class="number">0</span>, <span class="comment">// 针对企业显示的百分比</span>
+      validateKeys: [], <span class="comment">// 必须填写的字段，需要验证的字段，如有特殊情况，重写 isAllFilled</span>
+      validateDepends: [] <span class="comment">// 在一定条件下必须填写的字段 参考 UserInfo.js</span>
+    },
+    initialize: <span class="function"><span class="keyword">function</span><span class="params">( properties )</span>{</span>
+      _.extend( <span class="keyword">this</span>, properties );
+    }
+  }
+</pre></td></tr></table></figure>
+
+<h1 id="-">视图</h1>
+<p>视图层是呈现给用户的，用户与之产生交互。视图不必知晓模型和控制器中的细节</p>
+<p>Html 页面, html 模板</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/template"</span> <span class="attribute">id</span>=<span class="value">"navTemplate"</span>&gt;</span><span class="javascript">
+  &lt;i&gt;<span class="xml"><span class="tag">&lt;/<span class="title">i</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">span</span>&gt;</span>${name}<span class="tag">&lt;/<span class="title">span</span>&gt;</span>
+</span></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<h1 id="-">控制器</h1>
+<p>控制器是模型和视图之间的纽带。控制器从视图获得事件和输入，对它们进行处理，
+并相应的更新视。当页面加载时，控制器会给视图添加事件监听。</p>
+<p>不使用类库和框架也能实现视图</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+</pre></td><td class="code"><pre>$(<span class="string">''</span>).click(<span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+  <span class="comment">// any code here </span>
+});
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+</pre></td><td class="code"><pre><span class="comment">// views.js</span>
+(<span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+
+  <span class="keyword">var</span> models = $.app.models;
+  <span class="keyword">var</span> PageInfos = models.PageInfos;
+
+  <span class="comment">// 每个页面的原型</span>
+  <span class="keyword">var</span> PageView = Backbone.View.extend({
+    initialize: <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+      _.bindAll(<span class="keyword">this</span>, <span class="string">'display'</span>);
+      <span class="keyword">this</span>.setElement( <span class="keyword">this</span>.model.<span class="keyword">get</span>(<span class="string">'el'</span>) );
+      <span class="keyword">this</span>.model.<span class="keyword">set</span>({view: <span class="keyword">this</span>});
+
+      <span class="comment">// 如果是当前页，则显示出来</span>
+      <span class="keyword">this</span>.model.bind(<span class="string">'change:current'</span>, <span class="keyword">this</span>.display);
+      <span class="keyword">this</span>.display();
+      <span class="keyword">if</span>(<span class="keyword">this</span>.init) <span class="keyword">this</span>.init();
+    },
+    show: <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+      <span class="keyword">this</span>.beforeEnter();
+      <span class="keyword">this</span>.$el.show();
+    },
+    hide: <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+      <span class="keyword">this</span>.$el.hide();
+      <span class="keyword">this</span>.afterLeave();
+    },
+    <span class="comment">// 在显示页面之前，需要如何，比如 slogan 隐藏侧边栏</span>
+    beforeEnter: <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+    },
+    <span class="comment">// 在离开页面之后需要如何</span>
+    afterLeave: <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>},
+    display: <span class="function"><span class="keyword">function</span><span class="params">(model, current)</span> {</span>
+      <span class="keyword">if</span>( current ){
+        <span class="keyword">this</span>.show();
+      } <span class="keyword">else</span> {
+        <span class="keyword">this</span>.hide();
+      }
+    },
+    <span class="comment">// 因为要大量用到， 所以抽出来一个方法</span>
+    <span class="comment">// 将页面显示，绑定到用户变量</span>
+    bindWithUser: <span class="function"><span class="keyword">function</span><span class="params">( user, field, event, selector, params)</span>{</span>
+      <span class="keyword">var</span> self = <span class="keyword">this</span>;
+      <span class="comment">// 用户点击的时候， 回调函数</span>
+      params = params || {};
+
+      <span class="keyword">var</span> changeCallback = params.changeCallback;
+
+      <span class="comment">// 当同步的时候， 回调函数</span>
+      <span class="keyword">var</span> syncCallback = params.syncCallback;
+
+      <span class="keyword">var</span> change = <span class="function"><span class="keyword">function</span><span class="params">(e)</span>{</span>
+        <span class="keyword">var</span> $target = $(e.currentTarget);
+        <span class="keyword">var</span> type = $target.data(<span class="string">'type'</span>);
+        user.<span class="keyword">set</span>(field, type);
+        <span class="comment">// console.log(changeCallback);</span>
+        <span class="keyword">if</span>(changeCallback)  changeCallback();
+      };
+
+      <span class="keyword">var</span> sync = <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+        self.$(selector).removeClass(<span class="string">'cur'</span>);
+        self.$(selector + <span class="string">'[data-type='</span> + user.<span class="keyword">get</span>(field) + <span class="string">']'</span>).addClass(<span class="string">'cur'</span>);
+        <span class="keyword">if</span>(syncCallback)  syncCallback();
+      };
+
+      sync();
+      self.listenTo(user, <span class="string">'change:'</span> + field, sync);
+      <span class="keyword">this</span>.$el.on(event, selector, change);
+    }
+  });
+
+  <span class="comment">// 侧边栏控制器</span>
+  <span class="keyword">var</span> NavItem = Backbone.View.extend({
+    tagName: <span class="string">'li'</span>,
+    <span class="comment">// TODO 点击实现</span>
+    events: {
+      <span class="string">"click"</span>: <span class="string">"switchTo"</span>
+    },
+    initialize: <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+      _.bindAll(<span class="keyword">this</span>, <span class="string">'toggleCurrent'</span>);
+      <span class="keyword">this</span>.template = $(<span class="string">"#navTemplate"</span>).template();
+
+      <span class="keyword">this</span>.listenTo(<span class="keyword">this</span>.model, <span class="string">'change:current'</span>, <span class="keyword">this</span>.toggleCurrent);
+      <span class="keyword">this</span>.listenTo(<span class="keyword">this</span>.model, <span class="string">'change:forInput'</span>, <span class="keyword">this</span>.toggleVisible);
+    },
+    <span class="comment">// 切换到当前页面</span>
+    switchTo: <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+      <span class="comment">// appView 监听事件</span>
+      Backbone.trigger(<span class="string">"switch"</span>, <span class="keyword">this</span>.model);
+    },
+	  render: <span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span>
+      <span class="keyword">var</span> element = $.tmpl(<span class="keyword">this</span>.template, <span class="keyword">this</span>.model.toJSON());
+		  <span class="keyword">this</span>.$el.html(element);
+      <span class="keyword">this</span>.toggleCurrent();
+      <span class="keyword">this</span>.toggleVisible();
+		  <span class="keyword">return</span> <span class="keyword">this</span>;
+    },
+    toggleCurrent: <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+      <span class="keyword">if</span>(<span class="keyword">this</span>.model.<span class="keyword">get</span>(<span class="string">'current'</span>))  <span class="keyword">this</span>.$el.addClass(<span class="string">'cur'</span>);
+      <span class="keyword">else</span> <span class="keyword">this</span>.$el.removeClass(<span class="string">'cur'</span>);
+    },
+    toggleVisible: <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+      <span class="keyword">if</span>(<span class="keyword">this</span>.model.<span class="keyword">get</span>(<span class="string">'forInput'</span>))  <span class="keyword">this</span>.$el.show();
+      <span class="keyword">else</span> <span class="keyword">this</span>.$el.hide();
+    }
+  });
+
+
+  <span class="comment">// 主控制器</span>
+  <span class="keyword">var</span> AppView = Backbone.View.extend({
+    events: {
+      <span class="string">'click footer.next a'</span>: <span class="string">"gotoNext"</span>
+    },
+    initialize: <span class="function"><span class="keyword">function</span><span class="params">(data)</span>{</span>
+      _.bindAll(<span class="keyword">this</span>, <span class="string">'syncForView'</span>, <span class="string">'pageSwitch'</span>);
+
+      <span class="keyword">this</span>.$nav = <span class="keyword">this</span>.$(<span class="string">'nav ul'</span>);
+      <span class="keyword">this</span>.$navIndicator = <span class="keyword">this</span>.$(<span class="string">'nav .cur-step'</span>);
+      <span class="keyword">this</span>.user = data.user;
+      <span class="keyword">this</span>.cur = <span class="literal">null</span>;  <span class="comment">// 记录当前的 page</span>
+      <span class="keyword">this</span>.addNav();
+      <span class="keyword">this</span>.gotoNext();
+      <span class="keyword">this</span>.syncForView();
+
+      <span class="keyword">this</span>.listenTo(Backbone, <span class="string">'switch'</span>, <span class="keyword">this</span>.pageSwitch);
+      <span class="keyword">this</span>.listenTo(Backbone, <span class="string">'goto'</span>, <span class="keyword">this</span>.gotoPage);
+      <span class="comment">// 根据用户选择身份来刷新是否要填写的内容</span>
+      <span class="keyword">this</span>.listenTo(<span class="keyword">this</span>.user, <span class="string">'change:identity'</span>, <span class="keyword">this</span>.syncForView);
+    },
+    <span class="comment">// 根据id导航</span>
+    gotoPage: <span class="function"><span class="keyword">function</span><span class="params">(pageId)</span>{</span>
+      <span class="keyword">var</span> page = <span class="keyword">this</span>.model.find( <span class="function"><span class="keyword">function</span><span class="params">(m)</span>{</span>
+        <span class="keyword">return</span> m.<span class="keyword">get</span>(<span class="string">'el'</span>) == pageId;
+      });
+      <span class="keyword">if</span>(page) <span class="keyword">this</span>.setCurrent(page);
+    },
+    <span class="comment">// 点击导航栏切换</span>
+    pageSwitch: <span class="function"><span class="keyword">function</span><span class="params">(page)</span>{</span>
+      <span class="keyword">if</span>(page == <span class="keyword">this</span>.cur ) <span class="keyword">return</span>;
+      <span class="keyword">if</span>( !<span class="keyword">this</span>.chkIsFilled() ) {
+        $.gritter.add({
+	        <span class="comment">// (string | mandatory) the text inside the notification</span>
+	        text: <span class="string">'请将字段填充'</span>
+        });
+        <span class="keyword">return</span>;
+      }
+      <span class="comment">// 获得没有填写完整 切 index 比要切换的page 小的</span>
+      <span class="keyword">var</span> isNotFilled = <span class="keyword">this</span>.model.find(<span class="function"><span class="keyword">function</span><span class="params">(m)</span>{</span>
+        <span class="keyword">return</span> page.<span class="keyword">get</span>(<span class="string">'index'</span>) &gt; m.<span class="keyword">get</span>(<span class="string">'index'</span>) && m.isAllFilled(<span class="keyword">this</span>.user);
+      });
+
+      <span class="keyword">if</span>(!isNotFilled)
+        <span class="keyword">this</span>.setCurrent(page);
+    },
+    syncForView:<span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+      <span class="keyword">var</span> user = <span class="keyword">this</span>.user;
+      <span class="keyword">this</span>.model.<span class="keyword">each</span>(<span class="function"><span class="keyword">function</span><span class="params">(page)</span>{</span>
+        page.refresh(user.<span class="keyword">get</span>(<span class="string">'identity'</span>));
+      });
+    },
+    addNav: <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+      <span class="keyword">this</span>.$nav.html(<span class="string">''</span>);
+		  <span class="keyword">this</span>.model.<span class="keyword">each</span>( <span class="function"><span class="keyword">function</span> <span class="params">(page)</span> {</span>
+        <span class="keyword">if</span>(page.<span class="keyword">get</span>(<span class="string">'showInNav'</span>)) {
+          <span class="keyword">var</span> view = <span class="keyword">new</span> NavItem({ model: page });
+          <span class="keyword">this</span>.$nav.append(view.render().el);
+        }
+		  }, <span class="keyword">this</span>);
+    },
+    <span class="comment">// 检查当前页面是否全部正确填写</span>
+    chkIsFilled: <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+      <span class="keyword">if</span>( !<span class="keyword">this</span>.cur) <span class="keyword">return</span> <span class="literal">true</span>;
+      <span class="keyword">return</span> <span class="keyword">this</span>.cur.isAllFilled(<span class="keyword">this</span>.user);
+    },
+    <span class="comment">// 点击切换到下一个页面</span>
+    gotoNext: <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+      <span class="keyword">if</span>( !<span class="keyword">this</span>.chkIsFilled() ) {
+        $.gritter.add({
+	        text: <span class="string">'请填充字段'</span>
+        });
+        <span class="comment">// return;</span>
+      }
+      <span class="keyword">this</span>.setCurrent(<span class="keyword">this</span>.getNextView());
+    },
+    <span class="comment">// 获取下一个页面</span>
+    getNextView: <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+      <span class="keyword">var</span> curIndex = -<span class="number">1</span>;
+      <span class="keyword">if</span>(<span class="keyword">this</span>.cur) curIndex = <span class="keyword">this</span>.cur.<span class="keyword">get</span>(<span class="string">"index"</span>);
+
+      <span class="keyword">var</span> avaliables = <span class="keyword">this</span>.model.filter(<span class="function"><span class="keyword">function</span><span class="params">(p)</span> {</span>
+        <span class="keyword">var</span> pIndex = p.<span class="keyword">get</span>(<span class="string">'index'</span>);
+        <span class="keyword">return</span> pIndex &gt; curIndex && p.<span class="keyword">get</span>(<span class="string">'forInput'</span>);;
+      });
+      <span class="keyword">var</span> next = _.min( avaliables , <span class="function"><span class="keyword">function</span><span class="params">(m)</span>{</span>
+        <span class="keyword">return</span> m.<span class="keyword">get</span>(<span class="string">'index'</span>);
+      });
+      <span class="keyword">if</span>(next == Infinity) next = <span class="keyword">this</span>.cur;
+
+      <span class="keyword">return</span> next || <span class="keyword">this</span>.cur;
+    },
+    <span class="comment">// 设置当前选中页面</span>
+    setCurrent: <span class="function"><span class="keyword">function</span><span class="params">(cur)</span>{</span>
+      <span class="keyword">if</span>(<span class="keyword">this</span>.cur) { <span class="keyword">this</span>.cur.<span class="keyword">set</span>({current: <span class="literal">false</span>}); }
+      cur.<span class="keyword">set</span>({ current: <span class="literal">true</span> });
+      <span class="keyword">this</span>.cur = cur;
+      <span class="keyword">this</span>.setIndicator();
+    },
+    <span class="comment">// 设置百分数</span>
+    setIndicator: <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+      <span class="keyword">var</span> self = <span class="keyword">this</span>;
+
+      <span class="keyword">var</span> p = <span class="keyword">this</span>.model.reduce(<span class="function"><span class="keyword">function</span><span class="params">(percent, page)</span>{</span>
+        <span class="keyword">if</span>(page.isAllFilled(self.user) && !page.<span class="keyword">get</span>(<span class="string">"showInNav"</span>) && page.<span class="keyword">get</span>(<span class="string">"forInput"</span>)) {
+          <span class="keyword">var</span> tmp = -<span class="number">1</span>;
+          <span class="keyword">if</span>( self.user.isCompany() ) {
+            tmp = page.<span class="keyword">get</span>(<span class="string">"complete"</span>);
+          } <span class="keyword">else</span> {
+            tmp = page.<span class="keyword">get</span>(<span class="string">"completeForCompany"</span>);
+          }
+          <span class="keyword">return</span> percent &gt; tmp ? percent : tmp;
+        } <span class="keyword">else</span> {
+          <span class="keyword">return</span> percent;
+        }
+      }, <span class="number">0</span>);
+
+      <span class="keyword">this</span>.$navIndicator.html( p + <span class="string">'%'</span>);
+    }
+  });
+
+  $.app.views.AppView = AppView;
+  $.app.views.PageView = PageView;
+
+}).call(<span class="keyword">this</span>);
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+</pre></td><td class="code"><pre><span class="comment">// 每个页面都有自己的控制器</span>
+(<span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+
+  <span class="keyword">var</span> models = $.app.models;
+  <span class="keyword">var</span> PageInfo = models.PageInfo;
+  <span class="keyword">var</span> UserType = models.UserType;
+  <span class="keyword">var</span> PageView = $.app.views.PageView;
+
+  <span class="keyword">var</span> telRegex =  <span class="regexp">/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/</span>;
+
+  $.app.pages.BasicInfo = <span class="function"><span class="keyword">function</span><span class="params">(user)</span>{</span>
+
+    <span class="keyword">var</span> info = <span class="keyword">new</span> PageInfo({
+      el: <span class="string">"#partialBasicInfo"</span>,
+      name: <span class="string">"基本信息"</span>,
+      index: <span class="number">1</span>,
+      complete: <span class="number">0</span>,
+      <span class="comment">// 如果所有的字段都要填写， 就不用重写 isAllFilled</span>
+      validateKeys: [<span class="string">'identity'</span>, <span class="string">'userName'</span>, <span class="string">'cellPhoneNumber'</span>],
+      <span class="comment">// 重写 pageInfo 方法，因为并不是所有字段都要验证</span>
+      isAllFilled: <span class="function"><span class="keyword">function</span><span class="params">(model)</span> {</span>
+        <span class="comment">// 调用父类方法</span>
+        <span class="keyword">if</span>(<span class="keyword">this</span>.__proto__.isAllFilled(model)) {
+          <span class="keyword">var</span> id = model.get(<span class="string">'identity'</span>);
+          <span class="comment">// 如果是企业主那么 需要填写 share</span>
+          <span class="keyword">if</span>(id == UserType.BusinessOwner || id == UserType.SelfEmployed) {
+            <span class="keyword">return</span> !<span class="keyword">this</span>.isEmpty( model.get(<span class="string">'share'</span>) );
+          }
+          <span class="keyword">return</span> <span class="literal">true</span>;
+        }
+        <span class="keyword">return</span> <span class="literal">false</span>;
+      }
+    });
+
+    <span class="keyword">var</span> BasicInfoView = PageView.extend({
+      init: <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+        <span class="comment">// 绑定作用域</span>
+        _.bindAll(<span class="keyword">this</span>, <span class="string">"syncIdentity"</span>, <span class="string">"syncShare"</span>);
+
+        <span class="comment">// 缓存选择器</span>
+        <span class="keyword">this</span>.$telError = $(<span class="string">'#telError'</span>);
+        <span class="keyword">this</span>.$nameError = $(<span class="string">'#nameError'</span>);
+        <span class="keyword">this</span>.$nameInput = $(<span class="string">"#username"</span>);
+        <span class="keyword">this</span>.$telInput = $(<span class="string">"#tel"</span>);
+
+        <span class="comment">//初始化参数</span>
+        <span class="keyword">this</span>.syncIdentity();
+        <span class="keyword">this</span>.syncShare();
+        <span class="keyword">this</span>.$telInput.val(user.get(<span class="string">'cellPhoneNumber'</span>));
+        <span class="keyword">this</span>.$nameInput.val(user.get(<span class="string">'userName'</span>));
+
+        <span class="comment">// 监听变化</span>
+        <span class="keyword">this</span>.listenTo(user, <span class="string">'change:identity'</span>, <span class="keyword">this</span>.syncIdentity);
+        <span class="keyword">this</span>.listenTo(user, <span class="string">'change:share'</span>, <span class="keyword">this</span>.syncShare);
+        <span class="keyword">this</span>.listenTo(user, <span class="string">'change:userName'</span>, <span class="function"><span class="keyword">function</span><span class="params">(model, val)</span>{</span>
+          <span class="keyword">this</span>.$nameInput.val(val);
+        });
+        <span class="keyword">this</span>.listenTo(user, <span class="string">'change:cellPhoneNumber'</span>, <span class="function"><span class="keyword">function</span><span class="params">(model, val)</span>{</span>
+          <span class="keyword">this</span>.$telInput.val(val);
+        });
+      },
+      events: {
+        <span class="string">"change #tel"</span>: <span class="string">"chkTel"</span>,
+        <span class="string">"change #username"</span>: <span class="string">"chkName"</span>,
+        <span class="string">"click .form .identity li"</span>: <span class="string">"selectType"</span>,
+        <span class="string">"click .form .info a"</span>: <span class="string">"selectShare"</span>
+      },
+      syncIdentity: <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+        <span class="keyword">var</span> $cur = <span class="keyword">this</span>.$(<span class="string">'.identity li[data-type='</span> + user.get(<span class="string">'identity'</span>)  + <span class="string">']'</span>);
+        $(<span class="string">'.identity li'</span>).removeClass(<span class="string">'cur'</span>);
+        $cur.addClass(<span class="string">'cur'</span>);
+      },
+      syncShare: <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+        <span class="keyword">var</span> $cur = <span class="keyword">this</span>.$(<span class="string">'.identity .info a[data-type='</span> + user.get(<span class="string">'share'</span>)  + <span class="string">']'</span>);
+        $(<span class="string">'.identity .info a'</span>).removeClass(<span class="string">'cur'</span>);
+        $cur.addClass(<span class="string">'cur'</span>);
+      },
+      chkTel: <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+        <span class="keyword">var</span> tel = <span class="keyword">this</span>.$telInput.val();
+        <span class="keyword">if</span>( !telRegex.test(tel) ) {
+          <span class="keyword">this</span>.$telError.show();
+        } <span class="keyword">else</span> {
+          <span class="keyword">this</span>.$telError.hide();
+          <span class="comment">// 如果正确，就保存起来</span>
+          user.set(<span class="string">'cellPhoneNumber'</span>, tel);
+          <span class="keyword">return</span> <span class="literal">true</span>;
+        }
+        <span class="keyword">if</span>( ret == <span class="string">""</span> ){
+          user.set(<span class="string">'cellPhoneNumber'</span>, <span class="string">""</span>);
+        }
+        <span class="keyword">return</span> <span class="literal">false</span>;
+      },
+      chkName: <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+        <span class="keyword">var</span> username = $.trim(<span class="keyword">this</span>.$nameInput.val());
+        <span class="keyword">if</span>(username==<span class="string">""</span>) {
+          <span class="keyword">this</span>.showNameError(<span class="string">"请输入用户名"</span>);
+          user.set(<span class="string">'userName'</span>, <span class="string">""</span>);
+          <span class="keyword">return</span> <span class="literal">false</span>;
+        }
+        <span class="keyword">else</span> <span class="keyword">if</span>( <span class="regexp">/^\d.*$/</span>.test( username ) ){
+          <span class="keyword">this</span>.showNameError(<span class="string">"用户名不能以数字开头"</span>);
+          <span class="keyword">return</span> <span class="literal">false</span>;
+        }
+        <span class="keyword">else</span> <span class="keyword">if</span>(username.length&lt;<span class="number">2</span> || username.length&gt;<span class="number">15</span> ){
+          <span class="keyword">this</span>.showNameError(<span class="string">"合法长度为2-15个字符"</span>);
+          <span class="keyword">return</span> <span class="literal">false</span>;
+        }
+        <span class="keyword">else</span> {
+          <span class="keyword">this</span>.showNameError(<span class="string">""</span>);
+        }
+        user.set(<span class="string">'userName'</span>, username);
+        <span class="keyword">return</span> <span class="literal">true</span>;
+      },
+      showNameError: <span class="function"><span class="keyword">function</span><span class="params">(notify)</span> {</span>
+        <span class="keyword">this</span>.$nameError.html(notify);
+        <span class="keyword">if</span>( notify != <span class="string">""</span> ) <span class="keyword">this</span>.$nameError.show();
+        <span class="keyword">else</span> <span class="keyword">this</span>.$nameError.hide();
+      },
+      selectType: <span class="function"><span class="keyword">function</span><span class="params">(e)</span>{</span>
+        <span class="keyword">var</span> target = $(e.currentTarget);
+        user.set(<span class="string">'identity'</span>, target.data(<span class="string">'type'</span>));
+      },
+      selectShare: <span class="function"><span class="keyword">function</span><span class="params">(e)</span> {</span>
+        <span class="keyword">var</span> target = $(e.currentTarget);
+        user.set(<span class="string">'share'</span>, target.data(<span class="string">'type'</span>));
+      }
+    });
+
+    <span class="keyword">var</span> page = <span class="keyword">new</span> BasicInfoView({ model: info });
+
+    <span class="keyword">return</span> info;
+  };
+}).call(<span class="keyword">this</span>);
+</pre></td></tr></table></figure>
+
+<h1 id="-">程序入口</h1>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+</pre></td><td class="code"><pre><span class="comment">// app.js</span>
+$(<span class="function"><span class="keyword">function</span><span class="params">()</span><span class="comment">{
+
+  var views = $.app.views;
+  var models = $.app.models;
+  var pages = $.app.pages;
+
+  var PageInfo = models.PageInfo;
+  var PageInfos = models.PageInfos;
+  var PageView = views.PageView;
+  var AppView = views.AppView;
+  var User = models.User;
+
+  var app = app || {}</span>;</span>
+
+  app.user = <span class="keyword">new</span> User();
+
+  app.pages = <span class="keyword">new</span> PageInfos();
+
+  app.pages.<span class="keyword">add</span>( pages.Slogan(app.user) );
+  app.pages.<span class="keyword">add</span>( pages.BasicInfo(app.user));
+  app.pages.<span class="keyword">add</span>( pages.CompanyType(app.user));
+  app.pages.<span class="keyword">add</span>( pages.IncomeType(app.user));
+  app.pages.<span class="keyword">add</span>( pages.WorkingAge(app.user));
+  app.pages.<span class="keyword">add</span>( pages.CompanyPosition(app.user));
+  app.pages.<span class="keyword">add</span>( pages.CreditStanding(app.user));
+  app.pages.<span class="keyword">add</span>( pages.SocialSecurityfund(app.user));
+  app.pages.<span class="keyword">add</span>( pages.UserInfo(app.user) );
+  app.pages.<span class="keyword">add</span>( pages.HouseInfo(app.user) );
+  app.pages.<span class="keyword">add</span>( pages.MonthIncome(app.user) );
+  app.pages.<span class="keyword">add</span>( pages.LoansInfo(app.user) );
+  app.pages.<span class="keyword">add</span>(pages.CarInfo(app.user));
+  <span class="comment">// TODO</span>
+  app.pages.<span class="keyword">add</span>( pages.Region(app.user) );
+
+  app.pages.<span class="keyword">add</span>( pages.Review(app.user) );
+  app.pages.<span class="keyword">add</span>( pages.CompanyRegion(app.user) );
+  app.pages.<span class="keyword">add</span>( pages.Bill(app.user) );
+  app.pages.<span class="keyword">add</span>( pages.Complete(app.user) );
+  app.pages.<span class="keyword">add</span>( pages.CreditInfo(app.user) );
+
+  <span class="keyword">var</span> s = <span class="keyword">new</span> AppView(<span class="comment">{model: app.pages, el: '.container', user: app.user}</span>);
+});
+</pre></td></tr></table></figure>
+
+<h1 id="todo">TODO</h1>
+<ol>
+<li>模型的拷贝</li>
+<li>route</li>
+<li>模块化 requirejs </li>
+</ol>
+]]></content>
+    
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[susy]]></title>
+    <link href="http://zhpooer.github.io/2015/04/18/susy/"/>
+    <id>http://zhpooer.github.io/2015/04/18/susy/</id>
+    <published>2015-04-18T01:13:52.000Z</published>
+    <updated>2015-04-18T01:54:13.114Z</updated>
+    <content type="html"><![CDATA[<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+</pre></td><td class="code"><pre><span class="at_rule">@<span class="keyword">import</span> <span class="string">"susy"</span>;</span>
+
+<span class="tag">body</span> { <span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> container</span>(<span class="number">80</span>em);</span> }
+<span class="tag">nav</span> { <span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> span</span>(<span class="number">25</span>%);</span> }
+
+<span class="tag">body</span> {
+  <span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> container</span>;</span>
+  <span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> show-grid</span>(overlay);</span>
+}
+
+<span class="tag">nav</span> { <span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> span</span>(<span class="number">3</span><span class="preprocessor"> of</span><span class="preprocessor"> 12</span>);</span> }
+
+main {
+  <span class="attribute">float</span><span class="value">: left;</span>
+  <span class="attribute">width</span><span class="value">: span(<span class="number">4</span>);</span>
+  <span class="attribute">margin-left</span><span class="value">: span(<span class="number">2</span>) + gutter();</span>
+  <span class="attribute">margin-right</span><span class="value">: gutter();</span>
+}
+
+<span class="tag">nav</span> { <span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> span</span>(<span class="number">3</span><span class="preprocessor"> of</span><span class="preprocessor"> 12</span>);</span> }
+
+$susy<span class="value">: (
+  columns: <span class="number">12</span>,  // The number of columns in your grid
+  gutters: <span class="number">1</span>/<span class="number">4</span>, // The size of a gutter in relation to a single column
+);</span>
+</pre></td></tr></table></figure>
+
+<p>These two definitions are interchangeable</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+</pre></td><td class="code"><pre><span class="variable">$susy</span>: (
+  columns: <span class="number">12</span>,
+  gutters: <span class="number">1</span>/<span class="number">4</span>,
+  math: fluid,
+  output: float,
+  gutter<span class="attribute">-position</span>: inside,
+);
+
+<span class="variable">$shorthand</span>: <span class="number">12</span> <span class="number">1</span>/<span class="number">4</span> fluid float inside;
+
+
+<span class="comment">// 12-column grid</span>
+<span class="variable">$grid</span>: <span class="number">12</span>;
+
+<span class="comment">// 12-column grid with 1/3 gutter ratio</span>
+<span class="variable">$grid</span>: <span class="number">12</span> <span class="number">1</span>/<span class="number">3</span>;
+
+<span class="comment">// 12-column grid with 60px columns and 10px gutters</span>
+<span class="variable">$grid</span>: <span class="number">12</span> (<span class="number">60</span>px <span class="number">10</span>px);
+
+<span class="comment">// asymmetrical grid with .25 gutter ratio</span>
+<span class="variable">$grid</span>: (<span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">2</span> <span class="number">1</span>) <span class="number">.25</span>;
+
+<span class="comment">// globle sets</span>
+<span class="variable">$susy</span>: (
+  flow: ltr,   <span class="comment">// rtl | ltr The reading direction of your document. </span>
+  math: fluid,  <span class="comment">// static | fluid</span>
+                <span class="comment">// Susy can produce either relative widths (fluid percentages) or static widths (using given units)</span>
+  output: float, 
+  gutter<span class="attribute">-position</span>: after,
+  container: auto,  <span class="comment">// &lt;length&gt; | auto</span>
+  container<span class="attribute">-position</span>: center,  <span class="comment">// left | center | right | &lt;length&gt; [*2]</span>
+  columns: <span class="number">4</span>,     <span class="comment">// &lt;number&gt; | &lt;list&gt;</span>
+  gutters: <span class="number">.25</span>,   <span class="comment">// 70px/10px</span>
+  column<span class="attribute">-width</span>: <span class="literal">false</span>,
+  <span class="built_in">global</span><span class="attribute">-box</span><span class="attribute">-sizing</span>: content<span class="attribute">-box</span>,
+  last<span class="attribute">-flow</span>: <span class="keyword">to</span>,
+  debug: (
+    image: hide,
+    color: rgba(<span class="variable">#66</span>f, <span class="number">.25</span>),
+    output: background,
+    toggle: top right,
+  ),
+  use<span class="attribute">-custom</span>: (
+    background<span class="attribute">-image</span>: <span class="literal">true</span>,
+    background<span class="attribute">-options</span>: <span class="literal">false</span>,
+    box<span class="attribute">-sizing</span>: <span class="literal">true</span>,
+    clearfix: <span class="literal">false</span>,
+    rem: <span class="literal">true</span>,
+  )
+);
+</pre></td></tr></table></figure>
+
+<h2 id="layout">Layout</h2>
+<p>A “layout” in Susy is made up of any combination of settings. Layouts are stored as maps, but can also be written as shorthand.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="code"><pre><span class="comment">// mixin: set a global layout</span>
+@<span class="keyword">include</span> layout(<span class="number">12</span> <span class="number">1</span>/<span class="number">4</span> inside-<span class="keyword">static</span>);
+
+<span class="variable">$map1</span>: <span class="number">13</span> <span class="keyword">static</span>;
+<span class="variable">$map2</span>: (<span class="number">6</span>em <span class="number">1</span>em) inside;
+@<span class="keyword">include</span> layout(<span class="variable">$map1</span> <span class="variable">$map2</span>);
+
+@<span class="keyword">include</span> with-layout(<span class="number">8</span> <span class="keyword">static</span>) {
+  <span class="comment">// Temporary 8-column static grid...</span>
+}
+
+<span class="comment">// Global settings are restored...</span>
+</pre></td></tr></table></figure>
+
+<h2 id="keyword">keyword</h2>
+<p>The global keywords can be used anywhere, and apply to global default settings. The local keywords are specific to each individual use.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+</pre></td><td class="code"><pre>
+<span class="variable">$global</span><span class="attribute">-keywords</span>: (
+  container            : auto,
+  math                 : static fluid,
+  output               : isolate float,
+  container<span class="attribute">-position</span>   : left center right,
+  flow                 : ltr rtl,
+  gutter<span class="attribute">-position</span>      : before after split inside inside<span class="attribute">-static</span>,
+  debug: (
+    image              : show hide show<span class="attribute">-columns</span> show<span class="attribute">-baseline</span>,
+    output             : background overlay,
+  ),
+);
+
+<span class="variable">$local</span><span class="attribute">-keywords</span>: (
+  box<span class="attribute">-sizing</span>           : border<span class="attribute">-box</span> content<span class="attribute">-box</span>,
+  edge                 : first alpha last omega,
+  spread               : narrow wide wider,
+  gutter<span class="attribute">-override</span>      : no<span class="attribute">-gutters</span> no<span class="attribute">-gutter</span>,
+  clear                : break nobreak,
+  role                 : nest,
+);
+
+<span class="comment">// grid: (columns: 4, gutters: 1/4, column-width: 4em);</span>
+<span class="comment">// keywords: (math: fluid, gutter-position: inside-static, flow: rtl);</span>
+<span class="variable">$small</span>: <span class="number">4</span> (<span class="number">4</span>em <span class="number">1</span>em) fluid inside<span class="attribute">-static</span> rtl;
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+</pre></td><td class="code"><pre><span class="comment">// span: 3;</span>
+<span class="comment">// location: 4;</span>
+<span class="comment">// layout: (columns: 12, gutters: .25, math: fluid)</span>
+$<span class="tag">span</span><span class="value">: <span class="number">3</span> at <span class="number">4</span> of <span class="number">12</span> .<span class="number">25</span> fluid;</span>
+
+<span class="comment">// Only $span is required in most cases</span>
+$<span class="tag">span</span><span class="value">: <span class="number">30</span>%;</span>
+
+
+<span class="comment">// arbitrary width</span>
+<span class="class">.item</span> { <span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> span</span>(<span class="number">25</span>%);</span> }
+
+<span class="comment">// float output (without gutters)</span>
+<span class="class">.item</span> {
+  <span class="attribute">float</span><span class="value">: left;</span>
+  <span class="attribute">width</span><span class="value">: <span class="number">25</span>%;</span>
+}
+
+
+<span class="comment">// grid span</span>
+<span class="class">.item</span> { <span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> span</span>(<span class="number">3</span>);</span> }
+
+<span class="comment">// output (7-column grid with 1/2 gutters after)</span>
+<span class="class">.item</span> {
+  <span class="attribute">float</span><span class="value">: left;</span>
+  <span class="attribute">width</span><span class="value">: <span class="number">40</span>%;</span>
+  <span class="attribute">margin-right</span><span class="value">: <span class="number">5</span>%;</span>
+}
+
+
+<span class="comment">// grid span</span>
+<span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> span</span>(last<span class="preprocessor"> 3</span>);</span>
+
+<span class="comment">// output (same 7-column grid)</span>
+<span class="class">.item</span> {
+  <span class="attribute">float</span><span class="value">: right;</span>
+  <span class="attribute">width</span><span class="value">: <span class="number">40</span>%;</span>
+  <span class="attribute">margin-right</span><span class="value">: <span class="number">0</span>;</span>
+}
+
+<span class="comment">// 10-column grid</span>
+<span class="class">.outer</span> {
+  <span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> span</span>(<span class="number">5</span>);</span>
+  <span class="class">.inner</span> { <span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> span</span>(<span class="number">2</span><span class="preprocessor"> of</span><span class="preprocessor"> 5</span>);</span> }
+}
+
+
+<span class="comment">// Grids with inside, inside-static, or split gutters don’t need to worry about the edge cases, but they do have to worry about nesting.</span>
+<span class="comment">// If an element will have grid-aligned children, you should mark it as a nest:</span>
+<span class="class">.outer</span> {
+  <span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> span</span>(<span class="number">5</span><span class="preprocessor"> nest</span>);</span>
+  <span class="class">.inner</span> { <span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> span</span>(<span class="number">2</span><span class="preprocessor"> of</span><span class="preprocessor"> 5</span>);</span> }
+}
+
+
+<span class="comment">// grid span</span>
+<span class="class">.narrow</span> { <span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> span</span>(<span class="number">2</span>);</span> }
+<span class="class">.wide</span> { <span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> span</span>(<span class="number">2</span><span class="preprocessor"> wide</span>);</span> }
+<span class="class">.wider</span> { <span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> span</span>(<span class="number">2</span><span class="preprocessor"> wider</span>);</span> }
+
+<span class="comment">// width output (7 columns, .25 gutters)</span>
+<span class="comment">// (each column is 10%, and each gutter adds 2.5%)</span>
+<span class="class">.narrow</span> { <span class="attribute">width</span><span class="value">: <span class="number">22.5</span>%;</span> }
+<span class="class">.wide</span> { <span class="attribute">width</span><span class="value">: <span class="number">25</span>%;</span> }
+<span class="class">.wider</span> { <span class="attribute">width</span><span class="value">: <span class="number">27.5</span>%;</span> }
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+</pre></td><td class="code"><pre><span class="tag">body</span> {
+  <span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> container</span>(<span class="number">12</span><span class="preprocessor"> center</span><span class="preprocessor"> static</span>);</span>
+}
+
+<span class="comment">// inside gutters</span>
+<span class="class">.item</span> { <span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> gutters</span>(<span class="number">3</span>em<span class="preprocessor"> inside</span>);</span> }
+
+<span class="comment">// gutters after, in an explicit (10 1/3) layout context</span>
+<span class="class">.item</span> { <span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> gutters</span>(<span class="number">10</span><span class="preprocessor"> 1</span>/<span class="number">3</span><span class="preprocessor"> after</span>);</span> }
+
+<span class="comment">// default context</span>
+<span class="attribute">margin-left</span><span class="value">: gutter();</span>
+
+<span class="comment">// nested in a 10-column context</span>
+<span class="attribute">margin-left</span><span class="value">: gutter(<span class="number">10</span>);</span>
+
+<span class="class">.item</span> {
+  <span class="attribute">width</span><span class="value">: span(<span class="number">2</span>);</span>
+  <span class="attribute">margin-left</span><span class="value">: span(<span class="number">3</span> wide);</span>
+  <span class="attribute">margin-right</span><span class="value">: span(<span class="number">1</span>) + <span class="number">25</span>%;</span>
+}
+
+
+<span class="comment">// the flexible version:</span>
+<span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> global-box-sizing</span>(border-box);</span>
+
+<span class="comment">// the shortcut:</span>
+<span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> border-box-sizing</span>;</span>
+
+<span class="class">.first</span> { <span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> first</span>;</span> }
+<span class="class">.last</span> { <span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> full</span>;</span> }
+
+
+<span class="comment">//  depending on the flow direction.</span>
+<span class="class">.example1</span> { <span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> pre</span>(<span class="number">25</span>%);</span> }
+<span class="class">.example2</span> { <span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> push</span>(<span class="number">2</span><span class="preprocessor"> of</span><span class="preprocessor"> 7</span>);</span> }
+
+<span class="class">.example1</span> { <span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> post</span>(<span class="number">25</span>%);</span> }
+<span class="class">.example2</span> { <span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> post</span>(<span class="number">2</span><span class="preprocessor"> of</span><span class="preprocessor"> 7</span>);</span> }
+
+<span class="class">.example1</span> { <span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> pull</span>(<span class="number">25</span>%);</span> }
+<span class="class">.example2</span> { <span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> pull</span>(<span class="number">2</span><span class="preprocessor"> of</span><span class="preprocessor"> 7</span>);</span> }
+
+<span class="comment">// equal pre and post</span>
+<span class="class">.example1</span> { <span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> squish</span>(<span class="number">25</span>%);</span> }
+
+<span class="comment">// distinct pre and post</span>
+<span class="class">.example2</span> { <span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> squish</span>(<span class="number">1</span>,<span class="preprocessor"> 3</span>);</span> }
+
+<span class="class">.example1</span> { <span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> prefix</span>(<span class="number">25</span>%);</span> }
+<span class="class">.example2</span> { <span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> prefix</span>(<span class="number">2</span><span class="preprocessor"> of</span><span class="preprocessor"> 7</span>);</span> }
+
+<span class="class">.example1</span> { <span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> suffix</span>(<span class="number">25</span>%);</span> }
+<span class="class">.example2</span> { <span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> suffix</span>(<span class="number">2</span><span class="preprocessor"> of</span><span class="preprocessor"> 7</span>);</span> }
+
+<span class="comment">// equal pre and post</span>
+<span class="class">.example1</span> { <span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> pad</span>(<span class="number">25</span>%);</span> }
+
+<span class="comment">// distinct pre and post</span>
+<span class="class">.example2</span> { <span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> pad</span>(<span class="number">1</span>,<span class="preprocessor"> 3</span>);</span> }
+
+<span class="comment">// input</span>
+<span class="comment">// Apply negative margins and equal positive padding, so that element</span>
+<span class="comment">// borders and backgrounds “bleed” outside of their containers, without the content be affected.</span>
+<span class="class">.example1</span> { <span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> bleed</span>(<span class="number">1</span>em);</span> }
+<span class="class">.example2</span> { <span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> bleed</span>(<span class="number">1</span>em<span class="preprocessor"> 2</span><span class="preprocessor"> 20px</span><span class="preprocessor"> 5</span>%<span class="preprocessor"> of</span><span class="preprocessor"> 8</span><span class="preprocessor"> .25</span>);</span> }
+
+<span class="comment">// output</span>
+<span class="class">.example1</span> {
+  <span class="attribute">margin</span><span class="value">: -<span class="number">1</span>em;</span>
+  <span class="attribute">padding</span><span class="value">: <span class="number">1</span>em;</span>
+}
+
+<span class="class">.example2</span> {
+  <span class="attribute">margin-top</span><span class="value">: -<span class="number">1</span>em;</span>
+  <span class="attribute">padding-top</span><span class="value">: <span class="number">1</span>em;</span>
+  <span class="attribute">margin-right</span><span class="value">: -<span class="number">22.5</span>%;</span>
+  <span class="attribute">padding-right</span><span class="value">: <span class="number">22.5</span>%;</span>
+  <span class="attribute">margin-bottom</span><span class="value">: -<span class="number">20</span>px;</span>
+  <span class="attribute">padding-bottom</span><span class="value">: <span class="number">20</span>px;</span>
+  <span class="attribute">margin-left</span><span class="value">: -<span class="number">5</span>%;</span>
+  <span class="attribute">padding-left</span><span class="value">: <span class="number">5</span>%;</span>
+  }
+
+<span class="comment">// input</span>
+<span class="class">.example</span> { <span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> bleed-x</span>(<span class="number">1</span>em<span class="preprocessor"> 2em</span>);</span> }
+
+<span class="comment">// output</span>
+<span class="class">.example</span> {
+  <span class="attribute">margin-left</span><span class="value">: -<span class="number">1</span>em;</span>
+  <span class="attribute">padding-left</span><span class="value">: <span class="number">1</span>em;</span>
+  <span class="attribute">margin-right</span><span class="value">: -<span class="number">2</span>em;</span>
+  <span class="attribute">padding-right</span><span class="value">: <span class="number">2</span>em;</span>
+}
+
+
+<span class="comment">// input</span>
+<span class="class">.mixin</span> { <span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> isolate</span>(<span class="number">25</span>%);</span> }
+
+<span class="comment">// output</span>
+<span class="class">.mixin</span> {
+  <span class="attribute">float</span><span class="value">: left;</span>
+  <span class="attribute">margin-left</span><span class="value">: <span class="number">25</span>%;</span>
+  <span class="attribute">margin-right</span><span class="value">: -<span class="number">100</span>%;</span>
+}
+
+
+<span class="comment">// each img will span 3 of 12 columns,</span>
+<span class="comment">// with 4 images in each row:</span>
+<span class="class">.gallery</span> <span class="tag">img</span> {
+  <span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> gallery</span>(<span class="number">3</span><span class="preprocessor"> of</span><span class="preprocessor"> 12</span>);</span>
+}
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+</pre></td><td class="code"><pre>@include susy-breakpoint(30em, <span class="number">8</span>) {
+  // nested code uses an <span class="number">8</span>-column grid,
+  // starting at a 30em min-width breakpoint...
+  .example { @include span(<span class="number">3</span>); }
+}
+
+
+// min
+// ---
+@include susy-media(30em) { /*<span class="keyword">...</span>*/ }
+
+@media (min-width: 30em) { /*<span class="keyword">...</span>*/ }
+
+// min/max pair
+// ------------
+@include susy-media(30em 60em) { /*<span class="keyword">...</span>*/ }
+
+@media (min-width: 30em) and (max-width: 60em) { /*<span class="keyword">...</span>*/ }
+
+// property/value pair
+// -------------------
+@include susy-media(min-height 30em) { /*<span class="keyword">...</span>*/ }
+
+@media (min-height: 30em) { /*<span class="keyword">...</span>*/ }
+
+// map
+// ---
+@include susy-media((
+  min-height: 30em,
+  orientation: landscape,
+)) { /*<span class="keyword">...</span>*/ }
+
+@media (min-height: 30em) and (orientation: landscape) { /*<span class="keyword">...</span>*/ }
+
+
+$susy-media: (
+  min: 20em,
+  max: 80em 60em,
+  string: <span class="string">'screen and (orientation: landscape)'</span>,
+  pair: min-height 40em,
+  map: (
+    media: screen,
+    max-width: 30em
+  ),
+);
+
+@include susy-media(min);
+</pre></td></tr></table></figure>
+
+]]></content>
+    
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[前端规范]]></title>
+    <link href="http://zhpooer.github.io/2015/03/26/%E5%89%8D%E7%AB%AF%E8%A7%84%E8%8C%83/"/>
+    <id>http://zhpooer.github.io/2015/03/26/前端规范/</id>
+    <published>2015-03-26T05:30:29.000Z</published>
+    <updated>2015-03-26T09:22:01.326Z</updated>
+    <content type="html"><![CDATA[<blockquote>
+<p>不管有多少人共同参与同一项目，一定要确保每一行代码都像是同一个人编写的。</p>
+</blockquote>
+<p><a href="http://front-end-standards.com/#23xhtml" target="_blank">参考1</a>
+<a href="http://caibaojian.com/web-fontend-doc.html" target="_blank">参考2</a>
+<a href="http://codeguide.bootcss.com/" target="_blank">参考3</a></p>
+<h1 id="-">文件规范</h1>
+<ol>
+<li>css 文件命名：英文命名, 后缀<code>.css</code>. 共用 <code>base.css</code>, 首页<code>index.css</code>, 其他页面依实际模块需求命名。</li>
+<li>js 文件命名：英文命名, 后缀<code>.js</code>. 共用 <code>common.css</code>, 其他依实际模块需求命名.</li>
+</ol>
+<h1 id="-">编辑器配置</h1>
+<p>将你的编辑器按照下面的配置进行设置，以避免常见的代码不一致和差异：</p>
+<ul>
+<li>用两个空格代替制表符（soft-tab 即用空格代表 tab 符）。</li>
+<li>保存文件时，删除尾部的空白符。</li>
+<li>设置文件编码为 <code>UTF-8</code></li>
+</ul>
+<h1 id="html-">HTML规范</h1>
+<ul>
+<li>文档类型声明及编码: 统一为html5声明类型; 编码统一为<code>utf-8</code>, 书写时利用IDE实现层次分明的缩进;</li>
+<li>非特殊情况下样式文件必须外链至<code>&lt;head&gt;&lt;/head&gt;</code>之间;非特殊情况下javascript文件必须外链至页面底部;</li>
+<li>引入JS库文件, 文件名须包含库名称及版本号及是否为压缩版, 比如<code>jquery-1.7.1.min.js</code>;
+引入插件, 文件名格式为库名称+插件名称, 比如 <code>jQuery.cookie.js</code>;</li>
+<li>所有编码均遵循xhtml标准, 标签 &amp; 属性 &amp; 属性命名 必须由小写字母及下划线数字组成,
+且所有标签必须闭合; 属性值必须用双引号包括;</li>
+<li>充分利用无兼容性问题的html自身标签, 比如 span, em, strong, optgroup, label 等等;
+需要为html元素添加自定义属性的时候, 首先要考虑下有没有默认的已有的合适标签去设置,
+如果没有, 可以使用须以<code>”data-”</code>为前缀来添加自定义属性，避免使用<code>”data:”</code>等其他命名方式;</li>
+<li>语义化html, 如 标题根据重要性用h(同一页面只能有一个h1), 段落标记用p, 列表用ul,
+内联元素中不可嵌套块级元素;</li>
+<li>书写链接地址时, 必须避免重定向，例如：<code>href=”http://www.example.com/”</code>, 即须在URL地址后面加上<code>/</code>；</li>
+<li>在页面中尽量避免使用style属性,即<code>style=”…”</code>，应该尽量使用class或者id来定义新的样式，
+然后再对应的CSS文件里面修改;</li>
+</ul>
+<h2 id="-">模板</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+</pre></td><td class="code"><pre><span class="doctype">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;<span class="title">html</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">head</span>&gt;</span>
+    <span class="comment">&lt;!-- 通过明确声明字符编码，能够确保浏览器快速并容易的判断页面内容的渲染方式。 --&gt;</span>
+    <span class="tag">&lt;<span class="title">meta</span> <span class="attribute">charset</span>=<span class="value">"utf-8"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">title</span>&gt;</span>Page title<span class="tag">&lt;/<span class="title">title</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">meta</span> <span class="attribute">name</span>=<span class="value">"keywords"</span> <span class="attribute">content</span>=<span class="value">"xxxx, xxx, xxxxx"</span> /&gt;</span>
+    <span class="tag">&lt;<span class="title">meta</span> <span class="attribute">name</span>=<span class="value">"description"</span> <span class="attribute">content</span>=<span class="value">"xxxxxxxxxxxxxxxxxxxx"</span> /&gt;</span>
+    <span class="comment">&lt;!-- 通知ie采用最新模式 --&gt;</span>
+    <span class="tag">&lt;<span class="title">meta</span> <span class="attribute">content</span>=<span class="value">"IE=edge,chrome=1"</span> <span class="attribute">http-equiv</span>=<span class="value">"X-UA-Compatible"</span>&gt;</span>
+    <span class="comment">&lt;!-- 如果是响应式页面，请加上这句 --&gt;</span>
+    <span class="tag">&lt;<span class="title">meta</span> <span class="attribute">content</span>=<span class="value">"width=device-width, initial-scale=1"</span> <span class="attribute">name</span>=<span class="value">"viewport"</span>&gt;</span>
+    <span class="comment">&lt;!-- 让 360 等双核浏览器采用 webkit 进行页面渲染  --&gt;</span>
+    <span class="tag">&lt;<span class="title">meta</span> <span class="attribute">content</span>=<span class="value">"webkit"</span> <span class="attribute">name</span>=<span class="value">"renderer"</span> &gt;</span>
+    <span class="comment">&lt;!-- 缓存头可酌情添加 --&gt;</span>
+    <span class="tag">&lt;<span class="title">meta</span> <span class="attribute">http-equiv</span>=<span class="value">"Cache-Control"</span> <span class="attribute">content</span>=<span class="value">"max-age=7200"</span> /&gt;</span>
+    <span class="comment">&lt;!-- icon --&gt;</span>
+    <span class="tag">&lt;<span class="title">link</span> <span class="attribute">rel</span>=<span class="value">"shortcut icon"</span> <span class="attribute">href</span>=<span class="value">"favicon.ico"</span>&gt;</span>
+    <span class="comment">&lt;!-- 根据html5规范，对于引入css和js可以不用指定type属性 --&gt;</span>
+    <span class="comment">&lt;!-- External CSS --&gt;</span>
+    <span class="tag">&lt;<span class="title">link</span> <span class="attribute">rel</span>=<span class="value">"stylesheet"</span> <span class="attribute">href</span>=<span class="value">"code-guide.css"</span>&gt;</span>
+    <span class="comment">&lt;!-- In-document CSS --&gt;</span>
+    <span class="tag">&lt;<span class="title">style</span>&gt;</span><span class="css">
+    </span><span class="tag">&lt;/<span class="title">style</span>&gt;</span>
+  <span class="tag">&lt;/<span class="title">head</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/javascript"</span>&gt;</span><span class="javascript">
+    &lt;!-- Google 统计代码 的位置在离&lt;<span class="regexp">/head&gt;最近的位置 --&gt;
+  </span></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">body</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">img</span> <span class="attribute">src</span>=<span class="value">"images/company-logo.png"</span> <span class="attribute">alt</span>=<span class="value">"Company"</span>&gt;</span>
+    <span class="tag">&lt;<span class="title">h1</span> <span class="attribute">class</span>=<span class="value">"hello-world"</span>&gt;</span>Hello, world!<span class="tag">&lt;/<span class="title">h1</span>&gt;</span>
+    <span class="comment">&lt;!-- 注释约定 --&gt;</span>
+    <span class="comment">&lt;!--
+    @name: Drop Down Menu
+    @description: Style of top bar drop down menu.
+    @author: Andy Huang(andyahung@geekpark.net)
+    --&gt;</span>
+    <span class="tag">&lt;<span class="title">div</span> <span class="attribute">id</span>=<span class="value">"header"</span>&gt;</span>
+      <span class="tag">&lt;<span class="title">div</span> <span class="attribute">class</span>=<span class="value">"xxx"</span>&gt;</span>
+        <span class="tag">&lt;<span class="title">span</span>&gt;</span>HTML行内注释格式<span class="tag">&lt;/<span class="title">span</span>&gt;</span>
+      <span class="tag">&lt;/<span class="title">div</span>&gt;</span>
+    <span class="tag">&lt;/<span class="title">div</span>&gt;</span><span class="comment">&lt;!-- #header end--&gt;</span>
+    <span class="comment">&lt;!-- JavaScript 要加到html的最后，这样可以提高页面的加载速度 --&gt;</span>
+    <span class="tag">&lt;<span class="title">script</span> <span class="attribute">src</span>=<span class="value">"code-guide.js"</span>&gt;</span><span class="javascript"></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
+  <span class="tag">&lt;/<span class="title">body</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">html</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<h2 id="-">建议</h2>
+<h3 id="-">属性顺序</h3>
+<p>HTML 属性应当按照以下给出的顺序依次排列，确保代码的易读性。</p>
+<ul>
+<li>class</li>
+<li>id, name</li>
+<li>data-*</li>
+<li>src, for, type, href</li>
+<li>title, alt</li>
+<li>aria-*, role</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">a</span> <span class="attribute">class</span>=<span class="value">"..."</span> <span class="attribute">id</span>=<span class="value">"..."</span> <span class="attribute">data-modal</span>=<span class="value">"toggle"</span> <span class="attribute">href</span>=<span class="value">"#"</span>&gt;</span>
+  Example link
+<span class="tag">&lt;/<span class="title">a</span>&gt;</span>
+<span class="tag">&lt;<span class="title">input</span> <span class="attribute">class</span>=<span class="value">"form-control"</span> <span class="attribute">type</span>=<span class="value">"text"</span>&gt;</span>
+<span class="tag">&lt;<span class="title">img</span> <span class="attribute">src</span>=<span class="value">"..."</span> <span class="attribute">alt</span>=<span class="value">"..."</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<p>class 用于标识高度可复用组件，因此应该排在首位。id 用于标识具体组件，应当谨慎使用（例如，页面内的书签），因此排在第二位。</p>
+<h3 id="-">实用为王</h3>
+<p>尽量遵循 HTML 标准和语义，但是不要以牺牲实用性为代价。任何时候都要尽量使用最少的标签并保持最小的复杂度。</p>
+<h3 id="-">减少标签的数量</h3>
+<p>编写 HTML 代码时，尽量避免多余的父元素。很多时候，这需要迭代和重构来实现。请看下面的案例：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre><span class="comment">&lt;!-- Not so great --&gt;</span>
+<span class="tag">&lt;<span class="title">span</span> <span class="attribute">class</span>=<span class="value">"avatar"</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">img</span> <span class="attribute">src</span>=<span class="value">"..."</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">span</span>&gt;</span>
+  
+<span class="comment">&lt;!-- Better --&gt;</span>
+<span class="tag">&lt;<span class="title">img</span> <span class="attribute">class</span>=<span class="value">"avatar"</span> <span class="attribute">src</span>=<span class="value">"..."</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<h3 id="javascript-">JavaScript 生成的标签</h3>
+<p>通过 JavaScript 生成的标签让内容变得不易查找、编辑，并且降低性能。能避免时尽量避免。</p>
+<h3 id="-">嵌套层级</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="code"><pre>/* 推荐嵌套层级 */
+  &lt;ul class=<span class="string">"ui-nav"</span>&gt;
+    &lt;li class=<span class="string">"ui-nav-item"</span>&gt; some text
+      &lt;ul class=<span class="string">"ui-nav-item-child"</span>&gt;
+        &lt;li&gt; some text
+          &lt;ul class=<span class="string">"ui-list"</span>&gt;
+            &lt;li class=<span class="string">"ui-list-item"</span>&gt; some text&lt;/li&gt;
+          &lt;/ul
+        <span class="keyword">...</span>
+       &lt;/ul&gt;
+    &lt;/li&gt;
+    &lt;li
+    <span class="keyword">...</span>
+  &lt;/ul&gt;
+</pre></td></tr></table></figure>
+
+<h1 id="css-">CSS规范</h1>
+<ul>
+<li>编码统一为utf-8</li>
+<li>公用文件：协作开发过程中，会引入默认的<code>base.css</code>(里面包括了css reset、常用的css间距，css字体，css大小等)</li>
+<li>class与id命名: 样式名称由 小写英文 、 数字 和 _ 来组合命名, 如i_comment, fontred, width200;
+避免使用中文拼音, 尽量使用简易的单词组合；命名要语义化, 简明化</li>
+<li>为JavaScript预留钩子的命名, 尽量使用id属性，可以更快的获取到dom</li>
+<li>书写代码前, 考虑并提高样式重复使用率</li>
+<li>背景图片请尽可能使用sprite技术, 减小http请求, 考虑到多人协作开发, sprite按模块制作</li>
+<li>必须为大区块样式添加注释, 小区块适量注释</li>
+<li>代码缩进与格式: 建议单行书写, 可根据自身习惯, 后期优化会统一处理</li>
+</ul>
+<h2 id="-">命名规范</h2>
+<ul>
+<li>ID: 匈牙利命名法 &amp; 小駝峰式命名法, 如：<code>firstName</code> <code>topBoxList</code> <code>footerCopyright</code></li>
+<li>Class: [减号连接符]　如：<code>top-item</code> <code>main-box</code> <code>box-list-item-1</code>，　
+尽量使用语义明确的单词命名，避免 left bottom等方位性的词语</li>
+<li>避免过度任意的简写。.btn 代表 button，但是 .s 不能表达任何意思。</li>
+<li>class 名称应当尽可能短，并且意义明确。</li>
+<li>使用有意义的名称。使用有组织的或目的明确的名称，不要使用表现形式（presentational）的名称。(语义化)</li>
+<li>基于最近的父 class 或基本（base） class 作为新 class 的前缀。</li>
+</ul>
+<h2 id="-">模板</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+</pre></td><td class="code"><pre>/*
+@name: Drop Down Menu
+@description: Style of top bar drop down menu.
+@<span class="keyword">require</span>: reset.css
+@author: Andy Huang(andyahung@geekpark.net)
+*/
+/* CSS名称+冒号+属性 */
+.box1 {float:left;}
+/*建议保留{左侧空格，字体名用\包含*/
+.box1,.box2,.box3 {font-family:Courier,<span class="string">'Courier New'</span>;}
+/*避免中文，或使用转义，推荐前者如：*/
+.box4 {
+  font-family: <span class="string">"Microsoft YaHei"</span>;
+  font-family:\5fae\8f6f\96c5\9ed1;
+}
+
+/* 推荐嵌套层级 */
+.ui-icon-rarr{}
+.ui-icon-larr{}
+.ui-title{}
+.ui-nav .ui-list{}
+.ui-table .ui-list{}
+
+/* 不推荐 */
+.ui-icon-rarr{}
+.ui-icon-larr{}
+.ui-title{}
+.ui-list{}
+.ui-nav{}
+
+/* 媒体查询放在尽可能相关规则的附近。不要将他们打包放在一个单一样式文件中或者放在文档底部。*/
+.element { <span class="keyword">...</span> }
+.element-avatar { <span class="keyword">...</span> }
+.element-selected { <span class="keyword">...</span> }
+
+@media (min-width: 480px) {
+  .element { <span class="keyword">...</span>}
+  .element-avatar { <span class="keyword">...</span> }
+  .element-selected { <span class="keyword">...</span> }
+}
+</pre></td></tr></table></figure>
+
+<h2 id="-">重构步骤约定</h2>
+<pre><code>index.html 全部样式附着于 class=&quot;xxx&quot; 注： 此时文件中不包含任何一个 id=&quot;xxx&quot;
+为上一步书写 CSS style
+[至此重构完成]
+开始书写js交互文件，使用 ID 和 Class 定位被操作句柄
+向 index.html 中需要的地方添加 id=&quot;xxx&quot; 及 data-xxx=&quot;xxx&quot;
+[至此交互效果完成]
+</code></pre><h2 id="-">建议</h2>
+<h3 id="-">声明顺序</h3>
+<blockquote>
+<p>不做硬性规定</p>
+</blockquote>
+<p>相关的属性声明应当归为一组，并按照下面的顺序排列：</p>
+<ol>
+<li>Positioning</li>
+<li>Box model</li>
+<li>Typographic</li>
+<li>Visual</li>
+</ol>
+<p>由于定位（positioning）可以从正常的文档流中移除元素，并且还能覆盖盒模型（box model）相关的样式，因此排在首位。
+盒模型排在第二位，因为它决定了组件的尺寸和位置。</p>
+<p>其他属性只是影响组件的内部（inside）或者是不影响前两组属性，因此排在后面。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+</pre></td><td class="code"><pre><span class="class">.declaration-order</span> <span class="rules">{
+  <span class="comment">/* Positioning */</span>
+  <span class="rule"><span class="attribute">position</span>:<span class="value"> absolute</span></span>;
+  <span class="rule"><span class="attribute">top</span>:<span class="value"> <span class="number">0</span></span></span>;
+  <span class="rule"><span class="attribute">right</span>:<span class="value"> <span class="number">0</span></span></span>;
+  <span class="rule"><span class="attribute">bottom</span>:<span class="value"> <span class="number">0</span></span></span>;
+  <span class="rule"><span class="attribute">left</span>:<span class="value"> <span class="number">0</span></span></span>;
+  <span class="rule"><span class="attribute">z-index</span>:<span class="value"> <span class="number">100</span></span></span>;
+
+  <span class="comment">/* Box-model */</span>
+  <span class="rule"><span class="attribute">display</span>:<span class="value"> block</span></span>;
+  <span class="rule"><span class="attribute">float</span>:<span class="value"> right</span></span>;
+  <span class="rule"><span class="attribute">width</span>:<span class="value"> <span class="number">100</span>px</span></span>;
+  <span class="rule"><span class="attribute">height</span>:<span class="value"> <span class="number">100</span>px</span></span>;
+
+  <span class="comment">/* Typography */</span>
+  <span class="rule"><span class="attribute">font</span>:<span class="value"> normal <span class="number">13</span>px <span class="string">"Helvetica Neue"</span>, sans-serif</span></span>;
+  <span class="rule"><span class="attribute">line-height</span>:<span class="value"> <span class="number">1.5</span></span></span>;
+  <span class="rule"><span class="attribute">color</span>:<span class="value"> <span class="hexcolor">#333</span></span></span>;
+  <span class="rule"><span class="attribute">text-align</span>:<span class="value"> center</span></span>;
+
+  <span class="comment">/* Visual */</span>
+  <span class="rule"><span class="attribute">background-color</span>:<span class="value"> <span class="hexcolor">#f5f5f5</span></span></span>;
+  <span class="rule"><span class="attribute">border</span>:<span class="value"> <span class="number">1</span>px solid <span class="hexcolor">#e5e5e5</span></span></span>;
+  <span class="rule"><span class="attribute">border-radius</span>:<span class="value"> <span class="number">3</span>px</span></span>;
+
+  <span class="comment">/* Misc */</span>
+  <span class="rule"><span class="attribute">opacity</span>:<span class="value"> <span class="number">1</span></span></span>;
+<span class="rule">}</span></span>
+</pre></td></tr></table></figure>
+
+<h3 id="-">单行规则声明</h3>
+<p>对于只包含一条声明的样式，为了易读性和便于快速编辑，建议将语句放在同一行。对于带有多条声明的样式，还是应当将声明分为多行。</p>
+<p>这样做的关键因素是为了错误检测 -- 例如，CSS 校验器指出在 183 行有语法错误。如果是单行单条声明，你就不会忽略这个错误；如果是单行多条声明的话，你就要仔细分析避免漏掉错误了。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+</pre></td><td class="code"><pre>
+
+<span class="css"><span class="comment">/* Single declarations on one line */</span>
+<span class="class">.span1</span> <span class="rules">{ <span class="rule"><span class="attribute">width</span>:<span class="value"> <span class="number">60</span>px</span></span>; <span class="rule">}</span></span>
+<span class="class">.span2</span> <span class="rules">{ <span class="rule"><span class="attribute">width</span>:<span class="value"> <span class="number">140</span>px</span></span>; <span class="rule">}</span></span>
+<span class="class">.span3</span> <span class="rules">{ <span class="rule"><span class="attribute">width</span>:<span class="value"> <span class="number">220</span>px</span></span>; <span class="rule">}</span></span>
+
+<span class="comment">/* Multiple declarations, one per line */</span>
+<span class="class">.sprite</span> <span class="rules">{
+  <span class="rule"><span class="attribute">display</span>:<span class="value"> inline-block</span></span>;
+  <span class="rule"><span class="attribute">width</span>:<span class="value"> <span class="number">16</span>px</span></span>;
+  <span class="rule"><span class="attribute">height</span>:<span class="value"> <span class="number">15</span>px</span></span>;
+  <span class="rule"><span class="attribute">background-image</span>:<span class="value"> <span class="function">url(../img/sprite.png)</span></span></span>;
+<span class="rule">}</span></span>
+<span class="class">.icon</span>           <span class="rules">{ <span class="rule"><span class="attribute">background-position</span>:<span class="value"> <span class="number">0</span> <span class="number">0</span></span></span>; <span class="rule">}</span></span>
+<span class="class">.icon-home</span>      <span class="rules">{ <span class="rule"><span class="attribute">background-position</span>:<span class="value"> <span class="number">0</span> -<span class="number">20</span>px</span></span>; <span class="rule">}</span></span>
+<span class="class">.icon-account</span>   <span class="rules">{ <span class="rule"><span class="attribute">background-position</span>:<span class="value"> <span class="number">0</span> -<span class="number">40</span>px</span></span>; <span class="rule">}</span></span></span>
+</pre></td></tr></table></figure>
+
+<h2 id="css-reset">CSS Reset</h2>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+</pre></td><td class="code"><pre><span class="at_rule">@<span class="keyword">charset</span> <span class="string">"UTF-8"</span></span>;
+<span class="tag">html</span>, <span class="tag">body</span>, <span class="tag">div</span>, <span class="tag">span</span>, <span class="tag">applet</span>, <span class="tag">object</span>, <span class="tag">iframe</span>,
+<span class="tag">h1</span>, <span class="tag">h2</span>, <span class="tag">h3</span>, <span class="tag">h4</span>, <span class="tag">h5</span>, <span class="tag">h6</span>, <span class="tag">p</span>, <span class="tag">blockquote</span>, <span class="tag">pre</span>,
+<span class="tag">a</span>, <span class="tag">abbr</span>, <span class="tag">acronym</span>, <span class="tag">address</span>, <span class="tag">big</span>, <span class="tag">cite</span>, <span class="tag">code</span>,
+<span class="tag">del</span>, <span class="tag">dfn</span>, <span class="tag">em</span>, <span class="tag">img</span>, <span class="tag">ins</span>, <span class="tag">kbd</span>, <span class="tag">q</span>, <span class="tag">s</span>, <span class="tag">samp</span>,
+<span class="tag">small</span>, <span class="tag">strike</span>, <span class="tag">strong</span>, <span class="tag">sub</span>, <span class="tag">sup</span>, <span class="tag">tt</span>, <span class="tag">var</span>,
+<span class="tag">b</span>, <span class="tag">u</span>, <span class="tag">i</span>, <span class="tag">center</span>,
+<span class="tag">dl</span>, <span class="tag">dt</span>, <span class="tag">dd</span>, <span class="tag">ol</span>, <span class="tag">ul</span>, <span class="tag">li</span>,
+<span class="tag">fieldset</span>, <span class="tag">form</span>, <span class="tag">label</span>, <span class="tag">legend</span>,
+<span class="tag">table</span>, <span class="tag">caption</span>, <span class="tag">tbody</span>, <span class="tag">tfoot</span>, <span class="tag">thead</span>, <span class="tag">tr</span>, <span class="tag">th</span>, <span class="tag">td</span>,
+<span class="tag">article</span>, <span class="tag">aside</span>, <span class="tag">canvas</span>, <span class="tag">details</span>, <span class="tag">embed</span>,
+<span class="tag">figure</span>, <span class="tag">figcaption</span>, <span class="tag">footer</span>, <span class="tag">header</span>, <span class="tag">hgroup</span>,
+<span class="tag">menu</span>, <span class="tag">nav</span>, <span class="tag">output</span>, <span class="tag">ruby</span>, <span class="tag">section</span>, <span class="tag">summary</span>,
+<span class="tag">time</span>, <span class="tag">mark</span>, <span class="tag">audio</span>, <span class="tag">video</span> <span class="rules">{
+  <span class="rule"><span class="attribute">margin</span>:<span class="value"> <span class="number">0</span></span></span>;
+  <span class="rule"><span class="attribute">padding</span>:<span class="value"> <span class="number">0</span></span></span>;
+  <span class="rule"><span class="attribute">border</span>:<span class="value"> <span class="number">0</span></span></span>;
+  <span class="rule"><span class="attribute">font</span>:<span class="value"> inherit</span></span>;
+  <span class="rule"><span class="attribute">font-size</span>:<span class="value"> <span class="number">100</span>%</span></span>;
+  <span class="rule"><span class="attribute">vertical-align</span>:<span class="value"> baseline</span></span>;
+<span class="rule">}</span></span>
+<span class="tag">html</span> <span class="rules">{ <span class="rule"><span class="attribute">line-height</span>:<span class="value"> <span class="number">1</span></span></span>;<span class="rule">}</span></span>
+<span class="tag">ol</span>, <span class="tag">ul</span> <span class="rules">{ <span class="rule"><span class="attribute">list-style</span>:<span class="value"> none</span></span>; <span class="rule">}</span></span>
+<span class="tag">table</span> <span class="rules">{<span class="rule"><span class="attribute">border-collapse</span>:<span class="value"> collapse</span></span>; <span class="rule"><span class="attribute">border-spacing</span>:<span class="value"> <span class="number">0</span></span></span>;<span class="rule">}</span></span>
+<span class="tag">caption</span>, <span class="tag">th</span>, <span class="tag">td</span> <span class="rules">{<span class="rule"><span class="attribute">text-align</span>:<span class="value"> left</span></span>; <span class="rule"><span class="attribute">font-weight</span>:<span class="value"> normal</span></span>; <span class="rule"><span class="attribute">vertical-align</span>:<span class="value"> middle</span></span>;<span class="rule">}</span></span>
+<span class="tag">q</span>, <span class="tag">blockquote</span> <span class="rules">{ <span class="rule"><span class="attribute">quotes</span>:<span class="value"> none</span></span>; <span class="rule">}</span></span>
+<span class="tag">q</span><span class="pseudo">:before</span>, <span class="tag">q</span><span class="pseudo">:after</span>, <span class="tag">blockquote</span><span class="pseudo">:before</span>, <span class="tag">blockquote</span><span class="pseudo">:after</span> <span class="rules">{<span class="rule"><span class="attribute">content</span>:<span class="value"> <span class="string">""</span></span></span>; <span class="rule"><span class="attribute">content</span>:<span class="value"> none</span></span>;<span class="rule">}</span></span>
+<span class="tag">a</span> <span class="tag">img</span> <span class="rules">{ <span class="rule"><span class="attribute">border</span>:<span class="value"> none</span></span>;<span class="rule">}</span></span>
+<span class="tag">article</span>, <span class="tag">aside</span>, <span class="tag">details</span>, <span class="tag">figcaption</span>, <span class="tag">figure</span>, <span class="tag">footer</span>, <span class="tag">header</span>, <span class="tag">hgroup</span>, <span class="tag">main</span>, <span class="tag">menu</span>, <span class="tag">nav</span>, <span class="tag">section</span>, <span class="tag">summary</span> <span class="rules">{ <span class="rule"><span class="attribute">display</span>:<span class="value"> block</span></span>;<span class="rule">}</span></span>
+<span class="tag">a</span> <span class="rules">{ <span class="rule"><span class="attribute">color</span>:<span class="value"> inherit</span></span>;  <span class="rule"><span class="attribute">text-decoration</span>:<span class="value"> inherit</span></span>;  <span class="rule"><span class="attribute">cursor</span>:<span class="value"> inherit</span></span>;<span class="rule">}</span></span>
+<span class="tag">a</span><span class="pseudo">:active</span>, <span class="tag">a</span><span class="pseudo">:focus</span> <span class="rules">{ <span class="rule"><span class="attribute">outline</span>:<span class="value"> none</span></span>; <span class="rule">}</span></span>
+<span class="tag">input</span><span class="attr_selector">[type="button"]</span>, <span class="tag">button</span>, <span class="tag">a</span> <span class="rules">{ <span class="rule"><span class="attribute">font-family</span>:<span class="value"> <span class="string">'Microsoft YaHei'</span>, Verdana, Geneva, Arial, Helvetica, SimHei, sans-serif</span></span>; <span class="rule">}</span></span>
+<span class="tag">body</span> <span class="rules">{<span class="rule"><span class="attribute">font-family</span>:<span class="value"> <span class="string">'Microsoft YaHei'</span>, Verdana, Geneva, Arial, Helvetica, SimHei, sans-serif</span></span>;<span class="rule">}</span></span>
+</pre></td></tr></table></figure>
+
+<h1 id="js-">JS规范</h1>
+<ul>
+<li>JS 换行缩进：采用 4 空格</li>
+<li>结束行需添加分号<code>;</code></li>
+<li>jQuery变量要求首字符为 <code>$</code>,  <em>尽量避免全局变量</em>.</li>
+<li>JS调试使用<code>console.log()</code>及<code>console.dir()</code>进行，避免使用弹出框，线上版需要注释所有调试代码</li>
+<li>库引入: 原则上仅引入jQuery库, 若需引入第三方库, 须与团队其他人员讨论决定</li>
+<li>命名语义化, 尽可能利用英文单词或其缩写;</li>
+<li>代码结构明了, 加适量注释. 提高函数重用率;</li>
+<li><em>注重与html分离</em>, 减小reflow, 注重性能, 一个页面对应一个js文件.<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre><span class="comment">// 使用闭包来解决全局变量污染的问题</span>
+(<span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+  <span class="comment">// 对于事件的监听, </span>
+  <span class="comment">// 不要这么写 &lt;a onclick=""/&gt;  可以这么写</span>
+  $(<span class="string">"selector"</span>).bind(<span class="string">"click"</span>, <span class="function"><span class="keyword">function</span><span class="params">(e)</span>{</span>
+  });
+})();
+</pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2 id="jquery-plugin">jQuery Plugin</h2>
+<ul>
+<li>IE对HTML5标签支持，以及浏览器特性检测：[Modernizr] &amp; [html5shiv]</li>
+<li><del>IE6 PNG 图片支持：[DD_belatedPNG]</del></li>
+<li>定制&amp;统一 浏览器的滚动条样式：[jquery-scroll] &amp; [Lionbars]</li>
+<li>hover提示效果文字：[bootstrap-tooltips] &amp; [tipsy]</li>
+<li>滚动条跟随nav效果：[bootstrap-scrollspy]</li>
+<li>提示冒泡文字：[grumble.js]</li>
+<li>导航栏过渡效果：[lavalamp]</li>
+<li>移动设备的滚动效果：[iscroll 4]</li>
+<li>Mac OS Lion 风格的滚动条：[Lionbars]</li>
+<li>弹性SlideShow：[kwicks for jQuery]</li>
+<li>瀑布流：[isotope]</li>
+<li>抖动效果：[jQ shake]</li>
+<li>LightBox：[fancyBox]</li>
+<li>KenDo UI：[KenDo UI]</li>
+<li>textarea自适应高度：[elastic]</li>
+<li>提示区域 &amp; 提示层：[noty]</li>
+<li>浮动话题泡：[jQuery grumble]</li>
+<li>旋转进度：[jQuery Knob]</li>
+</ul>
+]]></content>
+    
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[前端 补遗]]></title>
+    <link href="http://zhpooer.github.io/2015/02/16/%E5%89%8D%E7%AB%AF-remain/"/>
+    <id>http://zhpooer.github.io/2015/02/16/前端-remain/</id>
+    <published>2015-02-16T01:22:01.000Z</published>
+    <updated>2015-02-17T08:25:37.093Z</updated>
+    <content type="html"><![CDATA[<p>锚</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">a</span> <span class="attribute">href</span>=<span class="value">"#mao"</span>&gt;</span><span class="tag">&lt;/<span class="title">a</span>&gt;</span>
+<span class="tag">&lt;<span class="title">a</span> <span class="attribute">name</span>=<span class="value">"mao"</span>&gt;</span><span class="tag">&lt;/<span class="title">a</span>&gt;</span>
+</pre></td></tr></table></figure>
+
+<p>frameset 能够使用的文档声明头: <code>html 4.01 frameset</code> <code>xhtml 1.0 frameset</code></p>
+<p><code>target</code></p>
+<ul>
+<li><code>_blank</code></li>
+<li><code>_top</code></li>
+<li><code>_parent</code></li>
+<li><code>_self</code></li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre><span class="comment">/*比例可能会失调*/</span>
+<span class="attribute">background-size</span><span class="value">: <span class="number">100</span>% <span class="number">100</span>%;</span>
+<span class="comment">/*图片比例不会变化, 但是一部分会看不见*/</span>
+<span class="attribute">background-size</span><span class="value">: cover;</span>
+<span class="comment">/*图片比例不会变化, 缩小呈递*/</span>
+<span class="attribute">background-size</span><span class="value">: cantain;</span>
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre>$(<span class="string">''</span>).draggable(
+{
+  containment: <span class="string">"#xiaoming"</span>,
+  axis: <span class="string">"y"</span>,
+  drag: <span class="function"><span class="keyword">function</span><span class="params">()</span>{</span>
+    $(<span class="keyword">this</span>).css(<span class="string">'top'</span>);
+  }
+});
+</pre></td></tr></table></figure>
+
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre>xhr<span class="preprocessor">.onreadystatechange</span> = function(){
+  if(xhr<span class="preprocessor">.readyState</span> == <span class="number">4</span>) {
+    if(xhr<span class="preprocessor">.state</span> &gt;= <span class="number">200</span> && xhr<span class="preprocessor">.status</span> &lt; <span class="number">300</span> || xhr<span class="preprocessor">.status</span> == <span class="number">304</span>){
+      xhr<span class="preprocessor">.responseXML</span><span class="comment">;</span>
+    }
+  }
+}
+</pre></td></tr></table></figure>
+
+<p>IE6 bug</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre><span class="attribute">opacity</span><span class="value">: <span class="number">0.6</span>;</span>
+_filter<span class="value">:alpha(opacity=<span class="number">60</span>);</span>
+
+<span class="attribute">height</span><span class="value">: <span class="number">13</span>px;</span>
+_font-size<span class="value">:<span class="number">0</span>;</span>
+
+<span class="attribute">overflow</span><span class="value">:hidden;</span>
+_zoom<span class="value">:<span class="number">1</span>;</span>
+</pre></td></tr></table></figure>
+
+]]></content>
+    
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[锋利的jquery 小记]]></title>
     <link href="http://zhpooer.github.io/2015/01/27/%E9%94%8B%E5%88%A9%E7%9A%84jquery-%E5%B0%8F%E8%AE%B0/"/>
     <id>http://zhpooer.github.io/2015/01/27/锋利的jquery-小记/</id>
     <published>2015-01-27T12:09:27.000Z</published>
-    <updated>2015-01-27T12:50:42.000Z</updated>
+    <updated>2015-01-27T12:50:42.672Z</updated>
     <content type="html"><![CDATA[<figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
 3
@@ -211,7 +2518,7 @@ $.extend({
 <span class="variable">$.</span>noop();
 <span class="variable">$.</span>now();
 
-<span class="variable">$.</span>localStorage
+<span class="variable">$.</span>localStorage;
 </pre></td></tr></table></figure>
 
 ]]></content>
@@ -224,7 +2531,7 @@ $.extend({
     <link href="http://zhpooer.github.io/2015/01/25/css-mstery-notes/"/>
     <id>http://zhpooer.github.io/2015/01/25/css-mstery-notes/</id>
     <published>2015-01-25T07:32:49.000Z</published>
-    <updated>2015-01-27T13:05:17.000Z</updated>
+    <updated>2015-01-27T13:05:17.598Z</updated>
     <content type="html"><![CDATA[<h1 id="-">意义的重要</h1>
 <ul>
 <li>与表现性相比，有意义的页面更容易处理。搜索代码，找到引用元素。</li>
@@ -471,7 +2778,7 @@ out-offset<span class="value">: ;</span></span></span>
     <link href="http://zhpooer.github.io/2014/12/27/angularjs-6/"/>
     <id>http://zhpooer.github.io/2014/12/27/angularjs-6/</id>
     <published>2014-12-27T10:14:01.000Z</published>
-    <updated>2014-12-27T11:14:24.000Z</updated>
+    <updated>2014-12-27T11:14:24.972Z</updated>
     <content type="html"><![CDATA[<h1 id="protractor">Protractor</h1>
 <p>We need to write end-to-end tests, which open the browser, navigate to
 a live running version of our web application, and click around using the application as
@@ -643,7 +2950,7 @@ $rootScope and fire events on <code>$rootScope</code>.</li>
     <link href="http://zhpooer.github.io/2014/12/24/angularjs-5/"/>
     <id>http://zhpooer.github.io/2014/12/24/angularjs-5/</id>
     <published>2014-12-24T07:34:42.000Z</published>
-    <updated>2014-12-27T10:13:43.000Z</updated>
+    <updated>2014-12-27T10:13:43.679Z</updated>
     <content type="html"><![CDATA[<h1 id="what-are-directives">What Are Directives</h1>
 <p>Directives are of two major types in AngularJS</p>
 <ul>
@@ -2237,7 +4544,7 @@ make sure you manually trigger the <code>$scope.$apply()</code> or <code>$scope.
     <link href="http://zhpooer.github.io/2014/12/23/angularjs-4/"/>
     <id>http://zhpooer.github.io/2014/12/23/angularjs-4/</id>
     <published>2014-12-23T07:12:14.000Z</published>
-    <updated>2014-12-24T07:34:17.000Z</updated>
+    <updated>2014-12-24T07:34:17.870Z</updated>
     <content type="html"><![CDATA[<h1 id="what-are-angularjs-filters">What Are AngularJS Filters</h1>
 <p>AngularJS filters are used to process data and format
 values to present to the user. </p>
@@ -3064,7 +5371,7 @@ application.</li>
     <link href="http://zhpooer.github.io/2014/12/22/%E5%93%8D%E5%BA%94%E5%BC%8F%E7%BD%91%E7%AB%99/"/>
     <id>http://zhpooer.github.io/2014/12/22/响应式网站/</id>
     <published>2014-12-22T01:12:08.000Z</published>
-    <updated>2015-01-05T15:04:45.000Z</updated>
+    <updated>2015-01-05T15:04:45.056Z</updated>
     <content type="html"><![CDATA[<h1 id="-">入门</h1>
 <p>响应式, 可以适应不同尺寸的屏幕,
 自动响应变化自己的外观的网站.使用html5和css3</p>
@@ -3812,7 +6119,7 @@ $().change(<span class="function"><span class="keyword">function</span><span cla
     <link href="http://zhpooer.github.io/2014/12/21/angularjs-3/"/>
     <id>http://zhpooer.github.io/2014/12/21/angularjs-3/</id>
     <published>2014-12-21T14:33:20.000Z</published>
-    <updated>2014-12-23T01:54:52.000Z</updated>
+    <updated>2014-12-23T01:54:52.540Z</updated>
     <content type="html"><![CDATA[<h1 id="startup">Startup</h1>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
@@ -4240,7 +6547,7 @@ describe(<span class="string">'MainCtrl Server Calls'</span>, <span class="funct
     <link href="http://zhpooer.github.io/2014/12/18/angularjs-2/"/>
     <id>http://zhpooer.github.io/2014/12/18/angularjs-2/</id>
     <published>2014-12-18T03:42:38.000Z</published>
-    <updated>2014-12-20T12:09:59.000Z</updated>
+    <updated>2014-12-20T12:09:59.509Z</updated>
     <content type="html"><![CDATA[<h1 id="ng-model">ng-model</h1>
 <p>AngularJS provides the <code>ng-model</code> directive for us to deal with
 inputs and two-way data-binding</p>
@@ -5357,7 +7664,7 @@ with ID 19</li>
     <link href="http://zhpooer.github.io/2014/12/18/angularjs-1/"/>
     <id>http://zhpooer.github.io/2014/12/18/angularjs-1/</id>
     <published>2014-12-18T02:37:53.000Z</published>
-    <updated>2015-01-25T07:29:16.000Z</updated>
+    <updated>2015-01-25T07:29:16.052Z</updated>
     <content type="html"><![CDATA[<h1 id="hello-world">Hello World</h1>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
@@ -6013,7 +8320,7 @@ describe(<span class="string">'Controller: ListCtrl'</span>, <span class="functi
     <link href="http://zhpooer.github.io/2014/12/12/jquery-1/"/>
     <id>http://zhpooer.github.io/2014/12/12/jquery-1/</id>
     <published>2014-12-12T02:32:33.000Z</published>
-    <updated>2014-12-23T09:16:32.000Z</updated>
+    <updated>2014-12-23T09:16:32.904Z</updated>
     <content type="html"><![CDATA[<h1 id="jquery">JQuery</h1>
 <p>Css 操作</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
@@ -6225,7 +8532,7 @@ $(<span class="string">'html, body'</span>).stop().animate({scrollTop: <span cla
     <link href="http://zhpooer.github.io/2014/12/07/js-%E5%9F%BA%E7%A1%80/"/>
     <id>http://zhpooer.github.io/2014/12/07/js-基础/</id>
     <published>2014-12-07T11:13:56.000Z</published>
-    <updated>2014-12-27T11:29:14.000Z</updated>
+    <updated>2014-12-27T11:29:14.499Z</updated>
     <content type="html"><![CDATA[<h1 id="-">基础</h1>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
@@ -7206,7 +9513,7 @@ img.src = <span class="string">"http://..."</span>;
     <link href="http://zhpooer.github.io/2014/12/06/bootstrap-1/"/>
     <id>http://zhpooer.github.io/2014/12/06/bootstrap-1/</id>
     <published>2014-12-06T08:08:18.000Z</published>
-    <updated>2014-12-07T02:32:53.000Z</updated>
+    <updated>2014-12-07T02:32:53.163Z</updated>
     <content type="html"><![CDATA[<p>There are many websites that offer Bootstrap themes. </p>
 <ul>
 <li><a href="http://bootswatch.com" target="_blank">http://bootswatch.com</a> (free)</li>
@@ -7712,7 +10019,7 @@ npm <span class="keyword">install</span> grunt-contrib-watch
     <link href="http://zhpooer.github.io/2014/12/04/compass-%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/"/>
     <id>http://zhpooer.github.io/2014/12/04/compass-基础语法/</id>
     <published>2014-12-04T01:18:21.000Z</published>
-    <updated>2014-12-29T02:24:40.000Z</updated>
+    <updated>2014-12-29T02:24:40.260Z</updated>
     <content type="html"><![CDATA[<h1 id="compass-base">Compass Base</h1>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
@@ -8795,7 +11102,7 @@ of margin after the element.</p>
     <link href="http://zhpooer.github.io/2014/12/03/sass-%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/"/>
     <id>http://zhpooer.github.io/2014/12/03/sass-基础语法/</id>
     <published>2014-12-03T00:56:40.000Z</published>
-    <updated>2014-12-04T01:18:49.000Z</updated>
+    <updated>2014-12-04T01:18:49.543Z</updated>
     <content type="html"><![CDATA[<h1 id="base-semantic">Base semantic</h1>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
@@ -9178,7 +11485,7 @@ In this case, you’d probably want <code>.seriousError</code> to <code>@extend<
     <link href="http://zhpooer.github.io/2014/11/23/bom-%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95/"/>
     <id>http://zhpooer.github.io/2014/11/23/bom-基本语法/</id>
     <published>2014-11-23T10:51:30.000Z</published>
-    <updated>2014-12-08T11:50:16.000Z</updated>
+    <updated>2014-12-08T11:50:16.146Z</updated>
     <content type="html"><![CDATA[<h1 id="bom">BOM</h1>
 <figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
@@ -9448,7 +11755,7 @@ win.close(); <span class="regexp">//</span> 关闭窗口
     <link href="http://zhpooer.github.io/2014/11/21/html-css-%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/"/>
     <id>http://zhpooer.github.io/2014/11/21/html-css-基础语法/</id>
     <published>2014-11-21T06:12:34.000Z</published>
-    <updated>2014-12-23T08:07:38.000Z</updated>
+    <updated>2014-12-23T08:07:38.190Z</updated>
     <content type="html"><![CDATA[<figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
 3
@@ -9978,1408 +12285,6 @@ win.close(); <span class="regexp">//</span> 关闭窗口
 <span class="tag">overflow-y</span>: <span class="tag">scroll</span>;
 </pre></td></tr></table></figure>
 
-]]></content>
-    
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[CoffeeScript 基础语法]]></title>
-    <link href="http://zhpooer.github.io/2014/11/20/coffeescript-%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/"/>
-    <id>http://zhpooer.github.io/2014/11/20/coffeescript-基础语法/</id>
-    <published>2014-11-20T06:13:25.000Z</published>
-    <updated>2014-12-07T08:36:36.000Z</updated>
-    <content type="html"><![CDATA[<h1 id="-">基础语法</h1>
-<p><code>&gt; coffee –c –w status.coffee</code> Watch </p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-</pre></td><td class="code"><pre><span class="tag">&lt;<span class="title">script</span> <span class="attribute">src</span>=<span class="value">'http://coffeescript.org/extras/coffee-script.js'</span>&gt;</span><span class="javascript"></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
-<span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">'text/coffeescript'</span> <span class="attribute">src</span>=<span class="value">'status.coffee'</span>&gt;</span><span class="javascript"></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
-</pre></td></tr></table></figure>
-
-<figure class="highlight coffeescript:"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-</pre></td><td class="code"><pre>houseRoast = <span class="literal">null</span>
-
-<span class="function"><span class="title">hasMilk</span> = <span class="params">(style)</span> -&gt;</span>
-  <span class="keyword">switch</span> style
-    <span class="keyword">when</span> <span class="string">"latte"</span>, <span class="string">"cappuccino"</span>
-      <span class="literal">yes</span>
-    <span class="keyword">else</span>
-      <span class="literal">no</span>
-
-<span class="function"><span class="title">makeCoffee</span> = <span class="params">(requestedStyle)</span> -&gt;</span>
-  style = requestedStyle || <span class="string">'Espresso'</span>
-  <span class="keyword">if</span> houseRoast?
-    <span class="string">"<span class="subst">#{houseRoast}</span> <span class="subst">#{style}</span>"</span>
-  <span class="keyword">else</span>
-    style
-
-<span class="function"><span class="title">barista</span> = <span class="params">(style)</span> -&gt;</span>
-  time = (<span class="keyword">new</span> Date()).getHours()
-  <span class="keyword">if</span> hasMilk(style) <span class="keyword">and</span> type &gt; <span class="number">12</span> <span class="keyword">then</span> <span class="string">"NO!"</span>
-  <span class="keyword">else</span>
-    coffee = makeCoffee style
-    <span class="string">"Enjoy your <span class="subst">#{coffee}</span>"</span>
-</pre></td></tr></table></figure>
-
-<figure class="highlight coffeescript:"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-</pre></td><td class="code"><pre>chuckNorris = <span class="string">'Chuck Norris'</span>
-<span class="keyword">weak</span> = <span class="string">'weak'</span>
-chuckNorris <span class="keyword">is</span> <span class="keyword">weak</span>   # <span class="keyword">false</span>
-chuckNorris isnt <span class="keyword">weak</span> # <span class="keyword">true</span>
-
-<span class="number">5</span> isnt <span class="number">6</span> # <span class="keyword">true</span>
-<span class="number">5</span> <span class="keyword">is</span> <span class="keyword">not</span> <span class="number">6</span> # <span class="keyword">false</span>
-
-# Unlike <span class="keyword">in</span> JavaScript, the equality <span class="keyword">and</span> inequality operators <span class="keyword">in</span> CoffeeScript aren’t <span class="keyword">type</span>
-# coercive. They’re equivalent <span class="keyword">to</span> === <span class="keyword">and</span> !== <span class="keyword">in</span> JavaScript:
-
-<span class="string">''</span> == <span class="keyword">false</span> # <span class="keyword">false</span>
-<span class="number">1</span> == <span class="string">'1'</span> #<span class="keyword">true</span>
-
-<span class="number">4</span> + <span class="string">'3'</span> # <span class="string">'43'</span>
-<span class="string">'apples'</span> – <span class="string">'oranges'</span> # NaN
-<span class="string">'3'</span>*<span class="number">3</span> # <span class="number">9</span>
-
-<span class="keyword">not</span> (<span class="number">3</span>%<span class="number">2</span>) # <span class="keyword">false</span>
-<span class="keyword">not</span> (<span class="number">4</span>%<span class="number">2</span>) # <span class="keyword">true</span>
-</pre></td></tr></table></figure>
-
-<h2 id="property-access">PROPERTY ACCESS</h2>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-</pre></td><td class="code"><pre>movie = title: <span class="attribute">'Way</span> <span class="keyword">of</span> the Dragon', star: <span class="attribute">'Bruce</span> Lee'
-myPropertyName = <span class="attribute">'title</span>'
-movie[myPropertyName] # <span class="attribute">'Way</span> <span class="keyword">of</span> the Dragon'
-</pre></td></tr></table></figure>
-
-<h2 id="types-existential-and-combining-operators">Types, existential, and combining operators</h2>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-</pre></td><td class="code"><pre>reference = <span class="keyword">null</span>
-reference == <span class="keyword">null</span> <span class="preprocessor"># true</span>
-<span class="keyword">typeof</span> <span class="keyword">null</span>  <span class="preprocessor"># 'object'</span>
-
-pegasus? <span class="preprocessor"># false</span>
-roundSquare? <span class="preprocessor"># false</span>
-pegasus = <span class="string">'Horse with wings'</span>
-pegasus? <span class="preprocessor"># true</span>
-
-<span class="keyword">typeof</span> roundSquare
-<span class="preprocessor"># 'undefined'</span>
-</pre></td></tr></table></figure>
-
-<h2 id="statements-as-expressions">Statements as expressions</h2>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
-51
-52
-53
-54
-</pre></td><td class="code"><pre>
-<span class="function"><span class="title">connectJackNumber</span> = <span class="params">(number)</span> -&gt;</span>
-  <span class="string">"Connecting jack <span class="subst">#{number}</span>"</span>
-  
-receiver = <span class="string">'Betty'</span>
-
-<span class="keyword">switch</span> receiver
-  <span class="keyword">when</span> <span class="string">'Betty'</span>
-    connectJackNumber
-    <span class="number">4</span>
-  <span class="keyword">when</span> <span class="string">'Sandra'</span>
-    connectJackNumber
-    <span class="number">22</span>
-  <span class="keyword">when</span> <span class="string">'Toby'</span>
-    connectJackNumber
-    <span class="number">9</span>
-  <span class="keyword">else</span>
-    <span class="string">'I am sorry, your call cannot be connected'</span>
-
-
-style = <span class="string">'latte'</span>
-milk = <span class="keyword">switch</span> style
-  <span class="keyword">when</span> <span class="string">"latte"</span>, <span class="string">"cappuccino"</span>
-    <span class="literal">yes</span>
-  <span class="keyword">else</span>
-    <span class="literal">no</span>
-
-<span class="comment">## Try Catch</span>
-<span class="function"><span class="title">flyAway</span> = <span class="params">(animal)</span> -&gt;</span>
-  <span class="keyword">if</span> animal <span class="keyword">is</span> <span class="string">'pig'</span>
-    <span class="keyword">throw</span> <span class="string">'Pigs cannot fly'</span>
-  <span class="keyword">else</span>
-    <span class="string">'Fly away!'</span>
-    
-peter = <span class="string">'pig'</span>
-<span class="keyword">try</span>
-  flyAway peter
-<span class="keyword">catch</span> error
-  error
-<span class="keyword">finally</span>
-  <span class="string">'Clean up!'</span>
-
-<span class="comment"># inline blocks</span>
-year = <span class="number">1983</span>
-<span class="keyword">if</span> year <span class="keyword">is</span> <span class="number">1983</span> <span class="keyword">then</span> hair = <span class="string">'perm'</span>
-
-lastDigit = <span class="number">4</span>
-daySuffix = <span class="keyword">switch</span> lastDigit
-  <span class="keyword">when</span> <span class="number">1</span> <span class="keyword">then</span> <span class="string">'st'</span>
-  <span class="keyword">when</span> <span class="number">2</span> <span class="keyword">then</span> <span class="string">'nd'</span>
-  <span class="keyword">when</span> <span class="number">3</span> <span class="keyword">then</span> <span class="string">'rd'</span>
-  <span class="keyword">else</span> <span class="string">'th'</span>
-
-hair = <span class="string">'permed'</span> <span class="keyword">if</span> year <span class="keyword">is</span> <span class="number">1983</span>
-</pre></td></tr></table></figure>
-
-<h2 id="method">Method</h2>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-</pre></td><td class="code"><pre><span class="string">'haystack'</span>.search <span class="string">'needle'</span> <span class="array"># </span>-<span class="number">1</span>
-<span class="string">'haystack'</span>.search <span class="string">'hay'</span> <span class="array"># </span><span class="number">0</span>
-<span class="string">'haystack'</span>.search <span class="string">'stack'</span> <span class="array"># </span><span class="number">3</span>
-
-
-milkDrinks = <span class="string">'latté,mocha,cappuccino,flat white,eiskaffee'</span>
-hakMilk = (style) -&gt;
-  milkDrinks.search(style) isnt -<span class="number">1</span>
-
-hasMilk <span class="string">'mocha'</span> <span class="array"># true</span>
-hasMilk <span class="string">'espresso romano'</span> <span class="array"># false</span>
-
-<span class="string">'haystack'</span>.replace <span class="string">'hay'</span>, <span class="string">'needle'</span> <span class="array"># </span><span class="string">'needlestack'</span>
-milkDrinks.replace <span class="string">'latté'</span>, <span class="string">'latte'</span>
-
-<span class="string">'Cappuccino'</span>.toLowerCase() <span class="array"># </span><span class="string">'cappuccino'</span>
-<span class="string">'I am shouting!'</span>.toUpperCase() <span class="array"># </span><span class="string">'I AM SHOUTING!'</span>
-
-
-<span class="string">'Banana,Banana'</span>.split /,/ <span class="array"># </span>[ <span class="string">'Banana'</span>, <span class="string">'Banana'</span> ]
-<span class="string">'latte,mocha,cappuccino,flat white,eiskaffee'</span>.split /,/ <span class="array"># </span>[ <span class="string">'latte'</span>, <span class="string">'mocha'</span>, <span class="string">'cappuccino'</span>, <span class="string">'flat white'</span>, <span class="string">'eiskaffee'</span> ]
-</pre></td></tr></table></figure>
-
-<h2 id="length-join-slice-and-concat">length, join, slice, and concat</h2>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-</pre></td><td class="code"><pre>fence = [<span class="string">'fence pail'</span>, <span class="string">'fence pail'</span>]
-fence.length <span class="array"># </span><span class="number">2</span>
-
-fence[<span class="number">999</span>] = <span class="string">'fence pail'</span>
-fence.length <span class="array"># </span><span class="number">1000</span>
-
-[<span class="string">'double'</span>, <span class="string">'barreled'</span>].join <span class="string">'-'</span> <span class="array"># </span><span class="string">'double-barreled'</span>
-[<span class="string">'good'</span>, <span class="string">'bad'</span>, <span class="string">'ugly'</span>].slice <span class="number">0</span>, <span class="number">2</span> <span class="array"># </span>[<span class="string">'good'</span>, <span class="string">'bad'</span>]
-
-[<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>].slice <span class="number">0</span>,<span class="number">1</span> <span class="array"># </span>[<span class="number">0</span>]
-[<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>].slice <span class="number">3</span>,<span class="number">5</span> <span class="array"># </span>[<span class="number">3</span>,<span class="number">4</span>]
-
-[<span class="string">'mythril'</span>, <span class="string">'energon'</span>].concat [<span class="string">'nitron'</span>, <span class="string">'durasteel'</span>, <span class="string">'unobtanium'</span>] <span class="array"># </span>[ <span class="string">'mythril'</span>, <span class="string">'energon'</span>, <span class="string">'nitron'</span>, <span class="string">'durasteel'</span>, <span class="string">'unobtanium'</span> ]
-</pre></td></tr></table></figure>
-
-<h2 id="in-range-comprehensions">In &amp; Range &amp; Comprehensions</h2>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-</pre></td><td class="code"><pre><span class="string">'to be'</span> <span class="keyword">in</span> [<span class="string">'to be'</span>, <span class="string">'not to be'</span>] <span class="comment"># true</span>
-living = <span class="string">'the present'</span>
-living <span class="keyword">in</span> [<span class="string">'the past'</span>, <span class="string">'the present'</span>] <span class="comment"># true</span>
-
-[<span class="number">1.</span><span class="number">.10</span>] <span class="comment"># [ 1,2,3,4,5,6,7,8,9,10 ]</span>
-[<span class="number">5.</span><span class="number">.1</span>]  <span class="comment"># [ 5,4,3,2,1 ]</span>
-
-number <span class="keyword">for</span> number <span class="keyword">in</span> [<span class="number">9</span>,<span class="number">0</span>,<span class="number">2</span>,<span class="number">1</span>,<span class="number">0</span>] <span class="comment"># [9,0,2,1,0]</span>
-number + <span class="number">1</span> <span class="keyword">for</span> number <span class="keyword">in</span> [<span class="number">9</span>,<span class="number">0</span>,<span class="number">2</span>,<span class="number">1</span>,<span class="number">0</span>] <span class="comment"># [10,1,3,2,1]</span>
-letter <span class="keyword">for</span> letter <span class="keyword">in</span> [<span class="string">'x'</span>,<span class="string">'y'</span>,<span class="string">'z'</span>] <span class="comment"># [x,y,z]</span>
-
-<span class="function"><span class="title">mix</span> = <span class="params">(ingredient)</span> -&gt;</span> <span class="string">"Mixing <span class="subst">#{ingredient}</span>"</span>
-<span class="keyword">for</span> ingredient <span class="keyword">in</span> ingredients <span class="keyword">when</span> ingredient.search(<span class="string">'flour'</span>) &lt; <span class="number">0</span>
-  mix ingredient
-
-person <span class="keyword">for</span> person <span class="keyword">in</span> [<span class="string">'Kingpin'</span>, <span class="string">'Galactus'</span>, <span class="string">'Thanos'</span>, <span class="string">'Doomsday'</span>] <span class="keyword">by</span> <span class="number">2</span> <span class="comment"># ['Kingpin', 'Thanos']</span>
-</pre></td></tr></table></figure>
-
-<h1 id="functions">Functions</h1>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-</pre></td><td class="code"><pre><span class="function"><span class="title">count</span> = <span class="params">(text, delimiter)</span> -&gt;</span>
-  <span class="keyword">return</span> <span class="number">0</span> <span class="keyword">unless</span> text
-  words = text.split(delimiter || <span class="regexp">/,/</span>)
-  words.length
-
-
-<span class="function"><span class="title">partyMessage</span> = -&gt;</span> <span class="built_in">console</span>.log <span class="string">"It's party time!"</span>
-setTimeout partyMessage, <span class="number">1000</span>
-
-interval = setInterval partyMessage, <span class="number">1000</span>
-clearInterval interval
-
-<span class="function"><span class="title">multiple</span> = <span class="params">(initial, numbers)</span> -&gt;</span>
-  total = initial <span class="keyword">or</span> <span class="number">1</span>
-  <span class="keyword">for</span> number <span class="keyword">in</span> numbers
-    total = total * number
-  total
-
-<span class="function"><span class="title">sum</span> = <span class="params">(numbers)</span> -&gt;</span>
-  total = <span class="number">0</span>
-  <span class="keyword">for</span> number <span class="keyword">in</span> numbers
-    total  = total + number
-  total
-
-<span class="comment">## Accumulate</span>
-<span class="function"><span class="title">accumulate</span> = <span class="params">(initial, numbers, accumulator)</span> -&gt;</span>
-  total = initial <span class="keyword">or</span> <span class="number">0</span>
-  <span class="keyword">for</span> number <span class="keyword">in</span> numbers
-    total = accumulator total, number
-  total
-
-<span class="function"><span class="title">sum</span> = <span class="params">(acc, current)</span> -&gt;</span> acc + current
-accumulate(<span class="number">0</span>, [<span class="number">5</span>, <span class="number">5</span>, <span class="number">5</span>], sum)
-
-<span class="function"><span class="title">logArgument</span> = <span class="params">(logMe=<span class="string">'default'</span>)</span> -&gt;</span> <span class="built_in">console</span>.log logMe
-</pre></td></tr></table></figure>
-
-<h2 id="do">do</h2>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-</pre></td><td class="code"><pre><span class="keyword">do</span><span class="function"> -&gt;</span>
-  name = <span class="string">'Ren'</span>
-</pre></td></tr></table></figure>
-
-<h1 id="object">object</h1>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
-51
-52
-53
-54
-55
-56
-57
-58
-59
-60
-61
-62
-</pre></td><td class="code"><pre>
-futurama =
-  <span class="attribute">characters</span>:[
-    <span class="string">'Fry'</span>
-    <span class="string">'Leela'</span>
-    <span class="string">'Bender'</span>
-    <span class="string">'The Professor'</span>
-    <span class="string">'Scruffy'</span>
-  ]
-<span class="attribute">quotes</span>:[
-  <span class="string">'Good news everyone'</span>
-  <span class="string">'Bite my shiny metal'</span>
-]
-
-phonebook =
-  <span class="attribute">numbers</span>:
-    <span class="attribute">hannibal</span>: <span class="string">'555-5551'</span>
-    <span class="attribute">darth</span>: <span class="string">'555-5552'</span>
-    <span class="attribute">hal900</span>: <span class="string">'disconnected'</span>
-    <span class="attribute">freddy</span>: <span class="string">'555-5554'</span>
-    <span class="string">'T-800'</span>: <span class="string">'555-5555'</span>
-  <span class="attribute">list</span>:<span class="function"> -&gt;</span>
-    <span class="string">"<span class="subst">#{name}</span>: <span class="subst">#{number}</span>"</span> <span class="keyword">for</span> name, number <span class="keyword">of</span> <span class="property">@numbers</span>
-  <span class="attribute">add</span>: <span class="function"><span class="params">(name, number)</span> -&gt;</span>
-    <span class="keyword">if</span> <span class="keyword">not</span> (name <span class="keyword">of</span> <span class="property">@numbers</span>)
-      <span class="property">@numbers</span>[name] = number
-  <span class="attribute">get</span>: <span class="function"><span class="params">(name)</span> -&gt;</span>
-    <span class="keyword">if</span> name <span class="keyword">of</span> <span class="property">@numbers</span>
-      <span class="string">"<span class="subst">#{name}</span>: <span class="subst">#{<span class="property">@numbers</span>[name]}</span>"</span>
-    <span class="keyword">else</span>
-      <span class="string">"<span class="subst">#{name}</span> not found"</span>
-
-process.stdin.setEncoding <span class="string">'utf8'</span>
-stdin = process.openStdin()
-stdin.<span class="literal">on</span> <span class="string">'data'</span>, <span class="function"><span class="params">(chunk)</span> -&gt;</span>
-  args = chunk.split(<span class="string">' '</span>)
-  command = args[<span class="number">0</span>].trim()
-  name = args[<span class="number">1</span>].trim() <span class="keyword">if</span> args[<span class="number">1</span>]
-  number = args[<span class="number">2</span>].trim() <span class="keyword">if</span> args[<span class="number">2</span>]
-  <span class="keyword">switch</span>
-    <span class="keyword">when</span> <span class="string">'add'</span>
-      res = phonebook.add(name, number) <span class="keyword">if</span> name <span class="keyword">and</span> number
-    <span class="keyword">when</span> <span class="string">'get'</span>
-      <span class="built_in">console</span>.log phonebook.get(name) <span class="keyword">if</span> name
-
-score <span class="keyword">for</span> name, score <span class="keyword">of</span> {<span class="attribute">bob</span>: <span class="number">152</span>, <span class="attribute">john</span>: <span class="number">139</span>, <span class="attribute">tracy</span>: <span class="number">209</span>}
-
-<span class="comment"># 不选原型中</span>
-<span class="keyword">for</span> own page, count <span class="keyword">of</span> views
-  sum = sum + count
-
-views[key] ?= <span class="number">0</span>
-
-
-<span class="comment"># fat arrow =&gt; bind the value of this </span>
-someElement.<span class="function"><span class="title">onClick</span> = -&gt;</span>
-  setTimeout<span class="function"> =&gt;</span>
-    <span class="keyword">this</span>.innerHTML <span class="string">'Got clicked'</span>, <span class="number">1000</span>
-
-cassetteCopy = {}
-<span class="keyword">for</span> own property, value <span class="keyword">of</span> cassette
-   cassetteCopy[property] = value
-</pre></td></tr></table></figure>
-
-<h1 id="class">class</h1>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-</pre></td><td class="code"><pre><span class="class"><span class="keyword">class</span> <span class="title">Views</span></span>
-  <span class="attribute">constructor</span>:<span class="function"> -&gt;</span>
-    <span class="property">@pages</span> = {}
-  <span class="attribute">increment</span>: <span class="function"><span class="params">(key)</span> -&gt;</span>
-    <span class="property">@pages</span>[key] ?= <span class="number">0</span>
-    <span class="property">@pages</span>[key] = <span class="property">@pages</span>[key] + <span class="number">1</span>
-  <span class="attribute">total</span>: <span class="function"><span class="params">()</span> -&gt;</span>
-    sum = <span class="number">0</span>
-    <span class="keyword">for</span> own url, count <span class="keyword">of</span> <span class="property">@pages</span>
-      sum = sum + count
-    sum
-
-<span class="class"><span class="keyword">class</span> <span class="title">Camera</span> <span class="title">extneds</span> <span class="title">Product</span></span>
-  <span class="attribute">megapixiels</span>:<span class="function"> -&gt;</span>
-    <span class="property">@info</span>.megapixiels || <span class="string">'Unknow'</span>
-
-<span class="class"><span class="keyword">class</span> <span class="title">Product</span></span>
-  instance = []  <span class="comment"># 私有变量</span>
-  <span class="comment"># 静态方法</span>
-  <span class="property">@find</span> = <span class="function"><span class="params">(query)</span> -&gt;</span>
-    (product <span class="keyword">for</span> product <span class="keyword">in</span> instances <span class="keyword">when</span> product.name <span class="keyword">is</span> query)
-  
-  <span class="attribute">constructor</span>: <span class="function"><span class="params">(name)</span> -&gt;</span>
-    instances = instances.concat [@]
-    <span class="property">@name</span> = name
-
-<span class="class"><span class="keyword">class</span> <span class="title">Product</span></span>
-  <span class="attribute">constructor</span>: <span class="function"><span class="params">(name, cost)</span> -&gt;</span>
-    <span class="property">@name</span> = name
-    <span class="property">@cost</span> = cost
-  <span class="attribute">price</span>:<span class="function"> -&gt;</span>
-    <span class="property">@cost</span>
-
-<span class="class"><span class="keyword">class</span> <span class="title">Camera</span> <span class="keyword">extends</span> <span class="title">Product</span></span>
-  markup = <span class="number">2</span>
-  <span class="attribute">price</span>:<span class="function"> -&gt;</span>
-    <span class="keyword">super</span>()*markup
-
-<span class="attribute">Example</span>::<span class="function"><span class="title">justAdded</span> = -&gt;</span> <span class="string">"just added!"</span>
-
-<span class="comment">## is equivalent to</span>
-Example.prototype.<span class="function"><span class="title">justAdded</span> = -&gt;</span> <span class="string">"just added!"</span>
-
-<span class="attribute">Array</span>::<span class="function"><span class="title">join</span> = -&gt;</span> <span class="string">"Array::join was redefined"</span>
-
-<span class="function"><span class="title">include</span> = <span class="params">(klass, <span class="built_in">module</span>)</span> -&gt;</span>
-  <span class="keyword">for</span> key, value <span class="keyword">of</span> <span class="built_in">module</span>
-    <span class="attribute">klass</span>::[key] = value
-</pre></td></tr></table></figure>
-
-<h1 id="compose">compose</h1>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-</pre></td><td class="code"><pre><span class="function"><span class="title">compose</span> = <span class="params">(f, g)</span> -&gt;</span> <span class="function"><span class="params">(x)</span> -&gt;</span> f g x
-taxForProducts = compose tax, netProfit
-loyaltyDiscountForUser = compose loyaltyDiscount, userSpend
-
-
-<span class="comment"># before</span>
-<span class="function"><span class="title">before</span> = <span class="params">(decoration)</span> -&gt;</span>
-  <span class="function"><span class="params">(base)</span> -&gt;</span>
-    <span class="function"><span class="params">(params)</span> -&gt;</span>
-      decoration params
-      base params
-
-<span class="function"><span class="title">after</span> = <span class="params">(decoration)</span> -&gt;</span>
-  <span class="function"><span class="params">(base)</span> -&gt;</span>
-    <span class="function"><span class="params">(params...)</span> -&gt;</span>
-      result = base params...
-      decoration params...
-      result
-
-<span class="function"><span class="title">around</span> = <span class="params">(decoration)</span> -&gt;</span>
-  <span class="function"><span class="params">(base)</span> -&gt;</span>
-    <span class="function"><span class="params">(params...)</span> -&gt;</span>
-     <span class="function"><span class="title">callback</span> = -&gt;</span> base params...
-     decoration ([callback].concat params)...
-
-<span class="function"><span class="title">beforeAsync</span> = <span class="params">(decoration)</span> -&gt;</span>
-  <span class="function"><span class="params">(base)</span> -&gt;</span>
-    <span class="function"><span class="params">(params..., callback)</span> -&gt;</span>
-      result = <span class="literal">undefined</span>
-      <span class="function"><span class="title">applyBase</span> = =&gt;</span>
-        result = base.apply @, (params.concat callback)
-      decoration.apply @, (params.concat applyBase)
-      result
-
-user?.contact?.phone?.home
-</pre></td></tr></table></figure>
-
-<h2 id="style">Style</h2>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-</pre></td><td class="code"><pre>
-<span class="function"><span class="title">highlight</span> = <span class="params">(names...)</span> -&gt;</span>
-  <span class="keyword">for</span> name <span class="keyword">in</span> names
-    color find(name), <span class="string">'yellow'</span>
-
-teams = [<span class="string">'wolverines'</span>, <span class="string">'sabertooths'</span>, <span class="string">'mongooses'</span>]
-highlight teams...
-
-[a,b] = [b,a]
-
-competitors = [
-  <span class="attribute">name</span>: <span class="string">'wildcats'</span>
-  <span class="attribute">points</span>: <span class="number">5</span>
-  ,
-  <span class="attribute">name</span>: <span class="string">'bobcats'</span>
-  <span class="attribute">points</span>: <span class="number">3</span>
-]
-
-<span class="function"><span class="title">makeCompetition</span> = <span class="params">({max, sort})</span> -&gt;</span>
-  {max, sort}
-
-[first, middle..., last] = competitors
-
-<span class="function"><span class="title">render</span> = <span class="params">(user)</span> -&gt;</span>
-  <span class="string">"""
-  Home phone for <span class="subst">#{user?.name?.first}</span>: <span class="subst">#{user?.contact?.phone?.home}</span>
-  """</span>
-
-contact = user?.contact?.phone?.home || <span class="string">'Not provided'</span>
-
-<span class="class"><span class="keyword">class</span> <span class="title">DuckRace</span></span>
-  <span class="attribute">constructor</span>: <span class="function"><span class="params">(<span class="property">@ducks</span>)</span> -&gt;</span>
-  <span class="attribute">go</span>:<span class="function"> -&gt;</span>
-    duck.walk() <span class="keyword">for</span> duck <span class="keyword">in</span> <span class="property">@ducks</span>
-
-evens = numbers.filter <span class="function"><span class="params">(item)</span> -&gt;</span> item%<span class="number">2</span> == <span class="number">0</span>
-
-taxes = paid.map <span class="function"><span class="params">(item)</span> -&gt;</span> item*<span class="number">0.1</span>
-
-<span class="comment"># 链式调用</span>
-<span class="function"><span class="title">using</span> = <span class="params">(object, fn)</span> -&gt;</span> fn.apply object
-using turtle,<span class="function"> -&gt;</span>
-  <span class="property">@forward</span> <span class="number">2</span>
-  <span class="property">@rotate</span> <span class="number">90</span>
-  <span class="property">@forward</span> <span class="number">4</span>
-
-x y z <span class="number">4</span> <span class="comment"># x(y(z(4)))</span>
-</pre></td></tr></table></figure>
-
-<h1 id="dsl">DSL</h1>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-</pre></td><td class="code"><pre>
-<span class="class"><span class="keyword">class</span> <span class="title">Email</span></span>
-  SMTP_PORT = <span class="number">25</span>
-  <span class="attribute">constructor</span>: <span class="function"><span class="params">(option)</span> -&gt;</span>
-    [<span class="string">'from'</span>, <span class="string">'to'</span>, <span class="string">'subject'</span>, <span class="string">'body'</span>].forEach <span class="function"><span class="params">(key)</span> =&gt;</span>
-      @[<span class="string">"_<span class="subst">#{key}</span>"</span>] = option?[key]
-      @[key] = <span class="function"><span class="params">(newValue)</span> -&gt;</span>
-        @[<span class="string">"_<span class="subst">#{key}</span>"</span>] = newValue
-        @
-
-scruffysEmail
-  .to(<span class="string">'agtron@coffeescriptinaction.com'</span>)
-  .from(<span class="string">'scruffy@coffeescriptinaction.com'</span>)
-  .subject(<span class="string">'Hi Agtron!'</span>)
-  .body <span class="string">'''
-    This is a test email.
-  '''</span>
-  
-scruffysEmail.send()
-</pre></td></tr></table></figure>
-
-<h2 id="html">html</h2>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-</pre></td><td class="code"><pre>loggedIn = -&gt; <span class="keyword">true</span>
-doctype <span class="number">5</span>
-html -&gt;
-  body -&gt;
-    ul <span class="class"><span class="keyword">class</span>: '<span class="title">info</span>', -&gt;</span>
-      li -&gt; <span class="string">'Logged in'</span> <span class="keyword">if</span> loggedIn()
-
-doctype = (variant) -&gt;
-  switch variant
-    <span class="keyword">when</span> <span class="number">5</span>
-      <span class="string">"&lt;!DOCTYPE html&gt;"</span>
-
-markup = (wrapper) -&gt;
-  (attributes..., descendents) -&gt;
-    attributesMarkup = <span class="keyword">if</span> attributes.length is <span class="number">1</span>
-      <span class="string">" "</span> + (<span class="string">"<span class="subst">#{name}</span>='<span class="subst">#{value}</span>'"</span> <span class="keyword">for</span> name, value of attributes[<span class="number">0</span>]).join <span class="string">' '</span>
-    <span class="keyword">else</span>
-      <span class="string">''</span>
-    <span class="string">"&lt;<span class="subst">#{wrapper}</span><span class="subst">#{attributesMarkup}</span>&gt;<span class="subst">#{descendents() || <span class="string">''</span>}</span>&lt;/<span class="subst">#{wrapper}</span>&gt;"</span>
-
-html = markup <span class="string">'html'</span>
-body = markup <span class="string">'body'</span>
-ul = markup <span class="string">'ul'</span>
-li = markup <span class="string">'li'</span>
-</pre></td></tr></table></figure>
-
-<h2 id="css">css</h2>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-</pre></td><td class="code"><pre><span class="function"><span class="title">emphasis</span> = -&gt;</span>
-  <span class="attribute">fontWeight</span>: <span class="string">'bold'</span>
-
-css
-  <span class="string">'ul'</span>:
-    emphasis()
-  <span class="string">'.x'</span>:
-    <span class="attribute">fontSize</span>: <span class="string">'2em'</span>
-
-<span class="function"><span class="title">css</span> = <span class="params">(raw)</span> -&gt;</span>
-  <span class="function"><span class="title">hyphenate</span> = <span class="params">(property)</span> -&gt;</span>
-    <span class="function"><span class="title">dashThenUpperAsLower</span> = <span class="params">(match, pre, upper)</span> -&gt;</span>
-      <span class="string">"<span class="subst">#{pre}</span>-<span class="subst">#{upper.toLowerCase}</span>"</span>
-    property.replace <span class="regexp">/([a-z])(A-Z)/g</span>, dashThenUpperAsLower
-
-    output = (
-      <span class="keyword">for</span> selector, rules <span class="keyword">of</span> raw
-        rules = (<span class="keyword">for</span> ruleName, ruleValue <span class="keyword">of</span> rules
-          <span class="string">"<span class="subst">#{hyphenate ruleName}</span>: <span class="subst">#{ruleValue}</span>;"</span>
-        ).join <span class="string">'\n'</span>
-        <span class="string">"""
-        <span class="subst">#{selector}</span> {
-          <span class="subst">#{rules}</span>
-        }
-        """</span>
-    ).join <span class="string">'\n'</span>
-</pre></td></tr></table></figure>
-
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-</pre></td><td class="code"><pre>coffee = <span class="keyword">require</span> <span class="string">'coffee-script'</span>
-
-coffee.<span class="keyword">eval</span> <span class="string">'2 + 4'</span>
-</pre></td></tr></table></figure>
-
-<h1 id="-">兼容</h1>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-</pre></td><td class="code"><pre><span class="built_in">document</span>.querySelector ?= <span class="function"><span class="params">(selector)</span> -&gt;</span>
-  <span class="keyword">if</span> <span class="regexp">/^#/</span>.test selector
-    (<span class="built_in">document</span>.getElementById (selector.replace <span class="regexp">/^#/gi</span>, <span class="string">''</span>))
-  <span class="keyword">else</span>
-    <span class="keyword">throw</span> <span class="keyword">new</span> Error <span class="string">'Not supported by this implementation'</span>
-
-Object.create ?= <span class="function"><span class="params">(prototype, extensions)</span> -&gt;</span>
-  <span class="keyword">if</span> extensions
-    <span class="keyword">throw</span> <span class="keyword">new</span> Error <span class="string">'Not supported by this implementation'</span>
-  <span class="keyword">else</span>
-    <span class="function"><span class="title">F</span> = -&gt;</span>
-  F.prototype = prototype
-  <span class="keyword">new</span> F()
-</pre></td></tr></table></figure>
-
-<h1 id="module">Module</h1>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-</pre></td><td class="code"><pre>
-# -- controller.coffee –
-<span class="class"><span class="keyword">class</span> <span class="title">Controller</span></span>
-exports.Controller = Controller
-
-# -- blog.coffee –-
-controller = require <span class="string">'./controller'</span>
-<span class="class"><span class="keyword">class</span> <span class="title">Blog</span> <span class="keyword">extends</span> <span class="title">controller</span>.<span class="title">Controller</span></span>
-
-exports.Post = Post
-{Post} = require <span class="string">'./post'</span>
-</pre></td></tr></table></figure>
-
-<h1 id="cake">Cake</h1>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-</pre></td><td class="code"><pre><span class="comment"># Cakefile</span>
-{spawn} = <span class="built_in">require</span> <span class="string">'child_process'</span>
-
-<span class="comment">## cake build</span>
-
-compile (directory) =<span class="function"> -&gt;</span>
-  coffee = spawn <span class="string">'coffee'</span>, [<span class="string">'-c'</span>, <span class="string">'-o'</span>, <span class="string">"compiled/<span class="subst">#{directory}</span>"</span>, directory]
-  
-coffee.<span class="literal">on</span> <span class="string">'exit'</span>, <span class="function"><span class="params">(code)</span> -&gt;</span>
-  <span class="built_in">console</span>.log <span class="string">'Build complete'</span>
-
-<span class="function"><span class="title">clean</span> = <span class="params">(path, callback)</span> -&gt;</span>
-  exec <span class="string">"rm -rf <span class="subst">#{path}</span>"</span>,<span class="function"> -&gt;</span> callback?()
-
-<span class="function"><span class="title">forAllSpecsIn</span> = <span class="params">(dir, fn)</span> -&gt;</span>
-  execFile <span class="string">'find'</span>, [ dir ], <span class="function"><span class="params">(err, stdout, stderr)</span> -&gt;</span>
-    fileList = stdout.split <span class="string">'\n'</span>
-    <span class="keyword">for</span> file <span class="keyword">in</span> fileList
-      fn file <span class="keyword">if</span> <span class="regexp">/_spec.js$/</span>.test file
-
-<span class="function"><span class="title">runSpecs</span> = <span class="params">(folder)</span> -&gt;</span>
-  forAllSpecsIn folder, <span class="function"><span class="params">(file)</span> -&gt;</span>
-    <span class="built_in">require</span> <span class="string">"./<span class="subst">#{file}</span>"</span>
-
-task <span class="string">'build'</span>, <span class="string">'Compile the application'</span>,<span class="function"> -&gt;</span>
-  clean <span class="string">'compiled'</span>,<span class="function"> -&gt;</span>
-    compile <span class="string">'app'</span>,<span class="function"> -&gt;</span>
-      <span class="string">'Build complete'</span>
-
-task <span class="string">'test'</span> , <span class="string">'Run the tests'</span>,<span class="function"> -&gt;</span>
-  clean <span class="string">'compiled'</span>,<span class="function"> -&gt;</span>
-    compile <span class="string">'app'</span>,<span class="function"> -&gt;</span>
-      compile <span class="string">'spec'</span>,<span class="function"> -&gt;</span>
-        runSpecs <span class="string">'compiled'</span>,<span class="function"> -&gt;</span>
-          <span class="built_in">console</span>.log <span class="string">'Tests complete'</span>
-
-<span class="comment">## task 'deploy', -&gt;</span>
-<span class="comment">##   invoke 'build'</span>
-<span class="comment">##   invoke 'test'</span>
-</pre></td></tr></table></figure>
-
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-</pre></td><td class="code"><pre>{describe, <span class="keyword">it</span>} = <span class="built_in">require</span> <span class="string">'chromic'</span>
-{Post} = <span class="built_in">require</span> <span class="string">'../../app/models/post'</span>
-
-describe <span class="string">'Post'</span>, -&gt;
-  <span class="built_in">post</span> = <span class="built_in">new</span> Post <span class="string">'A post'</span>, <span class="string">'with contents'</span>
-  another = <span class="built_in">new</span> Post <span class="string">'Another post'</span>, <span class="string">'with contents'</span>
-  <span class="keyword">it</span> <span class="string">'should return all posts'</span>, -&gt;
-    Post.all().<span class="built_in">length</span>.shouldBe <span class="number">2</span>
-  
-  <span class="keyword">it</span> <span class="string">'should return a specific post'</span>, -&gt;
-    Post.<span class="built_in">get</span>(<span class="built_in">post</span>.slug).shouldBe <span class="string">'a-post'</span>
-</pre></td></tr></table></figure>
-
-]]></content>
-    
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[UI实战]]></title>
-    <link href="http://zhpooer.github.io/2014/11/11/ui%E5%AE%9E%E6%88%98/"/>
-    <id>http://zhpooer.github.io/2014/11/11/ui实战/</id>
-    <published>2014-11-11T09:45:55.000Z</published>
-    <updated>2014-11-14T02:11:26.000Z</updated>
-    <content type="html"><![CDATA[<p>流程:</p>
-<ol>
-<li>确定项目内容 (项目名称, 项目产生原因,
-项目主要功能点(不要超过三种), 适用人群, 使用环境(需要网络支持, 不需要网络支持))</li>
-<li>功能流程穿越图(爱丽丝,彼得潘)</li>
-<li>低保真(原型图, 黑白灰), 功能模块 位置</li>
-<li>设定视觉标准(设定细节表现, 加配色标准)</li>
-<li>高保真(基于设定的视觉标准, 完成所有页面的最终视觉效果)</li>
-<li>完成该APP瀑布流展示</li>
-</ol>
-<h1 id="-">功能流程穿越图</h1>
-<p>App功能怎样实现? 该项目一共需要多少个界面实现.根据界面分配任务</p>
-<ol>
-<li>爱丽丝</li>
-<li>彼得潘</li>
-<li>相结合(彼得潘+爱丽丝)</li>
-</ol>
-<p>欢迎界面</p>
-<ul>
-<li>Logo(教学or引导界面(4-))</li>
-<li>广告语</li>
-<li>软件版本号</li>
-</ul>
-<p>弹出方式</p>
-<ul>
-<li>对话框从边上拉出, 挤掉主页面</li>
-<li>对话框从边上弹出</li>
-<li>弹出窗口加高斯模糊</li>
-<li>弹出窗口加高斯模糊蒙黑,且弹出界面加投影</li>
-</ul>
-]]></content>
-    
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[ICON手机主题点评]]></title>
-    <link href="http://zhpooer.github.io/2014/11/11/ui%E8%AE%BE%E8%AE%A1-3/"/>
-    <id>http://zhpooer.github.io/2014/11/11/ui设计-3/</id>
-    <published>2014-11-11T01:37:29.000Z</published>
-    <updated>2014-11-11T09:46:07.000Z</updated>
-    <content type="html"><![CDATA[<h1 id="-">点评一</h1>
-<p><img src="/img/dp6/1_1.png" alt=""></p>
-<blockquote>
-<p>标题太粗, 底纹不给力<br>icon 高光太亮, 细节不注意<br>浏览器Icon, 形态是用线, 其他的是面<br>两个收音机, 语义不明确<br>十字架凸起, 与其他icon质感不契合<br>细节整合(如投影), 整体风格(扁平, 凸起; 圆润的角, 尖锐的角)</p>
-</blockquote>
-<h1 id="-">点评二</h1>
-<p><img src="/img/dp6/1_4.png" alt="">
-<img src="/img/dp6/1_2.png" alt="">
-<img src="/img/dp6/1_3.png" alt=""></p>
-<blockquote>
-<p>日历细节多, 与其他风格不统一<br>照相机白色太亮, 且和其他风格不一致, 不是偏简洁, 背板不统一<br>时钟打光太强<br>话筒细节多<br>联系人斜面浮雕效果太强</p>
-</blockquote>
-<h1 id="-">点评三</h1>
-<p><img src="/img/dp6/1_5.png" alt=""></p>
-<p><img src="/img/dp6/1_6.png" alt=""></p>
-<blockquote>
-<p>紫色: 老女人, 颜色压抑<br>线和面运用的纠结<br>icon位置的排布</p>
-</blockquote>
-<p><img src="/img/dp6/1_7.png" alt=""></p>
-<blockquote>
-<p>蓝色系到青色系</p>
-</blockquote>
-<h1 id="-">点评四</h1>
-<p><img src="/img/dp6/1_8.png" alt=""></p>
-<p><img src="/img/dp6/1_9.png" alt=""></p>
-<blockquote>
-<p>计算器分割一下<br>日历斜面浮雕太亮<br>邮件投影太重<br>天气太阳外发光不契合<br>照片风格不统一<br>背板投影不统一  </p>
-</blockquote>
-<p><img src="/img/dp6/1_10.png" alt=""></p>
-<p><img src="/img/dp6/1_11.png" alt=""></p>
-<blockquote>
-<p>画面背板颜色偏冷, 但是主题是偏暖</p>
-</blockquote>
-<h1 id="-">点评五</h1>
-<p><img src="/img/dp6/1_12.png" alt=""></p>
-<h1 id="-">点评六</h1>
-<p><img src="/img/dp6/1_13.png" alt=""></p>
-<blockquote>
-<p>字可以给白色</p>
-</blockquote>
-<p><img src="/img/dp6/1_14.png" alt=""></p>
-<blockquote>
-<p>颜色风格和整体不统一<br>质感厚度太大 </p>
-</blockquote>
-<p><img src="/img/dp6/1_15.png" alt=""></p>
-<h1 id="-">点评七</h1>
-<p><img src="/img/dp6/1_16.png" alt=""></p>
-<blockquote>
-<p>投影 光源不一样</p>
-</blockquote>
-<h1 id="-">点评八</h1>
-<p><img src="/img/dp6/1_17.png" alt=""></p>
-<blockquote>
-<p>文案有点多</p>
-</blockquote>
-<p><img src="/img/dp6/1_18.png" alt=""></p>
-<blockquote>
-<p>线和面, 如视频和云朵; 尖角和圆角</p>
-</blockquote>
-<h1 id="-">点评九</h1>
-<p><img src="/img/dp6/1_19.png" alt="">
-<img src="/img/dp6/1_20.png" alt="">
-<img src="/img/dp6/1_21.png" alt=""></p>
-<blockquote>
-<p>风格不统一(点 面)</p>
-</blockquote>
-<h1 id="tip">Tip</h1>
-<p>比较暗的背景要可以用白色字体</p>
-<!-- APP 项目相关准备:
-流程:
-1. 确定项目内容 (项目名称, 项目产生原因,
-项目主要功能点(不要超过三种), 适用人群, 使用环境(需要网络支持, 不需要网络支持))
-* 时间点: 13号早晨
-2. 功能流程穿越图
-  * 爱丽丝
-  * 彼得潘
-3. 低保真(原型图), 功能模块 位置
-4. 设定视觉标准(设定细节表现, 加配色标准)
-5. 高保真(基于设定的视觉标准, 完成所有页面的最终视觉效果)
-6. 完成该APP瀑布流展示
-
-
-
--->
-]]></content>
-    
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[UI设计 快速icon生成]]></title>
-    <link href="http://zhpooer.github.io/2014/11/04/ui%E8%AE%BE%E8%AE%A1-2/"/>
-    <id>http://zhpooer.github.io/2014/11/04/ui设计-2/</id>
-    <published>2014-11-04T01:22:42.000Z</published>
-    <updated>2014-11-10T09:16:36.000Z</updated>
-    <content type="html"><![CDATA[<blockquote>
-<p>当存在两个面转折的效果时, 在转折边添加一像素的亮色调,
-明确两个面的转折关系</p>
-</blockquote>
-<p>PS动画表现形式</p>
-<ul>
-<li>逐帧动画, 24帧每秒</li>
-<li>时间轴动画</li>
-</ul>
-<!-- 假期作业：
-屏幕尺寸： 1136 * 640
-状态栏：   40
-
-至少完成4行主题ICON，每行4只。
-ICON规范：114 * 114  圆角18（or 20）
-
-要求：
-1 微原创
-
-2 美观，风格统一，质感等表现形式必须统一
-
-3 注重光源角度统一
-
-4 主色调及少量配色点缀
--->
-
-<h1 id="-icon">如何快速生成一套主题ICON</h1>
-<p>锁屏界面</p>
-<ol>
-<li>解锁方式</li>
-<li>锁屏壁纸</li>
-</ol>
-<blockquote>
-<p>状态栏 40px<br>英文和数字字体选择, Arial<br>除了提示性文字之外, 文字最小给到24点, 提示性文字可以给到18点; ios双数, 安卓给3的倍数</p>
-</blockquote>
-<p><img src="/img/ui/1_3.png" alt=""></p>
-<p>ICON展示界面</p>
-<ol>
-<li>常规系统ICON</li>
-<li>通用ICON(文件夹+第三方ICON美化)</li>
-<li>壁纸</li>
-</ol>
-<p><img src="/img/ui/1_7.png" alt=""></p>
-<p>Icon设计过程(语意明确(1, 2), 表现形式明确(3,4))</p>
-<ul>
-<li>设定风格(简洁 + 微质感)<ol>
-<li>关键词提取(温暖: 阳光 麦子 枫叶)</li>
-<li>基于关键词给出相关元素, 以及确定配色(金黄色,蓝色,无色系)</li>
-</ol>
-</li>
-<li>设定造型, 细节必须要同一, 表现手法一致(和颜色无关), 如下图描边和填充两种风格
-<img src="/img/ui/1_1.png" alt="">
-<img src="/img/ui/1_8.png" alt="">
-<img src="/img/ui/1_9.png" alt=""></li>
-<li>颜色定位, 环境色, 微质感(描边, 叠加渐变, 长投影), <ul>
-<li>先确定背板底色, 为了保证统一性, 可以改变色相, 但是饱和度和明度不能变化太大(视觉突兀, 颜色, 造型形态, 微质感(总体上统一))
-<img src="/img/ui/1_10.png" alt=""></li>
-<li>基础造型的统一: 指针背板的距离(投影), 基础造型效果的统一(透明渐变, 投影)(考虑到环境色, 如邮件)
-<img src="/img/ui/1_11.png" alt="">
-<img src="/img/ui/1_2.png" alt=""><blockquote>
-<p>打光: 白色圆, 高斯模糊, 透明度</p>
-</blockquote>
-</li>
-</ul>
-</li>
-<li>细节整合: 各个地方投影的统一, 背板透明图层的大小, 一像素白色描边(面的转折关系)
-<img src="/img/ui/1_12.png" alt=""></li>
-</ul>
-<p>常规ICON背板样式(2D, 2.5D): 圆形, 正方形, 圆角矩形, 鱼眼型</p>
-<p><img src="/img/ui/1_4.png" alt=""></p>
-<blockquote>
-<p>使用分层云彩, 抠出云彩</p>
-</blockquote>
-<p><img src="/img/ui/1_5.png" alt=""></p>
-<blockquote>
-<p>加高斯模糊, 动感模糊</p>
-</blockquote>
-<p><img src="/img/ui/1_6.png" alt=""></p>
-<blockquote>
-<p>雾状化, 可以用无敌高斯模糊出来</p>
-</blockquote>
-<p>根据关键词搜索icon形态, iconpng.com</p>
-<!-- 天气图标一套:
-基础造型: 云 雨 雪 闪电 月亮 风 + N/A
--->
-
-<h1 id="tips">Tips</h1>
-<p>针对智能层复制</p>
-<ol>
-<li>利用常规方式复制(位移复制or原位复制), 改一个, 其他同时变化</li>
-<li>在智能层后方, 右键, 通过拷贝新建智能层, 可以单独针对某一个进行更改</li>
-</ol>
-<h1 id="-">瀑布流初稿</h1>
-<ol>
-<li>主题锁屏状态 + 解锁方式</li>
-<li>头部(一套ICON命名, 走氛围)</li>
-<li>ICON展示</li>
-<li>ICON细节拆分展示</li>
-<li>第三方ICON美化细节拆分</li>
-<li>手机界面展示</li>
-<li>天气图标展示</li>
-<li>天气ICON基础造型展示</li>
-<li>尾巴(首尾呼应)</li>
-</ol>
 ]]></content>
     
     

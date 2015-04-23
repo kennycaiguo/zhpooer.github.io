@@ -69,6 +69,122 @@
 
   <section class="post" itemscope itemprop="blogPost">
   
+    <a href="/2014/07/16/传智播客day58-mybatis提高/" title="传智播客day58-Mybatis提高" itemprop="url">
+  
+    <h1 itemprop="name">传智播客day58-Mybatis提高</h1>
+    
+     
+           <p itemprop="description" >1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+public class User{
+    id: Int;
+    username: String;
+    birt</p>
+        
+    
+    <time datetime="2014-07-16T01:09:13.000Z" itemprop="datePublished">7月 16 2014</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2014/07/15/scala-in-action-functional-programming-in-scala/" title="Scala in Action-Functional Programming in Scala" itemprop="url">
+  
+    <h1 itemprop="name">Scala in Action-Functional Programming in Scala</h1>
+    
+     
+           <p itemprop="description" >类型参数化
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+sealed abstract class Maybe[+A] {
+  def isEmpty: Boolean
+  def get: A
+}
+final case class Just[A](value: A) </p>
+        
+    
+    <time datetime="2014-07-15T03:35:59.000Z" itemprop="datePublished">7月 15 2014</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2014/07/15/传智播客day57-mybatis/" title="传智播客day57-Mybatis" itemprop="url">
+  
+    <h1 itemprop="name">传智播客day57-Mybatis</h1>
+    
+     
+           <p itemprop="description" >概况
+
+mybatis配置
+
+SqlMapConfig.xml，此文件作为mybatis的全局配置文件，配置了mybatis的运行环境等信息。
+mapper.xml文件即sql映射文件，文件中配置了操作数据库的sql语句。
+此文件需要在SqlMapConfig.xml中加载。
+通</p>
+        
+    
+    <time datetime="2014-07-15T01:12:17.000Z" itemprop="datePublished">7月 15 2014</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
+    <a href="/2014/07/13/传智播客day56-spring-mvc/" title="传智播客day56-Spring mvc" itemprop="url">
+  
+    <h1 itemprop="name">传智播客day56-Spring mvc</h1>
+    
+     
+           <p itemprop="description" >SpringMVC 原理
+前端控制器(DispatcherServlet) 通过 映射处理器(HandlerMaping)
+找到 处理器(Handler) 和拦截器(HandlerInterceptor),
+它们被封装到 HandlerExecutionChain.
+前端控制器通</p>
+        
+    
+    <time datetime="2014-07-13T01:05:32.000Z" itemprop="datePublished">7月 13 2014</time>
+  </a>
+</section>
+
+  <section class="post" itemscope itemprop="blogPost">
+  
     <a href="/2014/07/12/scala-in-action-oop-in-scala/" title="Scala in Action-OOP in Scala" itemprop="url">
   
     <h1 itemprop="name">Scala in Action-OOP in Scala</h1>
@@ -401,123 +517,6 @@ fmap :: </p>
         
     
     <time datetime="2014-07-01T07:09:10.000Z" itemprop="datePublished">7月 1 2014</time>
-  </a>
-</section>
-
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2014/06/30/haskell趣学-输入与输出/" title="haskell趣学-输入与输出" itemprop="url">
-  
-    <h1 itemprop="name">haskell趣学-输入与输出</h1>
-    
-     
-           <p itemprop="description" >HelloWorld
-函数式语言, 一个函数不能改变状态(改变变量的内容),
-当一个函数会改变状态,  我们说这函数是由副作用的.
-如果我们用同样的参数调用两次同一个函数，它会回传相同的结果.
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-1</p>
-        
-    
-    <time datetime="2014-06-30T07:12:13.000Z" itemprop="datePublished">6月 30 2014</time>
-  </a>
-</section>
-
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2014/06/29/haskell趣学-构造type和typeclass/" title="haskell趣学-构造Type和Typeclass" itemprop="url">
-  
-    <h1 itemprop="name">haskell趣学-构造Type和Typeclass</h1>
-    
-     
-           <p itemprop="description" >使用data关键字定义自己的类型 data Bool = False | True
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-data Shape = Circle Float </p>
-        
-    
-    <time datetime="2014-06-29T07:02:14.000Z" itemprop="datePublished">6月 29 2014</time>
-  </a>
-</section>
-
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2014/06/29/haskell趣学-模块/" title="haskell趣学-模块" itemprop="url">
-  
-    <h1 itemprop="name">haskell趣学-模块</h1>
-    
-     
-           <p itemprop="description" >Haskell 中的模块是含有一组相关的函数，类型和类型类的组合.
-Haskell 进程的本质便是从主模块中
-引用其它模块并调用其中的函数来执行操作
-Prelude 模块包含一些基本函数,类型以及类型类，它缺省自动装载
-1
-2
-3
-4
-import Data.List   
---</p>
-        
-    
-    <time datetime="2014-06-29T06:16:24.000Z" itemprop="datePublished">6月 29 2014</time>
-  </a>
-</section>
-
-  <section class="post" itemscope itemprop="blogPost">
-  
-    <a href="/2014/06/29/haskell趣学-高阶函数/" title="haskell趣学-高阶函数" itemprop="url">
-  
-    <h1 itemprop="name">haskell趣学-高阶函数</h1>
-    
-     
-           <p itemprop="description" >函数可以作为参数和回传值传来传去，这样的函数就被称作高阶函数.
-在haskell中拒绝循环与状态的改变而通过定义问题&quot;是什么&quot;来解决问题
-柯里化(Curried functions)
-柯里化（Currying）是把接受多个参数的函数变换成接受一个单一参数(最初</p>
-        
-    
-    <time datetime="2014-06-29T01:40:54.000Z" itemprop="datePublished">6月 29 2014</time>
   </a>
 </section>
 
